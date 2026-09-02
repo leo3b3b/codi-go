@@ -1,8 +1,8 @@
 function App() {
   return (
-    <>
-      <h1>Hello, Codi!</h1>
-    </>
+    <div className="w-full h-screen flex items-center justify-center bg-bg">
+      <h1 className="text-(2xl primary)">Hello, Codi!</h1>
+    </div>
   )
 }
 
