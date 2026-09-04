@@ -1,4 +1,4 @@
-import { supabase } from '../../../lib/supabaseClient'
+import { supabase } from '../lib/supabaseClient'
 
 export async function signInTeacher(email: string, password: string) {
   // Passo 1: autenticar de verdade, usando o sistema de login do

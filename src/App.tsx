@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { LoginPage } from './features/teacher/pages/LoginPage'
+import { LoginPage } from './pages/LoginPage'
 
 function App() {
   return (
