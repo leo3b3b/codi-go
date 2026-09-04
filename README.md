@@ -1,3 +1,23 @@
+# CodiGO!
+
+## Como rodar o projeto pela primeira vez
+
+1. Instale as dependências:
+   ```bash
+   npm install
+   ```
+2. Copie o arquivo de variáveis de ambiente e preencha com suas credenciais do Supabase (Project Settings → API no painel do Supabase):
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   ⚠️ **Nunca** edite ou renomeie o `.env.local.example` com valores reais — ele é o único arquivo `.env*` que vai pro GitHub (veja o `.gitignore`). Os valores de verdade só existem no seu `.env.local`, que fica só na sua máquina.
+3. Rode o projeto:
+   ```bash
+   npm run dev
+   ```
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.

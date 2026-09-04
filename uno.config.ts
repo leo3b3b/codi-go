@@ -1,29 +1,9 @@
-import { defineConfig, presetIcons, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
+import { defineConfig, presetWind3 } from 'unocss'
 
 export default defineConfig({
-    presets: [
-        presetWind4({
-            preflights: {
-                reset: true
-            }
-        }),
-        presetIcons({
-            extraProperties: {
-                'display': 'inline-block',
-                'vertical-align': 'middle'
-            }
-        }),
-    ],
-    theme: {
-        colors: {
-            bg: 'var(--color-bg)',
-            fg: 'var(--color-fg)',
-            primary: 'var(--color-primary)',
-            muted: 'var(--color-muted)',
-        },
-    },
-    transformers: [
-        transformerDirectives(),
-        transformerVariantGroup()
-    ]
+  // presetWind3 é o conjunto "padrão" de classes utilitárias do UnoCSS
+  // (flex, p-4, text-white, rounded-lg...), no estilo do Tailwind CSS.
+  // Sem nenhum preset aqui, o UnoCSS fica configurado mas sem nenhuma
+  // classe disponível pra usar.
+  presets: [presetWind3()],
 })
