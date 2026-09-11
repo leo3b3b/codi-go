@@ -1,8 +1,8 @@
 :root {
   color-scheme: light dark;
 
-  --color-bg: light-dark(#ffffff, #111111);
+  --color-bg: light-dark(oklch(90% 0 none), oklch(20% 0 none));
   --color-fg: light-dark(#111111, #ffffff);
-  --color-primary: light-dark(#2563eb, #60a5fa);
+  --color-primary: oklch(70% 0.18 306);
   --color-muted: light-dark(#6b7280, #9ca3af);
 }
