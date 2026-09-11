@@ -61,11 +61,11 @@ Laura e Vinicius devem seguir os padrões e tecnologias já adotados no projeto.
 
 Consulte Leonardo antes de:
 
-adicionar ou substituir bibliotecas, frameworks ou tecnologias;
-criar novas camadas, abstrações ou convenções;
-estabelecer novas estratégias de validação, estado, autenticação, autorização, persistência, APIs ou tratamento de erros;
-alterar significativamente a organização ou o fluxo de dados do sistema;
-fazer mudanças relevantes em segurança, Supabase, RLS ou estilização.
+* adicionar ou substituir bibliotecas, frameworks ou tecnologias;
+* criar novas camadas, abstrações ou convenções;
+* estabelecer novas estratégias de validação, estado, autenticação, autorização, persistência, APIs ou tratamento de erros;
+* alterar significativamente a organização ou o fluxo de dados do sistema;
+* fazer mudanças relevantes em segurança, Supabase, RLS ou estilização.
 
 Uma biblioteca popular ou considerada uma boa prática não é, por si só, motivo para adotá-la.
 
@@ -150,7 +150,7 @@ Isso inclui, por exemplo:
 * alterações estruturais relevantes em funções, triggers ou políticas;
 * mudanças que possam afetar a arquitetura do banco.
 
-Durante o desenvolvimento, algumas proteções do Supabase, como RLS e restrições da Data API, podem estar temporariamente desativadas por conveniência. Isso não significa que devam permanecer desativadas em produção.
+RLS e outras proteções do Supabase estarão desativadas deliberadamente durante o desenvolvimento para facilitar iteração, testes e inspeção. Isso é um estado de desenvolvimento, não uma decisão arquitetural para produção.
 
 ## 6. Organização do código
 
@@ -233,8 +233,8 @@ A estilização global utiliza variáveis CSS e utilitários do UnoCSS. Um exemp
   --color-muted: light-dark(#6b7280, #9ca3af);
 }
 
+/* Exemplo de componente CSS fictício */
 .button {
-  /* Exemplo de componente CSS fictício */
   @apply bg-primary text-white;
 }
 ```
