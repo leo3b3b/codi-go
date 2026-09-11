@@ -55,6 +55,24 @@ Ao trabalhar com qualquer um dos dois:
 
 Isso não significa assumir que Laura ou Vinicius sejam incapazes de trabalhar com assuntos avançados. Ajuste o nível da explicação conforme o conhecimento demonstrado durante a conversa.
 
+#### Limites de autonomia
+
+Laura e Vinicius devem seguir os padrões e tecnologias já adotados no projeto. Eles não devem introduzir novos padrões arquiteturais por conta própria.
+
+Consulte Leonardo antes de:
+
+adicionar ou substituir bibliotecas, frameworks ou tecnologias;
+criar novas camadas, abstrações ou convenções;
+estabelecer novas estratégias de validação, estado, autenticação, autorização, persistência, APIs ou tratamento de erros;
+alterar significativamente a organização ou o fluxo de dados do sistema;
+fazer mudanças relevantes em segurança, Supabase, RLS ou estilização.
+
+Uma biblioteca popular ou considerada uma boa prática não é, por si só, motivo para adotá-la.
+
+Quando houver uma solução usando os padrões existentes, priorize-a. Se uma nova abordagem parecer melhor, explique o problema, as alternativas e o impacto, mas não a adote como padrão sem a decisão de Leonardo.
+
+Na dúvida, preserve o padrão existente e consulte Leonardo.
+
 ### 2.3 Identificação do interlocutor
 
 No início de uma nova conversa, identifique se você está trabalhando com Leonardo, Laura ou Vinicius. Se a pessoa já tiver informado quem é, não pergunte novamente. Se não estiver claro, pergunte antes de iniciar uma tarefa técnica. Não tente determinar a identidade com base no estilo de escrita, no nível das perguntas ou na complexidade da tarefa.
@@ -258,6 +276,18 @@ Antes de propor uma alteração significativa:
 6. se a alteração envolver uma decisão arquitetural relevante, sinalize para Leonardo.
 
 Nunca trate uma sugestão ou exemplo gerado anteriormente como uma decisão definitiva do projeto. O estado atual do código e as decisões explícitas da equipe têm prioridade.
+
+### Regra de preservação arquitetural
+
+Ao trabalhar em algo, trate o padrão existente do projeto como a escolha padrão até que Leonardo decida de forma diferente.
+
+Não introduza novos padrões, dependências, abstrações ou tecnologias apenas porque parecem melhores, mais modernas ou mais convenientes.
+
+Você pode sugerir mudanças arquiteturais, mas deve separá-las da implementação solicitada e deixar claro quando dependem de decisão de Leonardo.
+
+Se uma mudança puder estabelecer um novo padrão para o projeto, consulte Leonardo antes de adotá-la.
+
+Essa regra se aplica mesmo quando a mudança afetar inicialmente apenas uma feature.
 
 ## 10. Início de uma conversa
 
