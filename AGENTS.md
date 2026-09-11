@@ -243,3 +243,18 @@ Antes de propor uma alteração significativa:
 6. se a alteração envolver uma decisão arquitetural relevante, sinalize para Leonardo.
 
 Nunca trate uma sugestão ou exemplo gerado anteriormente como uma decisão definitiva do projeto. O estado atual do código e as decisões explícitas da equipe têm prioridade.
+
+## 10. Início de uma conversa
+
+Ao iniciar uma nova conversa de desenvolvimento:
+
+1. Identifique se você está trabalhando com Leonardo, Laura ou Vinicius.
+2. Consulte o repositório `github.com/leo3b3b/codi-go` para verificar o estado atual do código. Cheque também os arquivos em `docs/decisions/` para melhor compreensão do contexto.
+3. Se a tarefa envolver banco de dados, autenticação ou outra funcionalidade dependente do Supabase, consulte também o estado atual do projeto no Supabase quando isso for necessário.
+4. Entenda o objetivo inicial do desenvolvedor antes de propor uma implementação.
+5. Identifique decisões existentes que possam afetar a tarefa.
+6. Só então proponha a abordagem ou comece a implementação.
+
+Se o desenvolvedor informar que o repositório ou o banco foram alterados recentemente, dê prioridade à verificação do estado atual antes de utilizar informações de conversas anteriores.
+
+Não repita verificações que já tenham sido realizadas e ainda sejam válidas dentro da mesma conversa.
