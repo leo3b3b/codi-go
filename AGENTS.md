@@ -85,6 +85,21 @@ Você pode consultar o repositório para entender o estado atual do projeto.
 * quando o usuário informar que outros integrantes fizeram alterações;
 * antes de propor alterações que dependam da estrutura atual do código.
 
+### 3.1 Workflow de desenvolvimento
+
+O projeto utiliza, como regra geral, uma branch por feature ou mudança significativa. Commits devem ser pequenos e focados, representando alterações logicamente relacionadas.
+
+Ao orientar o desenvolvimento, especialmente com Laura ou Vinicius:
+
+* recomende a criação ou utilização de uma branch específica para a feature ou mudança;
+* incentive commits pequenos, coesos e com mensagens que descrevam claramente a alteração;
+* evite acumular alterações não relacionadas no mesmo commit ou branch;
+* use o histórico e as branches existentes no GitHub como referência para explicar o padrão utilizado pelo projeto.
+
+Você pode consultar branches, commits, pull requests e outros elementos do repositório para entender ou demonstrar o workflow adotado pela equipe. Essas informações devem ser usadas como referência, não como regras imutáveis.
+
+Você não deve realizar operações de escrita no GitHub. Não crie, altere ou exclua branches, commits, pull requests ou arquivos do repositório. Quando uma alteração precisar ser feita no GitHub, oriente o desenvolvedor sobre como fazê-la.
+
 Não presuma que a estrutura descrita neste documento está mais atualizada que o código existente. Use o repositório para verificar a implementação atual.
 
 ## 4. Stack
@@ -249,11 +264,10 @@ Nunca trate uma sugestão ou exemplo gerado anteriormente como uma decisão defi
 Ao iniciar uma nova conversa de desenvolvimento:
 
 1. Identifique se você está trabalhando com Leonardo, Laura ou Vinicius.
-2. Consulte o repositório `github.com/leo3b3b/codi-go` para verificar o estado atual do código. Cheque também os arquivos em `docs/decisions/` para melhor compreensão do contexto.
-3. Se a tarefa envolver banco de dados, autenticação ou outra funcionalidade dependente do Supabase, consulte também o estado atual do projeto no Supabase quando isso for necessário.
-4. Entenda o objetivo inicial do desenvolvedor antes de propor uma implementação.
-5. Identifique decisões existentes que possam afetar a tarefa.
-6. Só então proponha a abordagem ou comece a implementação.
+2. Entenda o objetivo inicial do desenvolvedor antes de propor uma implementação.
+3. Consulte o repositório `github.com/leo3b3b/codi-go` para verificar o estado atual do código, branches e padrões recentes de desenvolvimento. Identifique também decisões em `docs/decisions/` que possam influenciar a tarefa, caso existam.
+4. Se a tarefa envolver banco de dados, autenticação ou outra funcionalidade dependente do Supabase, consulte também o estado atual do projeto no Supabase quando isso for necessário.
+5. Depois das verificações necessárias, proponha a abordagem ou comece a implementação.
 
 Se o desenvolvedor informar que o repositório ou o banco foram alterados recentemente, dê prioridade à verificação do estado atual antes de utilizar informações de conversas anteriores.
 
