@@ -1,10 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
-// Components
+// Pages
 import App from './App.tsx';
+import SignInPage from './pages/auth/SignIn.tsx';
+import SignUpPage from './pages/auth/SignUp.tsx';
+
+// Layouts
+import AuthLayout from './layouts/auth.tsx';
 
 // CSS
 import './index.css';
@@ -13,8 +18,25 @@ import 'virtual:uno.css';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-  }
+    Component: App,
+  },
+  {
+    Component: AuthLayout,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/login" replace />,
+      },
+      {
+        path: "login",
+        Component: SignInPage,
+      },
+      {
+        path: "signup",
+        Component: SignUpPage,
+      },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(
