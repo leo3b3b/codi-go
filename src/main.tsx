@@ -5,8 +5,9 @@ import { RouterProvider } from "react-router/dom";
 
 // Pages
 import App from './App.tsx';
-import SignInPage from './pages/auth/SignIn.tsx';
-import SignUpPage from './pages/auth/SignUp.tsx';
+import SignInPage from './pages/auth/SignIn';
+import SignUpPage from './pages/auth/SignUp';
+import CheckEmailPage from './pages/auth/CheckEmail';
 
 // Layouts
 import AuthLayout from './layouts/auth.tsx';
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         Component: SignUpPage,
+      },
+      {
+        path: "check-email",
+        Component: CheckEmailPage,
       },
     ],
   },
