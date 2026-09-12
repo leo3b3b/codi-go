@@ -1,45 +1,63 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as v from "valibot";
+
 import { signUp } from "@/features/auth";
+
+const signUpSchema = v.pipe(
+    v.object({
+        email: v.pipe(
+            v.string(),
+            v.nonEmpty("Informe seu e-mail."),
+            v.email("Informe um e-mail válido."),
+        ),
+        password: v.pipe(
+            v.string(),
+            v.nonEmpty("Informe sua senha."),
+            v.minLength(6, "A senha deve ter pelo menos 6 caracteres."),
+        ),
+        confirmation: v.pipe(
+            v.string(),
+            v.nonEmpty("Confirme sua senha."),
+            v.minLength(6, "A senha deve ter pelo menos 6 caracteres."),
+        ),
+    }),
+    v.forward(
+        v.check(
+            ({ password, confirmation }) => password === confirmation,
+            "As senhas não coincidem.",
+        ),
+        ["confirmation"],
+    ),
+);
+
+type SignUpFormData = v.InferOutput<typeof signUpSchema>;
 
 function SignUpPage() {
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmation, setConfirmation] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+    } = useForm<SignUpFormData>({
+        resolver: valibotResolver(signUpSchema),
+    });
 
-    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (password !== confirmation) {
-            setError("As senhas não coincidem.");
-            return;
-        }
-
-        setError(null);
-        setLoading(true);
-
+    async function onSubmit({ email, password }: SignUpFormData) {
         try {
-            const { session } = await signUp(email, password);
+            await signUp(email, password);
 
-            if (session) {
-                navigate("/app", { replace: true });
-            } else {
-                navigate("/login", {
-                    replace: true,
-                });
-            }
-        } catch (error) {
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Não foi possível criar sua conta.",
-            );
-        } finally {
-            setLoading(false);
+            navigate("/check-email", {
+                replace: true,
+                state: { email },
+            });
+        } catch {
+            setError("root", {
+                message: "Não foi possível criar sua conta. Tente novamente.",
+            });
         }
     }
 
@@ -47,62 +65,83 @@ function SignUpPage() {
         <section>
             <header className="mb-8">
                 <h1 className="text-3xl font-bold">Criar conta</h1>
+
                 <p className="mt-2 text-muted">
                     Crie sua conta no CodiGO!
                 </p>
             </header>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+                className="flex flex-col gap-4"
+            >
                 <label className="flex flex-col gap-1">
                     <span>E-mail</span>
+
                     <input
                         type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
+                        {...register("email")}
                         autoComplete="email"
-                        className="border rounded px-3 py-2 bg-bg"
+                        aria-invalid={Boolean(errors.email)}
+                        className="rounded border px-3 py-2 bg-bg"
                     />
+
+                    {errors.email && (
+                        <p className="text-sm text-red-500">
+                            {errors.email.message}
+                        </p>
+                    )}
                 </label>
 
                 <label className="flex flex-col gap-1">
                     <span>Senha</span>
+
                     <input
                         type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        required
-                        minLength={6}
+                        {...register("password")}
                         autoComplete="new-password"
-                        className="border rounded px-3 py-2 bg-bg"
+                        aria-invalid={Boolean(errors.password)}
+                        className="rounded border px-3 py-2 bg-bg"
                     />
+
+                    {errors.password && (
+                        <p className="text-sm text-red-500">
+                            {errors.password.message}
+                        </p>
+                    )}
                 </label>
 
                 <label className="flex flex-col gap-1">
                     <span>Confirmar senha</span>
+
                     <input
                         type="password"
-                        value={confirmation}
-                        onChange={(event) => setConfirmation(event.target.value)}
-                        required
-                        minLength={6}
+                        {...register("confirmation")}
                         autoComplete="new-password"
-                        className="border rounded px-3 py-2 bg-bg"
+                        aria-invalid={Boolean(errors.confirmation)}
+                        className="rounded border px-3 py-2 bg-bg"
                     />
+
+                    {errors.confirmation && (
+                        <p className="text-sm text-red-500">
+                            {errors.confirmation.message}
+                        </p>
+                    )}
                 </label>
 
-                {error && (
+                {errors.root && (
                     <p role="alert" className="text-red-500">
-                        {error}
+                        {errors.root.message}
                     </p>
                 )}
 
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={isSubmitting}
                     className="rounded px-4 py-2 bg-primary text-white disabled:opacity-50"
                 >
-                    {loading ? "Criando..." : "Criar conta"}
+                    {isSubmitting ? "Criando..." : "Criar conta"}
                 </button>
             </form>
 
