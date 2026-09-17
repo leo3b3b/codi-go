@@ -1,0 +1,13 @@
+{
+    "name": "@codi-go/ui",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "exports": {
+        "./preset": "./preset.ts",
+        "./style": "./styles.css"
+    },
+    "peerDependencies": {
+        "unocss": "^66.10.2"
+    }
+}
