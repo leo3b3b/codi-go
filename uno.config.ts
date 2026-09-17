@@ -1,4 +1,5 @@
 import { defineConfig, presetIcons, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
+import presetCodiGo from "@codi-go/ui/preset";
 
 export default defineConfig({
     presets: [
@@ -13,15 +14,8 @@ export default defineConfig({
                 'vertical-align': 'middle'
             }
         }),
+        presetCodiGo,
     ],
-    theme: {
-        colors: {
-            bg: 'var(--color-bg)',
-            fg: 'var(--color-fg)',
-            primary: 'var(--color-primary)',
-            muted: 'var(--color-muted)',
-        },
-    },
     transformers: [
         transformerDirectives(),
         transformerVariantGroup()

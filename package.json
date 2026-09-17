@@ -1,31 +1,28 @@
 {
-  "name": "codi-go",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^5.9.1",
-    "@supabase/supabase-js": "^2.116.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "react-hook-form": "^7.88.0",
-    "react-router": "^8.3.1",
-    "valibot": "^1.5.0"
-  },
-  "devDependencies": {
-    "@types/node": "^26.5.1",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.82.0",
-    "typescript": "~7.0.2",
-    "unocss": "^66.10.2",
-    "vite": "^8.3.0"
-  }
+    "name": "codi-go",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "adults": "npm run dev --workspace=@codi-go/adults",
+        "students": "npm run dev --workspace=@codi-go/students",
+        "build:adults": "npm run build --workspace=@codi-go/adults",
+        "build:students": "npm run build --workspace=@codi-go/students",
+        "lint": "npm run lint --workspaces --if-present",
+        "typecheck": "npm run typecheck --workspaces --if-present"
+    },
+    "devDependencies": {
+        "@types/node": "^26.5.1",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@vitejs/plugin-react": "^6.1.1",
+        "oxlint": "^1.82.0",
+        "typescript": "~7.0.2",
+        "unocss": "^66.10.2",
+        "vite": "^8.3.0"
+    }
 }

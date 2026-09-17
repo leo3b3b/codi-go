@@ -5,15 +5,15 @@ import { RouterProvider } from "react-router/dom";
 
 // Pages
 import App from './App.tsx';
-import SignInPage from './pages/auth/SignIn';
-import SignUpPage from './pages/auth/SignUp';
-import CheckEmailPage from './pages/auth/CheckEmail';
+import SignInPage from './pages/auth/SignIn.tsx';
+import SignUpPage from './pages/auth/SignUp.tsx';
+import CheckEmailPage from './pages/auth/CheckEmail.tsx';
 
 // Layouts
 import AuthLayout from './layouts/auth.tsx';
 
 // CSS
-import './index.css';
+import '@codi-go/ui/style';
 import 'virtual:uno.css';
 
 const router = createBrowserRouter([
