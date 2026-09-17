@@ -1,8 +1,420 @@
 :root {
-  color-scheme: light dark;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #35235c;
+  background: #f4efff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
 
-  --color-bg: light-dark(#ffffff, #111111);
-  --color-fg: light-dark(#111111, #ffffff);
-  --color-primary: light-dark(#2563eb, #60a5fa);
-  --color-muted: light-dark(#6b7280, #9ca3af);
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* =========================
+   LOGIN
+   ========================= */
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  background: #f4efff;
+}
+
+/* =========================
+   ÁREA VISUAL
+   ========================= */
+
+.login-visual {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  background-image:
+    linear-gradient(
+      rgba(50, 35, 90, 0.08),
+      rgba(50, 35, 90, 0.08)
+    ),
+    url('/images/backgroundIceberg.png');
+
+  background-size: cover;
+  background-position: center;
+}
+
+.login-mascot {
+  position: absolute;
+  width: min(430px, 65%);
+  height: auto;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  object-fit: contain;
+}
+
+.login-message {
+  position: absolute;
+  top: 12%;
+  left: 10%;
+  right: 10%;
+  text-align: center;
+  z-index: 2;
+}
+
+.login-message h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 3.5vw, 4rem);
+  line-height: 1.05;
+  text-shadow: 0 3px 8px rgba(38, 24, 70, 0.35);
+}
+
+.login-message p {
+  max-width: 500px;
+  margin: 18px auto 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  text-shadow: 0 2px 5px rgba(38, 24, 70, 0.35);
+}
+
+/* =========================
+   ÁREA DO FORMULÁRIO
+   ========================= */
+
+.login-form-area {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #f4efff;
+}
+
+.login-card {
+  width: min(440px, 100%);
+  padding: 42px;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(76, 47, 130, 0.18);
+}
+
+/* =========================
+   LOGO E TÍTULOS
+   ========================= */
+
+.login-logo {
+  display: block;
+  width: 170px;
+  height: 95px;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto 8px;
+}
+
+.login-card h2 {
+  margin: 0;
+  text-align: center;
+  color: #4b2d78;
+  font-size: 2rem;
+}
+
+.login-subtitle {
+  margin: 8px 0 30px;
+  text-align: center;
+  color: #7d7190;
+  font-size: 0.95rem;
+}
+
+/* =========================
+   CAMPOS
+   ========================= */
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4b2d78;
+  font-weight: 700;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #ded5ed;
+  border-radius: 14px;
+  outline: none;
+  background: #ffffff;
+  color: #35235c;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-field input::placeholder {
+  color: #aaa0b7;
+}
+
+.form-field input:focus {
+  border-color: #8d65c4;
+  box-shadow: 0 0 0 4px rgba(141, 101, 196, 0.14);
+}
+
+/* =========================
+   ERRO
+   ========================= */
+
+.login-error {
+  margin: 0 0 18px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff0f0;
+  color: #c03939;
+  font-size: 0.9rem;
+}
+
+/* =========================
+   BOTÃO
+   ========================= */
+
+.login-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px 20px;
+  border: 0;
+  border-radius: 14px;
+  background: #7550a8;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  background: #644293;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(100, 66, 147, 0.25);
+}
+
+.login-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSIVIDADE
+   ========================= */
+
+@media (max-width: 800px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-visual {
+    min-height: 45vh;
+  }
+
+  .login-message {
+    top: 10%;
+  }
+
+  .login-mascot {
+    width: min(300px, 60%);
+    bottom: -5%;
+  }
+
+  .login-form-area {
+    min-height: auto;
+    padding: 30px 20px;
+  }
+
+  .login-card {
+    padding: 30px 24px;
+  }
+}
+
+/* =========================
+   ESCOLHA DA TURMA
+   ========================= */
+
+.classes-page {
+  min-height: 100vh;
+  padding: 50px 7%;
+  background: #f4efff;
+}
+
+.classes-header {
+  max-width: 1000px;
+  margin: 0 auto 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.classes-eyebrow {
+  margin: 0 0 8px;
+  color: #7550a8;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.classes-header h1 {
+  margin: 0;
+  color: #4b2d78;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1;
+}
+
+.classes-subtitle {
+  max-width: 600px;
+  margin: 15px 0 0;
+  color: #7d7190;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.classes-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 24px;
+  background: #7550a8;
+  color: #ffffff;
+  font-size: 2rem;
+  transform: rotate(8deg);
+}
+
+/* =========================
+   CARTÕES DAS TURMAS
+   ========================= */
+
+.classes-grid {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.class-card {
+  position: relative;
+  min-height: 260px;
+  padding: 30px;
+  border: 3px solid #ded5ed;
+  border-radius: 28px;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(76, 47, 130, 0.10);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.class-card:hover {
+  transform: translateY(-6px);
+  border-color: #8d65c4;
+  box-shadow: 0 18px 35px rgba(76, 47, 130, 0.17);
+}
+
+.class-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px;
+  height: 75px;
+  margin-bottom: 35px;
+  border-radius: 22px;
+  background: #ede5fa;
+  color: #7550a8;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.class-card-content h2 {
+  margin: 0;
+  color: #4b2d78;
+  font-size: 1.5rem;
+}
+
+.class-card-content p {
+  margin: 8px 0 0;
+  color: #7d7190;
+  line-height: 1.4;
+}
+
+.class-card-arrow {
+  position: absolute;
+  right: 28px;
+  bottom: 25px;
+  color: #7550a8;
+  font-size: 1.8rem;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.class-card:hover .class-card-arrow {
+  transform: translateX(5px);
+}
+
+/* =========================
+   RESPONSIVIDADE
+   ========================= */
+
+@media (max-width: 850px) {
+  .classes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class-card {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .classes-page {
+    padding: 35px 20px;
+  }
+
+  .classes-header {
+    align-items: flex-start;
+  }
+
+  .classes-decoration {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+  }
 }

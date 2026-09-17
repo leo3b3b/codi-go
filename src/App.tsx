@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { LoginPage } from './pages/LoginPage'
+import { ClassesPage } from './pages/ClassesPage'
 
 function App() {
   return (
@@ -9,6 +10,10 @@ function App() {
       escolha (sou professor / sou aluno / sou instituição). */}
       <Route path="/" element={<Navigate to="/teacher/login" />} />
       <Route path="/teacher/login" element={<LoginPage />} />
+      <Route
+        path="/teacher/classes"
+        element={<ClassesPage />}
+      />
     </Routes>
   )
 }
