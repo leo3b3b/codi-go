@@ -13,7 +13,7 @@ import CheckEmailPage from './pages/auth/CheckEmail.tsx';
 import AuthLayout from './layouts/auth.tsx';
 
 // CSS
-import '@codi-go/ui/style';
+import '@codi-go/ui/css';
 import 'virtual:uno.css';
 
 const router = createBrowserRouter([

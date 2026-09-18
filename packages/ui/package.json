@@ -5,7 +5,8 @@
     "type": "module",
     "exports": {
         "./preset": "./preset.ts",
-        "./style": "./styles.css"
+        "./css": "./styles.css",
+        "./images/*": "./assets/images/*"
     },
     "peerDependencies": {
         "unocss": "^66.10.2"

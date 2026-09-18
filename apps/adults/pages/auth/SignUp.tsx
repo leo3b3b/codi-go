@@ -4,6 +4,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as v from "valibot";
 
 import { signUp } from "@/features/auth";
+import logo from "@codi-go/ui/images/logo.png";
 
 const signUpSchema = v.pipe(
     v.object({
@@ -62,76 +63,85 @@ function SignUpPage() {
     }
 
     return (
-        <section>
-            <header className="mb-8">
-                <h1 className="text-3xl font-bold">Criar conta</h1>
+        <section className="ui-card">
+            <header className="mb-8 text-center">
+                <img
+                    src={logo}
+                    alt="CodiGO!"
+                    className="mx-auto h-24 w-auto object-contain"
+                />
+
+                <h1 className="mt-6 text-(3xl heading) font-black tracking-tight">Criar conta</h1>
 
                 <p className="mt-2 text-muted">
-                    Crie sua conta no CodiGO!
+                    Comece a acompanhar suas turmas no CodiGO!
                 </p>
             </header>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
-                className="flex flex-col gap-4"
+                className="flex-(~ col) gap-5"
             >
-                <label className="flex flex-col gap-1">
+                <label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
                     <span>E-mail</span>
 
                     <input
                         type="email"
                         {...register("email")}
                         autoComplete="email"
+                        placeholder="Digite seu e-mail"
                         aria-invalid={Boolean(errors.email)}
-                        className="rounded border px-3 py-2 bg-bg"
+                        className="ui-field"
                     />
 
                     {errors.email && (
-                        <p className="text-sm text-red-500">
+                        <p role="alert" className="text-(sm danger) font-medium">
                             {errors.email.message}
                         </p>
                     )}
                 </label>
 
-                <label className="flex flex-col gap-1">
+                <label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
                     <span>Senha</span>
 
                     <input
                         type="password"
                         {...register("password")}
                         autoComplete="new-password"
+                        placeholder="Crie uma senha"
                         aria-invalid={Boolean(errors.password)}
-                        className="rounded border px-3 py-2 bg-bg"
+                        className="ui-field"
                     />
 
                     {errors.password && (
-                        <p className="text-sm text-red-500">
+                        <p role="alert" className="text-(sm danger) font-medium">
                             {errors.password.message}
                         </p>
                     )}
                 </label>
 
-                <label className="flex flex-col gap-1">
+                <label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
                     <span>Confirmar senha</span>
 
                     <input
                         type="password"
                         {...register("confirmation")}
                         autoComplete="new-password"
+                        placeholder="Confirme sua senha"
                         aria-invalid={Boolean(errors.confirmation)}
-                        className="rounded border px-3 py-2 bg-bg"
+                        className="ui-field"
                     />
 
                     {errors.confirmation && (
-                        <p className="text-sm text-red-500">
+                        <p role="alert" className="text-(sm danger) font-medium">
                             {errors.confirmation.message}
                         </p>
                     )}
                 </label>
 
                 {errors.root && (
-                    <p role="alert" className="text-red-500">
+                    <p role="alert" className="ui-alert-danger">
                         {errors.root.message}
                     </p>
                 )}
@@ -139,15 +149,15 @@ function SignUpPage() {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="rounded px-4 py-2 bg-primary text-white disabled:opacity-50"
+                    className="ui-button-primary mt-1"
                 >
                     {isSubmitting ? "Criando..." : "Criar conta"}
                 </button>
             </form>
 
-            <p className="mt-6 text-center text-muted">
+            <p className="mt-7 text-(center sm muted)">
                 Já possui uma conta?{" "}
-                <Link to="/login" className="text-primary">
+                <Link to="/login" className="ui-link">
                     Entrar
                 </Link>
             </p>

@@ -4,6 +4,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as v from "valibot";
 
 import { signInWithPassword } from "@/features/auth";
+import logo from "@codi-go/ui/images/logo.png";
 
 const signInSchema = v.object({
     email: v.pipe(
@@ -44,58 +45,68 @@ function SignInPage() {
     }
 
     return (
-        <section>
-            <header className="mb-8">
-                <h1 className="text-3xl font-bold">Entrar no CodiGO!</h1>
+        <section className="ui-card">
+            <header className="mb-8 text-center">
+                <img
+                    src={logo}
+                    alt="CodiGO!"
+                    className="mx-auto h-24 w-auto object-contain"
+                />
+
+                <h1 className="mt-6 text-(3xl heading) font-black tracking-tight">
+                    Bem-vindo!
+                </h1>
 
                 <p className="mt-2 text-muted">
-                    Entre na sua conta para continuar.
+                    Entre para continuar sua aventura.
                 </p>
             </header>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
-                className="flex flex-col gap-4"
+                className="flex-(~ col) gap-5"
             >
-                <label className="flex flex-col gap-1">
+                <label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
                     <span>E-mail</span>
 
                     <input
                         type="email"
                         {...register("email")}
                         autoComplete="email"
+                        placeholder="Digite seu e-mail"
                         aria-invalid={Boolean(errors.email)}
-                        className="rounded border px-3 py-2 bg-bg"
+                        className="ui-field"
                     />
 
                     {errors.email && (
-                        <p className="text-sm text-red-500">
+                        <p role="alert" className="text-(sm danger) font-medium">
                             {errors.email.message}
                         </p>
                     )}
                 </label>
 
-                <label className="flex flex-col gap-1">
+                <label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
                     <span>Senha</span>
 
                     <input
                         type="password"
                         {...register("password")}
                         autoComplete="current-password"
+                        placeholder="Digite sua senha"
                         aria-invalid={Boolean(errors.password)}
-                        className="rounded border px-3 py-2 bg-bg"
+                        className="ui-field"
                     />
 
                     {errors.password && (
-                        <p className="text-sm text-red-500">
+                        <p role="alert" className="text-(sm danger) font-medium">
                             {errors.password.message}
                         </p>
                     )}
                 </label>
 
                 {errors.root && (
-                    <p role="alert" className="text-red-500">
+                    <p role="alert" className="ui-alert-danger">
                         {errors.root.message}
                     </p>
                 )}
@@ -103,15 +114,15 @@ function SignInPage() {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="rounded px-4 py-2 bg-primary text-white disabled:opacity-50"
+                    className="ui-button-primary mt-1"
                 >
                     {isSubmitting ? "Entrando..." : "Entrar"}
                 </button>
             </form>
 
-            <p className="mt-6 text-center text-muted">
+            <p className="mt-7 text-(center sm muted)">
                 Ainda não tem uma conta?{" "}
-                <Link to="/signup" className="text-primary">
+                <Link to="/signup" className="ui-link">
                     Criar conta
                 </Link>
             </p>
