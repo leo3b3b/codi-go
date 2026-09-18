@@ -10,7 +10,7 @@ A criação da escola e a criação da conta do primeiro administrador são proc
 
 O cadastro da escola é realizado pela equipe do CodiGO!. O primeiro administrador, por sua vez, precisa possuir uma conta de usuário adulto antes de ser associado à escola.
 
-Essa separação é compatível com o modelo conceitual no qual `profile` e `school` são entidades independentes, relacionadas posteriormente pela associação `schools_profiles`.
+Essa separação é compatível com o modelo conceitual no qual `profile` e `school` são entidades independentes, relacionadas posteriormente pela associação `school_memberships`.
 
 ## 2. Criação de contas de adultos
 
@@ -50,7 +50,7 @@ A equipe então cria diretamente, pelo dashboard do Supabase, a associação ent
 
 O cargo não é uma característica global do usuário.
 
-Um mesmo usuário pode atuar em diferentes escolas e possuir cargos diferentes em cada uma delas. O modelo de dados utiliza `schools_profiles` justamente para representar essa relação. Assim, um usuário pode ser professor em uma escola e administrador em outra.
+Um mesmo usuário pode atuar em diferentes escolas e possuir cargos diferentes em cada uma delas. O modelo de dados utiliza `school_memberships` justamente para representar essa relação. Assim, um usuário pode ser professor em uma escola e administrador em outra.
 
 Para o CodiGO!, administrador é uma especialização funcional do professor: todo administrador possui as capacidades de professor, além das capacidades administrativas adicionais.
 
