@@ -9,6 +9,9 @@ import SignInPage from './pages/auth/SignIn.tsx';
 import SignUpPage from './pages/auth/SignUp.tsx';
 import CheckEmailPage from './pages/auth/CheckEmail.tsx';
 import TeacherHome from './pages/teacher/TeacherHome.tsx';
+import TeacherClass from './pages/teacher/TeacherClass.tsx';
+import TeacherConfig from './pages/teacher/TeacherConfig.tsx';
+import TeacherAverages from './pages/teacher/TeacherAverages.tsx';
 // Layouts
 import AuthLayout from './layouts/auth.tsx';
 
@@ -24,6 +27,18 @@ const router = createBrowserRouter([
   {
     path: "/app",
     Component: TeacherHome,
+  },
+  {
+    path: "/app/turma/:classId",
+    Component: TeacherClass,
+},
+  {
+    path: "/app/configuracoes",
+    Component: TeacherConfig,
+  },
+  {
+    path: "/app/medias",
+    Component: TeacherAverages,
   },
   {
     Component: AuthLayout,
