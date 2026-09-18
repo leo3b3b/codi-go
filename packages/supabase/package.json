@@ -4,7 +4,8 @@
     "version": "0.0.0",
     "type": "module",
     "exports": {
-        ".": "./index.ts"
+        ".": "./index.ts",
+        "./types": "./database.types.ts"
     },
     "dependencies": {
         "@supabase/supabase-js": "^2.116.0"

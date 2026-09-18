@@ -2,23 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { supabase } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
-
-type School = {
-    id: string;
-    name: string;
-};
-
-type ClassRoom = {
-    id: string;
-    name: string;
-    school_id: string;
-};
-
-type Student = {
-    id: string;
-    name: string;
-    level: number | null;
-};
+import type { Student, ClassRoom, School } from "@codi-go/supabase/types";
 
 type OrderOption = "az" | "za";
 type LevelOption = "high" | "low";
@@ -31,13 +15,11 @@ function TeacherClass() {
 
     const [school, setSchool] = useState<School | null>(null);
     const [classes, setClasses] = useState<ClassRoom[]>([]);
-    const [selectedClass, setSelectedClass] =
-        useState<ClassRoom | null>(null);
+    const [selectedClass, setSelectedClass] = useState<ClassRoom | null>(null);
     const [students, setStudents] = useState<Student[]>([]);
 
     const [order, setOrder] = useState<OrderOption>("az");
-    const [levelOrder, setLevelOrder] =
-        useState<LevelOption>("high");
+    const [levelOrder, setLevelOrder] = useState<LevelOption>("high");
     const [search, setSearch] = useState("");
 
     const [orderOpen, setOrderOpen] = useState(false);
@@ -59,45 +41,47 @@ function TeacherClass() {
             setLoading(true);
             setError("");
 
-            const { data: classData, error: classError } =
-                await supabase
-                    .from("classes")
-                    .select("id, name, school_id")
-                    .eq("id", classId)
-                    .single();
+            const {
+                data: classData,
+                error: classError,
+            } = await supabase
+                .from("classes")
+                .select("id, name, school_id")
+                .eq("id", classId)
+                .single();
 
             if (classError || !classData) {
-                setError(
-                    "Não foi possível encontrar essa turma.",
-                );
+                setError("Não foi possível carregar a turma.");
                 setLoading(false);
                 return;
             }
 
             setSelectedClass(classData);
 
-            const { data: schoolData, error: schoolError } =
-                await supabase
-                    .from("school")
-                    .select("id, trade_name, legal_name")
-                    .eq("id", classData.school_id)
-                    .single();
+            const {
+                data: schoolData,
+                error: schoolError,
+            } = await supabase
+                .from("school")
+                .select("id, trade_name, legal_name")
+                .eq("id", classData.school_id)
+                .single();
 
             if (!schoolError && schoolData) {
                 setSchool({
                     id: schoolData.id,
-                    name:
-                        schoolData.trade_name ||
-                        schoolData.legal_name,
+                    name: schoolData.trade_name || schoolData.legal_name,
                 });
             }
 
-            const { data: classList, error: classListError } =
-                await supabase
-                    .from("classes")
-                    .select("id, name, school_id")
-                    .eq("school_id", classData.school_id)
-                    .order("name");
+            const {
+                data: classList,
+                error: classListError,
+            } = await supabase
+                .from("classes")
+                .select("id, name, school_id")
+                .eq("school_id", classData.school_id)
+                .order("name");
 
             if (!classListError) {
                 setClasses(classList ?? []);
@@ -113,9 +97,7 @@ function TeacherClass() {
                 .order("name");
 
             if (studentsError) {
-                setError(
-                    "Não foi possível carregar os alunos.",
-                );
+                setError("Não foi possível carregar os alunos.");
                 setLoading(false);
                 return;
             }
@@ -137,10 +119,7 @@ function TeacherClass() {
                         levels.get(progress.student_id) ?? 0;
 
                     if (progress.level_id > currentLevel) {
-                        levels.set(
-                            progress.student_id,
-                            progress.level_id,
-                        );
+                        levels.set(progress.student_id, progress.level_id);
                     }
                 }
             }
@@ -162,8 +141,7 @@ function TeacherClass() {
     }, [classId]);
 
     useEffect(() => {
-        const savedFilters =
-            localStorage.getItem(FILTERS_KEY);
+        const savedFilters = localStorage.getItem(FILTERS_KEY);
 
         if (!savedFilters) {
             return;
@@ -172,10 +150,7 @@ function TeacherClass() {
         try {
             const filters = JSON.parse(savedFilters);
 
-            if (
-                filters.order === "az" ||
-                filters.order === "za"
-            ) {
+            if (filters.order === "az" || filters.order === "za") {
                 setOrder(filters.order);
             }
 
@@ -195,14 +170,10 @@ function TeacherClass() {
     }, []);
 
     const filteredStudents = useMemo(() => {
-        const normalizedSearch = search
-            .trim()
-            .toLowerCase();
+        const normalizedSearch = search.trim().toLowerCase();
 
         const result = students.filter((student) =>
-            student.name
-                .toLowerCase()
-                .includes(normalizedSearch),
+            student.name.toLowerCase().includes(normalizedSearch),
         );
 
         result.sort((a, b) => {
@@ -216,24 +187,17 @@ function TeacherClass() {
             }
 
             if (levelOrder === "low") {
-                const levelA =
-                    a.level ?? Number.MAX_SAFE_INTEGER;
-                const levelB =
-                    b.level ?? Number.MAX_SAFE_INTEGER;
+                const levelA = a.level ?? Number.MAX_SAFE_INTEGER;
+                const levelB = b.level ?? Number.MAX_SAFE_INTEGER;
 
                 if (levelA !== levelB) {
                     return levelA - levelB;
                 }
             }
 
-            const comparison = a.name.localeCompare(
-                b.name,
-                "pt-BR",
-            );
+            const comparison = a.name.localeCompare(b.name, "pt-BR");
 
-            return order === "az"
-                ? comparison
-                : -comparison;
+            return order === "az" ? comparison : -comparison;
         });
 
         return result;
@@ -267,279 +231,442 @@ function TeacherClass() {
 
     return (
         <main className="h-screen overflow-hidden bg-gradient-to-br from-[#c9a8ed] via-[#f1dfd4] to-[#c9a8ed]">
-            {/* Cabeçalho */}
-            <header className="flex h-20 items-center justify-between bg-gradient-to-r from-[#f4ddd8] via-[#dfc9dc] to-[#bd91f0] px-8 shadow-lg">
-                <button
-                    type="button"
-                    onClick={goToHome}
-                    className="flex items-center"
-                    aria-label="Ir para a página inicial"
-                >
-                    <img
-                        src={logo}
-                        alt="CodiGO!"
-                        className="w-36 object-contain"
-                    />
-                </button>
-
-                <nav className="flex items-center gap-8 text-lg font-bold">
+            <header className="h-20 shrink-0 bg-gradient-to-r from-[#5541a9] to-[#7254d5] shadow-lg">
+                <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
                     <button
                         type="button"
-                        onClick={() =>
-                            navigate("/app/configuracoes")
-                        }
-                        className="rounded-xl px-3 py-2 text-black transition hover:bg-white/20"
+                        onClick={goToHome}
+                        className="flex items-center"
+                        aria-label="Voltar para a página inicial"
                     >
-                        Configurações
+                        <img
+                            src={logo}
+                            alt="CodiGO!"
+                            className="h-11 w-auto"
+                        />
                     </button>
 
-                    <button
-                        type="button"
-                        className="rounded-xl bg-white px-4 py-2 text-black shadow-sm"
-                    >
-                        Turmas
-                    </button>
+                    <nav className="flex items-center gap-8 text-sm font-semibold text-white">
+                        <button
+                            type="button"
+                            onClick={() => navigate("/app/configuracoes")}
+                            className="transition-opacity hover:opacity-80"
+                        >
+                            Configurações
+                        </button>
 
-                    <button
-                        type="button"
-                        onClick={() => navigate("/app/medias")}
-                        className="rounded-xl px-3 py-2 text-black transition hover:bg-white/20"
-                    >
-                        Médias
-                    </button>
-                </nav>
+                        <button
+                            type="button"
+                            className="border-b-2 border-white pb-1"
+                        >
+                            Turmas
+                        </button>
 
-                <div className="min-w-36 text-right text-xl font-bold text-white">
-                    {school?.name ?? "Escola"}
+                        <button
+                            type="button"
+                            onClick={() => navigate("/app/medias")}
+                            className="transition-opacity hover:opacity-80"
+                        >
+                            Médias
+                        </button>
+                    </nav>
+
+                    <div className="min-w-40 text-right text-sm font-semibold text-white">
+                        {school?.name ?? "Escola"}
+                    </div>
                 </div>
             </header>
 
-            {/* Filtros */}
-            <section className="mx-auto flex max-w-7xl items-center gap-3 px-8 py-5">
-                {/* Voltar */}
-                <button
-                    type="button"
-                    onClick={goToHome}
-                    className="rounded-xl bg-gradient-to-r from-[#f5e7ad] to-[#e6bdf2] px-4 py-2.5 text-base text-[#3d3547] shadow-md transition hover:scale-[1.01]"
-                >
-                    ← Voltar
-                </button>
-
-                {/* Salvar filtros */}
-                <button
-                    type="button"
-                    onClick={saveFilters}
-                    className="rounded-xl bg-gradient-to-r from-[#fff1bd] to-[#fff4ca] px-4 py-2.5 text-base font-bold text-[#3d3547] shadow-md transition hover:scale-[1.01]"
-                >
-                    ☷{" "}
-                    {saved
-                        ? "Filtros salvos!"
-                        : "Salvar filtros"}
-                </button>
-
-                {/* Turma */}
-                <div className="relative">
+            <div className="mx-auto flex h-[calc(100vh-5rem)] max-w-7xl flex-col overflow-hidden px-6 py-5">
+                <div className="mb-4 flex shrink-0 items-center justify-between">
                     <button
                         type="button"
-                        onClick={() =>
-                            setClassOpen(!classOpen)
-                        }
-                        className="flex min-w-36 items-center justify-between gap-4 rounded-xl bg-white px-4 py-2.5 text-base text-[#3d3547] shadow-md"
+                        onClick={goToHome}
+                        className="inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-[#5541a9] transition hover:bg-white/50"
                     >
-                        <span>
-                            {selectedClass?.name ?? "Turma"}
-                        </span>
-
-                        <span className="text-base">
-                            {classOpen ? "⌃" : "⌄"}
-                        </span>
+                        <span
+                            className="i-lucide-arrow-left text-base"
+                            aria-hidden="true"
+                        />
+                        Voltar
                     </button>
 
-                    {classOpen && (
-                        <div className="absolute left-0 top-full z-30 mt-2 min-w-36 overflow-hidden rounded-xl border border-[#e4ddea] bg-white p-1.5 shadow-xl">
-                            {classes.length === 0 ? (
-                                <div className="px-3 py-2.5 text-sm text-[#716886]">
-                                    Nenhuma turma
-                                </div>
-                            ) : (
-                                classes.map((item) => (
-                                    <button
-                                        key={item.id}
-                                        type="button"
-                                        onClick={() =>
-                                            selectClass(item)
-                                        }
-                                        className={`block w-full rounded-lg px-3 py-2 text-left text-sm text-[#3d3547] transition ${
-                                            item.id ===
-                                            selectedClass?.id
-                                                ? "bg-[#eedcff] font-bold"
-                                                : "hover:bg-[#f1f1f1]"
-                                        }`}
-                                    >
-                                        {item.name}
-                                    </button>
-                                ))
-                            )}
-                        </div>
-                    )}
+                    <h1 className="text-xl font-bold text-[#372a58]">
+                        {selectedClass?.name ?? "Turma"}
+                    </h1>
+
+                    <div className="w-20" />
                 </div>
 
-                {/* Ordem alfabética */}
-                <div className="relative">
-                    <button
-                        type="button"
-                        onClick={() =>
-                            setOrderOpen(!orderOpen)
-                        }
-                        className="flex min-w-32 items-center justify-between gap-4 rounded-xl bg-white px-4 py-2.5 text-base text-[#55515d] shadow-md"
-                    >
-                        <span>
-                            {order === "az"
-                                ? "A → Z"
-                                : "Z → A"}
-                        </span>
-
-                        <span className="text-base">
-                            {orderOpen ? "⌃" : "⌄"}
-                        </span>
-                    </button>
-
-                    {orderOpen && (
-                        <div className="absolute left-0 top-full z-30 mt-2 min-w-32 overflow-hidden rounded-xl border border-[#e4ddea] bg-white p-1.5 shadow-xl">
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setOrder("az");
-                                    setOrderOpen(false);
-                                }}
-                                className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-[#3d3547] transition hover:bg-[#f1f1f1]"
-                            >
-                                A → Z
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setOrder("za");
-                                    setOrderOpen(false);
-                                }}
-                                className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-[#3d3547] transition hover:bg-[#f1f1f1]"
-                            >
-                                Z → A
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {/* Level */}
-                <div className="relative">
-                    <button
-                        type="button"
-                        onClick={() =>
-                            setLevelOpen(!levelOpen)
-                        }
-                        className="flex min-w-36 items-center justify-between gap-4 rounded-xl bg-white px-4 py-2.5 text-base text-[#55515d] shadow-md"
-                    >
-                        <span>
-                            {levelOrder === "high"
-                                ? "Maior level"
-                                : "Menor level"}
-                        </span>
-
-                        <span className="text-base">
-                            {levelOpen ? "⌃" : "⌄"}
-                        </span>
-                    </button>
-
-                    {levelOpen && (
-                        <div className="absolute left-0 top-full z-30 mt-2 min-w-36 overflow-hidden rounded-xl border border-[#e4ddea] bg-white p-1.5 shadow-xl">
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setLevelOrder("high");
-                                    setLevelOpen(false);
-                                }}
-                                className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-[#3d3547] transition hover:bg-[#f1f1f1]"
-                            >
-                                Maior level
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setLevelOrder("low");
-                                    setLevelOpen(false);
-                                }}
-                                className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-[#3d3547] transition hover:bg-[#f1f1f1]"
-                            >
-                                Menor level
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {/* Pesquisa */}
-                <div className="ml-auto flex h-11 items-center rounded-xl bg-white px-4 shadow-md">
-                    <span className="mr-2 text-xl text-[#73788e]">
-                        ⌕
-                    </span>
-
-                    <input
-                        type="search"
-                        value={search}
-                        onChange={(event) =>
-                            setSearch(event.target.value)
-                        }
-                        placeholder="Pesquisar"
-                        className="w-40 bg-transparent text-base text-[#3d3547] outline-none placeholder:text-[#9b98a1]"
-                    />
-                </div>
-            </section>
-
-            {/* Lista de alunos */}
-            <section className="mx-auto h-[calc(100vh-178px)] max-w-7xl overflow-hidden rounded-[2rem] bg-white/80 px-8 py-7 shadow-xl">
                 {loading ? (
-                    <div className="flex h-full items-center justify-center text-xl text-[#716886]">
-                        Carregando alunos...
+                    <div className="flex min-h-0 flex-1 items-center justify-center">
+                        <div className="rounded-2xl bg-white/80 px-6 py-4 text-sm font-medium text-[#5541a9] shadow-sm">
+                            Carregando turma...
+                        </div>
                     </div>
                 ) : error ? (
-                    <div className="flex h-full items-center justify-center text-xl text-[#c53b4d]">
-                        {error}
-                    </div>
-                ) : filteredStudents.length === 0 ? (
-                    <div className="flex h-full items-center justify-center text-xl text-[#716886]">
-                        Nenhuma criança encontrada.
+                    <div className="flex min-h-0 flex-1 items-center justify-center">
+                        <div className="rounded-2xl bg-white/90 px-6 py-4 text-sm font-medium text-red-700 shadow-sm">
+                            {error}
+                        </div>
                     </div>
                 ) : (
-                    <div className="grid h-full grid-cols-2 content-start gap-x-8 gap-y-8 overflow-y-auto px-2 pb-4 sm:grid-cols-4 lg:grid-cols-6">
-                        {filteredStudents.map((student) => (
-                            <button
-                                key={student.id}
-                                type="button"
-                                className="group flex flex-col items-center"
-                            >
-                                <div className="relative">
-                                    {/* Card da criança */}
-                                    <div className="flex h-28 w-28 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-[#f8d5b3] to-[#f5e0c9] text-6xl shadow-lg transition group-hover:scale-[1.02]">
-                                        🐰
-                                    </div>
+                    <div className="grid min-h-0 flex-1 grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+                        <aside className="min-h-0 overflow-visible">
+                            <div className="flex h-full min-h-0 flex-col rounded-2xl bg-white/90 p-4 shadow-md backdrop-blur-sm">
+                                <div className="mb-4">
+                                    <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#716886]">
+                                        Turma
+                                    </p>
 
-                                    {/* Level */}
-                                    <span className="absolute right-1.5 top-1.5 rounded-lg bg-black px-2 py-1 text-sm font-bold leading-tight text-white shadow-md">
-                                        {student.level === null
-                                            ? "lvl.—"
-                                            : `lvl.${student.level}`}
-                                    </span>
+                                    <div className="relative">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setClassOpen((open) => !open)
+                                            }
+                                            className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-bold text-[#372a58] transition hover:border-[#7254d5]"
+                                            aria-expanded={classOpen}
+                                        >
+                                            <span className="truncate">
+                                                {selectedClass?.name ??
+                                                    "Selecionar turma"}
+                                            </span>
+
+                                            <span
+                                                className={`i-lucide-chevron-${classOpen ? "up" : "down"} ml-2 shrink-0 text-base text-[#7254d5]`}
+                                                aria-hidden="true"
+                                            />
+                                        </button>
+
+                                        {classOpen && (
+                                            <div className="absolute left-0 right-0 z-20 mt-2 max-h-56 overflow-y-auto rounded-xl border border-[#ded8ea] bg-white p-1.5 shadow-xl">
+                                                {classes.length === 0 ? (
+                                                    <p className="px-3 py-2 text-sm text-[#716886]">
+                                                        Nenhuma turma encontrada.
+                                                    </p>
+                                                ) : (
+                                                    classes.map(
+                                                        (classRoom) => (
+                                                            <button
+                                                                key={
+                                                                    classRoom.id
+                                                                }
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    selectClass(
+                                                                        classRoom,
+                                                                    )
+                                                                }
+                                                                className={`flex w-full items-center rounded-lg px-3 py-2 text-left text-sm transition ${
+                                                                    classRoom.id ===
+                                                                    selectedClass?.id
+                                                                        ? "bg-[#f1edff] font-bold text-[#5541a9]"
+                                                                        : "text-[#716886] hover:bg-[#f5f2fb] hover:text-[#372a58]"
+                                                                }`}
+                                                            >
+                                                                {
+                                                                    classRoom.name
+                                                                }
+                                                            </button>
+                                                        ),
+                                                    )
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <span className="mt-2 max-w-28 truncate text-base font-bold text-black">
-                                    {student.name}
-                                </span>
-                            </button>
-                        ))}
+                                <div className="mb-3 flex items-center justify-between">
+                                    <div>
+                                        <p className="text-sm font-bold text-[#372a58]">
+                                            Alunos
+                                        </p>
+
+                                        <p className="text-xs text-[#716886]">
+                                            {students.length}{" "}
+                                            {students.length === 1
+                                                ? "aluno"
+                                                : "alunos"}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+                                    <div className="space-y-2">
+                                        {students.length === 0 ? (
+                                            <div className="rounded-xl bg-[#f5f2fb] px-3 py-4 text-center text-xs text-[#716886]">
+                                                Esta turma ainda não possui
+                                                alunos.
+                                            </div>
+                                        ) : (
+                                            filteredStudents.map((student) => (
+                                                <div
+                                                    key={student.id}
+                                                    className="flex items-center gap-3 rounded-xl border border-[#ebe7f2] bg-white px-3 py-2.5 shadow-sm"
+                                                >
+                                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f1edff] text-[#7254d5]">
+                                                        <span
+                                                            className="i-lucide-user-round text-lg"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </div>
+
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="truncate text-sm font-semibold text-[#372a58]">
+                                                            {student.name}
+                                                        </p>
+
+                                                        <p className="text-xs text-[#716886]">
+                                                            {student.level !==
+                                                            null
+                                                                ? `Nível ${student.level}`
+                                                                : "Sem nível registrado"}
+                                                        </p>
+                                                    </div>
+
+                                                    <span className="shrink-0 rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
+                                                        {student.level !== null
+                                                            ? `lvl.${student.level}`
+                                                            : "lvl.—"}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <section className="flex min-h-0 flex-col rounded-2xl bg-white/90 p-5 shadow-md backdrop-blur-sm">
+                            <div className="mb-4 flex shrink-0 items-start justify-between gap-4">
+                                <div>
+                                    <h2 className="text-lg font-bold text-[#372a58]">
+                                        Alunos da turma
+                                    </h2>
+
+                                    <p className="mt-1 text-sm text-[#716886]">
+                                        Organize a visualização dos alunos
+                                        usando os filtros abaixo.
+                                    </p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={saveFilters}
+                                    className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#7254d5] px-3.5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#6245c5]"
+                                >
+                                    <span
+                                        className="i-lucide-save text-base"
+                                        aria-hidden="true"
+                                    />
+                                    {saved ? "Filtros salvos" : "Salvar filtros"}
+                                </button>
+                            </div>
+
+                            <div className="mb-4 grid shrink-0 grid-cols-1 gap-3 md:grid-cols-[1fr_180px_180px]">
+                                <label className="relative block">
+                                    <span className="sr-only">
+                                        Buscar aluno
+                                    </span>
+
+                                    <span
+                                        className="i-lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-[#716886]"
+                                        aria-hidden="true"
+                                    />
+
+                                    <input
+                                        type="search"
+                                        value={search}
+                                        onChange={(event) =>
+                                            setSearch(event.target.value)
+                                        }
+                                        placeholder="Buscar aluno..."
+                                        className="w-full rounded-xl border border-[#ded8ea] bg-[#f5f2fb] py-2.5 pl-10 pr-3 text-sm text-[#302746] outline-none transition placeholder:text-[#716886] focus:border-[#7254d5] focus:ring-4 focus:ring-[#7254d5]/15"
+                                    />
+                                </label>
+
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setOrderOpen((open) => !open)
+                                        }
+                                        className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-semibold text-[#372a58] transition hover:border-[#7254d5]"
+                                        aria-expanded={orderOpen}
+                                    >
+                                        <span>
+                                            {order === "az"
+                                                ? "A → Z"
+                                                : "Z → A"}
+                                        </span>
+
+                                        <span
+                                            className={`i-lucide-chevron-${orderOpen ? "up" : "down"} text-base text-[#7254d5]`}
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+
+                                    {orderOpen && (
+                                        <div className="absolute left-0 right-0 z-20 mt-2 rounded-xl border border-[#ded8ea] bg-white p-1.5 shadow-xl">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setOrder("az");
+                                                    setOrderOpen(false);
+                                                }}
+                                                className={`flex w-full rounded-lg px-3 py-2 text-left text-sm ${
+                                                    order === "az"
+                                                        ? "bg-[#f1edff] font-bold text-[#5541a9]"
+                                                        : "text-[#716886] hover:bg-[#f5f2fb]"
+                                                }`}
+                                            >
+                                                A → Z
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setOrder("za");
+                                                    setOrderOpen(false);
+                                                }}
+                                                className={`flex w-full rounded-lg px-3 py-2 text-left text-sm ${
+                                                    order === "za"
+                                                        ? "bg-[#f1edff] font-bold text-[#5541a9]"
+                                                        : "text-[#716886] hover:bg-[#f5f2fb]"
+                                                }`}
+                                            >
+                                                Z → A
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setLevelOpen((open) => !open)
+                                        }
+                                        className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-semibold text-[#372a58] transition hover:border-[#7254d5]"
+                                        aria-expanded={levelOpen}
+                                    >
+                                        <span>
+                                            {levelOrder === "high"
+                                                ? "Maior nível"
+                                                : "Menor nível"}
+                                        </span>
+
+                                        <span
+                                            className={`i-lucide-chevron-${levelOpen ? "up" : "down"} text-base text-[#7254d5]`}
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+
+                                    {levelOpen && (
+                                        <div className="absolute left-0 right-0 z-20 mt-2 rounded-xl border border-[#ded8ea] bg-white p-1.5 shadow-xl">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setLevelOrder("high");
+                                                    setLevelOpen(false);
+                                                }}
+                                                className={`flex w-full rounded-lg px-3 py-2 text-left text-sm ${
+                                                    levelOrder === "high"
+                                                        ? "bg-[#f1edff] font-bold text-[#5541a9]"
+                                                        : "text-[#716886] hover:bg-[#f5f2fb]"
+                                                }`}
+                                            >
+                                                Maior nível
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setLevelOrder("low");
+                                                    setLevelOpen(false);
+                                                }}
+                                                className={`flex w-full rounded-lg px-3 py-2 text-left text-sm ${
+                                                    levelOrder === "low"
+                                                        ? "bg-[#f1edff] font-bold text-[#5541a9]"
+                                                        : "text-[#716886] hover:bg-[#f5f2fb]"
+                                                }`}
+                                            >
+                                                Menor nível
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+                                {filteredStudents.length === 0 ? (
+                                    <div className="flex min-h-40 items-center justify-center rounded-xl border border-dashed border-[#ded8ea] bg-[#f5f2fb] px-5 text-center">
+                                        <div>
+                                            <span
+                                                className="i-lucide-user-search mb-2 text-2xl text-[#7254d5]"
+                                                aria-hidden="true"
+                                            />
+
+                                            <p className="text-sm font-semibold text-[#372a58]">
+                                                Nenhum aluno encontrado
+                                            </p>
+
+                                            <p className="mt-1 text-xs text-[#716886]">
+                                                Tente alterar a busca ou os
+                                                filtros.
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                                        {filteredStudents.map((student) => (
+                                            <article
+                                                key={student.id}
+                                                className="rounded-xl border border-[#ebe7f2] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f1edff] text-[#7254d5]">
+                                                        <span
+                                                            className="i-lucide-user-round text-xl"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </div>
+
+                                                    <div className="min-w-0 flex-1">
+                                                        <h3 className="truncate text-sm font-bold text-[#372a58]">
+                                                            {student.name}
+                                                        </h3>
+
+                                                        <p className="mt-1 text-xs text-[#716886]">
+                                                            {student.level !==
+                                                            null
+                                                                ? `Nível ${student.level}`
+                                                                : "Sem nível registrado"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-4 flex items-center justify-between border-t border-[#ebe7f2] pt-3">
+                                                    <span className="text-xs font-medium text-[#716886]">
+                                                        Progresso
+                                                    </span>
+
+                                                    <span className="rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
+                                                        {student.level !== null
+                                                            ? `lvl.${student.level}`
+                                                            : "lvl.—"}
+                                                    </span>
+                                                </div>
+                                            </article>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
                     </div>
                 )}
-            </section>
+            </div>
         </main>
     );
 }

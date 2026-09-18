@@ -2,16 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { supabase } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
+import type { ClassRoom, School } from "@codi-go/supabase/types";
 
-type School = {
-    id: string;
-    name: string;
-};
-
-type ClassRoom = {
-    id: string;
-    name: string;
-};
 
 function TeacherHome() {
     const navigate = useNavigate();
@@ -160,7 +152,7 @@ function TeacherHome() {
 
             const { data: classData, error: classError } = await supabase
                 .from("classes")
-                .select("id, name")
+                .select("id, name, school_id")
                 .eq("school_id", selectedSchool.id)
                 .in("id", classIds)
                 .order("name");
