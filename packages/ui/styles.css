@@ -26,21 +26,21 @@
 }
 
 .ui-card {
-  @apply rounded-3xl bg-surface p-7 shadow-card sm:p-10;
+  --at-apply: rounded-3xl bg-surface p-4 shadow-card sm:p-8 border-(~ border);
 }
 
 .ui-field {
-  @apply rounded-xl border-(~ border) bg-surface-subtle px-4 py-3 text-(base fg) outline-none transition placeholder:text-muted focus:(border-primary ring-4 ring-primary/15) aria-[invalid=true]:border-danger;
+  --at-apply: rounded-xl border-(~ border) bg-surface-subtle px-4 py-3 text-(base fg) outline-none transition placeholder:text-muted focus:(border-primary ring-4 ring-primary/15) aria-[invalid=true]:border-danger;
 }
 
 .ui-button-primary {
-  @apply rounded-xl bg-primary px-4 py-3.5 font-bold text-on-primary shadow-primary transition hover:bg-primary-hover focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
+  --at-apply: rounded-xl bg-primary px-4 py-3.5 font-bold text-on-primary shadow-primary transition hover:bg-primary-hover focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
 }
 
 .ui-link {
-  @apply font-bold text-primary underline-offset-4 hover:underline focus-visible:(outline-none ring-2 ring-primary/30);
+  --at-apply: font-bold text-primary underline-offset-4 hover:underline focus-visible:(outline-none ring-2 ring-primary/30);
 }
 
 .ui-alert-danger {
-  @apply rounded-xl bg-danger-soft px-4 py-3 text-(sm on-danger) font-medium;
+  --at-apply: rounded-xl bg-danger-soft px-4 py-3 text-(sm on-danger) font-medium;
 }

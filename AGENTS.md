@@ -369,7 +369,7 @@ A configuração utiliza principalmente:
 * `transformerDirectives`;
 * `transformerVariantGroup`;
 * configurações de `theme`;
-* classes de atalho definidas no package de UI com `@apply`.
+* classes de atalho definidas no package de UI com `--at-apply:`.
 
 Os arquivos relacionados à configuração global de estilização são:
 

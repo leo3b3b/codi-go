@@ -1,12 +1,19 @@
 import { Outlet } from "react-router";
 import icebergBackground from "@codi-go/ui/images/backgroundIceberg.png";
 import mascot from "@codi-go/ui/images/codiPisca.png";
+import logo from "@codi-go/ui/images/logo.png";
 
 function AuthLayout() {
     return (
-        <main className="grid min-h-screen bg-bg text-fg lg:grid-cols-2">
+        <main className="grid h-screen bg-bg text-fg lg:grid-cols-2">
             <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:px-12">
                 <div className="w-full max-w-md">
+                    <img
+                        src={logo}
+                        alt="CodiGO!"
+                        className="mx-auto mb-3 h-18 w-auto object-contain lg:hidden"
+                    />
+
                     <Outlet />
                 </div>
             </section>
@@ -22,9 +29,11 @@ function AuthLayout() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.24),transparent_26%),radial-gradient(circle_at_80%_76%,rgba(230,201,255,0.34),transparent_24%)]" />
 
                 <div className="relative max-w-md text-on-primary">
-                    <p className="text-(sm on-primary/75) font-bold tracking-[0.24em]">
-                        CodiGO!
-                    </p>
+                    <img
+                        src={logo}
+                        alt="CodiGO!"
+                        className="h-32 w-auto object-contain"
+                    />
 
                     <h1 className="mt-6 text-4xl leading-tight font-black tracking-tight xl:text-5xl">
                         Pronto para se aventurar?

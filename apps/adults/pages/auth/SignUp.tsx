@@ -4,7 +4,6 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as v from "valibot";
 
 import { signUp } from "@/features/auth";
-import logo from "@codi-go/ui/images/logo.png";
 
 const signUpSchema = v.pipe(
     v.object({
@@ -65,17 +64,7 @@ function SignUpPage() {
     return (
         <section className="ui-card">
             <header className="mb-8 text-center">
-                <img
-                    src={logo}
-                    alt="CodiGO!"
-                    className="mx-auto h-24 w-auto object-contain"
-                />
-
-                <h1 className="mt-6 text-(3xl heading) font-black tracking-tight">Criar conta</h1>
-
-                <p className="mt-2 text-muted">
-                    Comece a acompanhar suas turmas no CodiGO!
-                </p>
+                <h1 className="mt-4 text-(2xl heading) font-black tracking-tight">Criar conta</h1>
             </header>
 
             <form

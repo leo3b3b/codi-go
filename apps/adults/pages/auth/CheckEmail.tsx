@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router";
-import logo from "@codi-go/ui/images/logo.png";
 
 type CheckEmailLocationState = {
     email?: string;
@@ -13,13 +12,7 @@ function CheckEmailPage() {
     return (
         <section className="ui-card">
             <header className="mb-8 text-center">
-                <img
-                    src={logo}
-                    alt="CodiGO!"
-                    className="mx-auto h-24 w-auto object-contain"
-                />
-
-                <h1 className="mt-6 text-(3xl heading) font-black tracking-tight">
+                <h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
                     Confirme seu e-mail
                 </h1>
 

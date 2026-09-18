@@ -4,7 +4,6 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as v from "valibot";
 
 import { signInWithPassword } from "@/features/auth";
-import logo from "@codi-go/ui/images/logo.png";
 
 const signInSchema = v.object({
     email: v.pipe(
@@ -47,19 +46,9 @@ function SignInPage() {
     return (
         <section className="ui-card">
             <header className="mb-8 text-center">
-                <img
-                    src={logo}
-                    alt="CodiGO!"
-                    className="mx-auto h-24 w-auto object-contain"
-                />
-
-                <h1 className="mt-6 text-(3xl heading) font-black tracking-tight">
-                    Bem-vindo!
+                <h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
+                    Bom te ver!
                 </h1>
-
-                <p className="mt-2 text-muted">
-                    Entre para continuar sua aventura.
-                </p>
             </header>
 
             <form
