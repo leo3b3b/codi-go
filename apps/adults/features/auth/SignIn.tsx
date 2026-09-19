@@ -1,23 +1,9 @@
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as v from "valibot";
 
 import { signInWithPassword } from "./auth.service";
-
-const signInSchema = v.object({
-    email: v.pipe(
-        v.string(),
-        v.nonEmpty("Informe seu e-mail."),
-        v.email("Informe um e-mail válido."),
-    ),
-    password: v.pipe(
-        v.string(),
-        v.nonEmpty("Informe sua senha."),
-    ),
-});
-
-type SignInFormData = v.InferOutput<typeof signInSchema>;
+import { signInSchema, type SignInFormData } from "./auth.schemas";
 
 export default function SignInPage() {
     const navigate = useNavigate();
@@ -111,7 +97,7 @@ export default function SignInPage() {
 
             <p className="mt-7 text-(center sm muted)">
                 Ainda não tem uma conta?{" "}
-                <Link to="/signup" className="ui-link">
+                <Link to="/criar-conta" className="ui-link">
                     Criar conta
                 </Link>
             </p>
