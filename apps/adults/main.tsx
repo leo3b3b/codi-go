@@ -3,16 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
-// Pages
 import App from './App.tsx';
-import SignInPage from './pages/auth/SignIn.tsx';
-import SignUpPage from './pages/auth/SignUp.tsx';
-import CheckEmailPage from './pages/auth/CheckEmail.tsx';
+import { AuthLayout, CheckEmailPage, SignInPage, SignUpPage } from '@/features/auth';
 
-// Layouts
-import AuthLayout from './layouts/auth.tsx';
-
-// CSS
 import '@codi-go/ui/css';
 import 'virtual:uno.css';
 

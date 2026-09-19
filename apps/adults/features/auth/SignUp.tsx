@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as v from "valibot";
 
-import { signUp } from "@/features/auth";
+import { signUp } from "./auth.service";
 
 const signUpSchema = v.pipe(
     v.object({
@@ -34,7 +34,7 @@ const signUpSchema = v.pipe(
 
 type SignUpFormData = v.InferOutput<typeof signUpSchema>;
 
-function SignUpPage() {
+export default function SignUpPage() {
     const navigate = useNavigate();
 
     const {
@@ -153,5 +153,3 @@ function SignUpPage() {
         </section>
     );
 }
-
-export default SignUpPage;

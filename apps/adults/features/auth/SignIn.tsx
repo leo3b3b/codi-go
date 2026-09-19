@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as v from "valibot";
 
-import { signInWithPassword } from "@/features/auth";
+import { signInWithPassword } from "./auth.service";
 
 const signInSchema = v.object({
     email: v.pipe(
@@ -19,7 +19,7 @@ const signInSchema = v.object({
 
 type SignInFormData = v.InferOutput<typeof signInSchema>;
 
-function SignInPage() {
+export default function SignInPage() {
     const navigate = useNavigate();
 
     const {
@@ -118,5 +118,3 @@ function SignInPage() {
         </section>
     );
 }
-
-export default SignInPage;
