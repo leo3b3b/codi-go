@@ -22,11 +22,11 @@ const router = createBrowserRouter([
         Component: SignInPage,
       },
       {
-        path: "signup",
+        path: "criar-conta",
         Component: SignUpPage,
       },
       {
-        path: "check-email",
+        path: "verificar-email",
         Component: CheckEmailPage,
       },
     ],
