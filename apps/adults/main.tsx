@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
 import App from './App.tsx';
@@ -17,10 +17,6 @@ const router = createBrowserRouter([
   {
     Component: AuthLayout,
     children: [
-      {
-        index: true,
-        element: <Navigate to="/login" replace />,
-      },
       {
         path: "login",
         Component: SignInPage,
