@@ -1,7 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import { requireAuth } from '@codi-go/supabase';
 
 import App from './App.tsx';
 import { AuthLayout, CheckEmailPage, SignInPage, SignUpPage } from '@/features/auth';
@@ -13,24 +14,21 @@ const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
+    middleware: [requireAuth]
   },
   {
     Component: AuthLayout,
     children: [
       {
-        index: true,
-        element: <Navigate to="/login" replace />,
-      },
-      {
         path: "login",
         Component: SignInPage,
       },
       {
-        path: "signup",
+        path: "criar-conta",
         Component: SignUpPage,
       },
       {
-        path: "check-email",
+        path: "verificar-email",
         Component: CheckEmailPage,
       },
     ],

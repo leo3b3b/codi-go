@@ -1,38 +1,9 @@
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as v from "valibot";
 
 import { signUp } from "./auth.service";
-
-const signUpSchema = v.pipe(
-    v.object({
-        email: v.pipe(
-            v.string(),
-            v.nonEmpty("Informe seu e-mail."),
-            v.email("Informe um e-mail válido."),
-        ),
-        password: v.pipe(
-            v.string(),
-            v.nonEmpty("Informe sua senha."),
-            v.minLength(6, "A senha deve ter pelo menos 6 caracteres."),
-        ),
-        confirmation: v.pipe(
-            v.string(),
-            v.nonEmpty("Confirme sua senha."),
-            v.minLength(6, "A senha deve ter pelo menos 6 caracteres."),
-        ),
-    }),
-    v.forward(
-        v.check(
-            ({ password, confirmation }) => password === confirmation,
-            "As senhas não coincidem.",
-        ),
-        ["confirmation"],
-    ),
-);
-
-type SignUpFormData = v.InferOutput<typeof signUpSchema>;
+import { signUpSchema, type SignUpFormData } from "./auth.schemas";
 
 export default function SignUpPage() {
     const navigate = useNavigate();
@@ -50,7 +21,7 @@ export default function SignUpPage() {
         try {
             await signUp(email, password);
 
-            navigate("/check-email", {
+            navigate("/verificar-email", {
                 replace: true,
                 state: { email },
             });
@@ -64,7 +35,7 @@ export default function SignUpPage() {
     return (
         <section className="ui-card">
             <header className="mb-8 text-center">
-                <h1 className="mt-4 text-(2xl heading) font-black tracking-tight">Criar conta</h1>
+                <h1 className="mt-4 text-(2xl heading) font-black tracking-tight">Crie sua conta</h1>
             </header>
 
             <form
