@@ -2,10 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import { requireAuth } from '@codi-go/supabase';
 
 import App from './App.tsx';
-import { AuthLayout, CheckEmailPage, SignInPage, SignUpPage } from '@/features/auth';
+import { AuthLayout, CheckEmailPage, SignInPage, SignUpPage, requireAuth } from '@/features/auth';
 
 import '@codi-go/ui/css';
 import 'virtual:uno.css';
