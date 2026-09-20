@@ -146,8 +146,6 @@ codi-go/
 │   └── (adults || students)/
 │       ├── assets/
 │       ├── features/
-│       ├── pages/
-│       ├── layouts/
 │       ├── main.tsx
 │       ├── index.html
 │       ├── styles.css
@@ -189,9 +187,8 @@ Por exemplo:
 ```text
 apps/adults/
 ├── features/
-├── pages/
-├── layouts/
-├── lib/
+│   └── auth/
+│       └── index.ts
 ├── main.tsx
 └── index.html
 ```
@@ -200,10 +197,12 @@ e não:
 
 ```text
 apps/adults/
-└── src/
-    ├── features/
-    ├── pages/
-    └── main.tsx
+├── src/
+│   └── features/
+│       └── auth/
+│           └── index.ts
+├── main.tsx
+└── index.html
 ```
 
 Portanto, ao adicionar código específico de uma aplicação, coloque-o diretamente em `apps/*/` ou `packages/*/`, de acordo com a aplicação.
@@ -313,14 +312,14 @@ features/
     └── index.ts
 ```
 
-O `index.ts` da feature funciona como ponto de reexportação público.
+O `index.ts` da feature funciona como ponto de reexportação público, ou seja, usamos barrel files.
 
 Exemplo:
 
 ```ts
 // features/auth/index.ts
 
-export * from './auth.service';
+export { default as AuthLayout } from './auth.layout';
 ```
 
 Ao importar funcionalidades de outros módulos, prefira utilizar o ponto de entrada da feature quando isso fizer sentido, em vez de acessar diretamente arquivos internos.
@@ -332,7 +331,7 @@ O projeto possui o alias `@`, que aponta para a raiz da aplicação corrente.
 Em `apps/adults`, por exemplo:
 
 ```ts
-import { signInWithPassword } from '@/features/auth';
+import { AuthLayout } from '@/features/auth';
 ```
 
 Nesse contexto, `@` aponta para:
@@ -346,13 +345,6 @@ Em `apps/students`, `@` aponta para:
 ```text
 apps/students/
 ```
-
-Além de `features/`, a organização das aplicações também utiliza diretórios com responsabilidades gerais, como:
-
-* `pages/` — páginas associadas às rotas;
-* `types/` — tipos da aplicação;
-* `assets/` — recursos estáticos;
-* `layouts/` — layouts da aplicação.
 
 Antes de criar uma nova pasta ou padrão de organização, verifique como o projeto já organiza responsabilidades semelhantes.
 

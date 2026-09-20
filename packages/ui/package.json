@@ -1,14 +1,14 @@
 {
-    "name": "@codi-go/ui",
-    "private": true,
-    "version": "0.0.0",
-    "type": "module",
-    "exports": {
-        "./preset": "./preset.ts",
-        "./css": "./styles.css",
-        "./images/*": "./assets/images/*"
-    },
-    "peerDependencies": {
-        "unocss": "^66.10.2"
-    }
+	"name": "@codi-go/ui",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		"./preset": "./preset.ts",
+		"./css": "./styles.css",
+		"./images/*": "./assets/images/*"
+	},
+	"peerDependencies": {
+		"unocss": "^66.10.2"
+	}
 }
