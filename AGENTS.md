@@ -312,41 +312,21 @@ features/
     └── index.ts
 ```
 
-O `index.ts` da feature funciona como ponto de reexportação público, ou seja, usamos barrel files.
+O `index.ts` da feature funciona como ponto de reexportação público (barrel file).
 
-Exemplo:
+A feature `adults/auth` é a principal referência de implementação para a organização e arquitetura de novas features. Antes de criar ou modificar uma feature, consulte sua implementação atual e preserve seus padrões quando forem aplicáveis.
 
-```ts
-// features/auth/index.ts
+Isso inclui, entre outros aspectos:
 
-export { default as AuthLayout } from './auth.layout';
-```
+* organização dos arquivos;
+* responsabilidade dos services;
+* acesso a dados;
+* definição e uso de tipos;
+* exports pelo `index.ts`;
+* separação entre UI e lógica de negócio;
+* nomenclatura e convenções utilizadas pela feature.
 
-Ao importar funcionalidades de outros módulos, prefira utilizar o ponto de entrada da feature quando isso fizer sentido, em vez de acessar diretamente arquivos internos.
-
-As mesmas convenções de organização de features podem ser utilizadas nas diferentes aplicações, mas uma feature pertence à aplicação em que sua responsabilidade existe.
-
-O projeto possui o alias `@`, que aponta para a raiz da aplicação corrente.
-
-Em `apps/adults`, por exemplo:
-
-```ts
-import { AuthLayout } from '@/features/auth';
-```
-
-Nesse contexto, `@` aponta para:
-
-```text
-apps/adults/
-```
-
-Em `apps/students`, `@` aponta para:
-
-```text
-apps/students/
-```
-
-Antes de criar uma nova pasta ou padrão de organização, verifique como o projeto já organiza responsabilidades semelhantes.
+A existência de `adults/auth` como referência não significa que toda feature deva reproduzir sua estrutura literalmente. Quando houver uma diferença de responsabilidade, siga o padrão existente mais próximo e justifique novas abstrações ou convenções quando necessário.
 
 ## 7. Estilização
 
@@ -384,14 +364,30 @@ A estilização global utiliza variáveis CSS e utilitários do UnoCSS. Um exemp
 ```css
 :root {
   color-scheme: light dark;
-  --color-bg: light-dark(oklch(90% 0 none), oklch(20% 0 none));
-  --color-fg: light-dark(#111111, #ffffff);
-  --color-primary: oklch(70% 0.18 306);
-  --color-muted: light-dark(#6b7280, #9ca3af);
+
+  /* Foundation */
+  --color-bg: light-dark(#f9f9f9, #181525);
+  --color-surface: light-dark(#f5f4f9, #242035);
+  --color-surface-subtle: light-dark(#f5f2fb, #302b42);
+  --color-fg: light-dark(#302746, #faf8ff);
+  --color-heading: light-dark(#372a58, #ffffff);
+  --color-muted: light-dark(#716886, #c0b8cf);
+  --color-border: light-dark(#ded8ea, #4b435f);
+
+  /* demais tokens, consultar quando necessário */
 }
 
-/* Exemplo de componente CSS fictício */
-.button {
-  @apply bg-primary text-white;
+.ui-card {
+  --at-apply: rounded-3xl bg-surface p-4 shadow-card sm:p-8 border-(~ border);
 }
 ```
+
+## 8. Banco de dados
+
+O acesso a dados do CodiGO! segue as decisões documentadas em:
+
+`docs/decisions/0005-database.md`
+
+Antes de alterar ou criar código que envolva Supabase, PostgreSQL, queries, mutations, RPCs, RLS, policies ou migrations, consulte esse decision doc e verifique também a implementação atual do repositório.
+
+As decisões do documento devem ser tratadas como parte da arquitetura vigente. Não introduza outro padrão de acesso a dados sem justificar a mudança e, quando necessário, consultar Leonardo.
