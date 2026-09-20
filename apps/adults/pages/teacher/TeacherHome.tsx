@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+
 import { supabase } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
 import type { ClassRoom, School } from "@codi-go/supabase/types";
 
-
 function TeacherHome() {
     const navigate = useNavigate();
+    const { schoolId } = useParams<{ schoolId: string }>();
 
     const [schools, setSchools] = useState<School[]>([]);
     const [classes, setClasses] = useState<ClassRoom[]>([]);
@@ -25,6 +26,9 @@ function TeacherHome() {
      * CARREGAR ESCOLAS
      *
      * Busca as escolas às quais o professor logado está associado.
+     *
+     * A escola atual vem da URL. A URL representa o contexto
+     * institucional atual da aplicação.
      */
     useEffect(() => {
         async function loadSchools() {
@@ -42,7 +46,7 @@ function TeacherHome() {
 
             const { data: schoolLinks, error: schoolLinksError } =
                 await supabase
-                    .from("schools_profiles")
+                    .from("school_memberships")
                     .select("school_id")
                     .eq("profile_id", user.id);
 
@@ -58,6 +62,7 @@ function TeacherHome() {
 
             if (schoolIds.length === 0) {
                 setSchools([]);
+                setSelectedSchool(null);
                 setLoadingSchools(false);
                 return;
             }
@@ -82,32 +87,47 @@ function TeacherHome() {
             setSchools(loadedSchools);
 
             /*
-             * Se o professor já havia escolhido uma escola anteriormente,
-             * tentamos manter essa escolha.
-             *
-             * Caso contrário, usamos a primeira escola disponível.
+             * A escola presente na URL precisa pertencer
+             * às escolas às quais o professor possui vínculo.
              */
-            const savedSchoolId = localStorage.getItem(
-                "codi-go:selected-school",
+            const currentSchool = loadedSchools.find(
+                (school) => school.id === schoolId,
             );
 
-            const savedSchool = loadedSchools.find(
-                (school) => school.id === savedSchoolId,
-            );
+            /*
+             * Se a URL ainda não possui uma escola, usamos a primeira
+             * escola disponível e colocamos seu ID na URL.
+             *
+             * Se a URL possui uma escola inválida ou sem vínculo,
+             * também direcionamos para uma escola autorizada.
+             */
+            if (!currentSchool) {
+                const fallbackSchool = loadedSchools[0] ?? null;
 
-            setSelectedSchool(savedSchool ?? loadedSchools[0] ?? null);
+                if (fallbackSchool) {
+                    navigate(`/${fallbackSchool.id}/dashboard`, {
+                        replace: true,
+                    });
+                }
 
+                setSelectedSchool(fallbackSchool);
+                setLoadingSchools(false);
+                return;
+            }
+
+            setSelectedSchool(currentSchool);
             setLoadingSchools(false);
         }
 
         loadSchools();
-    }, [navigate]);
+    }, [navigate, schoolId]);
 
     /*
      * CARREGAR TURMAS
      *
-     * Sempre que a escola selecionada mudar, buscamos
-     * somente as turmas dessa escola às quais o professor está associado.
+     * Busca somente as turmas:
+     * 1. vinculadas ao professor por classes_profiles;
+     * 2. pertencentes à escola atualmente presente na URL.
      */
     useEffect(() => {
         async function loadClasses() {
@@ -136,6 +156,7 @@ function TeacherHome() {
 
             if (classLinksError) {
                 setError("Não foi possível carregar suas turmas.");
+                setClasses([]);
                 setLoadingClasses(false);
                 return;
             }
@@ -159,37 +180,43 @@ function TeacherHome() {
 
             if (classError) {
                 setError("Não foi possível carregar suas turmas.");
+                setClasses([]);
                 setLoadingClasses(false);
                 return;
             }
 
             setClasses(classData ?? []);
-
             setLoadingClasses(false);
         }
 
         loadClasses();
-    }, [selectedSchool, navigate]);
+    }, [navigate, selectedSchool]);
 
     /*
      * ESCOLHER ESCOLA
      *
-     * A escola permanece selecionada e o menu continua aberto.
+     * A escola selecionada é representada pela URL.
+     * Não usamos localStorage como fonte do contexto.
      */
     function selectSchool(school: School) {
         setSelectedSchool(school);
 
-        localStorage.setItem("codi-go:selected-school", school.id);
+        navigate(`/${school.id}/dashboard`);
     }
 
     /*
      * ABRIR TURMA
      *
      * A turma não é apenas "selecionada".
-     * O clique leva diretamente para a Tela 5 daquela turma.
+     * O clique leva diretamente para a tela daquela turma,
+     * preservando o contexto da escola na URL.
      */
     function openClass(classRoom: ClassRoom) {
-        navigate(`/app/turma/${classRoom.id}`);
+        if (!selectedSchool) {
+            return;
+        }
+
+        navigate(`/${selectedSchool.id}/turmas/${classRoom.id}`);
     }
 
     if (loadingSchools) {
@@ -207,51 +234,75 @@ function TeacherHome() {
             {/* =========================================================
                 CABEÇALHO
             ========================================================== */}
-            <header className="flex h-24 items-center justify-between bg-gradient-to-r from-[#f5e1dc] via-[#e3cce0] to-[#bb8ee9] px-10 shadow-xl">
-                {/* LOGO */}
-                <button
-                    type="button"
-                    onClick={() => navigate("/app")}
-                    className="transition hover:scale-[1.02]"
-                >
-                    <img
-                        src={logo}
-                        alt="CodiGO!"
-                        className="w-44 object-contain"
-                    />
-                </button>
-
-                {/* MENU SUPERIOR */}
-                <nav className="flex items-center gap-14 text-xl font-bold">
+            <header className="relative h-20 shrink-0 bg-[rgba(112,86,204,0.76)] shadow-lg">
+                <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
                     <button
                         type="button"
-                        onClick={() =>
-                            navigate("/app/configuracoes")
-                        }
-                        className="rounded-xl px-4 py-2 text-black transition hover:bg-white/30"
+                        onClick={() => {
+                            if (selectedSchool) {
+                                navigate(
+                                    `/${selectedSchool.id}/dashboard`,
+                                );
+                            }
+                        }}
+                        className="flex items-center focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30"
+                        aria-label="Ir para a página inicial"
                     >
-                        Configurações
+                        <img
+                            src={logo}
+                            alt="CodiGO!"
+                            className="h-11 w-auto"
+                        />
                     </button>
 
-                    <button
-                        type="button"
-                        className="rounded-xl bg-white px-5 py-3 text-black shadow-sm"
-                    >
-                        Turmas
-                    </button>
+                    <nav className="absolute left-1/2 flex h-full -translate-x-1/2 items-center gap-2 text-base font-bold text-white">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (selectedSchool) {
+                                    navigate(
+                                        `/${selectedSchool.id}/configuracoes`,
+                                    );
+                                }
+                            }}
+                            className="h-full px-5 transition-opacity hover:opacity-80"
+                        >
+                            Configurações
+                        </button>
 
-                    <button
-                        type="button"
-                        onClick={() => navigate("/app/medias")}
-                        className="rounded-xl px-4 py-2 text-black transition hover:bg-white/30"
-                    >
-                        Médias
-                    </button>
-                </nav>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (selectedSchool) {
+                                    navigate(
+                                        `/${selectedSchool.id}/turmas`,
+                                    );
+                                }
+                            }}
+                            className="h-full border-b-3 border-white px-5"
+                            aria-current="page"
+                        >
+                            Turmas
+                        </button>
 
-                {/* ESCOLA ATUAL */}
-                <div className="min-w-52 text-right text-2xl font-bold text-white">
-                    {selectedSchool?.name ?? "Nenhuma escola"}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (selectedSchool) {
+                                    navigate(
+                                        `/${selectedSchool.id}/medias`,
+                                    );
+                                }
+                            }}
+                            className="h-full px-5 transition-opacity hover:opacity-80"
+                        >
+                            Médias
+                        </button>
+                    </nav>
+
+                    <div className="min-w-40 text-right text-base font-bold text-white">
+                        {selectedSchool?.name ?? "Escola"}
+                    </div>
                 </div>
             </header>
 
@@ -273,12 +324,26 @@ function TeacherHome() {
                                 setSchoolMenuOpen(!schoolMenuOpen)
                             }
                             className="flex w-full items-center justify-center gap-4 text-2xl text-black"
+                            aria-expanded={schoolMenuOpen}
                         >
                             Escolha sua escola
 
-                            <span className="text-2xl">
-                                {schoolMenuOpen ? "⌃" : "⌄"}
-                            </span>
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d={schoolMenuOpen ? "M6 15L12 9L18 15" : "M6 9L12 15L18 9"}
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
                         </button>
 
                         {schoolMenuOpen && (
@@ -290,8 +355,7 @@ function TeacherHome() {
                                 ) : (
                                     schools.map((school) => {
                                         const isSelected =
-                                            school.id ===
-                                            selectedSchool?.id;
+                                            school.id === selectedSchool?.id;
 
                                         return (
                                             <button
@@ -300,11 +364,10 @@ function TeacherHome() {
                                                 onClick={() =>
                                                     selectSchool(school)
                                                 }
-                                                className={`rounded-2xl px-5 py-4 text-xl font-medium transition ${
-                                                    isSelected
-                                                        ? "bg-gradient-to-r from-[#df9cf4] via-[#e5c4e8] to-[#fff0bd] text-[#3267d9]"
-                                                        : "bg-[#d8d8d8] text-[#3267d9] hover:bg-[#cfcfcf]"
-                                                }`}
+                                                className={`rounded-2xl px-5 py-4 text-xl font-medium transition ${isSelected
+                                                    ? "bg-gradient-to-r from-[#df9cf4] via-[#e5c4e8] to-[#fff0bd] text-[#3267d9]"
+                                                    : "bg-[#d8d8d8] text-[#3267d9] hover:bg-[#cfcfcf]"
+                                                    }`}
                                             >
                                                 {school.name}
                                             </button>
@@ -325,12 +388,26 @@ function TeacherHome() {
                                 setClassMenuOpen(!classMenuOpen)
                             }
                             className="flex w-full items-center justify-center gap-4 text-2xl text-black"
+                            aria-expanded={classMenuOpen}
                         >
                             Escolha sua turma
 
-                            <span className="text-2xl">
-                                {classMenuOpen ? "⌃" : "⌄"}
-                            </span>
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d={classMenuOpen ? "M6 15L12 9L18 15" : "M6 9L12 15L18 9"}
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
                         </button>
 
                         {classMenuOpen && (
@@ -366,7 +443,7 @@ function TeacherHome() {
                     PAINEL DIREITO — ESTATÍSTICA GERAL
                 ====================================================== */}
                 <div className="flex min-h-0 flex-col rounded-[2rem] bg-white/85 p-10 shadow-2xl">
-                    <div className="mb-6 self-start rounded-full bg-white px-6 py-3 text-2xl shadow-lg">
+                    <div className="mb-6 self-start rounded-full bg-purple px-6 py-3 text-2xl shadow-lg">
                         Pontos fortes e fracos de cada turma
                     </div>
 

@@ -1,25 +1,33 @@
 import { useEffect, useMemo, useState } from "react";
+
 import { useNavigate, useParams } from "react-router";
+
 import { supabase } from "@codi-go/supabase";
+
 import logo from "@codi-go/ui/images/logo.png";
+
 import type { Student, ClassRoom, School } from "@codi-go/supabase/types";
 
 type OrderOption = "az" | "za";
+
 type LevelOption = "high" | "low";
 
 const FILTERS_KEY = "codi-go:teacher-class-filters";
 
 function TeacherClass() {
     const navigate = useNavigate();
-    const { classId } = useParams();
+
+    const { schoolId, classId } = useParams();
 
     const [school, setSchool] = useState<School | null>(null);
     const [classes, setClasses] = useState<ClassRoom[]>([]);
-    const [selectedClass, setSelectedClass] = useState<ClassRoom | null>(null);
+    const [selectedClass, setSelectedClass] =
+        useState<ClassRoom | null>(null);
     const [students, setStudents] = useState<Student[]>([]);
 
     const [order, setOrder] = useState<OrderOption>("az");
-    const [levelOrder, setLevelOrder] = useState<LevelOption>("high");
+    const [levelOrder, setLevelOrder] =
+        useState<LevelOption>("high");
     const [search, setSearch] = useState("");
 
     const [orderOpen, setOrderOpen] = useState(false);
@@ -32,7 +40,7 @@ function TeacherClass() {
 
     useEffect(() => {
         async function loadClass() {
-            if (!classId) {
+            if (!schoolId || !classId) {
                 setError("Turma não encontrada.");
                 setLoading(false);
                 return;
@@ -42,12 +50,56 @@ function TeacherClass() {
             setError("");
 
             const {
+                data: { user },
+                error: userError,
+            } = await supabase.auth.getUser();
+
+            if (userError || !user) {
+                setError("Não foi possível identificar o professor.");
+                setLoading(false);
+                return;
+            }
+
+            const {
+                data: membership,
+                error: membershipError,
+            } = await supabase
+                .from("school_memberships")
+                .select("school_id")
+                .eq("school_id", schoolId)
+                .eq("profile_id", user.id)
+                .maybeSingle();
+
+            if (membershipError || !membership) {
+                setError("Você não tem acesso a esta escola.");
+                setLoading(false);
+                return;
+            }
+
+            const {
+                data: teacherClass,
+                error: teacherClassError,
+            } = await supabase
+                .from("classes_profiles")
+                .select("class_id")
+                .eq("class_id", classId)
+                .eq("profile_id", user.id)
+                .maybeSingle();
+
+            if (teacherClassError || !teacherClass) {
+                setError("Você não tem acesso a esta turma.");
+                setLoading(false);
+                return;
+            }
+
+            const {
                 data: classData,
                 error: classError,
             } = await supabase
                 .from("classes")
                 .select("id, name, school_id")
                 .eq("id", classId)
+                .eq("school_id", schoolId)
                 .single();
 
             if (classError || !classData) {
@@ -64,26 +116,55 @@ function TeacherClass() {
             } = await supabase
                 .from("school")
                 .select("id, trade_name, legal_name")
-                .eq("id", classData.school_id)
+                .eq("id", schoolId)
                 .single();
 
             if (!schoolError && schoolData) {
                 setSchool({
                     id: schoolData.id,
-                    name: schoolData.trade_name || schoolData.legal_name,
+                    name:
+                        schoolData.trade_name ||
+                        schoolData.legal_name,
                 });
             }
 
             const {
-                data: classList,
-                error: classListError,
+                data: teacherClasses,
+                error: teacherClassesError,
             } = await supabase
-                .from("classes")
-                .select("id, name, school_id")
-                .eq("school_id", classData.school_id)
-                .order("name");
+                .from("classes_profiles")
+                .select("class_id")
+                .eq("profile_id", user.id);
 
-            if (!classListError) {
+            if (teacherClassesError) {
+                setError("Não foi possível carregar suas turmas.");
+                setLoading(false);
+                return;
+            }
+
+            const teacherClassIds = (teacherClasses ?? []).map(
+                (teacherClass) => teacherClass.class_id,
+            );
+
+            if (teacherClassIds.length === 0) {
+                setClasses([]);
+            } else {
+                const {
+                    data: classList,
+                    error: classListError,
+                } = await supabase
+                    .from("classes")
+                    .select("id, name, school_id")
+                    .eq("school_id", schoolId)
+                    .in("id", teacherClassIds)
+                    .order("name");
+
+                if (classListError) {
+                    setError("Não foi possível carregar suas turmas.");
+                    setLoading(false);
+                    return;
+                }
+
                 setClasses(classList ?? []);
             }
 
@@ -109,17 +190,29 @@ function TeacherClass() {
             const levels = new Map<string, number>();
 
             if (studentIds.length > 0) {
-                const { data: progressData } = await supabase
-                    .from("progress")
-                    .select("student_id, level_id")
-                    .in("student_id", studentIds);
+                const { data: progressData, error: progressError } =
+                    await supabase
+                        .from("progress")
+                        .select("student_id, level_id")
+                        .in("student_id", studentIds);
+
+                if (progressError) {
+                    setError(
+                        "Não foi possível carregar o progresso dos alunos.",
+                    );
+                    setLoading(false);
+                    return;
+                }
 
                 for (const progress of progressData ?? []) {
                     const currentLevel =
                         levels.get(progress.student_id) ?? 0;
 
                     if (progress.level_id > currentLevel) {
-                        levels.set(progress.student_id, progress.level_id);
+                        levels.set(
+                            progress.student_id,
+                            progress.level_id,
+                        );
                     }
                 }
             }
@@ -138,7 +231,7 @@ function TeacherClass() {
         }
 
         loadClass();
-    }, [classId]);
+    }, [schoolId, classId]);
 
     useEffect(() => {
         const savedFilters = localStorage.getItem(FILTERS_KEY);
@@ -150,7 +243,10 @@ function TeacherClass() {
         try {
             const filters = JSON.parse(savedFilters);
 
-            if (filters.order === "az" || filters.order === "za") {
+            if (
+                filters.order === "az" ||
+                filters.order === "za"
+            ) {
                 setOrder(filters.order);
             }
 
@@ -173,7 +269,9 @@ function TeacherClass() {
         const normalizedSearch = search.trim().toLowerCase();
 
         const result = students.filter((student) =>
-            student.name.toLowerCase().includes(normalizedSearch),
+            student.name
+                .toLowerCase()
+                .includes(normalizedSearch),
         );
 
         result.sort((a, b) => {
@@ -187,15 +285,20 @@ function TeacherClass() {
             }
 
             if (levelOrder === "low") {
-                const levelA = a.level ?? Number.MAX_SAFE_INTEGER;
-                const levelB = b.level ?? Number.MAX_SAFE_INTEGER;
+                const levelA =
+                    a.level ?? Number.MAX_SAFE_INTEGER;
+                const levelB =
+                    b.level ?? Number.MAX_SAFE_INTEGER;
 
                 if (levelA !== levelB) {
                     return levelA - levelB;
                 }
             }
 
-            const comparison = a.name.localeCompare(b.name, "pt-BR");
+            const comparison = a.name.localeCompare(
+                b.name,
+                "pt-BR",
+            );
 
             return order === "az" ? comparison : -comparison;
         });
@@ -222,22 +325,33 @@ function TeacherClass() {
 
     function selectClass(nextClass: ClassRoom) {
         setClassOpen(false);
-        navigate(`/app/turma/${nextClass.id}`);
+
+        if (!schoolId) {
+            return;
+        }
+
+        navigate(
+            `/${schoolId}/turmas/${nextClass.id}`,
+        );
     }
 
     function goToHome() {
-        navigate("/app");
+        if (!schoolId) {
+            return;
+        }
+
+        navigate(`/${schoolId}/dashboard`);
     }
 
     return (
         <main className="h-screen overflow-hidden bg-gradient-to-br from-[#c9a8ed] via-[#f1dfd4] to-[#c9a8ed]">
-            <header className="h-20 shrink-0 bg-gradient-to-r from-[#5541a9] to-[#7254d5] shadow-lg">
+            <header className="relative h-20 shrink-0 bg-[rgba(112,86,204,0.76)] shadow-lg">
                 <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
                     <button
                         type="button"
                         onClick={goToHome}
-                        className="flex items-center"
-                        aria-label="Voltar para a página inicial"
+                        className="flex items-center border-none bg-transparent p-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30"
+                        aria-label="Ir para a página inicial"
                     >
                         <img
                             src={logo}
@@ -246,56 +360,63 @@ function TeacherClass() {
                         />
                     </button>
 
-                    <nav className="flex items-center gap-8 text-sm font-semibold text-white">
+                    <nav className="absolute left-1/2 flex h-full -translate-x-1/2 items-center gap-2 text-base font-bold text-white">
                         <button
                             type="button"
-                            onClick={() => navigate("/app/configuracoes")}
-                            className="transition-opacity hover:opacity-80"
+                            onClick={() => {
+                                if (schoolId) {
+                                    navigate(
+                                        `/${schoolId}/configuracoes`,
+                                    );
+                                }
+                            }}
+                            className="h-full px-5 transition-opacity hover:opacity-80"
                         >
                             Configurações
                         </button>
 
                         <button
                             type="button"
-                            className="border-b-2 border-white pb-1"
+                            className="h-full border-b-3 border-white px-5"
+                            aria-current="page"
                         >
                             Turmas
                         </button>
 
                         <button
                             type="button"
-                            onClick={() => navigate("/app/medias")}
-                            className="transition-opacity hover:opacity-80"
+                            onClick={() => {
+                                if (schoolId) {
+                                    navigate(
+                                        `/${schoolId}/medias`,
+                                    );
+                                }
+                            }}
+                            className="h-full px-5 transition-opacity hover:opacity-80"
                         >
                             Médias
                         </button>
                     </nav>
 
-                    <div className="min-w-40 text-right text-sm font-semibold text-white">
+                    <div className="min-w-40 text-right text-base font-bold text-white">
                         {school?.name ?? "Escola"}
                     </div>
                 </div>
             </header>
 
             <div className="mx-auto flex h-[calc(100vh-5rem)] max-w-7xl flex-col overflow-hidden px-6 py-5">
-                <div className="mb-4 flex shrink-0 items-center justify-between">
+                <div className="mb-4 flex shrink-0 items-center">
                     <button
                         type="button"
                         onClick={goToHome}
-                        className="inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-[#5541a9] transition hover:bg-white/50"
+                        className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#5541a9] shadow-md transition hover:bg-[#f1edff] hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#7254d5]/30"
                     >
                         <span
-                            className="i-lucide-arrow-left text-base"
+                            className="i-lucide-arrow-left text-lg"
                             aria-hidden="true"
                         />
                         Voltar
                     </button>
-
-                    <h1 className="text-xl font-bold text-[#372a58]">
-                        {selectedClass?.name ?? "Turma"}
-                    </h1>
-
-                    <div className="w-20" />
                 </div>
 
                 {loading ? (
@@ -323,7 +444,9 @@ function TeacherClass() {
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setClassOpen((open) => !open)
+                                                setClassOpen(
+                                                    (open) => !open,
+                                                )
                                             }
                                             className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-bold text-[#372a58] transition hover:border-[#7254d5]"
                                             aria-expanded={classOpen}
@@ -333,10 +456,27 @@ function TeacherClass() {
                                                     "Selecionar turma"}
                                             </span>
 
-                                            <span
-                                                className={`i-lucide-chevron-${classOpen ? "up" : "down"} ml-2 shrink-0 text-base text-[#7254d5]`}
+                                            <svg
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
                                                 aria-hidden="true"
-                                            />
+                                                className="ml-2 shrink-0 text-[#7254d5]"
+                                            >
+                                                <path
+                                                    d={
+                                                        classOpen
+                                                            ? "M6 15L12 9L18 15"
+                                                            : "M6 9L12 15L18 9"
+                                                    }
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                            </svg>
                                         </button>
 
                                         {classOpen && (
@@ -400,38 +540,43 @@ function TeacherClass() {
                                                 alunos.
                                             </div>
                                         ) : (
-                                            filteredStudents.map((student) => (
-                                                <div
-                                                    key={student.id}
-                                                    className="flex items-center gap-3 rounded-xl border border-[#ebe7f2] bg-white px-3 py-2.5 shadow-sm"
-                                                >
-                                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f1edff] text-[#7254d5]">
-                                                        <span
-                                                            className="i-lucide-user-round text-lg"
-                                                            aria-hidden="true"
-                                                        />
-                                                    </div>
+                                            filteredStudents.map(
+                                                (student) => (
+                                                    <div
+                                                        key={student.id}
+                                                        className="flex items-center gap-3 rounded-xl border border-[#ebe7f2] bg-white px-3 py-2.5 shadow-sm"
+                                                    >
+                                                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f1edff] text-[#7254d5]">
+                                                            <span
+                                                                className="i-lucide-user-round text-lg"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </div>
 
-                                                    <div className="min-w-0 flex-1">
-                                                        <p className="truncate text-sm font-semibold text-[#372a58]">
-                                                            {student.name}
-                                                        </p>
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="truncate text-sm font-semibold text-[#372a58]">
+                                                                {
+                                                                    student.name
+                                                                }
+                                                            </p>
 
-                                                        <p className="text-xs text-[#716886]">
+                                                            <p className="text-xs text-[#716886]">
+                                                                {student.level !==
+                                                                null
+                                                                    ? `Nível ${student.level}`
+                                                                    : "Sem nível registrado"}
+                                                            </p>
+                                                        </div>
+
+                                                        <span className="shrink-0 rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
                                                             {student.level !==
                                                             null
-                                                                ? `Nível ${student.level}`
-                                                                : "Sem nível registrado"}
-                                                        </p>
+                                                                ? `lvl.${student.level}`
+                                                                : "lvl.—"}
+                                                        </span>
                                                     </div>
-
-                                                    <span className="shrink-0 rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
-                                                        {student.level !== null
-                                                            ? `lvl.${student.level}`
-                                                            : "lvl.—"}
-                                                    </span>
-                                                </div>
-                                            ))
+                                                ),
+                                            )
                                         )}
                                     </div>
                                 </div>
@@ -460,7 +605,10 @@ function TeacherClass() {
                                         className="i-lucide-save text-base"
                                         aria-hidden="true"
                                     />
-                                    {saved ? "Filtros salvos" : "Salvar filtros"}
+
+                                    {saved
+                                        ? "Filtros salvos"
+                                        : "Salvar filtros"}
                                 </button>
                             </div>
 
@@ -470,27 +618,47 @@ function TeacherClass() {
                                         Buscar aluno
                                     </span>
 
-                                    <span
-                                        className="i-lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-[#716886]"
-                                        aria-hidden="true"
-                                    />
+                                    <div className="relative">
+                                        <svg
+                                            className="pointer-events-none absolute left-3 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#716886]"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <circle
+                                                cx="11"
+                                                cy="11"
+                                                r="7"
+                                            />
 
-                                    <input
-                                        type="search"
-                                        value={search}
-                                        onChange={(event) =>
-                                            setSearch(event.target.value)
-                                        }
-                                        placeholder="Buscar aluno..."
-                                        className="w-full rounded-xl border border-[#ded8ea] bg-[#f5f2fb] py-2.5 pl-10 pr-3 text-sm text-[#302746] outline-none transition placeholder:text-[#716886] focus:border-[#7254d5] focus:ring-4 focus:ring-[#7254d5]/15"
-                                    />
+                                            <path d="m20 20-4-4" />
+                                        </svg>
+
+                                        <input
+                                            type="text"
+                                            value={search}
+                                            onChange={(event) =>
+                                                setSearch(
+                                                    event.target.value,
+                                                )
+                                            }
+                                            placeholder="Buscar aluno..."
+                                            className="w-full rounded-xl border border-[#ded8ea] bg-white px-4 py-3 pl-10 text-base text-[#302746] outline-none transition placeholder:text-[#716886] focus:border-[#7254d5] focus:ring-4 focus:ring-[#7254d5]/15"
+                                        />
+                                    </div>
                                 </label>
 
                                 <div className="relative">
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            setOrderOpen((open) => !open)
+                                            setOrderOpen(
+                                                (open) => !open,
+                                            )
                                         }
                                         className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-semibold text-[#372a58] transition hover:border-[#7254d5]"
                                         aria-expanded={orderOpen}
@@ -501,10 +669,27 @@ function TeacherClass() {
                                                 : "Z → A"}
                                         </span>
 
-                                        <span
-                                            className={`i-lucide-chevron-${orderOpen ? "up" : "down"} text-base text-[#7254d5]`}
+                                        <svg
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
                                             aria-hidden="true"
-                                        />
+                                            className="text-[#7254d5]"
+                                        >
+                                            <path
+                                                d={
+                                                    orderOpen
+                                                        ? "M6 15L12 9L18 15"
+                                                        : "M6 9L12 15L18 9"
+                                                }
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
                                     </button>
 
                                     {orderOpen && (
@@ -546,7 +731,9 @@ function TeacherClass() {
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            setLevelOpen((open) => !open)
+                                            setLevelOpen(
+                                                (open) => !open,
+                                            )
                                         }
                                         className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-semibold text-[#372a58] transition hover:border-[#7254d5]"
                                         aria-expanded={levelOpen}
@@ -557,10 +744,27 @@ function TeacherClass() {
                                                 : "Menor nível"}
                                         </span>
 
-                                        <span
-                                            className={`i-lucide-chevron-${levelOpen ? "up" : "down"} text-base text-[#7254d5]`}
+                                        <svg
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
                                             aria-hidden="true"
-                                        />
+                                            className="text-[#7254d5]"
+                                        >
+                                            <path
+                                                d={
+                                                    levelOpen
+                                                        ? "M6 15L12 9L18 15"
+                                                        : "M6 9L12 15L18 9"
+                                                }
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
                                     </button>
 
                                     {levelOpen && (
@@ -620,46 +824,51 @@ function TeacherClass() {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                                        {filteredStudents.map((student) => (
-                                            <article
-                                                key={student.id}
-                                                className="rounded-xl border border-[#ebe7f2] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-                                            >
-                                                <div className="flex items-start gap-3">
-                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f1edff] text-[#7254d5]">
-                                                        <span
-                                                            className="i-lucide-user-round text-xl"
-                                                            aria-hidden="true"
-                                                        />
+                                        {filteredStudents.map(
+                                            (student) => (
+                                                <article
+                                                    key={student.id}
+                                                    className="rounded-xl border border-[#ebe7f2] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                                                >
+                                                    <div className="flex items-start gap-3">
+                                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f1edff] text-[#7254d5]">
+                                                            <span
+                                                                className="i-lucide-user-round text-xl"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </div>
+
+                                                        <div className="min-w-0 flex-1">
+                                                            <h3 className="truncate text-sm font-bold text-[#372a58]">
+                                                                {
+                                                                    student.name
+                                                                }
+                                                            </h3>
+
+                                                            <p className="mt-1 text-xs text-[#716886]">
+                                                                {student.level !==
+                                                                null
+                                                                    ? `Nível ${student.level}`
+                                                                    : "Sem nível registrado"}
+                                                            </p>
+                                                        </div>
                                                     </div>
 
-                                                    <div className="min-w-0 flex-1">
-                                                        <h3 className="truncate text-sm font-bold text-[#372a58]">
-                                                            {student.name}
-                                                        </h3>
+                                                    <div className="mt-4 flex items-center justify-between border-t border-[#ebe7f2] pt-3">
+                                                        <span className="text-xs font-medium text-[#716886]">
+                                                            Progresso
+                                                        </span>
 
-                                                        <p className="mt-1 text-xs text-[#716886]">
+                                                        <span className="rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
                                                             {student.level !==
                                                             null
-                                                                ? `Nível ${student.level}`
-                                                                : "Sem nível registrado"}
-                                                        </p>
+                                                                ? `lvl.${student.level}`
+                                                                : "lvl.—"}
+                                                        </span>
                                                     </div>
-                                                </div>
-
-                                                <div className="mt-4 flex items-center justify-between border-t border-[#ebe7f2] pt-3">
-                                                    <span className="text-xs font-medium text-[#716886]">
-                                                        Progresso
-                                                    </span>
-
-                                                    <span className="rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
-                                                        {student.level !== null
-                                                            ? `lvl.${student.level}`
-                                                            : "lvl.—"}
-                                                    </span>
-                                                </div>
-                                            </article>
-                                        ))}
+                                                </article>
+                                            ),
+                                        )}
                                     </div>
                                 )}
                             </div>
