@@ -2,48 +2,48 @@ import { supabase } from "@codi-go/supabase";
 import { redirect } from "react-router";
 
 export async function signUp(email: string, password: string) {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
+	const { data, error } = await supabase.auth.signUp({
+		email,
+		password,
+	});
 
-  if (error) {
-    error.message = `signUp error: ${error.message}`;
-    throw error;
-  }
+	if (error) {
+		error.message = `signUp error: ${error.message}`;
+		throw error;
+	}
 
-  return data;
+	return data;
 }
 
 export async function signInWithPassword(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+	const { data, error } = await supabase.auth.signInWithPassword({
+		email,
+		password,
+	});
 
-  if (error) {
-    error.message = `signInWithPassword error: ${error.message}`;
-    throw error;
-  }
+	if (error) {
+		error.message = `signInWithPassword error: ${error.message}`;
+		throw error;
+	}
 
-  return data;
+	return data;
 }
 
 export async function signOut() {
-  const { error } = await supabase.auth.signOut();
+	const { error } = await supabase.auth.signOut();
 
-  if (error) {
-    error.message = `signOut error: ${error.message}`;
-    throw error;
-  }
+	if (error) {
+		error.message = `signOut error: ${error.message}`;
+		throw error;
+	}
 }
 
 export async function requireAuth(_, next) {
-  const { data, error } = await supabase.auth.getClaims();
+	const { data, error } = await supabase.auth.getClaims();
 
-  if (error || !data?.claims) {
-    throw redirect("/login");
-  }
+	if (error || !data?.claims) {
+		throw redirect("/login");
+	}
 
-  return next();
+	return next();
 }

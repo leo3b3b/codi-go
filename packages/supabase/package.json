@@ -1,12 +1,12 @@
 {
-    "name": "@codi-go/supabase",
-    "private": true,
-    "version": "0.0.0",
-    "type": "module",
-    "exports": {
-        ".": "./index.ts"
-    },
-    "dependencies": {
-        "@supabase/supabase-js": "^2.116.0"
-    }
+	"name": "@codi-go/supabase",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./index.ts"
+	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.116.0"
+	}
 }

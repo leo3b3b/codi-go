@@ -1,19 +1,19 @@
 {
-    "name": "@codi-go/students",
-    "private": true,
-    "version": "0.0.0",
-    "type": "module",
-    "scripts": {
-        "dev": "vite --config ../../vite.config.ts",
-        "build": "tsc --noEmit && vite build --config ../../vite.config.ts",
-        "typecheck": "tsc --noEmit",
-        "preview": "vite preview --config ../../vite.config.ts"
-    },
-    "dependencies": {
-        "@codi-go/supabase": "*",
-        "@codi-go/ui": "*",
-        "react": "^19.3.0",
-        "react-dom": "^19.3.0",
-        "react-router": "^8.3.1"
-    }
+	"name": "@codi-go/students",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --config ../../vite.config.ts",
+		"build": "tsc --noEmit && vite build --config ../../vite.config.ts",
+		"typecheck": "tsc --noEmit",
+		"preview": "vite preview --config ../../vite.config.ts"
+	},
+	"dependencies": {
+		"@codi-go/supabase": "*",
+		"@codi-go/ui": "*",
+		"react": "^19.3.0",
+		"react-dom": "^19.3.0",
+		"react-router": "^8.3.1"
+	}
 }
