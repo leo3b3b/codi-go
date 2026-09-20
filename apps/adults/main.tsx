@@ -9,47 +9,46 @@ import {
 	SignInPage,
 	SignUpPage,
 } from "@/features/auth";
-import App from "./App.tsx";
 
-import TeacherHome from "./pages/teacher/TeacherHome.tsx";
+import TeacherAverages from "./pages/teacher/TeacherAverages.tsx";
 import TeacherClass from "./pages/teacher/TeacherClass.tsx";
 import TeacherConfig from "./pages/teacher/TeacherConfig.tsx";
-import TeacherAverages from "./pages/teacher/TeacherAverages.tsx";
+import TeacherHome from "./pages/teacher/TeacherHome.tsx";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
 
 const router = createBrowserRouter([
-  {
-    path: "/:schoolId",
-    middleware: [requireAuth],
-    children: [
-      {
-        index: true,
-        element: <Navigate to="dashboard" replace />,
-      },
-      {
-        path: "dashboard",
-        Component: TeacherHome,
-      },
-      {
-        path: "turmas",
-        Component: TeacherHome,
-      },
-      {
-        path: "turmas/:classId",
-        Component: TeacherClass,
-      },
-      {
-        path: "configuracoes",
-        Component: TeacherConfig,
-      },
-      {
-        path: "medias",
-        Component: TeacherAverages,
-      },
-    ],
-  },
+	{
+		path: "/:schoolId",
+		middleware: [requireAuth],
+		children: [
+			{
+				index: true,
+				element: <Navigate to="dashboard" replace />,
+			},
+			{
+				path: "dashboard",
+				Component: TeacherHome,
+			},
+			{
+				path: "turmas",
+				Component: TeacherHome,
+			},
+			{
+				path: "turmas/:classId",
+				Component: TeacherClass,
+			},
+			{
+				path: "configuracoes",
+				Component: TeacherConfig,
+			},
+			{
+				path: "medias",
+				Component: TeacherAverages,
+			},
+		],
+	},
 	{
 		Component: AuthLayout,
 		children: [
@@ -69,8 +68,8 @@ const router = createBrowserRouter([
 	},
 ]);
 
-createRoot(document.getElementById("root")!).render(
-	<StrictMode>
-		<RouterProvider router={router} />
-	</StrictMode>,
+createRoot(document.getElementById("root") as HTMLElement).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
 );
