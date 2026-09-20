@@ -7,6 +7,7 @@ export type ClassRoom = {
 	id: string;
 	name: string;
 	school_id: string;
+	teacher_id: string | null;
 };
 
 export type Student = {

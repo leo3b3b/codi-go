@@ -39,9 +39,10 @@ function TeacherConfig() {
 
 			const { data: membership, error: membershipError } = await supabase
 				.from("school_memberships")
-				.select("school_id")
+				.select("school_id, role")
 				.eq("school_id", schoolId)
 				.eq("profile_id", user.id)
+				.eq("status", "active")
 				.maybeSingle();
 
 			if (membershipError || !membership) {

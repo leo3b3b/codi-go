@@ -21,14 +21,6 @@ function TeacherHome() {
 
 	const [error, setError] = useState("");
 
-	/*
-	 * CARREGAR ESCOLAS
-	 *
-	 * Busca as escolas às quais o professor logado está associado.
-	 *
-	 * A escola atual vem da URL. A URL representa o contexto
-	 * institucional atual da aplicação.
-	 */
 	useEffect(() => {
 		async function loadSchools() {
 			setLoadingSchools(true);
@@ -46,7 +38,8 @@ function TeacherHome() {
 			const { data: schoolLinks, error: schoolLinksError } = await supabase
 				.from("school_memberships")
 				.select("school_id")
-				.eq("profile_id", user.id);
+				.eq("profile_id", user.id)
+				.eq("status", "active");
 
 			if (schoolLinksError) {
 				setError("Não foi possível carregar suas escolas.");
@@ -82,21 +75,10 @@ function TeacherHome() {
 
 			setSchools(loadedSchools);
 
-			/*
-			 * A escola presente na URL precisa pertencer
-			 * às escolas às quais o professor possui vínculo.
-			 */
 			const currentSchool = loadedSchools.find(
 				(school) => school.id === schoolId,
 			);
 
-			/*
-			 * Se a URL ainda não possui uma escola, usamos a primeira
-			 * escola disponível e colocamos seu ID na URL.
-			 *
-			 * Se a URL possui uma escola inválida ou sem vínculo,
-			 * também direcionamos para uma escola autorizada.
-			 */
 			if (!currentSchool) {
 				const fallbackSchool = loadedSchools[0] ?? null;
 
@@ -118,13 +100,6 @@ function TeacherHome() {
 		loadSchools();
 	}, [navigate, schoolId]);
 
-	/*
-	 * CARREGAR TURMAS
-	 *
-	 * Busca somente as turmas:
-	 * 1. vinculadas ao professor por classes_profiles;
-	 * 2. pertencentes à escola atualmente presente na URL.
-	 */
 	useEffect(() => {
 		async function loadClasses() {
 			if (!selectedSchool) {
@@ -144,32 +119,39 @@ function TeacherHome() {
 				return;
 			}
 
-			const { data: classLinks, error: classLinksError } = await supabase
-				.from("classes_profiles")
-				.select("class_id")
-				.eq("profile_id", user.id);
-
-			if (classLinksError) {
-				setError("Não foi possível carregar suas turmas.");
-				setClasses([]);
-				setLoadingClasses(false);
-				return;
-			}
-
-			const classIds = (classLinks ?? []).map((item) => item.class_id);
-
-			if (classIds.length === 0) {
-				setClasses([]);
-				setLoadingClasses(false);
-				return;
-			}
-
-			const { data: classData, error: classError } = await supabase
-				.from("classes")
-				.select("id, name, school_id")
+			const { data: membership, error: membershipError } = await supabase
+				.from("school_memberships")
+				.select("role")
 				.eq("school_id", selectedSchool.id)
-				.in("id", classIds)
+				.eq("profile_id", user.id)
+				.eq("status", "active")
+				.maybeSingle();
+
+			if (membershipError) {
+				setError("Não foi possível verificar seu acesso à escola.");
+				setClasses([]);
+				setLoadingClasses(false);
+				return;
+			}
+
+			if (!membership) {
+				setError("Você não possui acesso a esta escola.");
+				setClasses([]);
+				setLoadingClasses(false);
+				return;
+			}
+
+			let query = supabase
+				.from("classes")
+				.select("id, name, school_id, teacher_id")
+				.eq("school_id", selectedSchool.id)
 				.order("name");
+
+			if (membership.role === "teacher") {
+				query = query.eq("teacher_id", user.id);
+			}
+
+			const { data: classData, error: classError } = await query;
 
 			if (classError) {
 				setError("Não foi possível carregar suas turmas.");
@@ -185,25 +167,12 @@ function TeacherHome() {
 		loadClasses();
 	}, [navigate, selectedSchool]);
 
-	/*
-	 * ESCOLHER ESCOLA
-	 *
-	 * A escola selecionada é representada pela URL.
-	 * Não usamos localStorage como fonte do contexto.
-	 */
 	function selectSchool(school: School) {
 		setSelectedSchool(school);
 
 		navigate(`/${school.id}/dashboard`);
 	}
 
-	/*
-	 * ABRIR TURMA
-	 *
-	 * A turma não é apenas "selecionada".
-	 * O clique leva diretamente para a tela daquela turma,
-	 * preservando o contexto da escola na URL.
-	 */
 	function openClass(classRoom: ClassRoom) {
 		if (!selectedSchool) {
 			return;

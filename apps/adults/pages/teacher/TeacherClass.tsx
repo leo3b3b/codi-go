@@ -49,16 +49,17 @@ function TeacherClass() {
 			} = await supabase.auth.getUser();
 
 			if (userError || !user) {
-				setError("Não foi possível identificar o professor.");
+				setError("Não foi possível identificar o usuário.");
 				setLoading(false);
 				return;
 			}
 
 			const { data: membership, error: membershipError } = await supabase
 				.from("school_memberships")
-				.select("school_id")
+				.select("school_id, role")
 				.eq("school_id", schoolId)
 				.eq("profile_id", user.id)
+				.eq("status", "active")
 				.maybeSingle();
 
 			if (membershipError || !membership) {
@@ -67,28 +68,21 @@ function TeacherClass() {
 				return;
 			}
 
-			const { data: teacherClass, error: teacherClassError } = await supabase
-				.from("classes_profiles")
-				.select("class_id")
-				.eq("class_id", classId)
-				.eq("profile_id", user.id)
-				.maybeSingle();
+			let classQuery = supabase
+				.from("classes")
+				.select("id, name, school_id, teacher_id")
+				.eq("id", classId)
+				.eq("school_id", schoolId);
 
-			if (teacherClassError || !teacherClass) {
-				setError("Você não tem acesso a esta turma.");
-				setLoading(false);
-				return;
+			if (membership.role === "teacher") {
+				classQuery = classQuery.eq("teacher_id", user.id);
 			}
 
-			const { data: classData, error: classError } = await supabase
-				.from("classes")
-				.select("id, name, school_id")
-				.eq("id", classId)
-				.eq("school_id", schoolId)
-				.single();
+			const { data: classData, error: classError } =
+				await classQuery.maybeSingle();
 
 			if (classError || !classData) {
-				setError("Não foi possível carregar a turma.");
+				setError("Você não tem acesso a esta turma.");
 				setLoading(false);
 				return;
 			}
@@ -99,54 +93,44 @@ function TeacherClass() {
 				.from("school")
 				.select("id, trade_name, legal_name")
 				.eq("id", schoolId)
-				.single();
+				.eq("is_active", true)
+				.maybeSingle();
 
-			if (!schoolError && schoolData) {
-				setSchool({
-					id: schoolData.id,
-					name: schoolData.trade_name || schoolData.legal_name,
-				});
+			if (schoolError || !schoolData) {
+				setError("Não foi possível carregar a escola.");
+				setLoading(false);
+				return;
 			}
 
-			const { data: teacherClasses, error: teacherClassesError } =
-				await supabase
-					.from("classes_profiles")
-					.select("class_id")
-					.eq("profile_id", user.id);
+			setSchool({
+				id: schoolData.id,
+				name: schoolData.trade_name || schoolData.legal_name,
+			});
 
-			if (teacherClassesError) {
+			let classesQuery = supabase
+				.from("classes")
+				.select("id, name, school_id, teacher_id")
+				.eq("school_id", schoolId)
+				.order("name");
+
+			if (membership.role === "teacher") {
+				classesQuery = classesQuery.eq("teacher_id", user.id);
+			}
+
+			const { data: classList, error: classListError } = await classesQuery;
+
+			if (classListError) {
 				setError("Não foi possível carregar suas turmas.");
 				setLoading(false);
 				return;
 			}
 
-			const teacherClassIds = (teacherClasses ?? []).map(
-				(teacherClass) => teacherClass.class_id,
-			);
-
-			if (teacherClassIds.length === 0) {
-				setClasses([]);
-			} else {
-				const { data: classList, error: classListError } = await supabase
-					.from("classes")
-					.select("id, name, school_id")
-					.eq("school_id", schoolId)
-					.in("id", teacherClassIds)
-					.order("name");
-
-				if (classListError) {
-					setError("Não foi possível carregar suas turmas.");
-					setLoading(false);
-					return;
-				}
-
-				setClasses(classList ?? []);
-			}
+			setClasses(classList ?? []);
 
 			const { data: studentsData, error: studentsError } = await supabase
 				.from("students")
 				.select("id, name")
-				.eq("class_id", classId)
+				.eq("id", classId)
 				.order("name");
 
 			if (studentsError) {
