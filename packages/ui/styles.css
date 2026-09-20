@@ -18,6 +18,7 @@
   --color-hero: light-dark(#5541a9, #3c2c7a);
   --color-hero-overlay-start: rgba(72, 54, 158, 0.9);
   --color-hero-overlay-end: rgba(112, 86, 204, 0.76);
+  --gradient-header: rgba(72, 54, 158, 0.9);
 
   /* Feedback */
   --color-danger: light-dark(#c53b4d, #ff8796);
