@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Navigate } from "react-router";
 import { RouterProvider } from "react-router/dom";
+
 import {
 	AuthLayout,
 	CheckEmailPage,
@@ -9,11 +10,12 @@ import {
 	SignInPage,
 	SignUpPage,
 } from "@/features/auth";
-
-import TeacherAverages from "./pages/teacher/TeacherAverages.tsx";
-import TeacherClass from "./pages/teacher/TeacherClass.tsx";
-import TeacherConfig from "./pages/teacher/TeacherConfig.tsx";
-import TeacherHome from "./pages/teacher/TeacherHome.tsx";
+import {
+	TeacherAverages,
+	TeacherClass,
+	TeacherConfig,
+	TeacherHome,
+} from "@/features/teacher";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -69,7 +71,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root") as HTMLElement).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+	<StrictMode>
+		<RouterProvider router={router} />
+	</StrictMode>,
 );
