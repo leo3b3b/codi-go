@@ -6,12 +6,15 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": false,
+		"includes": [
+			"**",
+			"!packages/ui/styles.css"
+		]
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "space",
-		"indentWidth": 2
+		"indentStyle": "tab"
 	},
 	"linter": {
 		"enabled": true,
