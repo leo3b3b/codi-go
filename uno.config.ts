@@ -1,3 +1,4 @@
+import presetCodiGo from "@codi-go/ui/preset";
 import {
 	defineConfig,
 	presetIcons,
@@ -5,7 +6,6 @@ import {
 	transformerDirectives,
 	transformerVariantGroup,
 } from "unocss";
-import presetCodiGo from "@codi-go/ui/preset";
 
 export default defineConfig({
 	presets: [

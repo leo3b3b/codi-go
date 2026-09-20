@@ -1,7 +1,7 @@
 import path from "node:path";
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import UnoCSS from "unocss/vite";
+import { defineConfig } from "vite";
 
 const repoRoot = import.meta.dirname;
 const appRoot = process.cwd();

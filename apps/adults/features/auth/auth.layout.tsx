@@ -1,7 +1,7 @@
-import { Outlet } from "react-router";
 import icebergBackground from "@codi-go/ui/images/backgroundIceberg.png";
 import mascot from "@codi-go/ui/images/codiPisca.png";
 import logo from "@codi-go/ui/images/logo.png";
+import { Outlet } from "react-router";
 
 export default function AuthLayout() {
 	return (

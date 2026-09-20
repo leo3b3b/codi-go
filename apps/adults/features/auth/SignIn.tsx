@@ -1,9 +1,8 @@
-import { Link, useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { type SignInFormData, signInSchema } from "./auth.schemas";
 import { signInWithPassword } from "./auth.service";
-import { signInSchema, type SignInFormData } from "./auth.schemas";
 
 export default function SignInPage() {
 	const navigate = useNavigate();

@@ -2,15 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-
-import App from "./App.tsx";
 import {
 	AuthLayout,
 	CheckEmailPage,
+	requireAuth,
 	SignInPage,
 	SignUpPage,
-	requireAuth,
 } from "@/features/auth";
+import App from "./App.tsx";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
