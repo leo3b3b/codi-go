@@ -7,10 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": [
-			"**",
-			"!packages/ui/styles.css"
-		]
+		"includes": ["**", "!packages/ui/styles.css"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -19,7 +16,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"preset": "recommended"
 		}
 	},
 	"javascript": {
