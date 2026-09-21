@@ -10,8 +10,9 @@ import {
 	SignInPage,
 	SignUpPage,
 } from "@/features/auth";
-import { TeacherAverages, TeacherClass, TeacherHome } from "@/features/teacher";
-import { ProfilePage } from "./features/profile";
+import { TeacherAverages, TeacherClass } from "@/features/metrics";
+import { TeacherHome } from "@/features/navigation";
+import { ProfilePage } from "@/features/profile";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
