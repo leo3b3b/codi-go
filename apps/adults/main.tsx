@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import { AuthLayout } from "@/layouts";
+import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
 	ClassesPage,
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "escola/:schoolId",
-				Component: Outlet,
+				Component: SchoolLayout,
 				children: [
 					{
 						index: true,

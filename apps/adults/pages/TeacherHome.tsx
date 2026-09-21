@@ -1,6 +1,5 @@
 import type { Tables } from "@codi-go/supabase";
 import { supabase } from "@codi-go/supabase";
-import logo from "@codi-go/ui/images/logo.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
@@ -89,7 +88,7 @@ export function TeacherHome() {
 				const fallbackSchool = loadedSchools[0] ?? null;
 
 				if (fallbackSchool) {
-					navigate(`/${fallbackSchool.id}/dashboard`, {
+					navigate(`/escola/${fallbackSchool.id}`, {
 						replace: true,
 					});
 				}
@@ -180,7 +179,7 @@ export function TeacherHome() {
 
 	function selectSchool(school: SchoolOption) {
 		setSelectedSchool(school);
-		navigate(`/${school.id}/dashboard`);
+		navigate(`/escola/${school.id}`);
 	}
 
 	function openClass(classRoom: ClassOption) {
@@ -188,244 +187,201 @@ export function TeacherHome() {
 			return;
 		}
 
-		navigate(`/${selectedSchool.id}/turmas/${classRoom.id}`);
+		navigate(`/escola/${selectedSchool.id}/turma/${classRoom.id}`);
 	}
 
 	if (loadingSchools) {
 		return (
-			<main className="flex h-screen items-center justify-center bg-[#e2c7e5]">
-				<p className="text-2xl font-bold text-[#372a58]">Carregando...</p>
+			<main className="flex min-h-full items-center justify-center">
+				<div className="ui-card px-8 py-6 text-center">
+					<p className="text-sm font-medium text-muted">Carregando...</p>
+				</div>
 			</main>
 		);
 	}
 
 	return (
-		<main className="h-screen overflow-hidden bg-gradient-to-br from-[#c6a0ea] via-[#f0ddd4] to-[#c8a0eb]">
-			<header className="relative h-20 shrink-0 bg-[rgba(112,86,204,0.76)] shadow-lg">
-				<div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
+		<main className="mx-auto grid min-h-full w-full max-w-[1450px] grid-cols-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-8 lg:px-8">
+			<div className="flex flex-col gap-6">
+				<section className="ui-card">
 					<button
 						type="button"
-						onClick={() => {
-							if (selectedSchool) {
-								navigate(`/${selectedSchool.id}/dashboard`);
-							}
-						}}
-						className="flex items-center focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30"
-						aria-label="Ir para a página inicial"
+						onClick={() => setSchoolMenuOpen((open) => !open)}
+						className="flex w-full items-center justify-between gap-4 text-left"
+						aria-expanded={schoolMenuOpen}
 					>
-						<img src={logo} alt="CodiGO!" className="h-11 w-auto" />
-					</button>
-
-					<nav className="absolute left-1/2 flex h-full -translate-x-1/2 items-center gap-2 text-base font-bold text-white">
-						<button
-							type="button"
-							onClick={() => {
-								if (selectedSchool) {
-									navigate("/meu-perfil");
-								}
-							}}
-							className="h-full px-5 transition-opacity hover:opacity-80"
-						>
-							Configurações
-						</button>
-
-						<button
-							type="button"
-							onClick={() => {
-								if (selectedSchool) {
-									navigate(`/${selectedSchool.id}/turmas`);
-								}
-							}}
-							className="h-full border-b-3 border-white px-5"
-							aria-current="page"
-						>
-							Turmas
-						</button>
-
-						<button
-							type="button"
-							onClick={() => {
-								if (selectedSchool) {
-									navigate(`/${selectedSchool.id}/medias`);
-								}
-							}}
-							className="h-full px-5 transition-opacity hover:opacity-80"
-						>
-							Médias
-						</button>
-					</nav>
-
-					<div className="min-w-40 text-right text-base font-bold text-white">
-						{selectedSchool ? schoolName(selectedSchool) : "Escola"}
-					</div>
-				</div>
-			</header>
-
-			<section className="mx-auto grid h-[calc(100vh-96px)] max-w-[1450px] grid-cols-[380px_1fr] gap-14 px-10 py-12">
-				<div className="flex flex-col gap-9">
-					<div className="rounded-[2rem] bg-white p-7 shadow-2xl">
-						<button
-							type="button"
-							onClick={() => setSchoolMenuOpen(!schoolMenuOpen)}
-							className="flex w-full items-center justify-center gap-4 text-2xl text-black"
-							aria-expanded={schoolMenuOpen}
-						>
-							Escolha sua escola
-							<svg
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								aria-hidden="true"
-							>
-								<path
-									d={schoolMenuOpen ? "M6 15L12 9L18 15" : "M6 9L12 15L18 9"}
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								/>
-							</svg>
-						</button>
-
-						{schoolMenuOpen && (
-							<div className="mt-7 flex flex-col gap-4">
-								{schools.length === 0 ? (
-									<p className="py-4 text-center text-[#716886]">
-										Nenhuma escola encontrada.
-									</p>
-								) : (
-									schools.map((school) => {
-										const isSelected = school.id === selectedSchool?.id;
-
-										return (
-											<button
-												key={school.id}
-												type="button"
-												onClick={() => selectSchool(school)}
-												className={`rounded-2xl px-5 py-4 text-xl font-medium transition ${
-													isSelected
-														? "bg-gradient-to-r from-[#df9cf4] via-[#e5c4e8] to-[#fff0bd] text-[#3267d9]"
-														: "bg-[#d8d8d8] text-[#3267d9] hover:bg-[#cfcfcf]"
-												}`}
-											>
-												{schoolName(school)}
-											</button>
-										);
-									})
-								)}
-							</div>
-						)}
-					</div>
-
-					<div className="rounded-[2rem] bg-white p-7 shadow-2xl">
-						<button
-							type="button"
-							onClick={() => setClassMenuOpen(!classMenuOpen)}
-							className="flex w-full items-center justify-center gap-4 text-2xl text-black"
-							aria-expanded={classMenuOpen}
-						>
-							Escolha sua turma
-							<svg
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								aria-hidden="true"
-							>
-								<path
-									d={classMenuOpen ? "M6 15L12 9L18 15" : "M6 9L12 15L18 9"}
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								/>
-							</svg>
-						</button>
-
-						{classMenuOpen && (
-							<div className="mt-7 flex flex-col gap-4">
-								{loadingClasses ? (
-									<p className="py-4 text-center text-[#716886]">
-										Carregando turmas...
-									</p>
-								) : classes.length === 0 ? (
-									<p className="py-4 text-center text-[#716886]">
-										Nenhuma turma encontrada.
-									</p>
-								) : (
-									classes.map((classRoom) => (
-										<button
-											key={classRoom.id}
-											type="button"
-											onClick={() => openClass(classRoom)}
-											className="rounded-2xl border-2 border-[#8c62c9] bg-[#eedcff] px-5 py-4 text-xl font-bold text-black shadow-sm transition hover:bg-[#e5d0f7] hover:shadow-md"
-										>
-											{classRoom.name}
-										</button>
-									))
-								)}
-							</div>
-						)}
-					</div>
-				</div>
-
-				<div className="flex min-h-0 flex-col rounded-[2rem] bg-white/85 p-10 shadow-2xl">
-					<div className="mb-6 self-start rounded-full bg-purple px-6 py-3 text-2xl shadow-lg">
-						Pontos fortes e fracos de cada turma
-					</div>
-
-					<div className="flex min-h-0 flex-1 items-center justify-center rounded-3xl bg-white p-8">
-						<div className="w-full">
-							<p className="mb-8 text-center text-lg text-[#716886]">
-								Estatísticas gerais das turmas de{" "}
-								<strong>
-									{selectedSchool
-										? schoolName(selectedSchool)
-										: "escola selecionada"}
-								</strong>
+						<div>
+							<p className="text-xs font-semibold uppercase tracking-wide text-muted">
+								Escola
 							</p>
 
-							{classes.length === 0 ? (
-								<div className="py-16 text-center">
-									<h2 className="text-3xl font-bold text-[#372a58]">
-										Nenhuma turma encontrada
-									</h2>
+							<p className="mt-1 text-lg font-semibold text-heading">
+								Escolha sua escola
+							</p>
+						</div>
 
-									<p className="mt-3 text-lg text-[#716886]">
-										As estatísticas aparecerão aqui quando houver turmas
-										cadastradas.
-									</p>
-								</div>
+						<span
+							className={
+								schoolMenuOpen
+									? "i-lucide-chevron-up shrink-0 text-lg text-primary"
+									: "i-lucide-chevron-down shrink-0 text-lg text-primary"
+							}
+							aria-hidden="true"
+						/>
+					</button>
+
+					{schoolMenuOpen && (
+						<div className="mt-5 flex flex-col gap-2">
+							{schools.length === 0 ? (
+								<p className="rounded-xl bg-surface-subtle px-4 py-3 text-center text-sm text-muted">
+									Nenhuma escola encontrada.
+								</p>
 							) : (
-								<div className="flex flex-col gap-5">
-									{classes.map((classRoom) => (
-										<div key={classRoom.id} className="flex items-center gap-5">
-											<div className="w-32 text-right text-lg font-bold text-[#372a58]">
-												{classRoom.name}
-											</div>
+								schools.map((school) => {
+									const isSelected = school.id === selectedSchool?.id;
 
-											<div className="h-10 flex-1 overflow-hidden rounded-xl bg-[#eee9f4]">
-												<div
-													className="h-full rounded-xl bg-[#8f68e8]"
-													style={{
-														width: "0%",
-													}}
-												/>
-											</div>
-										</div>
-									))}
-								</div>
+									return (
+										<button
+											key={school.id}
+											type="button"
+											onClick={() => selectSchool(school)}
+											className={[
+												"rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
+												isSelected
+													? "border-primary bg-primary-soft text-heading"
+													: "border-border bg-surface-subtle text-fg hover:border-primary/50 hover:bg-surface",
+											].join(" ")}
+										>
+											{schoolName(school)}
+										</button>
+									);
+								})
 							)}
 						</div>
-					</div>
+					)}
+				</section>
+
+				<section className="ui-card">
+					<button
+						type="button"
+						onClick={() => setClassMenuOpen((open) => !open)}
+						className="flex w-full items-center justify-between gap-4 text-left"
+						aria-expanded={classMenuOpen}
+					>
+						<div>
+							<p className="text-xs font-semibold uppercase tracking-wide text-muted">
+								Turmas
+							</p>
+
+							<p className="mt-1 text-lg font-semibold text-heading">
+								Escolha sua turma
+							</p>
+						</div>
+
+						<span
+							className={
+								classMenuOpen
+									? "i-lucide-chevron-up shrink-0 text-lg text-primary"
+									: "i-lucide-chevron-down shrink-0 text-lg text-primary"
+							}
+							aria-hidden="true"
+						/>
+					</button>
+
+					{classMenuOpen && (
+						<div className="mt-5 flex flex-col gap-2">
+							{loadingClasses ? (
+								<p className="rounded-xl bg-surface-subtle px-4 py-3 text-center text-sm text-muted">
+									Carregando turmas...
+								</p>
+							) : classes.length === 0 ? (
+								<p className="rounded-xl bg-surface-subtle px-4 py-3 text-center text-sm text-muted">
+									Nenhuma turma encontrada.
+								</p>
+							) : (
+								classes.map((classRoom) => (
+									<button
+										key={classRoom.id}
+										type="button"
+										onClick={() => openClass(classRoom)}
+										className="flex items-center justify-between rounded-xl border border-border bg-surface-subtle px-4 py-3 text-left text-sm font-semibold text-heading transition-colors hover:border-primary/50 hover:bg-primary-soft"
+									>
+										<span>{classRoom.name}</span>
+
+										<span
+											className="i-lucide-arrow-right text-base text-primary"
+											aria-hidden="true"
+										/>
+									</button>
+								))
+							)}
+						</div>
+					)}
+				</section>
+			</div>
+
+			<section className="ui-card flex min-h-0 flex-col">
+				<div className="mb-6">
+					<p className="text-xs font-semibold uppercase tracking-wide text-muted">
+						Visão geral
+					</p>
+
+					<h1 className="mt-1 text-2xl font-semibold text-heading">
+						Pontos fortes e fracos de cada turma
+					</h1>
+
+					<p className="mt-2 text-sm text-muted">
+						Estatísticas gerais das turmas de{" "}
+						<strong className="font-semibold text-fg">
+							{selectedSchool
+								? schoolName(selectedSchool)
+								: "escola selecionada"}
+						</strong>
+					</p>
+				</div>
+
+				<div className="min-h-0 flex-1 rounded-2xl border border-border bg-surface-subtle p-5 sm:p-8">
+					{classes.length === 0 ? (
+						<div className="flex min-h-60 items-center justify-center text-center">
+							<div>
+								<span
+									className="i-lucide-chart-no-axes-combined text-3xl text-primary"
+									aria-hidden="true"
+								/>
+
+								<h2 className="mt-3 text-lg font-semibold text-heading">
+									Nenhuma turma encontrada
+								</h2>
+
+								<p className="mt-2 text-sm text-muted">
+									As estatísticas aparecerão aqui quando houver turmas
+									cadastradas.
+								</p>
+							</div>
+						</div>
+					) : (
+						<div className="flex flex-col gap-5">
+							{classes.map((classRoom) => (
+								<div key={classRoom.id} className="flex items-center gap-4">
+									<div className="w-28 shrink-0 truncate text-right text-sm font-semibold text-heading">
+										{classRoom.name}
+									</div>
+
+									<div className="h-8 min-w-0 flex-1 overflow-hidden rounded-lg bg-surface">
+										<div
+											className="h-full rounded-lg bg-primary transition-[width]"
+											style={{ width: "0%" }}
+										/>
+									</div>
+								</div>
+							))}
+						</div>
+					)}
 				</div>
 			</section>
 
 			{error && (
-				<div className="fixed bottom-5 left-1/2 -translate-x-1/2 rounded-xl bg-[#fff0f2] px-6 py-4 text-[#8e2331] shadow-xl">
+				<div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-border bg-surface px-5 py-3 text-sm font-medium text-fg shadow-card">
 					{error}
 				</div>
 			)}
