@@ -1,10 +1,13 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { type SignInFormData, signInSchema } from "./auth.schemas";
-import { signInWithPassword } from "./auth.service";
+import {
+	type SignUpFormData,
+	signUpSchema,
+} from "../features/auth/auth.schemas";
+import { signUp } from "../features/auth/auth.service";
 
-export default function SignInPage() {
+export function SignUpPage() {
 	const navigate = useNavigate();
 
 	const {
@@ -12,18 +15,21 @@ export default function SignInPage() {
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<SignInFormData>({
-		resolver: valibotResolver(signInSchema),
+	} = useForm<SignUpFormData>({
+		resolver: valibotResolver(signUpSchema),
 	});
 
-	async function onSubmit({ email, password }: SignInFormData) {
+	async function onSubmit({ email, password }: SignUpFormData) {
 		try {
-			await signInWithPassword(email, password);
+			await signUp(email, password);
 
-			navigate("/app", { replace: true });
+			navigate("/verificar-email", {
+				replace: true,
+				state: { email },
+			});
 		} catch {
 			setError("root", {
-				message: "Não foi possível entrar. Verifique seu e-mail e senha.",
+				message: "Não foi possível criar sua conta. Tente novamente.",
 			});
 		}
 	}
@@ -32,7 +38,7 @@ export default function SignInPage() {
 		<section className="ui-card">
 			<header className="mb-8 text-center">
 				<h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
-					Bom te ver!
+					Crie sua conta
 				</h1>
 			</header>
 
@@ -66,8 +72,8 @@ export default function SignInPage() {
 					<input
 						type="password"
 						{...register("password")}
-						autoComplete="current-password"
-						placeholder="Digite sua senha"
+						autoComplete="new-password"
+						placeholder="Crie uma senha"
 						aria-invalid={Boolean(errors.password)}
 						className="ui-field"
 					/>
@@ -75,6 +81,25 @@ export default function SignInPage() {
 					{errors.password && (
 						<p role="alert" className="text-(sm danger) font-medium">
 							{errors.password.message}
+						</p>
+					)}
+				</label>
+
+				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
+					<span>Confirmar senha</span>
+
+					<input
+						type="password"
+						{...register("confirmation")}
+						autoComplete="new-password"
+						placeholder="Confirme sua senha"
+						aria-invalid={Boolean(errors.confirmation)}
+						className="ui-field"
+					/>
+
+					{errors.confirmation && (
+						<p role="alert" className="text-(sm danger) font-medium">
+							{errors.confirmation.message}
 						</p>
 					)}
 				</label>
@@ -90,14 +115,14 @@ export default function SignInPage() {
 					disabled={isSubmitting}
 					className="ui-button-primary mt-1"
 				>
-					{isSubmitting ? "Entrando..." : "Entrar"}
+					{isSubmitting ? "Criando..." : "Criar conta"}
 				</button>
 			</form>
 
 			<p className="mt-7 text-(center sm muted)">
-				Ainda não tem uma conta?{" "}
-				<Link to="/criar-conta" className="ui-link">
-					Criar conta
+				Já possui uma conta?{" "}
+				<Link to="/login" className="ui-link">
+					Entrar
 				</Link>
 			</p>
 		</section>
