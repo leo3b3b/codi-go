@@ -22,7 +22,7 @@ type SavedFilters = {
 
 const FILTERS_KEY = "codi-go:teacher-class-filters";
 
-function TeacherClass() {
+export function ClassesPage() {
 	const navigate = useNavigate();
 	const { schoolId, classId } = useParams();
 
@@ -579,5 +579,3 @@ function TeacherClass() {
 		</main>
 	);
 }
-
-export default TeacherClass;

@@ -2,11 +2,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
-
-import { TeacherAverages, TeacherClass } from "@/features/metrics";
-import { TeacherHome } from "@/features/navigation";
 import { AuthLayout } from "@/layouts";
-import { CheckEmailPage, ProfilePage, SignInPage, SignUpPage } from "@/pages";
+import {
+	CheckEmailPage,
+	ClassesPage,
+	ProfilePage,
+	SignInPage,
+	SignUpPage,
+	StudentsPage,
+	TeacherHome,
+} from "@/pages";
 import { requireAuth } from "@/services";
 
 import "@codi-go/ui/css";
@@ -36,11 +41,11 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "turma/:classId",
-						Component: TeacherClass,
+						Component: ClassesPage,
 					},
 					{
 						path: "aluno/:studentId",
-						Component: TeacherAverages,
+						Component: StudentsPage,
 					},
 					{
 						path: "admin",

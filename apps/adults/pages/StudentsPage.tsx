@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router";
 
 type SchoolOption = Pick<Tables<"school">, "id" | "trade_name" | "legal_name">;
 
-function TeacherAverages() {
+export function StudentsPage() {
 	const navigate = useNavigate();
 	const { schoolId } = useParams();
 
@@ -149,5 +149,3 @@ function TeacherAverages() {
 		</main>
 	);
 }
-
-export default TeacherAverages;

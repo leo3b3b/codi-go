@@ -11,7 +11,7 @@ type ClassOption = Pick<
 	"id" | "name" | "school_id" | "teacher_id"
 >;
 
-function TeacherHome() {
+export function TeacherHome() {
 	const navigate = useNavigate();
 	const { schoolId } = useParams<{ schoolId: string }>();
 
@@ -432,5 +432,3 @@ function TeacherHome() {
 		</main>
 	);
 }
-
-export default TeacherHome;
