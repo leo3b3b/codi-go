@@ -2,7 +2,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { type SignUpOutput, signUpSchema } from "@/schemas";
-import { signUp } from "../features/auth/auth.service";
+import { signUp } from "@/services";
 
 export function SignUpPage() {
 	const navigate = useNavigate();
