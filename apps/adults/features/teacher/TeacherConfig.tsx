@@ -1,18 +1,17 @@
+import type { Tables } from "@codi-go/supabase";
 import { supabase } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-type School = {
-	id: string;
-	name: string;
-};
-
 function TeacherConfig() {
 	const navigate = useNavigate();
 	const { schoolId } = useParams();
 
-	const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+	const [selectedSchool, setSelectedSchool] = useState<Pick<
+		Tables<"school">,
+		"id" | "trade_name" | "legal_name"
+	> | null>(null);
 
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
@@ -64,15 +63,11 @@ function TeacherConfig() {
 				return;
 			}
 
-			setSelectedSchool({
-				id: schoolData.id,
-				name: schoolData.trade_name || schoolData.legal_name,
-			});
-
+			setSelectedSchool(schoolData);
 			setLoading(false);
 		}
 
-		loadSchool();
+		void loadSchool();
 	}, [navigate, schoolId]);
 
 	function goToHome() {
@@ -147,7 +142,9 @@ function TeacherConfig() {
 					</nav>
 
 					<div className="min-w-40 text-right text-base font-bold text-white">
-						{selectedSchool?.name ?? "Escola"}
+						{selectedSchool
+							? selectedSchool.trade_name || selectedSchool.legal_name
+							: "Escola"}
 					</div>
 				</div>
 			</header>

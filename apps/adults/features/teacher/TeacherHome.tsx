@@ -1,17 +1,25 @@
+import type { Tables } from "@codi-go/supabase";
 import { supabase } from "@codi-go/supabase";
-import type { ClassRoom, School } from "@codi-go/supabase/types";
 import logo from "@codi-go/ui/images/logo.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+
+type SchoolOption = Pick<Tables<"school">, "id" | "trade_name" | "legal_name">;
+
+type ClassOption = Pick<
+	Tables<"classes">,
+	"id" | "name" | "school_id" | "teacher_id"
+>;
 
 function TeacherHome() {
 	const navigate = useNavigate();
 	const { schoolId } = useParams<{ schoolId: string }>();
 
-	const [schools, setSchools] = useState<School[]>([]);
-	const [classes, setClasses] = useState<ClassRoom[]>([]);
-
-	const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+	const [schools, setSchools] = useState<SchoolOption[]>([]);
+	const [classes, setClasses] = useState<ClassOption[]>([]);
+	const [selectedSchool, setSelectedSchool] = useState<SchoolOption | null>(
+		null,
+	);
 
 	const [schoolMenuOpen, setSchoolMenuOpen] = useState(true);
 	const [classMenuOpen, setClassMenuOpen] = useState(true);
@@ -60,7 +68,8 @@ function TeacherHome() {
 				.from("school")
 				.select("id, trade_name, legal_name")
 				.in("id", schoolIds)
-				.eq("is_active", true);
+				.eq("is_active", true)
+				.order("trade_name");
 
 			if (schoolError) {
 				setError("Não foi possível carregar suas escolas.");
@@ -68,10 +77,7 @@ function TeacherHome() {
 				return;
 			}
 
-			const loadedSchools = (schoolData ?? []).map((school) => ({
-				id: school.id,
-				name: school.trade_name || school.legal_name,
-			}));
+			const loadedSchools: SchoolOption[] = schoolData ?? [];
 
 			setSchools(loadedSchools);
 
@@ -97,13 +103,14 @@ function TeacherHome() {
 			setLoadingSchools(false);
 		}
 
-		loadSchools();
+		void loadSchools();
 	}, [navigate, schoolId]);
 
 	useEffect(() => {
 		async function loadClasses() {
 			if (!selectedSchool) {
 				setClasses([]);
+				setLoadingClasses(false);
 				return;
 			}
 
@@ -164,16 +171,19 @@ function TeacherHome() {
 			setLoadingClasses(false);
 		}
 
-		loadClasses();
+		void loadClasses();
 	}, [navigate, selectedSchool]);
 
-	function selectSchool(school: School) {
-		setSelectedSchool(school);
+	function schoolName(school: SchoolOption) {
+		return school.trade_name || school.legal_name;
+	}
 
+	function selectSchool(school: SchoolOption) {
+		setSelectedSchool(school);
 		navigate(`/${school.id}/dashboard`);
 	}
 
-	function openClass(classRoom: ClassRoom) {
+	function openClass(classRoom: ClassOption) {
 		if (!selectedSchool) {
 			return;
 		}
@@ -191,9 +201,6 @@ function TeacherHome() {
 
 	return (
 		<main className="h-screen overflow-hidden bg-gradient-to-br from-[#c6a0ea] via-[#f0ddd4] to-[#c8a0eb]">
-			{/* =========================================================
-                CABEÇALHO
-            ========================================================== */}
 			<header className="relative h-20 shrink-0 bg-[rgba(112,86,204,0.76)] shadow-lg">
 				<div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
 					<button
@@ -249,22 +256,13 @@ function TeacherHome() {
 					</nav>
 
 					<div className="min-w-40 text-right text-base font-bold text-white">
-						{selectedSchool?.name ?? "Escola"}
+						{selectedSchool ? schoolName(selectedSchool) : "Escola"}
 					</div>
 				</div>
 			</header>
 
-			{/* =========================================================
-                CONTEÚDO PRINCIPAL
-            ========================================================== */}
 			<section className="mx-auto grid h-[calc(100vh-96px)] max-w-[1450px] grid-cols-[380px_1fr] gap-14 px-10 py-12">
-				{/* =====================================================
-                    COLUNA ESQUERDA
-                ====================================================== */}
 				<div className="flex flex-col gap-9">
-					{/* -------------------------------------------------
-                        ESCOLHA SUA ESCOLA
-                    -------------------------------------------------- */}
 					<div className="rounded-[2rem] bg-white p-7 shadow-2xl">
 						<button
 							type="button"
@@ -312,7 +310,7 @@ function TeacherHome() {
 														: "bg-[#d8d8d8] text-[#3267d9] hover:bg-[#cfcfcf]"
 												}`}
 											>
-												{school.name}
+												{schoolName(school)}
 											</button>
 										);
 									})
@@ -321,9 +319,6 @@ function TeacherHome() {
 						)}
 					</div>
 
-					{/* -------------------------------------------------
-                        ESCOLHA SUA TURMA
-                    -------------------------------------------------- */}
 					<div className="rounded-[2rem] bg-white p-7 shadow-2xl">
 						<button
 							type="button"
@@ -377,9 +372,6 @@ function TeacherHome() {
 					</div>
 				</div>
 
-				{/* =====================================================
-                    PAINEL DIREITO — ESTATÍSTICA GERAL
-                ====================================================== */}
 				<div className="flex min-h-0 flex-col rounded-[2rem] bg-white/85 p-10 shadow-2xl">
 					<div className="mb-6 self-start rounded-full bg-purple px-6 py-3 text-2xl shadow-lg">
 						Pontos fortes e fracos de cada turma
@@ -389,7 +381,11 @@ function TeacherHome() {
 						<div className="w-full">
 							<p className="mb-8 text-center text-lg text-[#716886]">
 								Estatísticas gerais das turmas de{" "}
-								<strong>{selectedSchool?.name ?? "escola selecionada"}</strong>
+								<strong>
+									{selectedSchool
+										? schoolName(selectedSchool)
+										: "escola selecionada"}
+								</strong>
 							</p>
 
 							{classes.length === 0 ? (
@@ -428,9 +424,6 @@ function TeacherHome() {
 				</div>
 			</section>
 
-			{/* =========================================================
-                MENSAGEM DE ERRO
-            ========================================================== */}
 			{error && (
 				<div className="fixed bottom-5 left-1/2 -translate-x-1/2 rounded-xl bg-[#fff0f2] px-6 py-4 text-[#8e2331] shadow-xl">
 					{error}

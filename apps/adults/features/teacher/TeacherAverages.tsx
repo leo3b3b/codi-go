@@ -1,18 +1,18 @@
+import type { Tables } from "@codi-go/supabase";
 import { supabase } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-type School = {
-	id: string;
-	name: string;
-};
+type SchoolOption = Pick<Tables<"school">, "id" | "trade_name" | "legal_name">;
 
 function TeacherAverages() {
 	const navigate = useNavigate();
 	const { schoolId } = useParams();
 
-	const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+	const [selectedSchool, setSelectedSchool] = useState<SchoolOption | null>(
+		null,
+	);
 
 	const [loadingSchool, setLoadingSchool] = useState(true);
 
@@ -60,32 +60,25 @@ function TeacherAverages() {
 				return;
 			}
 
-			setSelectedSchool({
-				id: schoolData.id,
-				name: schoolData.trade_name || schoolData.legal_name,
-			});
-
+			setSelectedSchool(schoolData);
 			setLoadingSchool(false);
 		}
 
-		loadSchool();
+		void loadSchool();
 	}, [navigate, schoolId]);
 
 	function goToHome() {
 		if (!schoolId) return;
-
 		navigate(`/${schoolId}/dashboard`);
 	}
 
 	function goToClasses() {
 		if (!schoolId) return;
-
 		navigate(`/${schoolId}/turmas`);
 	}
 
 	function goToSettings() {
 		if (!schoolId) return;
-
 		navigate(`/${schoolId}/configuracoes`);
 	}
 
@@ -137,7 +130,9 @@ function TeacherAverages() {
 					</nav>
 
 					<div className="min-w-40 text-right text-base font-bold text-white">
-						{selectedSchool?.name ?? "Escola"}
+						{selectedSchool
+							? selectedSchool.trade_name || selectedSchool.legal_name
+							: "Escola"}
 					</div>
 				</div>
 			</header>

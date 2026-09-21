@@ -1,31 +1,40 @@
+import type { Tables } from "@codi-go/supabase";
 import { supabase } from "@codi-go/supabase";
-import type { ClassRoom, School, Student } from "@codi-go/supabase/types";
 import logo from "@codi-go/ui/images/logo.png";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 type OrderOption = "az" | "za";
 
-type LevelOption = "high" | "low";
+type SchoolOption = Pick<Tables<"school">, "id" | "trade_name" | "legal_name">;
+
+type ClassOption = Pick<
+	Tables<"classes">,
+	"id" | "name" | "school_id" | "teacher_id"
+>;
+
+type StudentOption = Pick<Tables<"students">, "id" | "name">;
+
+type SavedFilters = {
+	order?: OrderOption;
+	search?: string;
+};
 
 const FILTERS_KEY = "codi-go:teacher-class-filters";
 
 function TeacherClass() {
 	const navigate = useNavigate();
-
 	const { schoolId, classId } = useParams();
 
-	const [school, setSchool] = useState<School | null>(null);
-	const [classes, setClasses] = useState<ClassRoom[]>([]);
-	const [selectedClass, setSelectedClass] = useState<ClassRoom | null>(null);
-	const [students, setStudents] = useState<Student[]>([]);
+	const [school, setSchool] = useState<SchoolOption | null>(null);
+	const [classes, setClasses] = useState<ClassOption[]>([]);
+	const [selectedClass, setSelectedClass] = useState<ClassOption | null>(null);
+	const [students, setStudents] = useState<StudentOption[]>([]);
 
 	const [order, setOrder] = useState<OrderOption>("az");
-	const [levelOrder, setLevelOrder] = useState<LevelOption>("high");
 	const [search, setSearch] = useState("");
 
 	const [orderOpen, setOrderOpen] = useState(false);
-	const [levelOpen, setLevelOpen] = useState(false);
 	const [classOpen, setClassOpen] = useState(false);
 
 	const [loading, setLoading] = useState(true);
@@ -102,10 +111,7 @@ function TeacherClass() {
 				return;
 			}
 
-			setSchool({
-				id: schoolData.id,
-				name: schoolData.trade_name || schoolData.legal_name,
-			});
+			setSchool(schoolData);
 
 			let classesQuery = supabase
 				.from("classes")
@@ -130,7 +136,7 @@ function TeacherClass() {
 			const { data: studentsData, error: studentsError } = await supabase
 				.from("students")
 				.select("id, name")
-				.eq("id", classId)
+				.eq("class_id", classId)
 				.order("name");
 
 			if (studentsError) {
@@ -139,43 +145,11 @@ function TeacherClass() {
 				return;
 			}
 
-			const studentIds = (studentsData ?? []).map((student) => student.id);
-
-			const levels = new Map<string, number>();
-
-			if (studentIds.length > 0) {
-				const { data: progressData, error: progressError } = await supabase
-					.from("progress")
-					.select("student_id, level_id")
-					.in("student_id", studentIds);
-
-				if (progressError) {
-					setError("Não foi possível carregar o progresso dos alunos.");
-					setLoading(false);
-					return;
-				}
-
-				for (const progress of progressData ?? []) {
-					const currentLevel = levels.get(progress.student_id) ?? 0;
-
-					if (progress.level_id > currentLevel) {
-						levels.set(progress.student_id, progress.level_id);
-					}
-				}
-			}
-
-			setStudents(
-				(studentsData ?? []).map((student) => ({
-					id: student.id,
-					name: student.name,
-					level: levels.has(student.id) ? levels.get(student.id)! : null,
-				})),
-			);
-
+			setStudents(studentsData ?? []);
 			setLoading(false);
 		}
 
-		loadClass();
+		void loadClass();
 	}, [schoolId, classId]);
 
 	useEffect(() => {
@@ -186,14 +160,10 @@ function TeacherClass() {
 		}
 
 		try {
-			const filters = JSON.parse(savedFilters);
+			const filters: SavedFilters = JSON.parse(savedFilters);
 
 			if (filters.order === "az" || filters.order === "za") {
 				setOrder(filters.order);
-			}
-
-			if (filters.levelOrder === "high" || filters.levelOrder === "low") {
-				setLevelOrder(filters.levelOrder);
 			}
 
 			if (typeof filters.search === "string") {
@@ -212,38 +182,18 @@ function TeacherClass() {
 		);
 
 		result.sort((a, b) => {
-			if (levelOrder === "high") {
-				const levelA = a.level ?? -1;
-				const levelB = b.level ?? -1;
-
-				if (levelA !== levelB) {
-					return levelB - levelA;
-				}
-			}
-
-			if (levelOrder === "low") {
-				const levelA = a.level ?? Number.MAX_SAFE_INTEGER;
-				const levelB = b.level ?? Number.MAX_SAFE_INTEGER;
-
-				if (levelA !== levelB) {
-					return levelA - levelB;
-				}
-			}
-
 			const comparison = a.name.localeCompare(b.name, "pt-BR");
-
 			return order === "az" ? comparison : -comparison;
 		});
 
 		return result;
-	}, [students, search, order, levelOrder]);
+	}, [students, search, order]);
 
 	function saveFilters() {
 		localStorage.setItem(
 			FILTERS_KEY,
 			JSON.stringify({
 				order,
-				levelOrder,
 				search,
 			}),
 		);
@@ -255,7 +205,7 @@ function TeacherClass() {
 		}, 1800);
 	}
 
-	function selectClass(nextClass: ClassRoom) {
+	function selectClass(nextClass: ClassOption) {
 		setClassOpen(false);
 
 		if (!schoolId) {
@@ -321,7 +271,7 @@ function TeacherClass() {
 					</nav>
 
 					<div className="min-w-40 text-right text-base font-bold text-white">
-						{school?.name ?? "Escola"}
+						{school ? school.trade_name || school.legal_name : "Escola"}
 					</div>
 				</div>
 			</header>
@@ -450,19 +400,7 @@ function TeacherClass() {
 														<p className="truncate text-sm font-semibold text-[#372a58]">
 															{student.name}
 														</p>
-
-														<p className="text-xs text-[#716886]">
-															{student.level !== null
-																? `Nível ${student.level}`
-																: "Sem nível registrado"}
-														</p>
 													</div>
-
-													<span className="shrink-0 rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
-														{student.level !== null
-															? `lvl.${student.level}`
-															: "lvl.—"}
-													</span>
 												</div>
 											))
 										)}
@@ -497,7 +435,7 @@ function TeacherClass() {
 								</button>
 							</div>
 
-							<div className="mb-4 grid shrink-0 grid-cols-1 gap-3 md:grid-cols-[1fr_180px_180px]">
+							<div className="mb-4 grid shrink-0 grid-cols-1 gap-3 md:grid-cols-[1fr_180px]">
 								<label className="relative block">
 									<span className="sr-only">Buscar aluno</span>
 
@@ -513,7 +451,6 @@ function TeacherClass() {
 											aria-hidden="true"
 										>
 											<circle cx="11" cy="11" r="7" />
-
 											<path d="m20 20-4-4" />
 										</svg>
 
@@ -589,71 +526,6 @@ function TeacherClass() {
 										</div>
 									)}
 								</div>
-
-								<div className="relative">
-									<button
-										type="button"
-										onClick={() => setLevelOpen((open) => !open)}
-										className="flex w-full items-center justify-between rounded-xl border border-[#ded8ea] bg-[#f5f2fb] px-3 py-2.5 text-sm font-semibold text-[#372a58] transition hover:border-[#7254d5]"
-										aria-expanded={levelOpen}
-									>
-										<span>
-											{levelOrder === "high" ? "Maior nível" : "Menor nível"}
-										</span>
-
-										<svg
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-											aria-hidden="true"
-											className="text-[#7254d5]"
-										>
-											<path
-												d={levelOpen ? "M6 15L12 9L18 15" : "M6 9L12 15L18 9"}
-												stroke="currentColor"
-												strokeWidth="2"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-											/>
-										</svg>
-									</button>
-
-									{levelOpen && (
-										<div className="absolute left-0 right-0 z-20 mt-2 rounded-xl border border-[#ded8ea] bg-white p-1.5 shadow-xl">
-											<button
-												type="button"
-												onClick={() => {
-													setLevelOrder("high");
-													setLevelOpen(false);
-												}}
-												className={`flex w-full rounded-lg px-3 py-2 text-left text-sm ${
-													levelOrder === "high"
-														? "bg-[#f1edff] font-bold text-[#5541a9]"
-														: "text-[#716886] hover:bg-[#f5f2fb]"
-												}`}
-											>
-												Maior nível
-											</button>
-
-											<button
-												type="button"
-												onClick={() => {
-													setLevelOrder("low");
-													setLevelOpen(false);
-												}}
-												className={`flex w-full rounded-lg px-3 py-2 text-left text-sm ${
-													levelOrder === "low"
-														? "bg-[#f1edff] font-bold text-[#5541a9]"
-														: "text-[#716886] hover:bg-[#f5f2fb]"
-												}`}
-											>
-												Menor nível
-											</button>
-										</div>
-									)}
-								</div>
 							</div>
 
 							<div className="min-h-0 flex-1 overflow-y-auto pr-1">
@@ -693,25 +565,7 @@ function TeacherClass() {
 														<h3 className="truncate text-sm font-bold text-[#372a58]">
 															{student.name}
 														</h3>
-
-														<p className="mt-1 text-xs text-[#716886]">
-															{student.level !== null
-																? `Nível ${student.level}`
-																: "Sem nível registrado"}
-														</p>
 													</div>
-												</div>
-
-												<div className="mt-4 flex items-center justify-between border-t border-[#ebe7f2] pt-3">
-													<span className="text-xs font-medium text-[#716886]">
-														Progresso
-													</span>
-
-													<span className="rounded-lg bg-[#f1edff] px-2 py-1 text-[11px] font-bold text-[#5541a9]">
-														{student.level !== null
-															? `lvl.${student.level}`
-															: "lvl.—"}
-													</span>
 												</div>
 											</article>
 										))}
