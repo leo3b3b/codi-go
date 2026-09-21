@@ -4,7 +4,6 @@ import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
 import {
-	AuthLayout,
 	CheckEmailPage,
 	requireAuth,
 	SignInPage,
@@ -13,6 +12,8 @@ import {
 import { TeacherAverages, TeacherClass } from "@/features/metrics";
 import { TeacherHome } from "@/features/navigation";
 import { ProfilePage } from "@/features/profile";
+
+import { AuthLayout } from "@/layouts";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
