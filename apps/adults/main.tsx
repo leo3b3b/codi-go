@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Navigate, Outlet } from "react-router";
+import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
 import {
@@ -19,7 +19,7 @@ import "virtual:uno.css";
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Outlet />,
+		Component: Outlet,
 		middleware: [requireAuth],
 		children: [
 			{
@@ -27,27 +27,42 @@ const router = createBrowserRouter([
 				Component: ProfilePage,
 			},
 			{
-				path: "/:schoolId",
+				path: "escolas",
+				Component: Outlet,
+			},
+			{
+				path: "escola/:schoolId",
+				Component: Outlet,
 				children: [
 					{
 						index: true,
-						element: <Navigate to="dashboard" replace />,
-					},
-					{
-						path: "dashboard",
 						Component: TeacherHome,
 					},
 					{
-						path: "turmas",
-						Component: TeacherHome,
-					},
-					{
-						path: "turmas/:classId",
+						path: "turma/:classId",
 						Component: TeacherClass,
 					},
 					{
-						path: "medias",
+						path: "aluno/:studentId",
 						Component: TeacherAverages,
+					},
+					{
+						path: "admin",
+						Component: Outlet,
+						children: [
+							{
+								path: "turmas",
+								Component: Outlet,
+							},
+							{
+								path: "turma/:classId/alunos",
+								Component: Outlet,
+							},
+							{
+								path: "membros",
+								Component: Outlet,
+							},
+						],
 					},
 				],
 			},
