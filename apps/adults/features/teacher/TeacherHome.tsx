@@ -221,7 +221,7 @@ function TeacherHome() {
 							type="button"
 							onClick={() => {
 								if (selectedSchool) {
-									navigate(`/${selectedSchool.id}/configuracoes`);
+									navigate("/meu-perfil");
 								}
 							}}
 							className="h-full px-5 transition-opacity hover:opacity-80"

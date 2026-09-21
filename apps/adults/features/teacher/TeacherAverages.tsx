@@ -79,7 +79,7 @@ function TeacherAverages() {
 
 	function goToSettings() {
 		if (!schoolId) return;
-		navigate(`/${schoolId}/configuracoes`);
+		navigate("/meu-perfil");
 	}
 
 	if (loadingSchool) {

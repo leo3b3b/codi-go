@@ -241,7 +241,7 @@ function TeacherClass() {
 							type="button"
 							onClick={() => {
 								if (schoolId) {
-									navigate(`/${schoolId}/configuracoes`);
+									navigate("/meu-perfil");
 								}
 							}}
 							className="h-full px-5 transition-opacity hover:opacity-80"

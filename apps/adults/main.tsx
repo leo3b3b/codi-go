@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
 import {
@@ -10,44 +10,46 @@ import {
 	SignInPage,
 	SignUpPage,
 } from "@/features/auth";
-import {
-	TeacherAverages,
-	TeacherClass,
-	TeacherConfig,
-	TeacherHome,
-} from "@/features/teacher";
+import { TeacherAverages, TeacherClass, TeacherHome } from "@/features/teacher";
+import { ProfilePage } from "./features/profile";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
 
 const router = createBrowserRouter([
 	{
-		path: "/:schoolId",
+		path: "/",
+		element: <Outlet />,
 		middleware: [requireAuth],
 		children: [
 			{
-				index: true,
-				element: <Navigate to="dashboard" replace />,
+				path: "meu-perfil",
+				Component: ProfilePage,
 			},
 			{
-				path: "dashboard",
-				Component: TeacherHome,
-			},
-			{
-				path: "turmas",
-				Component: TeacherHome,
-			},
-			{
-				path: "turmas/:classId",
-				Component: TeacherClass,
-			},
-			{
-				path: "configuracoes",
-				Component: TeacherConfig,
-			},
-			{
-				path: "medias",
-				Component: TeacherAverages,
+				path: "/:schoolId",
+				children: [
+					{
+						index: true,
+						element: <Navigate to="dashboard" replace />,
+					},
+					{
+						path: "dashboard",
+						Component: TeacherHome,
+					},
+					{
+						path: "turmas",
+						Component: TeacherHome,
+					},
+					{
+						path: "turmas/:classId",
+						Component: TeacherClass,
+					},
+					{
+						path: "medias",
+						Component: TeacherAverages,
+					},
+				],
 			},
 		],
 	},
