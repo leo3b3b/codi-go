@@ -1,7 +1,7 @@
 import logo from "@codi-go/ui/images/logo.png";
 import { useNavigate } from "react-router";
 
-export default function ProfilePage() {
+export function ProfilePage() {
 	const navigate = useNavigate();
 
 	function goToHome() {

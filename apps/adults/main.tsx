@@ -6,9 +6,8 @@ import { RouterProvider } from "react-router/dom";
 import { requireAuth } from "@/features/auth";
 import { TeacherAverages, TeacherClass } from "@/features/metrics";
 import { TeacherHome } from "@/features/navigation";
-import { ProfilePage } from "@/features/profile";
 import { AuthLayout } from "@/layouts";
-import { CheckEmailPage, SignInPage, SignUpPage } from "@/pages";
+import { CheckEmailPage, ProfilePage, SignInPage, SignUpPage } from "@/pages";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
