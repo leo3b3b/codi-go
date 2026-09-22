@@ -6,23 +6,21 @@
 
 1. O CodiGO! utiliza Supabase como backend e o cliente compartilhado é consumido através de `@codi-go/supabase`.
 
-2. O acesso ao banco deve ser encapsulado nos services das features. Queries, mutations e chamadas a RPC do Supabase devem ficar, por padrão, em arquivos `.service.ts`.
+2. O acesso ao banco deve ser encapsulado em services. Queries, mutations e chamadas a RPC do Supabase devem ficar, por padrão, em arquivos `services/*.ts`.
 
-3. Páginas, componentes e layouts não devem executar queries diretamente nem importar o cliente do Supabase para acesso a dados da aplicação.
-
-4. O `index.ts` da feature deve funcionar como ponto de entrada público dos services.
+3. Páginas, componentes e layouts nunca devem executar queries diretamente nem importar o cliente do Supabase para acesso a dados da aplicação.
 
 Exemplo:
 
 ```text
-features/
-└── students/
-    ├── students.service.ts
-    └── index.ts
+services/
+  ├── students.ts
+  ├── auth.ts
+  └── index.ts
 ```
 
 ```ts
-// students.service.ts
+// services/students.ts
 import { supabase } from '@codi-go/supabase';
 
 export async function getStudentsByClass(classId: string) {
@@ -40,7 +38,7 @@ export async function getStudentsByClass(classId: string) {
 O consumidor utiliza:
 
 ```ts
-import { getStudentsByClass } from '@/features/students';
+import { getStudentsByClass } from '@/services';
 ```
 
 e não acessa `supabase.from(...)` diretamente.
