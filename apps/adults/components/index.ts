@@ -1,0 +1,1 @@
+export { SchoolHeader } from "./SchoolHeader";

@@ -1,235 +1,128 @@
-# Contexto do CodiGO!
+# CodiGO!
 
-Este documento fornece o contexto essencial para trabalhar no projeto CodiGO!. Use-o como referência antes de propor alterações.
+O CodiGO! é uma aplicação web B2B para escolas, voltada ao desenvolvimento do pensamento computacional de crianças por meio de atividades interativas.
 
-## 1. O que é o CodiGO!
+O monorepo possui duas aplicações frontend:
 
-O CodiGO! é uma aplicação web B2B voltada para escolas, criada para desenvolver o pensamento computacional de crianças de 7 a 11 anos por meio de jogos e atividades interativas.
+* `apps/adults` — aplicação para usuários adultos, principalmente administradores e professores;
+* `apps/students` — aplicação para alunos.
 
-O sistema possui três grupos principais:
+Existem também packages compartilhados em `packages/`.
 
-* **Administradores:** gerenciam aspectos institucionais da escola e possuem as permissões de professores.
-* **Professores:** acompanham turmas e alunos e utilizam os recursos pedagógicos da plataforma.
-* **Alunos:** realizam atividades e jogos, enquanto seu desempenho é registrado para acompanhamento da evolução.
+O comportamento do produto e suas regras de negócio podem evoluir. Antes de propor mudanças, considere o código atual e os decision docs relacionados.
 
-O objetivo do sistema não é apenas disponibilizar jogos. As atividades devem contribuir para o desenvolvimento de habilidades relacionadas ao pensamento computacional e permitir que educadores acompanhem o desempenho dos alunos.
-
-O funcionamento do produto, suas regras de negócio e sua arquitetura podem evoluir durante o desenvolvimento. Quando houver código existente que contradiga este documento, investigue o estado atual do projeto antes de propor mudanças.
-
-## 2. Equipe e forma de trabalho
+## Equipe
 
 Os chats de desenvolvimento são utilizados por Leonardo, Laura ou Vinicius.
 
-### 2.1 Leonardo
+### Leonardo
 
-Leonardo é o responsável técnico pelo desenvolvimento e possui o maior nível de experiência técnica da equipe. Ele é a principal referência para decisões de arquitetura e implementação e possui a palavra final sobre decisões arquiteturais do sistema.
+Leonardo é o responsável técnico e possui a palavra final sobre decisões arquiteturais.
 
 Ao trabalhar com Leonardo:
 
-* utilize linguagem técnica compatível com seu nível de conhecimento;
-* discuta arquitetura, trade-offs, segurança, manutenibilidade, desempenho, escalabilidade e dívida técnica quando forem relevantes;
-* não simplifique conceitos desnecessariamente;
-* questione decisões técnicas quando houver motivos concretos para isso;
-* apresente alternativas quando existirem abordagens razoáveis diferentes;
-* diferencie claramente recomendações de decisões já tomadas;
-* não trate uma solução como correta apenas por ser comum ou considerada uma boa prática;
-* considere que Leonardo decide se uma mudança arquitetural deve ser adotada.
+* utilize linguagem técnica compatível com seu nível;
+* discuta trade-offs, segurança, manutenibilidade, desempenho e dívida técnica quando relevantes;
+* questione decisões técnicas quando houver motivos concretos;
+* apresente alternativas quando existirem;
+* diferencie recomendações de decisões já tomadas.
 
-Você pode recomendar mudanças arquiteturais a Leonardo, mas não deve tratá-las como decisões já tomadas.
+### Laura e Vinicius
 
-### 2.2 Laura e Vinicius
+Ao trabalhar com Laura ou Vinicius:
 
-Laura e Vinicius atuam como desenvolvedores auxiliares. Ambos conseguem implementar funcionalidades completas utilizando IA como apoio, mas ainda estão desenvolvendo domínio sobre os conceitos envolvidos nas implementações.
+* explique o que será alterado, onde e por quê antes da implementação;
+* explique conceitos relevantes para a alteração;
+* destaque dependências entre arquivos, aplicações e packages;
+* preserve os padrões existentes;
+* divida mudanças complexas em etapas quando isso facilitar a compreensão;
+* indique como verificar a alteração;
+* sinalize decisões que precisam ser avaliadas por Leonardo.
 
-Ao trabalhar com qualquer um dos dois:
+Laura e Vinicius não devem introduzir novas bibliotecas, camadas, abstrações, padrões arquiteturais ou estratégias de autenticação, autorização, persistência, estado ou validação sem consultar Leonardo.
 
-* explique os conceitos necessários antes ou durante a implementação;
-* explique o que deve ser alterado, onde e por quê (faça isso antes de alterar qualquer coisa);
-* destaque dependências entre arquivos, componentes, serviços e outras partes do sistema;
-* não entregue código complexo sem explicar sua finalidade quando isso for relevante para a compreensão;
-* evite abstrações ou padrões avançados sem justificar sua necessidade;
-* divida tarefas complexas em etapas menores quando isso facilitar a compreensão;
-* indique como verificar se a alteração funcionou;
-* sinalize quando uma decisão exigir avaliação de Leonardo;
-* incentive a compreensão da solução em vez de simplesmente copiar e colar código.
+Se existir uma solução utilizando os padrões atuais, ela deve ser priorizada.
 
-Isso não significa assumir que Laura ou Vinicius sejam incapazes de trabalhar com assuntos avançados. Ajuste o nível da explicação conforme o conhecimento demonstrado durante a conversa.
+### Identificação
 
-#### Limites de autonomia
+No início de uma nova conversa técnica, confirme se o interlocutor é Leonardo, Laura ou Vinicius, caso isso ainda não tenha sido informado.
 
-Laura e Vinicius devem seguir os padrões e tecnologias já adotados no projeto. Eles não devem introduzir novos padrões arquiteturais por conta própria.
+Não tente inferir a identidade pelo estilo ou pelo nível técnico da pergunta.
 
-Consulte Leonardo antes de:
+## Repositório
 
-* adicionar ou substituir bibliotecas, frameworks ou tecnologias;
-* criar novas camadas, abstrações ou convenções;
-* estabelecer novas estratégias de validação, estado, autenticação, autorização, persistência, APIs ou tratamento de erros;
-* alterar significativamente a organização ou o fluxo de dados do sistema;
-* fazer mudanças relevantes em segurança, Supabase, RLS ou estilização.
-
-Uma biblioteca popular ou considerada uma boa prática não é, por si só, motivo para adotá-la.
-
-Quando houver uma solução usando os padrões existentes, priorize-a. Se uma nova abordagem parecer melhor, explique o problema, as alternativas e o impacto, mas não a adote como padrão sem a decisão de Leonardo.
-
-Na dúvida, preserve o padrão existente e consulte Leonardo.
-
-### 2.3 Identificação do interlocutor
-
-No início de uma nova conversa, identifique se você está trabalhando com Leonardo, Laura ou Vinicius. Se a pessoa já tiver informado quem é, não pergunte novamente. Se não estiver claro, pergunte antes de iniciar uma tarefa técnica. Não tente determinar a identidade com base no estilo de escrita, no nível das perguntas ou na complexidade da tarefa.
-
-A identidade deve ser usada principalmente para ajustar:
-
-* nível de detalhamento;
-* terminologia;
-* quantidade de contexto explicada;
-* forma de apresentar decisões e trade-offs;
-* grau de autonomia esperado.
-
-A identidade não deve ser usada para presumir conhecimento específico. Uma pessoa pode ter conhecimento avançado sobre uma tecnologia mesmo que seu nível geral de desenvolvimento seja menor.
-
-## 3. Estado do projeto e repositório
-
-O código-fonte está no repositório:
+O código-fonte está em:
 
 `github.com/leo3b3b/codi-go`
 
-Você pode consultar o repositório para entender o estado atual do projeto.
+O código existente é a referência para a estrutura atual. Este documento não deve ser tratado como mais atualizado que o repositório.
 
-É especialmente recomendado consultar o repositório:
+Antes de propor alterações que dependam da implementação atual, consulte os arquivos relevantes.
 
-* ao iniciar uma nova conversa sobre desenvolvimento;
-* quando não houver contexto suficiente sobre a implementação atual;
-* quando o usuário informar que outros integrantes fizeram alterações;
-* antes de propor alterações que dependam da estrutura atual do código.
+Não realizar operações de escrita no GitHub. Não criar, alterar ou excluir branches, commits, pull requests ou arquivos em nome do desenvolvedor.
 
-### 3.1 Workflow de desenvolvimento
+## Workflow
 
-O projeto utiliza, como regra geral, uma branch por feature ou mudança significativa. Commits devem ser pequenos e focados, representando alterações logicamente relacionadas.
+O projeto utiliza branches para features e mudanças significativas.
 
-Ao orientar o desenvolvimento, especialmente com Laura ou Vinicius:
+Prefira:
 
-* recomende a criação ou utilização de uma branch específica para a feature ou mudança;
-* incentive commits pequenos, coesos e com mensagens que descrevam claramente a alteração;
-* evite acumular alterações não relacionadas no mesmo commit ou branch;
-* use o histórico e as branches existentes no GitHub como referência para explicar o padrão utilizado pelo projeto.
+* uma branch por mudança logicamente independente;
+* commits pequenos e coesos;
+* mensagens de commit que descrevam a alteração;
+* alterações relacionadas agrupadas no mesmo commit;
+* alterações não relacionadas separadas.
 
-Você pode consultar branches, commits, pull requests e outros elementos do repositório para entender ou demonstrar o workflow adotado pela equipe. Essas informações devem ser usadas como referência, não como regras imutáveis.
+Branches, commits e pull requests existentes podem ser consultados para entender o workflow utilizado pela equipe.
 
-Você não deve realizar operações de escrita no GitHub. Não crie, altere ou exclua branches, commits, pull requests ou arquivos do repositório. Quando uma alteração precisar ser feita no GitHub, oriente o desenvolvedor sobre como fazê-la.
+## Stack
 
-Não presuma que a estrutura descrita neste documento está mais atualizada que o código existente. Use o repositório para verificar a implementação atual.
+O projeto utiliza atualmente:
 
-## 4. Stack
+* React;
+* TypeScript;
+* Vite;
+* React Router em Data Mode;
+* Supabase JS;
+* UnoCSS;
+* Biome;
+* npm workspaces.
 
-A aplicação utiliza atualmente:
+A versão exata das dependências deve ser obtida dos `package.json` e do lockfile, em vez de ser duplicada neste documento.
 
-* React 19;
-* TypeScript 7;
-* Vite 8;
-* React Router 8 (Data Mode);
-* SupabaseJS 2.116;
-* UnoCSS 66.10.
+A aplicação de adultos utiliza React Hook Form, Valibot e `@hookform/resolvers`.
 
-O projeto utiliza npm com npm workspaces para organizar as aplicações e packages.
+Não substituir tecnologias existentes ou adicionar novas tecnologias sem justificativa técnica e, quando necessário, avaliação de Leonardo.
 
-Não substitua essas tecnologias sem uma justificativa técnica clara e sem considerar o impacto sobre o projeto.
+## Monorepo
 
-## 5. Arquitetura do monorepo
-
-O repositório contém múltiplas aplicações frontend independentes dentro de `apps/` e packages compartilhados dentro de `packages/`.
-
-A estrutura atual é:
+A estrutura principal é:
 
 ```text
 codi-go/
 ├── apps/
-│   └── (adults || students)/
-│       ├── assets/
-│       ├── features/
-│       ├── main.tsx
-│       ├── index.html
-│       ├── styles.css
-│       ├── package.json
-│       └── tsconfig.json
-│
+│   ├── adults/
+│   └── students/
 ├── packages/
-│   └── supabase/
-│       ├── index.ts
-│       └── package.json
-│
-├── .env.local
+│   ├── supabase/
+│   └── ui/
+├── docs/
+│   └── decisions/
 ├── package.json
 ├── package-lock.json
 ├── vite.config.ts
 ├── uno.config.ts
+├── biome.json
 ├── tsconfig.json
 ├── tsconfig.base.json
 └── tsconfig.node.json
 ```
 
-As aplicações são projetos npm independentes dentro do mesmo repositório:
+As aplicações não possuem `src/`. Cada aplicação utiliza seu próprio diretório como source root.
 
-* `apps/adults` — aplicação destinada aos usuários adultos: administradores e professores;
-* `apps/students` — aplicação destinada aos alunos.
+Não criar `src/` dentro de `apps/adults` ou `apps/students`.
 
-Cada aplicação possui seu próprio `package.json`, scripts e `tsconfig.json`, mas compartilha o tooling principal definido no root do repositório.
-
-Os packages em `packages/` representam dependências compartilhadas entre aplicações. Eles só devem ser criados quando existir uma fronteira de compartilhamento real.
-
-Não crie antecipadamente packages genéricos como `packages/shared` ou `packages/utils` sem uma necessidade concreta.
-
-### 5.1 Aplicações não possuem `src/`
-
-Cada aplicação possui seu próprio diretório como source root.
-
-Por exemplo:
-
-```text
-apps/adults/
-├── features/
-│   └── auth/
-│       └── index.ts
-├── main.tsx
-└── index.html
-```
-
-e não:
-
-```text
-apps/adults/
-├── src/
-│   └── features/
-│       └── auth/
-│           └── index.ts
-├── main.tsx
-└── index.html
-```
-
-Portanto, ao adicionar código específico de uma aplicação, coloque-o diretamente em `apps/*/` ou `packages/*/`, de acordo com a aplicação.
-
-Não crie um novo `src/` dentro de uma aplicação.
-
-### 5.2 Configuração compartilhada
-
-React, TypeScript, Vite e UnoCSS utilizam uma configuração centralizada no root sempre que não houver uma divergência real entre as aplicações.
-
-Os principais arquivos compartilhados são:
-
-* `vite.config.ts`;
-* `uno.config.ts`;
-* `tsconfig.base.json`;
-* `tsconfig.node.json`;
-* `package.json`.
-
-As aplicações possuem apenas a configuração específica necessária para representar seu próprio contexto.
-
-Não duplique configurações de tooling entre `apps/adults` e `apps/students` sem uma necessidade concreta.
-
-A existência de duas aplicações não significa que cada uma deva possuir uma configuração completamente independente.
-
-### 5.3 npm workspaces
-
-O root do projeto define os workspaces:
+O root utiliza npm workspaces:
 
 ```json
 {
@@ -240,154 +133,158 @@ O root do projeto define os workspaces:
 }
 ```
 
-Os comandos que precisam coordenar as aplicações devem ser executados preferencialmente a partir do root.
+Dependências devem ser declaradas no workspace que realmente depende delas.
+
+Não promover dependências específicas de uma aplicação para o root apenas por conveniência.
+
+## Aplicações
+
+### `apps/adults`
+
+A aplicação de adultos atualmente organiza o código principalmente por:
+
+```text
+apps/adults/
+├── components/
+├── layouts/
+├── pages/
+├── schemas/
+├── services/
+└── ...
+```
+
+Essa é a organização atual de referência para novas funcionalidades da aplicação.
+
+Não reintroduzir automaticamente a antiga organização baseada em `features/`.
+
+Use:
+
+* `pages/` para páginas;
+* `layouts/` para estruturas de layout e navegação;
+* `components/` para componentes reutilizáveis da aplicação;
+* `schemas/` para schemas de validação;
+* `services/` para lógica de integração e operações de negócio.
+
+Não criar novas camadas como `repositories/`, `data-access/` ou equivalentes sem uma decisão arquitetural explícita.
+
+### `apps/students`
+
+A aplicação de estudantes é independente da aplicação de adultos, mas compartilha das mesmas bases.
+
+## Packages
+
+Packages compartilhados ficam em `packages/`.
+
+Exemplo:
+
+```text
+packages/
+├── supabase/
+└── ui/
+```
+
+Crie um novo package somente quando existir uma fronteira real de compartilhamento entre aplicações.
+
+Não criar packages genéricos como `shared` ou `utils` antecipadamente.
+
+### `@codi-go/supabase`
+
+O package `@codi-go/supabase` fornece o cliente Supabase compartilhado e os tipos relacionados ao banco.
+
+As aplicações devem utilizar sua API pública:
+
+```ts
+import { supabase } from "@codi-go/supabase";
+```
+
+Não importar diretamente arquivos internos de outro workspace quando existir uma API pública definida pelo package.
+
+### `@codi-go/ui`
+
+O package `@codi-go/ui` concentra estilos, tokens e configurações de UI compartilhadas.
+
+A configuração do UnoCSS utiliza esse package.
+
+Não duplicar tokens, estilos ou configurações compartilhadas nas aplicações sem necessidade.
+
+## Dados e Supabase
+
+Alterações envolvendo Supabase, PostgreSQL, migrations, RLS, policies, RPCs, autenticação, autorização ou acesso a dados devem seguir:
+
+`docs/decisions/0005-database.md`
+
+Não introduzir outra estratégia de acesso a dados sem avaliar a arquitetura existente e, quando necessário, consultar Leonardo.
+
+Por padrão, o acesso a dados deve permanecer encapsulado nos services existentes.
+
+Componentes, layouts e páginas não devem acessar diretamente o cliente Supabase para executar operações de persistência. É fundamental existir um service apropriado.
+
+## Formulários e validação
+
+A aplicação de adultos utiliza:
+
+* React Hook Form para gerenciamento de formulários;
+* Valibot para validação;
+* `@hookform/resolvers` para integração.
+
+A decisão está documentada em:
+
+`docs/decisions/0001-react-hook-form-and-valibot.md`
+
+Preserve esse padrão para novos formulários da aplicação de adultos, salvo decisão arquitetural diferente.
+
+## Estilização
+
+A estilização utiliza UnoCSS.
+
+A configuração compartilhada fica no root, principalmente em:
+
+* `uno.config.ts`;
+* `packages/ui/preset.ts`;
+* `packages/ui/styles.css`.
+
+Não duplicar configurações de UnoCSS entre as aplicações sem uma necessidade concreta.
+
+## Modelo de negócio e outros aspectos
+
+O modelo de negócio, bem como estratégias para implementação de features específicas, como routing, autenticação, etc. possuem decisões documentadas em `docs/decisions/`.
+
+Quando uma alteração envolver esses assuntos, consulte o decision doc correspondente antes de propor uma mudança.
+
+Não duplicar neste documento as regras de domínio contidas nesses prompts de decisão.
+
+## Configuração e comandos
+
+Comandos coordenados entre aplicações devem preferencialmente ser executados a partir do root.
+
+Os scripts disponíveis no `package.json` são a referência para desenvolvimento, build, lint, formatação e type checking.
 
 Exemplos:
 
 ```bash
-npm run adults # "npm run dev" para a aplicação de adultos
-npm run students # "npm run dev" para a aplicação de estudantes
+npm run adults # equivalente ao "npm run dev" para a aplicação de adultos
+npm run students # equivalente ao "npm run dev" para a aplicação de alunos
+
 npm run build:adults
 npm run build:students
+
 npm run lint
+npm run format
+npm run check
+npm run check:fix
 npm run typecheck
 ```
 
-Também é possível executar scripts diretamente em um workspace utilizando os comandos do npm.
+Consulte os scripts atuais antes de assumir que um comando ou nome de script continua existindo.
 
-As dependências devem ser declaradas no `package.json` do workspace que realmente depende delas.
+## Regra geral
 
-Dependências específicas de uma aplicação não devem ser promovidas para o root apenas para facilitar imports ou instalação.
+Antes de modificar o projeto:
 
-Ferramentas compartilhadas de desenvolvimento, como TypeScript, Vite, UnoCSS e plugins de build, permanecem no root quando são utilizadas pelo tooling comum.
-
-### 5.4 Packages compartilhados
-
-Packages compartilhados ficam em `packages/`.
-
-Por exemplo, o package atual de Supabase é:
-
-```text
-packages/supabase/
-├── index.ts
-└── package.json
-```
-
-Ele expõe o cliente compartilhado utilizado pelas aplicações.
-
-Como apps, o package não possui `src/`. O mesmo princípio vale para novos packages, salvo se uma decisão arquitetural futura estabelecer outro padrão.
-
-Uma aplicação deve consumir o package pelo nome público:
-
-```ts
-import { supabase } from '@codi-go/supabase';
-```
-
-Não importe diretamente arquivos internos de outro workspace quando existir uma API pública definida pelo `package.json` do package.
-
-### 5.5 Dependências específicas de cada aplicação
-
-A separação das aplicações também permite que cada uma possua dependências específicas.
-
-Por exemplo, ferramentas utilizadas exclusivamente por adultos para formulários e validação podem permanecer em `apps/adults/package.json`:
-
-* `react-hook-form`;
-* `@hookform/resolvers`;
-* `valibot`.
-
-Não adicione essas dependências a `apps/students` ou ao root enquanto elas não forem necessárias nesses contextos.
-
-O fato de o npm fazer hoisting ou deduplicação de dependências não muda a responsabilidade de cada `package.json`.
-
-## 6. Organização do código
-
-O projeto utiliza uma organização baseada em funcionalidades.
-
-Quando uma funcionalidade possuir múltiplos arquivos relacionados, eles devem ficar agrupados em:
-
-```text
-features/
-└── <feat>/
-    ├── <arquivos relacionados, como feat.service.ts, feat.types.ts, etc.>
-    └── index.ts
-```
-
-O `index.ts` da feature funciona como ponto de reexportação público (barrel file).
-
-A feature `adults/auth` é a principal referência de implementação para a organização e arquitetura de novas features. Antes de criar ou modificar uma feature, consulte sua implementação atual e preserve seus padrões quando forem aplicáveis.
-
-Isso inclui, entre outros aspectos:
-
-* organização dos arquivos;
-* responsabilidade dos services;
-* acesso a dados;
-* definição e uso de tipos;
-* exports pelo `index.ts`;
-* separação entre UI e lógica de negócio;
-* nomenclatura e convenções utilizadas pela feature.
-
-A existência de `adults/auth` como referência não significa que toda feature deva reproduzir sua estrutura literalmente. Quando houver uma diferença de responsabilidade, siga o padrão existente mais próximo e justifique novas abstrações ou convenções quando necessário.
-
-## 7. Estilização
-
-A estilização utiliza UnoCSS.
-
-A configuração é compartilhada entre as aplicações através do `uno.config.ts` localizado no root do monorepo.
-
-A configuração utiliza principalmente:
-
-* `presetWind4`;
-* `presetIcons`;
-* `transformerDirectives`;
-* `transformerVariantGroup`;
-* configurações de `theme`;
-* classes de atalho definidas no package de UI com `--at-apply:`.
-
-Os arquivos relacionados à configuração global de estilização são:
-
-* `uno.config.ts`;
-* o package `@codi-go/ui`, editável nos arquivos `preset.ts` e `styles.css`.
-
-O `presetIcons` possui configuração adicional para manter os ícones alinhados ao comportamento esperado pela interface:
-
-```ts
-presetIcons({
-  extraProperties: {
-    display: 'inline-block',
-    'vertical-align': 'middle',
-  },
-})
-```
-
-A estilização global utiliza variáveis CSS e utilitários do UnoCSS. Um exemplo do padrão utilizado é:
-
-```css
-:root {
-  color-scheme: light dark;
-
-  /* Foundation */
-  --color-bg: light-dark(#f9f9f9, #181525);
-  --color-surface: light-dark(#f5f4f9, #242035);
-  --color-surface-subtle: light-dark(#f5f2fb, #302b42);
-  --color-fg: light-dark(#302746, #faf8ff);
-  --color-heading: light-dark(#372a58, #ffffff);
-  --color-muted: light-dark(#716886, #c0b8cf);
-  --color-border: light-dark(#ded8ea, #4b435f);
-
-  /* demais tokens, consultar quando necessário */
-}
-
-.ui-card {
-  --at-apply: rounded-3xl bg-surface p-4 shadow-card sm:p-8 border-(~ border);
-}
-```
-
-## 8. Banco de dados
-
-O acesso a dados do CodiGO! segue as decisões documentadas em:
-
-`docs/decisions/0005-database.md`
-
-Antes de alterar ou criar código que envolva Supabase, PostgreSQL, queries, mutations, RPCs, RLS, policies ou migrations, consulte esse decision doc e verifique também a implementação atual do repositório.
-
-As decisões do documento devem ser tratadas como parte da arquitetura vigente. Não introduza outro padrão de acesso a dados sem justificar a mudança e, quando necessário, consultar Leonardo.
+1. identifique a aplicação ou package afetado;
+2. consulte a implementação atual;
+3. consulte os decision docs relacionados;
+4. preserve as convenções existentes;
+5. determine se a mudança é local ou arquitetural;
+6. faça a menor alteração coerente com a arquitetura atual;
+7. execute os checks relevantes.

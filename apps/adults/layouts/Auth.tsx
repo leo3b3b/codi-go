@@ -3,7 +3,7 @@ import mascot from "@codi-go/ui/images/codiPisca.png";
 import logo from "@codi-go/ui/images/logo.png";
 import { Outlet } from "react-router";
 
-export default function AuthLayout() {
+export function AuthLayout() {
 	return (
 		<main className="grid h-screen bg-bg text-fg lg:grid-cols-2">
 			<section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:px-12">

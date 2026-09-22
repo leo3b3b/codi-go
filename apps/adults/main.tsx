@@ -2,17 +2,17 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
-
+import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
-	AuthLayout,
 	CheckEmailPage,
-	requireAuth,
+	ClassesPage,
+	DashboardPage,
+	ProfilePage,
 	SignInPage,
 	SignUpPage,
-} from "@/features/auth";
-import { TeacherAverages, TeacherClass } from "@/features/metrics";
-import { TeacherHome } from "@/features/navigation";
-import { ProfilePage } from "@/features/profile";
+	StudentsPage,
+} from "@/pages";
+import { requireAuth } from "@/services";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -33,19 +33,19 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "escola/:schoolId",
-				Component: Outlet,
+				Component: SchoolLayout,
 				children: [
 					{
 						index: true,
-						Component: TeacherHome,
+						Component: DashboardPage,
 					},
 					{
 						path: "turma/:classId",
-						Component: TeacherClass,
+						Component: ClassesPage,
 					},
 					{
 						path: "aluno/:studentId",
-						Component: TeacherAverages,
+						Component: StudentsPage,
 					},
 					{
 						path: "admin",

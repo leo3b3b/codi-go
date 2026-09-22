@@ -4,7 +4,7 @@ type CheckEmailLocationState = {
 	email?: string;
 };
 
-export default function CheckEmailPage() {
+export function CheckEmailPage() {
 	const location = useLocation();
 	const state = location.state as CheckEmailLocationState | null;
 	const email = state?.email;

@@ -1,10 +1,10 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { type SignUpFormData, signUpSchema } from "./auth.schemas";
-import { signUp } from "./auth.service";
+import { type SignUpOutput, signUpSchema } from "@/schemas";
+import { signUp } from "@/services";
 
-export default function SignUpPage() {
+export function SignUpPage() {
 	const navigate = useNavigate();
 
 	const {
@@ -12,11 +12,11 @@ export default function SignUpPage() {
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<SignUpFormData>({
+	} = useForm<SignUpOutput>({
 		resolver: valibotResolver(signUpSchema),
 	});
 
-	async function onSubmit({ email, password }: SignUpFormData) {
+	async function onSubmit({ email, password }: SignUpOutput) {
 		try {
 			await signUp(email, password);
 
