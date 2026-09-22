@@ -6,11 +6,11 @@ import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
 	ClassesPage,
+	DashboardPage,
 	ProfilePage,
 	SignInPage,
 	SignUpPage,
 	StudentsPage,
-	TeacherHome,
 } from "@/pages";
 import { requireAuth } from "@/services";
 
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
 				children: [
 					{
 						index: true,
-						Component: TeacherHome,
+						Component: DashboardPage,
 					},
 					{
 						path: "turma/:classId",

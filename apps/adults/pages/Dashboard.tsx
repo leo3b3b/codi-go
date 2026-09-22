@@ -10,7 +10,7 @@ type ClassOption = Pick<
 	"id" | "name" | "school_id" | "teacher_id"
 >;
 
-export function TeacherHome() {
+export function DashboardPage() {
 	const navigate = useNavigate();
 	const { schoolId } = useParams<{ schoolId: string }>();
 
