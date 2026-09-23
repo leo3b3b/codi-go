@@ -34,3 +34,19 @@ export function canMove(
 
 	return level.tiles[next.y][next.x] !== "wall";
 }
+
+export function executeCommand(
+	level: MazeLevel,
+	position: Position,
+	command: Command,
+): Position | null {
+	if (!canMove(level, position, command)) {
+		return null;
+	}
+
+	return getNextPosition(position, command);
+}
+
+export function isGoalReached(level: MazeLevel, position: Position): boolean {
+	return position.x === level.goal.x && position.y === level.goal.y;
+}

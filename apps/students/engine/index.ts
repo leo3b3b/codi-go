@@ -1,1 +1,6 @@
-export { canMove, getNextPosition } from "./maze";
+export {
+	canMove,
+	executeCommand,
+	getNextPosition,
+	isGoalReached,
+} from "./maze";

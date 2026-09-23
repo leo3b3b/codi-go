@@ -47,7 +47,7 @@ function Entity({
 }) {
 	return (
 		<div
-			className="absolute aspect-square w-[var(--tile-size)]"
+			className="absolute aspect-square w-[var(--tile-size)] transition-[left,top] duration-300 ease-in-out"
 			style={{
 				left: `calc(${position.x} * var(--tile-size))`,
 				top: `calc(${position.y} * var(--tile-size))`,
@@ -74,16 +74,9 @@ export function MazeRenderer({ level, playerPosition }: MazeRendererProps) {
 					gridTemplateColumns: `repeat(${level.tiles[0].length}, var(--tile-size))`,
 				}}
 			>
-				{level.tiles
-					.flatMap((row, y) =>
-						row.map((tile, x) => ({
-							id: `${x}:${y}`,
-							tile,
-						})),
-					)
-					.map(({ id, tile }) => (
-						<Tile key={id} type={tile} />
-					))}
+				{level.tiles.flatMap((row, y) =>
+					row.map((tile, x) => <Tile key={`${x}-${y}`} type={tile} />),
+				)}
 			</div>
 
 			<div className="absolute inset-0">
