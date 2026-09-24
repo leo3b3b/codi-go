@@ -61,17 +61,14 @@ export type Database = {
 			};
 			games: {
 				Row: {
-					created_at: string;
 					id: number;
 					name: string;
 				};
 				Insert: {
-					created_at?: string;
 					id?: number;
 					name: string;
 				};
 				Update: {
-					created_at?: string;
 					id?: number;
 					name?: string;
 				};
@@ -79,16 +76,19 @@ export type Database = {
 			};
 			levels: {
 				Row: {
+					config: Json;
 					game_id: number;
 					id: number;
 					name: string;
 				};
 				Insert: {
+					config: Json;
 					game_id: number;
 					id?: number;
 					name: string;
 				};
 				Update: {
+					config?: Json;
 					game_id?: number;
 					id?: number;
 					name?: string;

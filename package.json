@@ -17,7 +17,7 @@
 		"check": "biome check .",
 		"check:fix": "biome check --write .",
 		"typecheck": "npm run typecheck --workspaces --if-present",
-		"types:update": "supabase gen types typescript --linked > packages/supabase/database.types.ts"
+		"types:update": "npx supabase gen types typescript --linked > packages/supabase/database.types.ts"
 	},
 	"devDependencies": {
 		"@iconify-json/lucide": "^1.2.133",
