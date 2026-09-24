@@ -1,26 +1,8 @@
 import { useState } from "react";
+import { useLoaderData } from "react-router";
 import { MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
 import type { Command, MazeLevel, MazeState } from "@/types";
-
-const level: MazeLevel = {
-	id: "level-1",
-	tiles: [
-		["wall", "wall", "wall", "wall", "wall"],
-		["wall", "floor", "floor", "floor", "wall"],
-		["wall", "floor", "wall", "floor", "wall"],
-		["wall", "floor", "floor", "floor", "wall"],
-		["wall", "wall", "wall", "wall", "wall"],
-	],
-	start: {
-		x: 1,
-		y: 1,
-	},
-	goal: {
-		x: 3,
-		y: 3,
-	},
-};
 
 const commandIcons: Record<Command, string> = {
 	up: "i-lucide-arrow-up",
@@ -36,6 +18,8 @@ function wait(ms: number) {
 }
 
 export function MazeGame() {
+	const level = useLoaderData() as MazeLevel;
+
 	const [state, setState] = useState<MazeState>({
 		level,
 		playerPosition: level.start,
@@ -180,7 +164,7 @@ export function MazeGame() {
 
 					<button
 						type="button"
-						disabled={isRunning || state.commands.length === 0}
+						disabled={isRunning}
 						className="ui-button-secondary px-6 py-3 disabled:opacity-50"
 						onClick={clearCommands}
 					>

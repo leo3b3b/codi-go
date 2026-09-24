@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { MazeGame } from "@/pages";
+import { mazeLoader } from "@/router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -13,7 +14,8 @@ const router = createBrowserRouter([
 		Component: Outlet,
 		children: [
 			{
-				path: "labirinto",
+				path: "labirinto/:levelId",
+				loader: mazeLoader,
 				Component: MazeGame,
 			},
 		],

@@ -8,11 +8,17 @@ export type Command = "up" | "down" | "left" | "right";
 export type TileType = "floor" | "wall";
 
 export type MazeLevel = {
-	id: string;
+	id: number;
+	name: string;
 	tiles: TileType[][];
 	start: Position;
 	goal: Position;
 	maxCommands?: number;
+};
+
+export type MazeLevelSummary = {
+	id: number;
+	name: string;
 };
 
 export type MazeState = {

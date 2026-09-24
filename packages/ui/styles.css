@@ -38,6 +38,10 @@
   --at-apply: rounded-xl bg-primary px-4 py-3.5 font-bold text-on-primary shadow-primary transition hover:bg-primary-hover focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
 }
 
+.ui-button-secondary {
+  --at-apply: rounded-xl bg-surface px-4 py-3.5 font-bold text-fg shadow-primary transition hover:bg-surface-subtle focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
+}
+
 .ui-link {
   --at-apply: font-bold text-primary underline-offset-4 hover:underline focus-visible:(outline-none ring-2 ring-primary/30);
 }
