@@ -61,15 +61,15 @@ export type Database = {
 			};
 			games: {
 				Row: {
-					id: number;
+					key: string;
 					name: string;
 				};
 				Insert: {
-					id?: number;
+					key: string;
 					name: string;
 				};
 				Update: {
-					id?: number;
+					key?: string;
 					name?: string;
 				};
 				Relationships: [];
@@ -77,29 +77,29 @@ export type Database = {
 			levels: {
 				Row: {
 					config: Json;
-					game_id: number;
+					game_key: string;
 					id: number;
 					name: string;
 				};
 				Insert: {
 					config: Json;
-					game_id: number;
+					game_key: string;
 					id?: number;
 					name: string;
 				};
 				Update: {
 					config?: Json;
-					game_id?: number;
+					game_key?: string;
 					id?: number;
 					name?: string;
 				};
 				Relationships: [
 					{
-						foreignKeyName: "levels_game_id_fkey";
-						columns: ["game_id"];
+						foreignKeyName: "levels_game_key_fkey";
+						columns: ["game_key"];
 						isOneToOne: false;
 						referencedRelation: "games";
-						referencedColumns: ["id"];
+						referencedColumns: ["key"];
 					},
 				];
 			};
