@@ -1,0 +1,1 @@
+export { schoolsLoader } from "./schools";

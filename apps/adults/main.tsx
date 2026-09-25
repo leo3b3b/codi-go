@@ -8,10 +8,12 @@ import {
 	ClassesPage,
 	DashboardPage,
 	ProfilePage,
+	SchoolsPage,
 	SignInPage,
 	SignUpPage,
 	StudentsPage,
 } from "@/pages";
+import { schoolsLoader } from "@/router";
 import { requireAuth } from "@/services";
 
 import "@codi-go/ui/css";
@@ -28,40 +30,45 @@ const router = createBrowserRouter([
 				Component: ProfilePage,
 			},
 			{
-				path: "escolas",
-				Component: Outlet,
-			},
-			{
-				path: "escola/:schoolId",
 				Component: SchoolLayout,
 				children: [
 					{
-						index: true,
-						Component: DashboardPage,
+						path: "escolas",
+						Component: SchoolsPage,
+						loader: schoolsLoader,
 					},
 					{
-						path: "turma/:classId",
-						Component: ClassesPage,
-					},
-					{
-						path: "aluno/:studentId",
-						Component: StudentsPage,
-					},
-					{
-						path: "admin",
-						Component: Outlet,
+						path: "escola/:schoolId",
 						children: [
 							{
-								path: "turmas",
-								Component: Outlet,
+								index: true,
+								Component: DashboardPage,
 							},
 							{
-								path: "turma/:classId/alunos",
-								Component: Outlet,
+								path: "turma/:classId",
+								Component: ClassesPage,
 							},
 							{
-								path: "membros",
+								path: "aluno/:studentId",
+								Component: StudentsPage,
+							},
+							{
+								path: "admin",
 								Component: Outlet,
+								children: [
+									{
+										path: "turmas",
+										Component: Outlet,
+									},
+									{
+										path: "turma/:classId/alunos",
+										Component: Outlet,
+									},
+									{
+										path: "membros",
+										Component: Outlet,
+									},
+								],
 							},
 						],
 					},

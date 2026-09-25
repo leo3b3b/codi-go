@@ -45,9 +45,9 @@ export async function getSchoolsForCurrentUser() {
 	const memberships = await getMembershipsForCurrentUser("active");
 
 	return memberships.map(({ role, schools }) => ({
-		school_id: schools.id,
-		legal_name: schools.legal_name,
-		trade_name: schools.trade_name,
+		schoolId: schools.id,
+		legalName: schools.legal_name,
+		tradeName: schools.trade_name,
 		cnpj: schools.cnpj,
 		role,
 	}));
@@ -57,9 +57,9 @@ export async function getInvitesForCurrentUser() {
 	const memberships = await getMembershipsForCurrentUser("pending");
 
 	return memberships.map(({ role, schools }) => ({
-		school_id: schools.id,
-		legal_name: schools.legal_name,
-		trade_name: schools.trade_name,
+		schoolId: schools.id,
+		legalName: schools.legal_name,
+		tradeName: schools.trade_name,
 		cnpj: schools.cnpj,
 		role,
 	}));

@@ -1,13 +1,13 @@
-import { Outlet, useLocation, useParams } from "react-router";
+import { Outlet, useLocation /*useParams*/ } from "react-router";
 import { SchoolHeader } from "@/components";
 
 export function SchoolLayout() {
-	const { schoolId } = useParams();
+	// const { schoolId } = useParams();
 	const location = useLocation();
 
 	return (
 		<div className="min-h-screen bg-bg text-fg">
-			<SchoolHeader schoolId={schoolId} />
+			<SchoolHeader /*schoolId={schoolId}*/ />
 
 			<main
 				key={location.pathname}

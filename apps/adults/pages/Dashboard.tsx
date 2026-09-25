@@ -3,7 +3,7 @@ import { supabase } from "@codi-go/supabase";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-type SchoolOption = Pick<Tables<"school">, "id" | "trade_name" | "legal_name">;
+type SchoolOption = Pick<Tables<"schools">, "id" | "trade_name" | "legal_name">;
 
 type ClassOption = Pick<
 	Tables<"classes">,
@@ -64,7 +64,7 @@ export function DashboardPage() {
 			}
 
 			const { data: schoolData, error: schoolError } = await supabase
-				.from("school")
+				.from("schools")
 				.select("id, trade_name, legal_name")
 				.in("id", schoolIds)
 				.eq("is_active", true)
