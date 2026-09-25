@@ -30,6 +30,7 @@ export function SignInPage() {
 
 	return (
 		<section className="ui-card">
+			<title>CodiGO! | Login</title>
 			<header className="mb-8 text-center">
 				<h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
 					Bom te ver!

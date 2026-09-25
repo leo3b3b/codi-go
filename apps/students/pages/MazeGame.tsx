@@ -118,6 +118,7 @@ export function MazeGame() {
 
 	return (
 		<div className="flex flex-col gap-6">
+			<title>CodiGO! | Labirinto</title>
 			<MazeRenderer level={state.level} playerPosition={state.playerPosition} />
 
 			<div className="flex flex-col gap-4 px-4">

@@ -11,6 +11,7 @@ export function CheckEmailPage() {
 
 	return (
 		<section className="ui-card">
+			<title>CodiGO! | Confirme seu e-mail</title>
 			<header className="mb-8 text-center">
 				<h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
 					Confirme seu e-mail

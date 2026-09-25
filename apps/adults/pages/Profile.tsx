@@ -18,6 +18,7 @@ export function ProfilePage() {
 
 	return (
 		<main className="h-screen overflow-hidden bg-gradient-to-br from-[#c9a8ed] via-[#f1dfd4] to-[#c9a8ed]">
+			<title>CodiGO! | Meu Perfil</title>
 			<header className="relative h-20 shrink-0 bg-[rgba(112,86,204,0.76)] shadow-lg">
 				<div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
 					<button
