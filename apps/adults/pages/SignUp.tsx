@@ -110,7 +110,7 @@ export function SignUpPage() {
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="ui-button-primary mt-1"
+					className="ui-button-(~ primary) mt-1"
 				>
 					{isSubmitting ? "Criando..." : "Criar conta"}
 				</button>

@@ -127,7 +127,7 @@ export function MazeGame() {
 							key={command}
 							type="button"
 							disabled={isRunning}
-							className="ui-button-primary h-14 w-14 px-2 py-2 disabled:opacity-50"
+							className="ui-button-(~ primary) h-14 w-14 px-2 py-2 disabled:opacity-50"
 							onClick={() => addCommand(command)}
 						>
 							<span
@@ -137,7 +137,7 @@ export function MazeGame() {
 					))}
 				</div>
 
-				<div className="flex min-h-16 items-center gap-2 rounded-lg border p-3">
+				<div className="flex h-18 items-center gap-2 rounded-lg border p-3">
 					{state.commands.length === 0 ? (
 						<span className="text-(center muted) w-full">Comandos</span>
 					) : (
@@ -156,7 +156,7 @@ export function MazeGame() {
 					<button
 						type="button"
 						disabled={isRunning || state.commands.length === 0}
-						className="ui-button-primary px-6 py-3 disabled:opacity-50"
+						className="ui-button-(~ primary) px-6 py-3 disabled:opacity-50"
 						onClick={play}
 					>
 						Começar
@@ -164,8 +164,8 @@ export function MazeGame() {
 
 					<button
 						type="button"
-						disabled={isRunning}
-						className="ui-button-secondary px-6 py-3 disabled:opacity-50"
+						disabled={isRunning || state.commands.length === 0}
+						className="ui-button-(~ secondary) px-6 py-3 disabled:opacity-50"
 						onClick={clearCommands}
 					>
 						Limpar

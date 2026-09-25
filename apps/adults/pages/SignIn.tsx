@@ -88,7 +88,7 @@ export function SignInPage() {
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="ui-button-primary mt-1"
+					className="ui-button-(~ primary) mt-1"
 				>
 					{isSubmitting ? "Entrando..." : "Entrar"}
 				</button>

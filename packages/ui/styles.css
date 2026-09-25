@@ -2,18 +2,18 @@
   color-scheme: light dark;
 
   /* Foundation */
-  --color-bg: light-dark(#f9f9f9, #181525);
-  --color-surface: light-dark(#f5f4f9, #242035);
-  --color-surface-subtle: light-dark(#f5f2fb, #302b42);
-  --color-fg: light-dark(#302746, #faf8ff);
-  --color-heading: light-dark(#372a58, #ffffff);
-  --color-muted: light-dark(#716886, #c0b8cf);
-  --color-border: light-dark(#ded8ea, #4b435f);
+  --color-bg: light-dark(#cad5e2, #0f172b);
+  --color-surface: light-dark(#e2e8f0, #1d293d);
+  --color-surface-subtle: light-dark(#f1f5f9, #314158);
+  --color-fg: light-dark(#0a0a0a, #fafafa);
+  --color-heading: light-dark(#262626, #e5e5e5);
+  --color-muted: light-dark(#525252b7, #a1a1a1b7);
+  --color-border: light-dark(#d4d4d4, #171717);
 
   /* Brand */
-  --color-primary: light-dark(#7254d5, #a991ff);
-  --color-primary-hover: light-dark(#6245c5, #b7a5ff);
-  --color-primary-soft: light-dark(#f1edff, #383050);
+  --color-primary: light-dark(#8e51ff, #c4b4ff);
+  --color-primary-hover: light-dark(#7f22fe, #a684ff);
+  --color-primary-soft: light-dark(#a684ff, #ddd6ff);
   --color-on-primary: #ffffff;
   --color-hero: light-dark(#5541a9, #3c2c7a);
   --color-hero-overlay-start: rgba(72, 54, 158, 0.9);
@@ -21,9 +21,9 @@
   --gradient-header: rgba(72, 54, 158, 0.9);
 
   /* Feedback */
-  --color-danger: light-dark(#c53b4d, #ff8796);
-  --color-danger-soft: light-dark(#fff0f2, #4a2630);
-  --color-on-danger: light-dark(#8e2331, #ffd8dd);
+  --color-danger: light-dark(#fb2c36, #ffa2a2);
+  --color-danger-soft: light-dark(#ff6467, #ffc9c9);
+  --color-on-danger: light-dark(#9f0712, #e7000b);
 }
 
 .ui-card {
@@ -31,15 +31,19 @@
 }
 
 .ui-field {
-  --at-apply: rounded-xl border-(~ border) bg-surface-subtle px-4 py-3 text-(base fg) outline-none transition placeholder:text-muted focus:(border-primary ring-4 ring-primary/15) aria-[invalid=true]:border-danger;
+  --at-apply: rounded-xl border-(~ border) bg-surface-subtle px-4 py-3 text-(base fg) outline-none transition placeholder:text-muted focus:(outline-none border-primary ring-4 ring-primary/15) aria-[invalid=true]:border-danger;
+}
+
+.ui-button {
+  --at-apply: rounded-xl px-4 py-3.5 font-bold shadow-primary transition focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
 }
 
 .ui-button-primary {
-  --at-apply: rounded-xl bg-primary px-4 py-3.5 font-bold text-on-primary shadow-primary transition hover:bg-primary-hover focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
+  --at-apply: bg-primary text-on-primary hover:bg-primary-hover;
 }
 
 .ui-button-secondary {
-  --at-apply: rounded-xl bg-surface px-4 py-3.5 font-bold text-fg shadow-primary transition hover:bg-surface-subtle focus-visible:(outline-none ring-4 ring-primary/30) disabled:(cursor-not-allowed opacity-50);
+  --at-apply: bg-surface-subtle text-fg hover:bg-surface border-(~ border);
 }
 
 .ui-link {
