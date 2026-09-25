@@ -47,7 +47,7 @@ export type Database = {
 						foreignKeyName: "classes_school_id_fkey";
 						columns: ["school_id"];
 						isOneToOne: false;
-						referencedRelation: "school";
+						referencedRelation: "schools";
 						referencedColumns: ["id"];
 					},
 					{
@@ -166,33 +166,6 @@ export type Database = {
 					},
 				];
 			};
-			school: {
-				Row: {
-					cnpj: string;
-					created_at: string;
-					id: string;
-					is_active: boolean;
-					legal_name: string;
-					trade_name: string;
-				};
-				Insert: {
-					cnpj: string;
-					created_at?: string;
-					id?: string;
-					is_active?: boolean;
-					legal_name: string;
-					trade_name: string;
-				};
-				Update: {
-					cnpj?: string;
-					created_at?: string;
-					id?: string;
-					is_active?: boolean;
-					legal_name?: string;
-					trade_name?: string;
-				};
-				Relationships: [];
-			};
 			school_memberships: {
 				Row: {
 					profile_id: string;
@@ -224,10 +197,37 @@ export type Database = {
 						foreignKeyName: "schools_profiles_school_id_fkey";
 						columns: ["school_id"];
 						isOneToOne: false;
-						referencedRelation: "school";
+						referencedRelation: "schools";
 						referencedColumns: ["id"];
 					},
 				];
+			};
+			schools: {
+				Row: {
+					cnpj: string;
+					created_at: string;
+					id: string;
+					is_active: boolean;
+					legal_name: string;
+					trade_name: string;
+				};
+				Insert: {
+					cnpj: string;
+					created_at?: string;
+					id?: string;
+					is_active?: boolean;
+					legal_name: string;
+					trade_name: string;
+				};
+				Update: {
+					cnpj?: string;
+					created_at?: string;
+					id?: string;
+					is_active?: boolean;
+					legal_name?: string;
+					trade_name?: string;
+				};
+				Relationships: [];
 			};
 			students: {
 				Row: {
@@ -266,7 +266,7 @@ export type Database = {
 						foreignKeyName: "student_school_id_fkey";
 						columns: ["school_id"];
 						isOneToOne: false;
-						referencedRelation: "school";
+						referencedRelation: "schools";
 						referencedColumns: ["id"];
 					},
 				];
