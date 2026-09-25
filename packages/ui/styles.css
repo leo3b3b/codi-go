@@ -2,18 +2,18 @@
   color-scheme: light dark;
 
   /* Foundation */
-  --color-bg: light-dark(#cad5e2, #0f172b);
-  --color-surface: light-dark(#e2e8f0, #1d293d);
-  --color-surface-subtle: light-dark(#f1f5f9, #314158);
-  --color-fg: light-dark(#0a0a0a, #fafafa);
-  --color-heading: light-dark(#262626, #e5e5e5);
-  --color-muted: light-dark(#525252b7, #a1a1a1b7);
-  --color-border: light-dark(#d4d4d4, #171717);
+  --color-bg: light-dark(oklch(87% 0 none), oklch(20.5% 0 none));
+  --color-surface: light-dark(oklch(92.2% 0 none), oklch(26.9% 0 none));
+  --color-surface-subtle: light-dark(oklch(97% 0 none), oklch(37.1% 0 none));
+  --color-fg: light-dark(oklch(20% 0 none), oklch(90% 0 none));
+  --color-heading: light-dark(oklch(14.5% 0 none), oklch(98.5% 0 none));
+  --color-muted: light-dark(oklch(43.9% 0 none), oklch(70.8% 0 none));
+  --color-border: light-dark(oklch(98.5% 0 none), oklch(43.9% 0 none));
 
   /* Brand */
-  --color-primary: light-dark(#8e51ff, #c4b4ff);
-  --color-primary-hover: light-dark(#7f22fe, #a684ff);
-  --color-primary-soft: light-dark(#a684ff, #ddd6ff);
+  --color-primary: light-dark(oklch(60.6% 0.25 292.717), oklch(70.2% 0.183 293.541));
+  --color-primary-hover: light-dark(oklch(54.1% 0.281 293.009), oklch(60.6% 0.25 292.717));
+  --color-primary-soft: light-dark(oklch(70.2% 0.183 293.541), oklch(81.1% 0.111 293.571));
   --color-on-primary: #ffffff;
   --color-hero: light-dark(#5541a9, #3c2c7a);
   --color-hero-overlay-start: rgba(72, 54, 158, 0.9);
