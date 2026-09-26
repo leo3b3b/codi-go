@@ -1,5 +1,5 @@
 import { supabase } from "@codi-go/supabase";
-import { getUserContext } from "./context";
+import { getUserContext } from "@/services/context";
 
 export async function getClassesForCurrentContext(schoolId: string) {
 	const user = await getUserContext();

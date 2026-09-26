@@ -11,7 +11,7 @@ import {
 	SignInPage,
 	SignUpPage,
 } from "@/pages";
-import { schoolHomeLoader, schoolsLoader } from "@/router";
+import { schoolHomeLoader, schoolLayoutLoader, schoolsLoader } from "@/router";
 import { requireAuth } from "@/services";
 
 import "@codi-go/ui/css";
@@ -29,6 +29,7 @@ const router = createBrowserRouter([
 			},
 			{
 				Component: SchoolLayout,
+				loader: schoolLayoutLoader,
 				children: [
 					{
 						path: "escolas",
