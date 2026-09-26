@@ -6,7 +6,7 @@ export function SchoolsPage() {
 	const schools = useLoaderData<typeof schoolsLoader>();
 
 	return (
-		<div className="grid-(~ cols-1) md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+		<div className="grid-(~ cols-1) md:grid-cols-2 lg:grid-cols-3">
 			{schools.map((school) => (
 				<SchoolCard
 					key={school.schoolId}
