@@ -45,7 +45,7 @@ e não acessa `supabase.from(...)` diretamente.
 
 ## Segurança e schema
 
-Alterações em RLS, policies, autenticação, autorização ou schema do banco devem seguir o mecanismo de migrations adotado pelo projeto e exigem avaliação arquitetural de Leonardo quando representarem mudança relevante.
+Alterações em RLS, policies, autenticação, autorização ou schema do banco devem seguir o mecanismo de migrations adotado pelo projeto e exigem avaliação arquitetural do usuário quando representarem mudança relevante.
 
 ## Diretriz para novos casos
 
