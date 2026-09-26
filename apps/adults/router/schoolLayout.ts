@@ -14,13 +14,10 @@ export async function schoolLayoutLoader({ url }: { url: URL }) {
 	}
 
 	const schoolId = match[1];
-	const isClassRoute = /^\/escola\/[^/]+\/turma\/[^/]+(?:\/|$)/.test(
-		url.pathname,
-	);
 
 	const [schools, classes] = await Promise.all([
 		getSchoolsForCurrentUser(),
-		isClassRoute ? getClassesForCurrentContext(schoolId) : Promise.resolve([]),
+		getClassesForCurrentContext(schoolId),
 	]);
 
 	return {

@@ -21,7 +21,11 @@ const adminOptions = [
 ];
 
 export function SchoolHeader() {
-	const { schools, classes } = useLoaderData<typeof schoolLayoutLoader>();
+	const data = useLoaderData<typeof schoolLayoutLoader>();
+
+	const schools = data?.schools || [];
+	const classes = data?.classes || [];
+
 	const { schoolId, classId } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
