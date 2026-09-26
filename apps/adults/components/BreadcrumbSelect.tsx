@@ -44,13 +44,20 @@ export function BreadcrumbSelect({
 				onClick={() => setIsOpen(!isOpen)}
 				className="
                     min-w-32 flex items-center justify-between rounded-lg border border-border
-                    bg-surface px-3 py-2 text-sm font-medium text-heading
+                    bg-surface-subtle px-3 py-2 text-sm font-medium text-fg
                     outline-none transition-colors cursor-pointer
                     hover:border-primary
                     focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
                 "
 			>
-				<span>{selectedOption ? selectedOption.label : "Selecione..."}</span>
+				<span>{selectedOption ? selectedOption.label : "Selecione…"}</span>
+				<div
+					className={`
+                        i-lucide-chevron-down text-lg opacity-70 transition-transform duration-200 ml-3
+                        ${isOpen ? "rotate-180" : ""}
+                    `}
+					aria-hidden="true"
+				/>
 			</button>
 
 			{isOpen && (
