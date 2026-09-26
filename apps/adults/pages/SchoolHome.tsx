@@ -57,7 +57,7 @@ export function SchoolHomePage() {
 								/>
 								<div className="h-full w-px bg-border" />
 								<div>
-									<h3 className="text-(xl fg) group-hover:text-on-primary transition-(colors 500)">
+									<h3 className="text-xl group-hover:text-on-primary transition-(colors 500)">
 										{title}
 									</h3>
 									<p className="text-(sm muted) group-hover:text-on-primary/70 transition-(colors 500)">

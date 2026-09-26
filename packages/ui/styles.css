@@ -26,6 +26,10 @@
   --color-on-danger: light-dark(#9f0712, #e7000b);
 }
 
+.ui-gradient {
+  --at-apply: bg-[radial-gradient(circle,_#fef9c3_0%,_#d8b4fe_100%)];
+}
+
 .ui-card {
   --at-apply: rounded-3xl bg-surface p-4 shadow-card sm:p-8 border-(~ border);
 }
