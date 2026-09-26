@@ -5,13 +5,11 @@ import { RouterProvider } from "react-router/dom";
 import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
-	ClassesPage,
 	ProfilePage,
 	SchoolHomePage,
 	SchoolsPage,
 	SignInPage,
 	SignUpPage,
-	StudentsPage,
 } from "@/pages";
 import { schoolHomeLoader, schoolsLoader } from "@/router";
 import { requireAuth } from "@/services";
@@ -47,11 +45,11 @@ const router = createBrowserRouter([
 							},
 							{
 								path: "turma/:classId",
-								Component: ClassesPage,
+								Component: Outlet,
 							},
 							{
 								path: "aluno/:studentId",
-								Component: StudentsPage,
+								Component: Outlet,
 							},
 							{
 								path: "admin",
