@@ -6,14 +6,14 @@ import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
 	ClassesPage,
-	DashboardPage,
 	ProfilePage,
+	SchoolHomePage,
 	SchoolsPage,
 	SignInPage,
 	SignUpPage,
 	StudentsPage,
 } from "@/pages";
-import { schoolsLoader } from "@/router";
+import { schoolHomeLoader, schoolsLoader } from "@/router";
 import { requireAuth } from "@/services";
 
 import "@codi-go/ui/css";
@@ -42,7 +42,8 @@ const router = createBrowserRouter([
 						children: [
 							{
 								index: true,
-								Component: DashboardPage,
+								Component: SchoolHomePage,
+								loader: schoolHomeLoader,
 							},
 							{
 								path: "turma/:classId",
