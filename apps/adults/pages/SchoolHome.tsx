@@ -31,21 +31,25 @@ export function SchoolHomePage() {
 				<section className="ui-card w-full h-full flex flex-col">
 					<h2 className="text-(2xl heading center) font-bold">Suas Turmas</h2>
 					<HorizontalSeparator />
-					<div className="flex-(~ col) gap-2">
-						{classes.map(({ id, name }) => (
-							<NavLink to={`turma/${id}`} key={id}>
-								<article
-									className="
-								bg-surface-subtle border-(~ border) rounded-lg px-8 py-4
-								transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
-								>
-									<h3 className="text-(xl primary) font-semibold group-hover:text-on-primary transition-(colors 500)">
-										{name}
-									</h3>
-								</article>
-							</NavLink>
-						))}
-					</div>
+					{classes.length === 0 ? (
+						<p className="text-(lg center)">Você não tem turmas!</p>
+					) : (
+						<div className="flex-(~ col) gap-2">
+							{classes.map(({ id, name }) => (
+								<NavLink to={`turma/${id}`} key={id}>
+									<article
+										className="
+									bg-surface-subtle border-(~ border) rounded-lg px-8 py-4
+									transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
+									>
+										<h3 className="text-(xl primary) font-semibold group-hover:text-on-primary transition-(colors 500)">
+											{name}
+										</h3>
+									</article>
+								</NavLink>
+							))}
+						</div>
+					)}
 				</section>
 
 				{isAdmin && (
