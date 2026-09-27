@@ -52,7 +52,7 @@ Assim como acontece com escolas, a tela de seleção de turma é pulada caso o u
 
 ## 4. Acesso do administrador
 
-O administrador possui acesso de leitura a todas as turmas da escola, independentemente do professor responsável por cada uma delas.
+O administrador possui acesso de leitura a todas as turmas da escola, através das telas administrativas, independentemente do professor responsável por cada uma delas.
 
 O administrador não precisa ser o professor responsável por uma turma para visualizar seus dados.
 
@@ -66,6 +66,8 @@ Professor
     └── suas turmas
 
 Administrador
+├── acesso operacional
+│   └── suas turmas
 └── acesso de leitura
     └── todas as turmas
 ```
