@@ -1,5 +1,5 @@
 import { NavLink, useLoaderData } from "react-router";
-import { HorizontalSeparator } from "@/components";
+import { HorizontalSeparator, Icon } from "@/components";
 import type { schoolHomeLoader } from "@/router";
 
 const adminActions = [
@@ -63,13 +63,15 @@ export function SchoolHomePage() {
 								<NavLink to={to} key={title}>
 									<article
 										className="
-								bg-surface-subtle border-(~ border) rounded-lg flex-(~ row) items-center gap-4 px-4 py-4
-								transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
+											bg-surface-subtle border-(~ border) rounded-lg flex-(~ row) items-center gap-4 px-4 py-4
+											transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
 									>
-										<div
-											className={`${icon} text-(2xl primary center) h-10 w-10 group-hover:text-on-primary transition-(colors 500)`}
+										<Icon
+											icon={icon}
+											color="primary"
+											size={10}
+											className="group-hover:text-on-primary transition-(colors 500)"
 										/>
-										<div className="h-full w-px bg-border" />
 										<div>
 											<h3 className="text-xl group-hover:text-on-primary transition-(colors 500)">
 												{title}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Icon } from "@/components";
 
 interface Option {
 	value: string;
@@ -51,12 +52,11 @@ export function BreadcrumbSelect({
                 "
 			>
 				<span>{selectedOption ? selectedOption.label : "Selecione…"}</span>
-				<div
-					className={`
-                        i-lucide-chevron-down text-lg opacity-70 transition-transform duration-200 ml-3
-                        ${isOpen ? "rotate-180" : ""}
-                    `}
-					aria-hidden="true"
+				<Icon
+					icon="i-lucide-chevron-down"
+					color="muted"
+					size={4}
+					className={`${isOpen ? "rotate-180" : ""} transition-transform ml-3`}
 				/>
 			</button>
 

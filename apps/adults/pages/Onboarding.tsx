@@ -1,6 +1,7 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { Icon } from "@/components";
 import { type ProfileOutput, profileSchema } from "@/schemas";
 import { updateProfileForCurrentUser } from "@/services";
 
@@ -63,7 +64,12 @@ export function OnboardingPage() {
 					<span>Nome de usuário</span>
 
 					<div className="relative flex items-center">
-						<div className="absolute left-3 text-(xl muted) i-lucide-at-sign pointer-events-none" />
+						<Icon
+							icon="i-lucide-at-sign"
+							color="muted"
+							size={6}
+							className="absolute left-3 pointer-events-none"
+						/>
 
 						<input
 							type="text"

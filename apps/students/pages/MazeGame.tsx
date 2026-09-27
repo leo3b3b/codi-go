@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router";
-import { MazeRenderer } from "@/components";
+import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
 import type { Command, MazeLevel, MazeState } from "@/types";
 
@@ -147,7 +147,11 @@ export function MazeGame() {
 								key={`${index}-${command}`}
 								className="flex h-12 w-12 items-center justify-center rounded-md border"
 							>
-								<span className={`${commandIcons[command]} h-8 w-8`} />
+								<Icon
+									icon={commandIcons[command]}
+									color="on-primary"
+									size={8}
+								/>
 							</div>
 						))
 					)}

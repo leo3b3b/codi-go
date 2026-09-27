@@ -6,7 +6,7 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router";
-import { BreadcrumbSelect, VerticalSeparator } from "@/components";
+import { BreadcrumbSelect, Icon, VerticalSeparator } from "@/components";
 import type { schoolLayoutLoader } from "@/router";
 
 const adminOptions = [
@@ -108,7 +108,7 @@ export function SchoolHeader() {
 					to="/meu-perfil"
 					className="bg-primary-soft hover:bg-primary rounded-full h-10 w-10 flex items-center justify-center transition-colors"
 				>
-					<div className="i-lucide-user text-(xl on-primary)" />
+					<Icon icon="i-lucide-user" color="on-primary" size={6} />
 				</NavLink>
 			</div>
 		</header>

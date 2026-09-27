@@ -9,7 +9,8 @@
 			"types": "./css.d.ts",
 			"default": "./styles.css"
 		},
-		"./images/*": "./assets/images/*"
+		"./components": "./components/index.ts",
+		"./images/*": "./images/*"
 	},
 	"peerDependencies": {
 		"unocss": "^66.10.2"
