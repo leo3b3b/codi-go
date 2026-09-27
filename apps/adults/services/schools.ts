@@ -1,21 +1,8 @@
 import { supabase } from "@codi-go/supabase";
+import { getUser } from "@/services";
 
 async function getMembershipsForCurrentUser(status: "active" | "pending") {
-	const {
-		data: { user },
-		error: userError,
-	} = await supabase.auth.getUser();
-
-	if (userError) {
-		userError.message = `getMembershipsForCurrentUser error: ${userError.message}`;
-		throw userError;
-	}
-
-	if (!user) {
-		throw new Error(
-			"getMembershipsForCurrentUser error: usuário não autenticado",
-		);
-	}
+	const user = await getUser();
 
 	const { data, error } = await supabase
 		.from("school_memberships")

@@ -40,3 +40,20 @@ export async function signOut() {
 		throw error;
 	}
 }
+
+export async function getUser() {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		throw userError;
+	}
+
+	if (!user) {
+		throw new Error("usuário não autenticado");
+	}
+
+	return user;
+}

@@ -1,8 +1,8 @@
 import { supabase } from "@codi-go/supabase";
-import { getUserContext } from "@/services/context";
+import { getUser } from "@/services";
 
-export async function getClassesForCurrentContext(schoolId: string) {
-	const user = await getUserContext();
+export async function getClassesForCurrentUser(schoolId: string) {
+	const user = await getUser();
 
 	const { data, error } = await supabase
 		.from("classes")
@@ -11,7 +11,7 @@ export async function getClassesForCurrentContext(schoolId: string) {
 		.eq("teacher_id", user.id);
 
 	if (error) {
-		error.message = `getClassesForCurrentContext error: ${error.message}`;
+		error.message = `getClassesForCurrentUser error: ${error.message}`;
 		throw error;
 	}
 

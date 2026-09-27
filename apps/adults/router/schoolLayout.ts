@@ -1,7 +1,4 @@
-import {
-	getClassesForCurrentContext,
-	getSchoolsForCurrentUser,
-} from "@/services";
+import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
 
 export async function schoolLayoutLoader({ url }: { url: URL }) {
 	const match = url.pathname.match(/^\/escola\/([^/]+)/);
@@ -17,7 +14,7 @@ export async function schoolLayoutLoader({ url }: { url: URL }) {
 
 	const [schools, classes] = await Promise.all([
 		getSchoolsForCurrentUser(),
-		getClassesForCurrentContext(schoolId),
+		getClassesForCurrentUser(schoolId),
 	]);
 
 	return {
