@@ -22,3 +22,19 @@ export async function updateProfileForCurrentUser(props: ProfileProps) {
 
 	return data;
 }
+
+export async function getProfileForCurrentUser() {
+	const user = await getUser();
+
+	const { data, error } = await supabase
+		.from("profiles")
+		.select("id, name, username")
+		.eq("id", user.id)
+		.single();
+
+	if (error) {
+		throw error;
+	}
+
+	return data;
+}
