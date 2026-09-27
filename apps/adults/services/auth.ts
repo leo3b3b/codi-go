@@ -1,5 +1,4 @@
 import { supabase } from "@codi-go/supabase";
-import { redirect } from "react-router";
 
 export async function signUp(email: string, password: string) {
 	const { data, error } = await supabase.auth.signUp({
@@ -36,14 +35,4 @@ export async function signOut() {
 		error.message = `signOut error: ${error.message}`;
 		throw error;
 	}
-}
-
-export async function requireAuth(_, next) {
-	const { data, error } = await supabase.auth.getClaims();
-
-	if (error || !data?.claims) {
-		throw redirect("/login");
-	}
-
-	return next();
 }

@@ -19,8 +19,7 @@ export function SignInPage() {
 	async function onSubmit({ email, password }: SignInOutput) {
 		try {
 			await signInWithPassword(email, password);
-
-			navigate("/app", { replace: true });
+			navigate("/escolas", { replace: true });
 		} catch {
 			setError("root", {
 				message: "Não foi possível entrar. Verifique seu e-mail e senha.",
