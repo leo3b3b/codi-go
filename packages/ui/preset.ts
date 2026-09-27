@@ -6,20 +6,32 @@ const presetCodiGo: Preset = {
 	theme: {
 		colors: {
 			bg: "var(--color-bg)",
-			surface: "var(--color-surface)",
-			"surface-subtle": "var(--color-surface-subtle)",
 			fg: "var(--color-fg)",
 			heading: "var(--color-heading)",
-			primary: "var(--color-primary)",
-			"primary-hover": "var(--color-primary-hover)",
-			"primary-soft": "var(--color-primary-soft)",
-			"on-primary": "var(--color-on-primary)",
 			hero: "var(--color-hero)",
 			muted: "var(--color-muted)",
 			border: "var(--color-border)",
-			danger: "var(--color-danger)",
-			"danger-soft": "var(--color-danger-soft)",
-			"on-danger": "var(--color-on-danger)",
+			surface: {
+				DEFAULT: "var(--color-surface)",
+				subtle: "var(--color-surface-subtle)",
+			},
+			primary: {
+				DEFAULT: "var(--color-primary)",
+				hover: "var(--color-primary-hover)",
+				soft: "var(--color-primary-soft)",
+			},
+			danger: {
+				DEFAULT: "var(--color-danger)",
+				soft: "var(--color-danger-soft)",
+			},
+			on: {
+				primary: "var(--color-on-primary)",
+				danger: "var(--color-on-danger)",
+			},
+			grad: {
+				base: "var(--color-grad-base)",
+				via: "var(--color-grad-via)",
+			},
 		},
 		boxShadow: {
 			card: "0 20px 60px rgba(73, 57, 135, 0.14)",

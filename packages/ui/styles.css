@@ -26,12 +26,12 @@
   --color-on-danger: light-dark(#9f0712, #e7000b);
 
   /* Gradient */
-  --color-grad-from-to: light-dark(#c9a8ed, #4c336b);
+  --color-grad-base: light-dark(#c9a8ed, #4c336b);
   --color-grad-via: light-dark(#f1dfd4, #664555);
 }
 
 .ui-gradient {
-  --at-apply: bg-gradient-to-br from-[var(--color-grad-from-to)] via-[var(--color-grad-via)] to-[var(--color-grad-from-to)];
+  --at-apply: bg-gradient-to-br from-grad-base via-grad-via to-grad-base;
 }
 
 .ui-card {
