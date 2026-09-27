@@ -4,6 +4,7 @@ import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
+	CheckEmailPage,
 	OnboardingPage,
 	ProfilePage,
 	SchoolHomePage,
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
 		Component: Outlet,
 		middleware: [requireAuth],
 		children: [
+			{
+				path: "onboarding",
+				Component: OnboardingPage,
+			},
 			{
 				Component: SchoolLayout,
 				loader: schoolLayoutLoader,
@@ -93,8 +98,8 @@ const router = createBrowserRouter([
 				Component: SignUpPage,
 			},
 			{
-				path: "onboarding",
-				Component: OnboardingPage,
+				path: "verificar-email",
+				Component: CheckEmailPage,
 			},
 		],
 	},
