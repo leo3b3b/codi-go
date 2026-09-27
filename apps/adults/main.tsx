@@ -24,14 +24,14 @@ const router = createBrowserRouter([
 		middleware: [requireAuth],
 		children: [
 			{
-				path: "meu-perfil",
-				Component: ProfilePage,
-			},
-			{
 				Component: SchoolLayout,
 				loader: schoolLayoutLoader,
 				shouldRevalidate: () => true,
 				children: [
+					{
+						path: "meu-perfil",
+						Component: ProfilePage,
+					},
 					{
 						path: "escolas",
 						Component: SchoolsPage,
