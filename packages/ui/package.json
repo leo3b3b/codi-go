@@ -5,7 +5,10 @@
 	"type": "module",
 	"exports": {
 		"./preset": "./preset.ts",
-		"./css": "./styles.css",
+		"./css": {
+			"types": "./css.d.ts",
+			"default": "./styles.css"
+		},
 		"./images/*": "./assets/images/*"
 	},
 	"peerDependencies": {
