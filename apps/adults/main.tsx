@@ -98,7 +98,7 @@ const router = createBrowserRouter([
 				Component: SignUpPage,
 			},
 			{
-				path: "verificar-email",
+				path: "confirmar-email",
 				Component: CheckEmailPage,
 			},
 		],
