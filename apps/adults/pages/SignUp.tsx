@@ -19,11 +19,7 @@ export function SignUpPage() {
 	async function onSubmit({ email, password }: SignUpOutput) {
 		try {
 			await signUp(email, password);
-
-			navigate("/verificar-email", {
-				replace: true,
-				state: { email },
-			});
+			navigate("/onboarding", { replace: true });
 		} catch {
 			setError("root", {
 				message: "Não foi possível criar sua conta. Tente novamente.",

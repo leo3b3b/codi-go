@@ -4,15 +4,19 @@ import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
-	CheckEmailPage,
+	OnboardingPage,
 	ProfilePage,
 	SchoolHomePage,
 	SchoolsPage,
 	SignInPage,
 	SignUpPage,
 } from "@/pages";
-import { schoolHomeLoader, schoolLayoutLoader, schoolsLoader } from "@/router";
-import { requireAuth } from "@/services";
+import {
+	requireAuth,
+	schoolHomeLoader,
+	schoolLayoutLoader,
+	schoolsLoader,
+} from "@/router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -89,8 +93,8 @@ const router = createBrowserRouter([
 				Component: SignUpPage,
 			},
 			{
-				path: "verificar-email",
-				Component: CheckEmailPage,
+				path: "onboarding",
+				Component: OnboardingPage,
 			},
 		],
 	},

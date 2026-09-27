@@ -30,8 +30,8 @@ export function SchoolHeader() {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const isSchoolRoute = Boolean(schoolId);
-	const isClassRoute = Boolean(schoolId && classId);
+	const isSchoolRoute = schoolId !== undefined;
+	const isClassRoute = schoolId !== undefined && classId !== undefined;
 	const isAdminRoute = location.pathname.includes("/admin/");
 
 	const matchedOption = adminOptions.find((option) =>
