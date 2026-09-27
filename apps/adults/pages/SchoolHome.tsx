@@ -18,12 +18,12 @@ const adminActions = [
 ];
 
 export function SchoolHomePage() {
-	const classes = useLoaderData<typeof schoolHomeLoader>();
+	const { school, classes } = useLoaderData<typeof schoolHomeLoader>();
 
 	return (
 		<div className="w-full h-full">
-			<span className="text-(lg heading) mx-4">Escola X. Você é admin.</span>
-			<div className="w-full h-px bg-border my-4" />
+			<h1 className="text-(xl heading) font-bold">{school.tradeName}</h1>
+			<HorizontalSeparator />
 			<div className="flex-(~ col) gap-4 md:(grid grid-cols-2 gap-8)">
 				<section className="ui-card w-full h-full flex flex-col">
 					<h2 className="text-(2xl heading center) font-bold">Suas Turmas</h2>

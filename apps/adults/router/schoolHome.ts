@@ -1,4 +1,8 @@
-import { getClassesForCurrentContext } from "@/services";
+import { redirect } from "react-router";
+import {
+	getClassesForCurrentContext,
+	getSchoolsForCurrentUser,
+} from "@/services";
 
 export async function schoolHomeLoader({
 	params,
@@ -9,5 +13,23 @@ export async function schoolHomeLoader({
 		throw new Response("Escola não encontrada", { status: 404 });
 	}
 
-	return getClassesForCurrentContext(params.schoolId);
+	const schoolId = params.schoolId;
+
+	const schools = await getSchoolsForCurrentUser();
+	const school = schools.find((school) => school.schoolId === schoolId);
+
+	if (!school) {
+		throw new Response("Escola não encontrada", { status: 404 });
+	}
+
+	const classes = await getClassesForCurrentContext(schoolId);
+
+	if (school.role !== "admin" && classes.length === 1) {
+		throw redirect(`/escola/${schoolId}/turma/${classes[0].id}`);
+	}
+
+	return {
+		school,
+		classes,
+	};
 }
