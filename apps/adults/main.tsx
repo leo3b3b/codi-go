@@ -29,10 +29,6 @@ const router = createBrowserRouter([
 		middleware: [requireAuth],
 		children: [
 			{
-				path: "onboarding",
-				Component: OnboardingPage,
-			},
-			{
 				Component: SchoolLayout,
 				loader: schoolLayoutLoader,
 				shouldRevalidate: () => true,
@@ -100,6 +96,11 @@ const router = createBrowserRouter([
 			{
 				path: "confirmar-email",
 				Component: CheckEmailPage,
+			},
+			{
+				path: "onboarding",
+				Component: OnboardingPage,
+				middleware: [requireAuth],
 			},
 		],
 	},
