@@ -30,6 +30,7 @@ const router = createBrowserRouter([
 			{
 				Component: SchoolLayout,
 				loader: schoolLayoutLoader,
+				shouldRevalidate: () => true,
 				children: [
 					{
 						path: "escolas",
