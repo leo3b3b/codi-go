@@ -1,9 +1,13 @@
 import { supabase } from "@codi-go/supabase";
 
 export async function signUp(email: string, password: string) {
+	const redirectUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
 	const { data, error } = await supabase.auth.signUp({
 		email,
 		password,
+		options: {
+			emailRedirectTo: `${redirectUrl}/login`,
+		},
 	});
 
 	if (error) {
