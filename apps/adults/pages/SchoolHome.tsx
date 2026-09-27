@@ -19,12 +19,15 @@ const adminActions = [
 
 export function SchoolHomePage() {
 	const { school, classes } = useLoaderData<typeof schoolHomeLoader>();
+	const isAdmin = school.role === "admin";
 
 	return (
 		<div className="w-full h-full">
 			<h1 className="text-(xl heading) font-bold">{school.tradeName}</h1>
 			<HorizontalSeparator />
-			<div className="flex-(~ col) gap-4 md:(grid grid-cols-2 gap-8)">
+			<div
+				className={`flex-(~ col) justify-center gap-4 ${isAdmin ? "md:(grid grid-cols-2 gap-8)" : "max-w-lg mx-auto"}`}
+			>
 				<section className="ui-card w-full h-full flex flex-col">
 					<h2 className="text-(2xl heading center) font-bold">Suas Turmas</h2>
 					<HorizontalSeparator />
@@ -45,34 +48,38 @@ export function SchoolHomePage() {
 					</div>
 				</section>
 
-				<section className="ui-card w-full h-full flex flex-col">
-					<h2 className="text-(2xl heading center) font-bold">Administração</h2>
-					<HorizontalSeparator />
-					<div className="flex-(~ col) gap-2">
-						{adminActions.map(({ title, description, icon, to }) => (
-							<NavLink to={to} key={title}>
-								<article
-									className="
+				{isAdmin && (
+					<section className="ui-card w-full h-full flex flex-col">
+						<h2 className="text-(2xl heading center) font-bold">
+							Administração
+						</h2>
+						<HorizontalSeparator />
+						<div className="flex-(~ col) gap-2">
+							{adminActions.map(({ title, description, icon, to }) => (
+								<NavLink to={to} key={title}>
+									<article
+										className="
 								bg-surface-subtle border-(~ border) rounded-lg flex-(~ row) items-center gap-4 px-4 py-4
 								transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
-								>
-									<div
-										className={`${icon} text-(2xl primary center) h-10 w-10 group-hover:text-on-primary transition-(colors 500)`}
-									/>
-									<div className="h-full w-px bg-border" />
-									<div>
-										<h3 className="text-xl group-hover:text-on-primary transition-(colors 500)">
-											{title}
-										</h3>
-										<p className="text-(sm muted) group-hover:text-on-primary/70 transition-(colors 500)">
-											{description}
-										</p>
-									</div>
-								</article>
-							</NavLink>
-						))}
-					</div>
-				</section>
+									>
+										<div
+											className={`${icon} text-(2xl primary center) h-10 w-10 group-hover:text-on-primary transition-(colors 500)`}
+										/>
+										<div className="h-full w-px bg-border" />
+										<div>
+											<h3 className="text-xl group-hover:text-on-primary transition-(colors 500)">
+												{title}
+											</h3>
+											<p className="text-(sm muted) group-hover:text-on-primary/70 transition-(colors 500)">
+												{description}
+											</p>
+										</div>
+									</article>
+								</NavLink>
+							))}
+						</div>
+					</section>
+				)}
 			</div>
 		</div>
 	);
