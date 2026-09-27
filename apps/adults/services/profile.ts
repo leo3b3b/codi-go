@@ -1,4 +1,5 @@
 import { supabase } from "@codi-go/supabase";
+import { getUser } from "@/services";
 
 interface ProfileProps {
 	name: string | null;
@@ -6,21 +7,7 @@ interface ProfileProps {
 }
 
 export async function updateProfileForCurrentUser(props: ProfileProps) {
-	const {
-		data: { user },
-		error: userError,
-	} = await supabase.auth.getUser();
-
-	if (userError) {
-		userError.message = `updateProfileForCurrentUser error: ${userError.message}`;
-		throw userError;
-	}
-
-	if (!user) {
-		throw new Error(
-			"updateProfileForCurrentUser error: usuário não autenticado",
-		);
-	}
+	const user = await getUser();
 
 	const { data, error } = await supabase
 		.from("profiles")
@@ -30,6 +17,22 @@ export async function updateProfileForCurrentUser(props: ProfileProps) {
 
 	if (error) {
 		error.message = `updateProfileForCurrentUser error: ${error.message}`;
+		throw error;
+	}
+
+	return data;
+}
+
+export async function getProfileForCurrentUser() {
+	const user = await getUser();
+
+	const { data, error } = await supabase
+		.from("profiles")
+		.select("id, name, username")
+		.eq("id", user.id)
+		.single();
+
+	if (error) {
 		throw error;
 	}
 

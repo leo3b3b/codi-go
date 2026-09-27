@@ -1,40 +1,21 @@
-import { Link, useLocation } from "react-router";
-
-type CheckEmailLocationState = {
-	email?: string;
-};
+import { Link } from "react-router";
+import { HorizontalSeparator } from "@/components";
 
 export function CheckEmailPage() {
-	const location = useLocation();
-	const state = location.state as CheckEmailLocationState | null;
-	const email = state?.email;
-
 	return (
 		<section className="ui-card">
 			<title>CodiGO! | Confirme seu e-mail</title>
 			<header className="mb-8 text-center">
-				<h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
+				<h1 className="mb-4 text-(2xl heading) font-black tracking-tight">
 					Confirme seu e-mail
 				</h1>
 
-				<p className="mt-2 text-muted">
+				<p className="text-muted">
 					Enviamos uma mensagem para confirmar sua conta.
 				</p>
 			</header>
-
+			<HorizontalSeparator />
 			<div className="flex-(~ col) gap-4 text-fg">
-				{email && (
-					<p className="rounded-xl bg-primary-soft px-4 py-3">
-						Verifique a caixa de entrada de <strong>{email}</strong>.
-					</p>
-				)}
-
-				<p>
-					Se a conta puder ser criada, você receberá um e-mail de{" "}
-					<strong>noreply@mail.app.supabase.io</strong>, enviado pelo Supabase
-					Auth, com as instruções para confirmar seu endereço de e-mail.
-				</p>
-
 				<p className="text-muted">
 					Se não encontrar a mensagem, verifique também a pasta de spam ou lixo
 					eletrônico.

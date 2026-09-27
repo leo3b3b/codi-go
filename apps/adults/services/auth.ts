@@ -1,9 +1,13 @@
 import { supabase } from "@codi-go/supabase";
 
 export async function signUp(email: string, password: string) {
+	const redirectUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
 	const { data, error } = await supabase.auth.signUp({
 		email,
 		password,
+		options: {
+			emailRedirectTo: `${redirectUrl}/login`,
+		},
 	});
 
 	if (error) {
@@ -35,4 +39,21 @@ export async function signOut() {
 		error.message = `signOut error: ${error.message}`;
 		throw error;
 	}
+}
+
+export async function getUser() {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		throw userError;
+	}
+
+	if (!user) {
+		throw new Error("usuário não autenticado");
+	}
+
+	return user;
 }

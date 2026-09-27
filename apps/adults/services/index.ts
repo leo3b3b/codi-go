@@ -1,5 +1,5 @@
-export { signInWithPassword, signOut, signUp } from "./auth";
-export { getClassesForCurrentContext } from "./classes";
+export { getUser, signInWithPassword, signOut, signUp } from "./auth";
+export { getClassesForCurrentUser } from "./classes";
 export { updateProfileForCurrentUser } from "./profile";
 export {
 	getInvitesForCurrentUser,
