@@ -5,7 +5,7 @@ export function SchoolLayout() {
 	const location = useLocation();
 
 	return (
-		<div className="h-dvh ui-gradient text-fg">
+		<div className="fixed inset-0 h-dvh w-full overflow-y-auto ui-gradient text-fg">
 			<SchoolHeader />
 
 			<main
