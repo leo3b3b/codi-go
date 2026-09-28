@@ -7,13 +7,29 @@ interface ProfileProps {
 }
 
 export async function updateProfileForCurrentUser(props: ProfileProps) {
+	const dataToUpdate: { name?: string; username?: string } = {};
+
+	if (props.name !== null) {
+		dataToUpdate.name = props.name;
+	}
+
+	if (props.username !== null) {
+		dataToUpdate.username = props.username;
+	}
+
+	if (Object.keys(dataToUpdate).length === 0) {
+		const data = await getProfileForCurrentUser();
+		return data;
+	}
+
 	const user = await getUser();
 
 	const { data, error } = await supabase
 		.from("profiles")
-		.update(props)
+		.update(dataToUpdate)
 		.eq("id", user.id)
-		.select();
+		.select()
+		.single();
 
 	if (error) {
 		error.message = `updateProfileForCurrentUser error: ${error.message}`;
