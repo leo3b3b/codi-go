@@ -5,7 +5,7 @@ export function SchoolLayout() {
 	const location = useLocation();
 
 	return (
-		<div className="min-h-screen ui-gradient text-fg">
+		<div className="h-dvh ui-gradient text-fg">
 			<SchoolHeader />
 
 			<main

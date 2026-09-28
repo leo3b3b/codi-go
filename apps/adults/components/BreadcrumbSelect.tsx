@@ -38,20 +38,26 @@ export function BreadcrumbSelect({
 	}, []);
 
 	return (
-		<div className="relative inline-block text-left" ref={containerRef}>
+		<div
+			className="relative inline-block min-w-0 flex-1 text-left sm:flex-none"
+			ref={containerRef}
+		>
 			<button
 				type="button"
 				aria-label={ariaLabel}
 				onClick={() => setIsOpen(!isOpen)}
 				className="
-                    min-w-32 flex items-center justify-between rounded-lg border border-border
-                    bg-surface-subtle px-3 py-2 text-sm font-medium text-fg
-                    outline-none transition-colors cursor-pointer
-                    hover:border-primary
-                    focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
-                "
+					w-full sm:max-w-32
+					flex items-center justify-between rounded-lg border border-border
+					bg-surface-subtle px-3 py-2 text-sm font-medium text-fg
+					outline-none transition-colors cursor-pointer
+					hover:border-primary
+					focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+				"
 			>
-				<span>{selectedOption ? selectedOption.label : "Selecione…"}</span>
+				<span className="min-w-0 truncate">
+					{selectedOption ? selectedOption.label : "Selecione…"}
+				</span>
 				<Icon
 					icon="i-lucide-chevron-down"
 					color="muted"
@@ -61,8 +67,16 @@ export function BreadcrumbSelect({
 			</button>
 
 			{isOpen && (
-				<div className="absolute left-0 z-20 mt-1 w-full min-w-[12rem] rounded-lg border border-border bg-surface shadow-lg overflow-hidden">
-					<div className="py-1 max-h-60 overflow-y-auto">
+				<div
+					className="
+						absolute right-0 z-20 mt-1
+						w-full min-w-0
+						rounded-lg border border-border
+						bg-surface shadow-lg overflow-hidden
+						sm:left-0 sm:right-auto sm:min-w-[12rem]
+					"
+				>
+					<div className="max-h-60 overflow-y-auto py-1">
 						{options.map((option) => (
 							<button
 								key={option.value}
@@ -72,9 +86,13 @@ export function BreadcrumbSelect({
 									setIsOpen(false);
 								}}
 								className={`
-                                    w-full text-left px-3 py-2 text-sm transition-colors cursor-pointer
-                                    ${option.value === value ? "bg-primary/10 text-primary font-semibold" : "text-fg bg-surface-subtle"}
-                                `}
+						w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors
+						${
+							option.value === value
+								? "bg-primary/10 font-semibold text-primary"
+								: "bg-surface-subtle text-fg"
+						}
+					`}
 							>
 								{option.label}
 							</button>

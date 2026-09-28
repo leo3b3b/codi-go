@@ -12,11 +12,11 @@ import type { schoolLayoutLoader } from "@/router";
 const adminOptions = [
 	{
 		value: "turmas",
-		label: "Gerenciar Turmas",
+		label: "Turmas",
 	},
 	{
 		value: "membros",
-		label: "Gerenciar Membros",
+		label: "Membros",
 	},
 ];
 
@@ -43,70 +43,76 @@ export function SchoolHeader() {
 
 	return (
 		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
-			<div className="mx-auto flex justify-between h-16 max-w-7xl items-center px-4 py-4">
-				<div className="flex items-center h-full">
-					<NavLink
-						to="/escolas"
-						className="shrink-0 focus-visible:outline-none focus-visible:ring-(2 primary offset-2)"
+			<div className="mx-auto grid min-h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 py-3 sm:(flex h-16 py-4)">
+				<NavLink
+					to="/escolas"
+					className="order-1 shrink-0 focus-visible:outline-none focus-visible:ring-(2 primary offset-2)"
+				>
+					<img src={logo} alt="Logo do CodiGO!" className="h-12 w-auto" />
+				</NavLink>
+
+				{isSchoolRoute && (
+					<div
+						className="
+							order-3 col-span-2 h-full flex w-full items-center
+							gap-2 mt-2 sm:(order-2 ml-4 w-auto gap-0 mt-0)
+						"
 					>
-						<img src={logo} alt="Logo do CodiGO!" className="h-12 w-auto" />
-					</NavLink>
+						<VerticalSeparator className="hidden sm:block" />
 
-					{isSchoolRoute && (
-						<>
-							<VerticalSeparator />
+						<BreadcrumbSelect
+							aria-label="Escola"
+							value={schoolId}
+							onChange={(nextSchoolId) => {
+								navigate(`/escola/${nextSchoolId}`);
+							}}
+							options={schools.map((school) => ({
+								value: school.schoolId,
+								label: school.tradeName || school.legalName,
+							}))}
+						/>
 
-							<BreadcrumbSelect
-								aria-label="Escola"
-								value={schoolId}
-								onChange={(nextSchoolId) => {
-									navigate(`/escola/${nextSchoolId}`);
-								}}
-								options={schools.map((school) => ({
-									value: school.schoolId,
-									label: school.tradeName || school.legalName,
-								}))}
-							/>
+						{isClassRoute && currentClass && (
+							<>
+								<VerticalSeparator className="hidden sm:block" />
 
-							{isClassRoute && currentClass && (
-								<>
-									<VerticalSeparator />
+								<BreadcrumbSelect
+									aria-label="Turma"
+									value={classId}
+									onChange={(nextClassId) => {
+										navigate(`/escola/${schoolId}/turma/${nextClassId}`);
+									}}
+									options={classes.map((schoolClass) => ({
+										value: schoolClass.id,
+										label: schoolClass.name,
+									}))}
+								/>
+							</>
+						)}
 
-									<BreadcrumbSelect
-										aria-label="Turma"
-										value={classId}
-										onChange={(nextClassId) => {
-											navigate(`/escola/${schoolId}/turma/${nextClassId}`);
-										}}
-										options={classes.map((schoolClass) => ({
-											value: schoolClass.id,
-											label: schoolClass.name,
-										}))}
-									/>
-								</>
-							)}
+						{isAdminRoute && (
+							<>
+								<VerticalSeparator className="hidden sm:block" />
 
-							{isAdminRoute && (
-								<>
-									<VerticalSeparator />
-
-									<BreadcrumbSelect
-										aria-label="Administração"
-										value={currentAdminScreen}
-										onChange={(screen) => {
-											navigate(`/escola/${schoolId}/admin/${screen}`);
-										}}
-										options={adminOptions}
-									/>
-								</>
-							)}
-						</>
-					)}
-				</div>
+								<BreadcrumbSelect
+									aria-label="Administração"
+									value={currentAdminScreen}
+									onChange={(screen) => {
+										navigate(`/escola/${schoolId}/admin/${screen}`);
+									}}
+									options={adminOptions}
+								/>
+							</>
+						)}
+					</div>
+				)}
 
 				<NavLink
 					to="/meu-perfil"
-					className="bg-primary-soft hover:bg-primary rounded-full h-10 w-10 flex items-center justify-center transition-colors"
+					className="order-2 col-start-2 row-start-1 flex
+					h-10 w-10 items-center justify-center rounded-full
+					bg-primary-soft transition-colors hover:bg-primary
+					sm:(order-3 ml-auto)"
 				>
 					<Icon icon="i-lucide-user" color="on-primary" size={6} />
 				</NavLink>
