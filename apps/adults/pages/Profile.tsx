@@ -70,8 +70,8 @@ export function ProfilePage() {
 			<title>CodiGO! | Meu Perfil</title>
 
 			<section className="ui-card w-full flex-(~ row) gap-6 items-center">
-				<div className="rounded-full bg-primary text-(8 on-primary) flex items-center justify-center size-16 font-bold uppercase tracking-wider">
-					{profile.name.slice(0, 2)}
+				<div className="rounded-full bg-primary flex items-center justify-center size-16">
+					<Icon icon="i-lucide-user" color="on-primary" size={8} />
 				</div>
 				<div>
 					<h1 className="text-(2xl heading) sm:text-3xl font-bold break-words">
@@ -100,7 +100,7 @@ export function ProfilePage() {
 							type="text"
 							{...register("name")}
 							autoComplete="name"
-							placeholder={profile.name}
+							placeholder={profile.name || undefined}
 							aria-invalid={Boolean(errors.name)}
 							className="ui-field"
 						/>
@@ -124,7 +124,7 @@ export function ProfilePage() {
 								type="text"
 								{...register("username")}
 								autoComplete="username"
-								placeholder={profile.username}
+								placeholder={profile.username || undefined}
 								aria-invalid={Boolean(errors.username)}
 								className="ui-field w-full pl-10"
 							/>
