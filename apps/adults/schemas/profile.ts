@@ -1,19 +1,28 @@
 import * as v from "valibot";
 
 export const profileSchema = v.object({
-	name: v.pipe(
-		v.string("O nome deve ser um texto."),
-		v.nonEmpty("Informe seu nome."),
+	name: v.optional(
+		v.union([
+			v.literal(""),
+			v.pipe(
+				v.string("O nome deve ser um texto."),
+				v.nonEmpty("O nome não pode estar vazio."),
+			),
+		]),
 	),
-	username: v.pipe(
-		v.string("O nome de usuário deve ser um texto."),
-		v.nonEmpty("Informe um nome de usuário."),
-		v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
-		v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
-		v.regex(
-			/^[a-z0-9._-]+$/,
-			"Use apenas letras minúsculas, números, pontos, traços ou sublinhados.",
-		),
+	username: v.optional(
+		v.union([
+			v.literal(""),
+			v.pipe(
+				v.string("O nome de usuário deve ser um texto."),
+				v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
+				v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
+				v.regex(
+					/^[a-z0-9._-]+$/,
+					"Use apenas letras minúsculas, números, pontos, traços ou sublinhados.",
+				),
+			),
+		]),
 	),
 });
 

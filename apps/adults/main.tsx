@@ -13,6 +13,7 @@ import {
 	SignUpPage,
 } from "@/pages";
 import {
+	profileLoader,
 	requireAuth,
 	schoolHomeLoader,
 	schoolLayoutLoader,
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
 					{
 						path: "meu-perfil",
 						Component: ProfilePage,
+						loader: profileLoader,
 					},
 					{
 						path: "escolas",
