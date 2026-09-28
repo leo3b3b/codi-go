@@ -9,6 +9,7 @@ const appRoot = process.cwd();
 export default defineConfig({
 	root: appRoot,
 	envDir: repoRoot,
+	publicDir: path.resolve(repoRoot, "public"),
 
 	plugins: [
 		UnoCSS({
