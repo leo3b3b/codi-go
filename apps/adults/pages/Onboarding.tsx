@@ -2,7 +2,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { Icon } from "@/components";
-import { type ProfileOutput, profileSchema } from "@/schemas";
+import { type OnboardingOutput, onboardingSchema } from "@/schemas";
 import { updateProfileForCurrentUser } from "@/services";
 
 export function OnboardingPage() {
@@ -13,11 +13,11 @@ export function OnboardingPage() {
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<ProfileOutput>({
-		resolver: valibotResolver(profileSchema),
+	} = useForm<OnboardingOutput>({
+		resolver: valibotResolver(onboardingSchema),
 	});
 
-	async function onSubmit({ name, username }: ProfileOutput) {
+	async function onSubmit({ name, username }: OnboardingOutput) {
 		try {
 			await updateProfileForCurrentUser({ name, username });
 			navigate("/escolas", { replace: true });

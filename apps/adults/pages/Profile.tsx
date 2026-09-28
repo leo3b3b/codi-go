@@ -1,14 +1,16 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLoaderData, useRevalidator } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import type { profileLoader } from "@/router";
 import { type ProfileOutput, profileSchema } from "@/schemas";
-import { updateProfileForCurrentUser } from "@/services";
+import { signOut, updateProfileForCurrentUser } from "@/services";
+import { deleteUserAccount } from "@/services/auth";
 
 export function ProfilePage() {
 	const profile = useLoaderData<typeof profileLoader>();
+	const navigate = useNavigate();
 
 	const { revalidate } = useRevalidator();
 
@@ -47,6 +49,20 @@ export function ProfilePage() {
 					"Não foi possível salvar seu perfil. Tente novamente mais tarde.",
 			});
 		}
+	}
+
+	async function handleSignOut() {
+		await signOut();
+		navigate("/login");
+	}
+
+	async function handleDeleteAccount() {
+		const confirmed = window.confirm(
+			"Tem certeza de que quer deletar sua conta? Essa ação é irreversível!",
+		);
+		if (!confirmed) return;
+		await deleteUserAccount();
+		navigate("/login");
 	}
 
 	return (
@@ -145,6 +161,24 @@ export function ProfilePage() {
 						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
 					</button>
 				</form>
+			</section>
+			<section className="ui-card w-full flex-(~ row) gap-4">
+				<button
+					type="button"
+					className="ui-button-(~ danger)"
+					onClick={handleSignOut}
+				>
+					<Icon icon="i-lucide-log-out" color="on-danger" size={6} />
+					Sair da Conta
+				</button>
+				<button
+					type="button"
+					className="ui-button-(~ danger)"
+					onClick={handleDeleteAccount}
+				>
+					<Icon icon="i-lucide-trash-2" color="on-danger" size={6} />
+					Deletar Conta
+				</button>
 			</section>
 		</div>
 	);
