@@ -1,5 +1,6 @@
 import { Codi } from "@/components";
 import type { Command, MazeLevel, Position, TileType } from "@/types";
+import { tileImages } from "@/types";
 
 type MazeRendererProps = {
 	level: MazeLevel;
@@ -8,15 +9,11 @@ type MazeRendererProps = {
 	moving: boolean;
 };
 
-const tileClassNames: Record<TileType, string> = {
-	floor: "bg-border",
-	wall: "bg-gray-700",
-};
-
 function Tile({ type }: { type: TileType }) {
 	return (
-		<div
-			className={tileClassNames[type]}
+		<img
+			src={tileImages[type]}
+			alt=""
 			style={{
 				width: "var(--tile-size)",
 				height: "var(--tile-size)",
