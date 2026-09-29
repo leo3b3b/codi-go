@@ -9,9 +9,14 @@ export const tileImages = {
 	floor: "/tiles/floor.png",
 	left: "/tiles/left.png",
 	right: "/tiles/right.png",
+	top: "/tiles/wall.png",
+	bottom: "/tiles/wall.png",
 	wall: "/tiles/wall.png",
-	"left-top": "/tiles/left-top.png",
-	"right-top": "/tiles/right-top.png",
+	"top-left": "/tiles/left.png",
+	"top-right": "/tiles/right.png",
+	"bottom-left": "/tiles/bottom-left.png",
+	"bottom-right": "/tiles/bottom-right.png",
+	"roof": "/tiles/roof.png",
 };
 
 export type TileType = keyof typeof tileImages;
