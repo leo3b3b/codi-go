@@ -32,7 +32,7 @@ export function canMove(
 		return false;
 	}
 
-	return level.tiles[next.y][next.x] !== "wall";
+	return level.tiles[next.y][next.x] === "floor";
 }
 
 export function executeCommand(

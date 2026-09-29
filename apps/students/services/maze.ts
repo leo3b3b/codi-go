@@ -1,5 +1,6 @@
 import { supabase, type Tables } from "@codi-go/supabase";
 import type { MazeLevel, MazeLevelSummary, Position, TileType } from "@/types";
+import { tileImages } from "@/types";
 
 type LevelRow = Omit<Tables<"levels">, "game_key">;
 
@@ -15,7 +16,7 @@ function isPosition(value: unknown): value is Position {
 }
 
 function isTileType(value: unknown): value is TileType {
-	return value === "floor" || value === "wall";
+	return typeof value === "string" && value in tileImages;
 }
 
 function isTileRow(value: unknown): value is TileType[] {

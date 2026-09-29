@@ -5,7 +5,16 @@ export type Position = {
 
 export type Command = "up" | "down" | "left" | "right";
 
-export type TileType = "floor" | "wall";
+export const tileImages = {
+	floor: "/tiles/floor.png",
+	left: "/tiles/left.png",
+	right: "/tiles/right.png",
+	wall: "/tiles/wall.png",
+	"left-top": "/tiles/left-top.png",
+	"right-top": "/tiles/right-top.png",
+};
+
+export type TileType = keyof typeof tileImages;
 
 export type MazeLevel = {
 	id: number;
@@ -26,4 +35,5 @@ export type MazeState = {
 	level: MazeLevel;
 	commands: Command[];
 	status: "editing" | "running" | "success" | "failure";
+	direction: Command;
 };

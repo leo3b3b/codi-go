@@ -1,19 +1,19 @@
-import type { MazeLevel, Position, TileType } from "@/types";
+import { Codi } from "@/components";
+import type { Command, MazeLevel, Position, TileType } from "@/types";
+import { tileImages } from "@/types";
 
 type MazeRendererProps = {
 	level: MazeLevel;
 	playerPosition: Position;
-};
-
-const tileClassNames: Record<TileType, string> = {
-	floor: "bg-border",
-	wall: "bg-gray-700",
+	direction: Command;
+	moving: boolean;
 };
 
 function Tile({ type }: { type: TileType }) {
 	return (
-		<div
-			className={tileClassNames[type]}
+		<img
+			src={tileImages[type]}
+			alt=""
 			style={{
 				width: "var(--tile-size)",
 				height: "var(--tile-size)",
@@ -22,32 +22,34 @@ function Tile({ type }: { type: TileType }) {
 	);
 }
 
-function Codi() {
-	return (
-		<div className="absolute inset-2 rounded-full bg-primary">
-			{/* temporário; depois entra o asset do Codi */}
-		</div>
-	);
-}
-
 function Goal() {
 	return (
-		<div className="absolute inset-3 rounded-full bg-green-500">
-			{/* temporário; depois entra o asset do objetivo */}
-		</div>
+		<img
+			src="/tiles/goal.png"
+			alt=""
+			draggable={false}
+			className="block h-full w-full object-contain"
+		/>
 	);
 }
 
 function Entity({
 	position,
+	animate = true,
 	children,
 }: {
 	position: Position;
+	animate: boolean;
 	children: React.ReactNode;
 }) {
 	return (
 		<div
-			className="absolute aspect-square w-[var(--tile-size)] transition-[left,top] duration-300 ease-in-out"
+			className={[
+				"absolute aspect-square w-[var(--tile-size)]",
+				animate && "transition-[left,top] duration-300 ease-in-out",
+			]
+				.filter(Boolean)
+				.join(" ")}
 			style={{
 				left: `calc(${position.x} * var(--tile-size))`,
 				top: `calc(${position.y} * var(--tile-size))`,
@@ -58,7 +60,12 @@ function Entity({
 	);
 }
 
-export function MazeRenderer({ level, playerPosition }: MazeRendererProps) {
+export function MazeRenderer({
+	level,
+	playerPosition,
+	direction,
+	moving,
+}: MazeRendererProps) {
 	return (
 		<div
 			className="relative"
@@ -80,12 +87,12 @@ export function MazeRenderer({ level, playerPosition }: MazeRendererProps) {
 			</div>
 
 			<div className="absolute inset-0">
-				<Entity position={level.goal}>
+				<Entity animate={false} position={level.goal}>
 					<Goal />
 				</Entity>
 
-				<Entity position={playerPosition}>
-					<Codi />
+				<Entity animate={moving} position={playerPosition}>
+					<Codi direction={direction} moving={moving} />
 				</Entity>
 			</div>
 		</div>
