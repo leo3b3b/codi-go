@@ -26,4 +26,5 @@ export type MazeState = {
 	level: MazeLevel;
 	commands: Command[];
 	status: "editing" | "running" | "success" | "failure";
+	direction: Command;
 };

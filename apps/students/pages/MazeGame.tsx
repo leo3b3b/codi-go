@@ -25,6 +25,7 @@ export function MazeGame() {
 		playerPosition: level.start,
 		commands: [],
 		status: "editing",
+		direction: "down",
 	});
 
 	const isRunning = state.status === "running";
@@ -78,6 +79,11 @@ export function MazeGame() {
 		let position = currentLevel.start;
 
 		for (const command of commandsToExecute) {
+			setState((current) => ({
+				...current,
+				direction: command,
+			}));
+
 			await wait(400);
 
 			const nextPosition = executeCommand(currentLevel, position, command);
@@ -119,7 +125,12 @@ export function MazeGame() {
 	return (
 		<div className="flex flex-col gap-6">
 			<title>CodiGO! | Labirinto</title>
-			<MazeRenderer level={state.level} playerPosition={state.playerPosition} />
+			<MazeRenderer
+				level={state.level}
+				playerPosition={state.playerPosition}
+				direction={state.direction}
+				moving={state.status === "running"}
+			/>
 
 			<div className="flex flex-col gap-4 px-4">
 				<div className="flex items-center gap-4">
