@@ -24,9 +24,12 @@ function Tile({ type }: { type: TileType }) {
 
 function Goal() {
 	return (
-		<div className="absolute inset-3 rounded-full bg-green-500">
-			{/* temporário; depois entra o asset do objetivo */}
-		</div>
+		<img
+			src="/tiles/goal.png"
+			alt=""
+			draggable={false}
+			className="block h-full w-full object-contain"
+		/>
 	);
 }
 
