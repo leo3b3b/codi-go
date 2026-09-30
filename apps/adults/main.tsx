@@ -1,16 +1,18 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Outlet } from "react-router";
-import { RouterProvider } from "react-router/dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
+	ClassAdminPage,
+	MemberAdminPage,
 	OnboardingPage,
 	ProfilePage,
 	SchoolHomePage,
 	SchoolsPage,
 	SignInPage,
 	SignUpPage,
+	StudentAdminPage,
 } from "@/pages";
 import {
 	profileLoader,
@@ -66,15 +68,15 @@ const router = createBrowserRouter([
 								children: [
 									{
 										path: "turmas",
-										Component: Outlet,
+										Component: ClassAdminPage,
 									},
 									{
 										path: "turma/:classId/alunos",
-										Component: Outlet,
+										Component: StudentAdminPage,
 									},
 									{
 										path: "membros",
-										Component: Outlet,
+										Component: MemberAdminPage,
 									},
 								],
 							},
