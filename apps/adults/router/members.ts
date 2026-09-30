@@ -1,4 +1,4 @@
-import { adminGetMembershipsBySchool } from "@/services";
+import { adminGetMembershipsBySchool, getSchoolById } from "@/services";
 
 export async function memberAdminLoader({
 	params,
@@ -9,5 +9,8 @@ export async function memberAdminLoader({
 		throw new Response("Escola não encontrada", { status: 404 });
 	}
 
-	return adminGetMembershipsBySchool(params.schoolId);
+	const school = await getSchoolById(params.schoolId);
+	const memberships = await adminGetMembershipsBySchool(params.schoolId);
+
+	return { school, memberships };
 }

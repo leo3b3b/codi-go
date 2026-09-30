@@ -77,3 +77,24 @@ export async function adminGetMembershipsBySchool(schoolId: string) {
 		...membership,
 	}));
 }
+
+type deleteMembershipProps = {
+	profile_id: string;
+	school_id: string;
+};
+
+export async function deleteMembership({
+	profile_id,
+	school_id,
+}: deleteMembershipProps) {
+	const { error } = await supabase
+		.from("school_memberships")
+		.delete()
+		.eq("profile_id", profile_id)
+		.eq("school_id", school_id);
+
+	if (error) {
+		error.message = `deleteMembership error: ${error.message}`;
+		throw error;
+	}
+}

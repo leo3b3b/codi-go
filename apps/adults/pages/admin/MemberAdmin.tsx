@@ -1,9 +1,34 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import type { memberAdminLoader } from "@/router";
+import { deleteMembership } from "@/services/memberships";
+
+type HandleDeleteMembershipProps = {
+	profile_id: string;
+	school_id: string;
+	username: string;
+	action: "remover" | "cancelar";
+};
 
 export function MemberAdminPage() {
-	const memberships = useLoaderData<typeof memberAdminLoader>();
+	const { school, memberships } = useLoaderData<typeof memberAdminLoader>();
+	const { revalidate } = useRevalidator();
+
+	async function handleDeleteMembership({
+		profile_id,
+		school_id,
+		username,
+		action,
+	}: HandleDeleteMembershipProps) {
+		const confirmed = window.confirm(
+			action === "remover"
+				? `Tem certeza de que quer remover ${username} de ${school.trade_name}?`
+				: `Tem certeza de que quer cancelar o convite de ${username} para ${school.trade_name}?`,
+		);
+		if (!confirmed) return;
+		await deleteMembership({ profile_id, school_id });
+		revalidate();
+	}
 
 	return (
 		<div className="ui-card w-full overflow-x-auto">
@@ -87,7 +112,21 @@ export function MemberAdminPage() {
 									{membership.role === "admin" ? "Rebaixar" : "Promover"}
 								</button>
 
-								<button type="button" className="ui-button-(~ danger) w-1/2">
+								<button
+									type="button"
+									className="ui-button-(~ danger) w-1/2"
+									onClick={() => {
+										const { profile_id, school_id, username, name, status } =
+											membership;
+
+										handleDeleteMembership({
+											profile_id,
+											school_id,
+											username: username ? `@${username}` : name,
+											action: status === "active" ? "remover" : "cancelar",
+										});
+									}}
+								>
 									<Icon
 										icon={
 											membership.status === "active"
