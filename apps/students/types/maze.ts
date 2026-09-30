@@ -16,7 +16,7 @@ export const tileImages = {
 	"top-right": "/tiles/right.png",
 	"bottom-left": "/tiles/bottom-left.png",
 	"bottom-right": "/tiles/bottom-right.png",
-	"roof": "/tiles/roof.png",
+	roof: "/tiles/roof.png",
 };
 
 export type TileType = keyof typeof tileImages;
