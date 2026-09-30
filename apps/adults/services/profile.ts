@@ -49,8 +49,24 @@ export async function getProfileForCurrentUser() {
 		.single();
 
 	if (error) {
+		error.message = `getProfileForCurrentUser error: ${error.message}`;
 		throw error;
 	}
 
 	return data;
+}
+
+export async function getUserIdByUsername(username: string) {
+	const { data, error } = await supabase
+		.from("profiles")
+		.select("id")
+		.eq("username", username)
+		.single();
+
+	if (error) {
+		error.message = `getUserIdByUsername error: ${error.message}`;
+		throw error;
+	}
+
+	return data.id;
 }

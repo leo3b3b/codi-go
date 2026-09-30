@@ -1,5 +1,5 @@
 import { supabase } from "@codi-go/supabase";
-import { getUser } from "@/services";
+import { getUser, getUserIdByUsername } from "@/services";
 
 async function getMembershipsForCurrentUser(status: "active" | "pending") {
 	const user = await getUser();
@@ -50,6 +50,31 @@ export async function getInvitesForCurrentUser() {
 		cnpj: schools.cnpj,
 		role,
 	}));
+}
+
+type InviteUserToSchoolProps = {
+	username: string;
+	role: "admin" | "teacher";
+	school_id: string;
+};
+
+export async function inviteUserToSchool({
+	username,
+	role,
+	school_id,
+}: InviteUserToSchoolProps) {
+	const profile_id = await getUserIdByUsername(username);
+
+	const { error } = await supabase.from("school_memberships").insert({
+		profile_id,
+		school_id,
+		role,
+	});
+
+	if (error) {
+		error.message = `inviteUserToSchool error: ${error.message}`;
+		throw error;
+	}
 }
 
 export async function adminGetMembershipsBySchool(schoolId: string) {

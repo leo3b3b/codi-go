@@ -11,6 +11,7 @@ interface SelectProps {
 	value: string;
 	onChange: (value: string) => void;
 	options: Option[];
+	className?: string;
 }
 
 export function Select({
@@ -18,6 +19,7 @@ export function Select({
 	value,
 	onChange,
 	options,
+	className,
 }: SelectProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -39,30 +41,31 @@ export function Select({
 
 	return (
 		<div
-			className="relative inline-block min-w-0 flex-1 text-left sm:flex-none"
+			className={`relative inline-block min-w-0 text-left ${className}`}
 			ref={containerRef}
 		>
 			<button
 				type="button"
 				aria-label={ariaLabel}
+				aria-expanded={isOpen}
 				onClick={() => setIsOpen(!isOpen)}
 				className="
-					w-full sm:max-w-32
-					flex items-center justify-between rounded-lg border border-border
-					bg-surface-subtle px-3 py-2 text-sm font-medium text-fg
+					flex w-full h-full
+					items-center justify-between rounded-lg border-(~ border)
+					bg-surface-subtle px-3 py-2 text-(sm fg) font-medium
 					outline-none transition-colors cursor-pointer
-					hover:border-primary
-					focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+					hover:border-primary focus-visible:ring-(2 primary offset-2)
 				"
 			>
 				<span className="min-w-0 truncate">
-					{selectedOption ? selectedOption.label : "Selecione…"}
+					{selectedOption?.label ?? "Selecione…"}
 				</span>
+
 				<Icon
 					icon="i-lucide-chevron-down"
 					color="muted"
 					size={4}
-					className={`${isOpen ? "rotate-180" : ""} transition-transform ml-3`}
+					className={`${isOpen ? "rotate-180" : ""} ml-3 transition-transform`}
 				/>
 			</button>
 
@@ -71,9 +74,9 @@ export function Select({
 					className="
 						absolute right-0 z-20 mt-1
 						w-full min-w-0
-						rounded-lg border border-border
+						rounded-lg border-(~ border)
 						bg-surface shadow-lg overflow-hidden
-						sm:left-0 sm:right-auto sm:min-w-[12rem]
+						sm:(left-0 right-auto min-w-[12rem])
 					"
 				>
 					<div className="max-h-60 overflow-y-auto py-1">
@@ -86,13 +89,13 @@ export function Select({
 									setIsOpen(false);
 								}}
 								className={`
-						w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors
-						${
-							option.value === value
-								? "bg-primary/10 font-semibold text-primary"
-								: "bg-surface-subtle text-fg"
-						}
-					`}
+									w-full cursor-pointer px-3 py-2 text-(sm left) transition-colors
+									${
+										option.value === value
+											? "bg-primary/10 font-semibold text-primary"
+											: "bg-surface-subtle text-fg"
+									}
+								`}
 							>
 								{option.label}
 							</button>

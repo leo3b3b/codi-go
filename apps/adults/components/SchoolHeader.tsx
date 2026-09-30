@@ -70,6 +70,7 @@ export function SchoolHeader() {
 								value: school.schoolId,
 								label: school.tradeName || school.legalName,
 							}))}
+							className="flex-1 sm:max-w-32"
 						/>
 
 						{isClassRoute && currentClass && (
@@ -86,6 +87,7 @@ export function SchoolHeader() {
 										value: schoolClass.id,
 										label: schoolClass.name,
 									}))}
+									className="flex-1 sm:max-w-32"
 								/>
 							</>
 						)}
@@ -101,6 +103,7 @@ export function SchoolHeader() {
 										navigate(`/escola/${schoolId}/admin/${screen}`);
 									}}
 									options={adminOptions}
+									className="flex-1 sm:max-w-32"
 								/>
 							</>
 						)}

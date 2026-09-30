@@ -5,10 +5,12 @@ export {
 	deleteMembership,
 	getInvitesForCurrentUser,
 	getSchoolsForCurrentUser,
+	inviteUserToSchool,
 	updateMembershipRole,
 } from "./memberships";
 export {
 	getProfileForCurrentUser,
+	getUserIdByUsername,
 	updateProfileForCurrentUser,
 } from "./profile";
 export { getSchoolById } from "./schools";
