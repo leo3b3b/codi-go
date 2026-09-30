@@ -65,7 +65,9 @@ export async function adminGetMembershipsBySchool(schoolId: string) {
                 username
             )
         `)
-		.eq("school_id", schoolId);
+		.eq("school_id", schoolId)
+		.order("profiles(name)")
+		.order("profiles(username)");
 
 	if (error) {
 		error.message = `adminGetMembershipsBySchool error: ${error.message}`;
@@ -78,7 +80,7 @@ export async function adminGetMembershipsBySchool(schoolId: string) {
 	}));
 }
 
-type deleteMembershipProps = {
+type DeleteMembershipProps = {
 	profile_id: string;
 	school_id: string;
 };
@@ -86,7 +88,7 @@ type deleteMembershipProps = {
 export async function deleteMembership({
 	profile_id,
 	school_id,
-}: deleteMembershipProps) {
+}: DeleteMembershipProps) {
 	const { error } = await supabase
 		.from("school_memberships")
 		.delete()
@@ -94,7 +96,42 @@ export async function deleteMembership({
 		.eq("school_id", school_id);
 
 	if (error) {
+		if (error.code === "PT409" && error.message === "LAST_ADMIN") {
+			throw new Error(
+				"Não é possível remover o único administrador ativo de uma escola!",
+			);
+		}
+
 		error.message = `deleteMembership error: ${error.message}`;
+		throw error;
+	}
+}
+
+type UpdateMembershipRoleProps = {
+	profile_id: string;
+	school_id: string;
+	role: "admin" | "teacher";
+};
+
+export async function updateMembershipRole({
+	profile_id,
+	school_id,
+	role,
+}: UpdateMembershipRoleProps) {
+	const { error } = await supabase
+		.from("school_memberships")
+		.update({ role })
+		.eq("profile_id", profile_id)
+		.eq("school_id", school_id);
+
+	if (error) {
+		if (error.code === "PT409" && error.message === "LAST_ADMIN") {
+			throw new Error(
+				"Não é possível rebaixar o único administrador ativo de uma escola!",
+			);
+		}
+
+		error.message = `updateMembershipRole error: ${error.message}`;
 		throw error;
 	}
 }

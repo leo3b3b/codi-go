@@ -1,18 +1,53 @@
-import { useLoaderData, useRevalidator } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import type { memberAdminLoader } from "@/router";
-import { deleteMembership } from "@/services/memberships";
+import { deleteMembership, updateMembershipRole } from "@/services";
+
+type HandleUpdateRoleProps = {
+	profile_id: string;
+	school_id: string;
+	username: string;
+	current_role: "admin" | "teacher";
+};
 
 type HandleDeleteMembershipProps = {
 	profile_id: string;
 	school_id: string;
 	username: string;
-	action: "remover" | "cancelar";
+	action: "remove" | "cancel";
 };
 
 export function MemberAdminPage() {
-	const { school, memberships } = useLoaderData<typeof memberAdminLoader>();
+	const { user, school, memberships } =
+		useLoaderData<typeof memberAdminLoader>();
 	const { revalidate } = useRevalidator();
+	const navigate = useNavigate();
+
+	async function handleUpdateRole({
+		profile_id,
+		school_id,
+		username,
+		current_role,
+	}: HandleUpdateRoleProps) {
+		const confirmed = window.confirm(
+			current_role === "teacher"
+				? `Tem certeza de que quer promover ${username} a administrador?`
+				: `Tem certeza de que quer remover o cargo de administrador de ${username}?`,
+		);
+		if (!confirmed) return;
+
+		const role = current_role === "teacher" ? "admin" : "teacher";
+		const isSelfDemotion = current_role === "admin" && profile_id === user.id;
+
+		await updateMembershipRole({ profile_id, school_id, role });
+
+		if (isSelfDemotion) {
+			navigate("/");
+			return;
+		}
+
+		revalidate();
+	}
 
 	async function handleDeleteMembership({
 		profile_id,
@@ -21,7 +56,7 @@ export function MemberAdminPage() {
 		action,
 	}: HandleDeleteMembershipProps) {
 		const confirmed = window.confirm(
-			action === "remover"
+			action === "remove"
 				? `Tem certeza de que quer remover ${username} de ${school.trade_name}?`
 				: `Tem certeza de que quer cancelar o convite de ${username} para ${school.trade_name}?`,
 		);
@@ -53,8 +88,7 @@ export function MemberAdminPage() {
 							key={`${membership.school_id}-${membership.profile_id}`}
 							className="
 								grid grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
-								py-4 items-center
-								border-b-(~ border) last:border-b-0
+								py-4 items-center border-b-(~ border)
 							"
 						>
 							<div className="font-semibold text-heading">
@@ -99,18 +133,36 @@ export function MemberAdminPage() {
 							</div>
 
 							<div className="flex gap-2">
-								<button type="button" className="ui-button-(~ secondary) w-1/2">
-									<Icon
-										icon={
-											membership.role === "admin"
-												? "i-lucide-arrow-down"
-												: "i-lucide-arrow-up"
-										}
-										color="fg"
-										size={5}
-									/>
-									{membership.role === "admin" ? "Rebaixar" : "Promover"}
-								</button>
+								{membership.status === "active" ? (
+									<button
+										type="button"
+										className="ui-button-(~ secondary) w-1/2"
+										onClick={() => {
+											const { profile_id, school_id, username, name, role } =
+												membership;
+
+											handleUpdateRole({
+												profile_id,
+												school_id,
+												username: username ? `@${username}` : name,
+												current_role: role,
+											});
+										}}
+									>
+										<Icon
+											icon={
+												membership.role === "admin"
+													? "i-lucide-arrow-down"
+													: "i-lucide-arrow-up"
+											}
+											color="fg"
+											size={5}
+										/>
+										{membership.role === "admin" ? "Rebaixar" : "Promover"}
+									</button>
+								) : (
+									<div className="w-1/2"></div>
+								)}
 
 								<button
 									type="button"
@@ -123,7 +175,7 @@ export function MemberAdminPage() {
 											profile_id,
 											school_id,
 											username: username ? `@${username}` : name,
-											action: status === "active" ? "remover" : "cancelar",
+											action: status === "active" ? "remove" : "cancel",
 										});
 									}}
 								>
