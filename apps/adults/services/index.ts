@@ -1,14 +1,12 @@
 export { getUser, signInWithPassword, signOut, signUp } from "./auth";
 export { getClassesForCurrentUser } from "./classes";
 export {
+	adminGetMembershipsBySchool,
 	getInvitesForCurrentUser,
-	getMembershipsForCurrentUser,
+	getSchoolsForCurrentUser,
 } from "./memberships";
 export {
 	getProfileForCurrentUser,
 	updateProfileForCurrentUser,
 } from "./profile";
-export {
-	getSchoolById,
-	getSchoolsForCurrentUser,
-} from "./schools";
+export { getSchoolById } from "./schools";

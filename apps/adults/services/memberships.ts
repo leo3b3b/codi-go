@@ -1,9 +1,7 @@
 import { supabase } from "@codi-go/supabase";
 import { getUser } from "@/services";
 
-export async function getMembershipsForCurrentUser(
-	status: "active" | "pending",
-) {
+async function getMembershipsForCurrentUser(status: "active" | "pending") {
 	const user = await getUser();
 
 	const { data, error } = await supabase
@@ -30,6 +28,18 @@ export async function getMembershipsForCurrentUser(
 	return data;
 }
 
+export async function getSchoolsForCurrentUser() {
+	const memberships = await getMembershipsForCurrentUser("active");
+
+	return memberships.map(({ role, schools }) => ({
+		schoolId: schools.id,
+		legalName: schools.legal_name,
+		tradeName: schools.trade_name,
+		cnpj: schools.cnpj,
+		role,
+	}));
+}
+
 export async function getInvitesForCurrentUser() {
 	const memberships = await getMembershipsForCurrentUser("pending");
 
@@ -42,6 +52,28 @@ export async function getInvitesForCurrentUser() {
 	}));
 }
 
-// export async function getMembershipsBySchool(schoolId: string) {
-//     const { data, user } = await supabase
-// }
+export async function adminGetMembershipsBySchool(schoolId: string) {
+	const { data, error } = await supabase
+		.from("school_memberships")
+		.select(`
+            school_id,
+            profile_id,
+            role,
+            status,
+            profiles!schools_profiles_profile_id_fkey (
+                name,
+                username
+            )
+        `)
+		.eq("school_id", schoolId);
+
+	if (error) {
+		error.message = `adminGetMembershipsBySchool error: ${error.message}`;
+		throw error;
+	}
+
+	return data.map(({ profiles, ...membership }) => ({
+		...profiles,
+		...membership,
+	}));
+}
