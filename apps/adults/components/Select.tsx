@@ -6,19 +6,19 @@ interface Option {
 	label: string;
 }
 
-interface BreadcrumbSelectProps {
+interface SelectProps {
 	"aria-label": string;
 	value: string;
 	onChange: (value: string) => void;
 	options: Option[];
 }
 
-export function BreadcrumbSelect({
+export function Select({
 	"aria-label": ariaLabel,
 	value,
 	onChange,
 	options,
-}: BreadcrumbSelectProps) {
+}: SelectProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
 

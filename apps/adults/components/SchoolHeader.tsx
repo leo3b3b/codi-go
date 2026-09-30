@@ -6,7 +6,7 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router";
-import { BreadcrumbSelect, Icon, VerticalSeparator } from "@/components";
+import { Select, Icon, VerticalSeparator } from "@/components";
 import type { schoolLayoutLoader } from "@/router";
 
 const adminOptions = [
@@ -60,7 +60,7 @@ export function SchoolHeader() {
 					>
 						<VerticalSeparator className="hidden sm:block" />
 
-						<BreadcrumbSelect
+						<Select
 							aria-label="Escola"
 							value={schoolId}
 							onChange={(nextSchoolId) => {
@@ -76,7 +76,7 @@ export function SchoolHeader() {
 							<>
 								<VerticalSeparator className="hidden sm:block" />
 
-								<BreadcrumbSelect
+								<Select
 									aria-label="Turma"
 									value={classId}
 									onChange={(nextClassId) => {
@@ -94,7 +94,7 @@ export function SchoolHeader() {
 							<>
 								<VerticalSeparator className="hidden sm:block" />
 
-								<BreadcrumbSelect
+								<Select
 									aria-label="Administração"
 									value={currentAdminScreen}
 									onChange={(screen) => {
