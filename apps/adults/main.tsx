@@ -16,6 +16,7 @@ import {
 } from "@/pages";
 import {
 	profileLoader,
+	redirectRoot,
 	requireAuth,
 	schoolHomeLoader,
 	schoolLayoutLoader,
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
 		Component: Outlet,
 		middleware: [requireAuth],
 		children: [
+			{
+				index: true,
+				Component: Outlet,
+				middleware: [redirectRoot],
+			},
 			{
 				Component: SchoolLayout,
 				loader: schoolLayoutLoader,
