@@ -66,11 +66,13 @@ export function MemberAdminPage() {
 	}
 
 	return (
-		<div className="ui-card w-full overflow-x-auto">
-			<div className="min-w-4xl">
+		<div className="flex-(~ col) gap-4">
+			<section className="ui-card">{/* invite form */}</section>
+			<section className="ui-card">
 				<div
 					className="
-						grid grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
+						hidden lg:grid
+						grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
 						py-3 border-b-(~ border)
 						text-(sm muted) font-bold
 					"
@@ -82,28 +84,32 @@ export function MemberAdminPage() {
 					<div>Ações</div>
 				</div>
 
-				<div className="flex-(~ col)">
+				<div className="flex-(~ col) gap-4 lg:gap-0">
 					{memberships.map((membership) => (
 						<div
 							key={`${membership.school_id}-${membership.profile_id}`}
 							className="
-								grid grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
-								py-4 items-center border-b-(~ border)
+								grid grid-cols-[1fr_auto]
+								border-b-(~ border) py-3
+								gap-x-4 gap-y-2
+								md:(grid-cols-4 gap-x-4 gap-y-3)
+								lg:grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
+								lg:(gap-0 items-center)
 							"
 						>
 							<div className="font-semibold text-heading">
 								{membership.name ?? "—"}
 							</div>
 
-							<div className="text-muted">
+							<div className="text-right text-muted md:text-left">
 								{membership.username ? `@${membership.username}` : "—"}
 							</div>
 
-							<div>
+							<div className="md:col-span-1">
 								{membership.role === "admin" ? "Administrador" : "Professor"}
 							</div>
 
-							<div>
+							<div className="justify-self-end md:justify-self-start">
 								<span
 									className={`
 										inline-flex items-center gap-2 rounded-full
@@ -132,7 +138,7 @@ export function MemberAdminPage() {
 								</span>
 							</div>
 
-							<div className="flex gap-2">
+							<div className="col-span-2 flex gap-2 md:col-span-4 lg:col-span-1">
 								{membership.status === "active" ? (
 									<button
 										type="button"
@@ -194,7 +200,7 @@ export function MemberAdminPage() {
 						</div>
 					))}
 				</div>
-			</div>
+			</section>
 		</div>
 	);
 }
