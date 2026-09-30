@@ -15,6 +15,7 @@ import {
 	StudentAdminPage,
 } from "@/pages";
 import {
+	HydrateFallback,
 	profileLoader,
 	redirectRoot,
 	requireAuth,
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
 		path: "/",
 		Component: Outlet,
 		middleware: [requireAuth],
+		HydrateFallback: HydrateFallback,
 		children: [
 			{
 				index: true,
