@@ -1,6 +1,6 @@
 import { supabase } from "@codi-go/supabase";
 import { type MiddlewareFunction, redirect } from "react-router";
-import { getProfileForCurrentUser } from "@/services/profile";
+import { getProfileForCurrentUser } from "@/services";
 
 export const requireAuth: MiddlewareFunction = async ({ request }, next) => {
 	const { data: claimsData, error: claimsError } =

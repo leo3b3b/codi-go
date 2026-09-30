@@ -23,10 +23,10 @@ export function SchoolsPage() {
 				<div className="grid-(~ cols-1) md:grid-cols-2 lg:grid-cols-3">
 					{schools.map((school) => (
 						<SchoolCard
-							key={school.schoolId}
-							schoolId={school.schoolId}
-							legalName={school.legalName}
-							tradeName={school.tradeName}
+							key={school.school_id}
+							schoolId={school.school_id}
+							legalName={school.legal_name}
+							tradeName={school.trade_name}
 							userRole={school.role}
 						/>
 					))}

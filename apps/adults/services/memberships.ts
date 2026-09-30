@@ -12,8 +12,7 @@ async function getMembershipsForCurrentUser(status: "active" | "pending") {
 			schools!schools_profiles_school_id_fkey (
 				id,
 				legal_name,
-				trade_name,
-				cnpj
+				trade_name
 			)
 		`)
 		.eq("profile_id", user.id)
@@ -32,10 +31,9 @@ export async function getSchoolsForCurrentUser() {
 	const memberships = await getMembershipsForCurrentUser("active");
 
 	return memberships.map(({ role, schools }) => ({
-		schoolId: schools.id,
-		legalName: schools.legal_name,
-		tradeName: schools.trade_name,
-		cnpj: schools.cnpj,
+		school_id: schools.id,
+		legal_name: schools.legal_name,
+		trade_name: schools.trade_name,
 		role,
 	}));
 }
@@ -44,12 +42,32 @@ export async function getInvitesForCurrentUser() {
 	const memberships = await getMembershipsForCurrentUser("pending");
 
 	return memberships.map(({ role, schools }) => ({
-		schoolId: schools.id,
-		legalName: schools.legal_name,
-		tradeName: schools.trade_name,
-		cnpj: schools.cnpj,
+		school_id: schools.id,
+		legal_name: schools.legal_name,
+		trade_name: schools.trade_name,
 		role,
 	}));
+}
+
+type AcceptInviteProps = {
+	profile_id: string;
+	school_id: string;
+};
+
+export async function acceptInvite({
+	profile_id,
+	school_id,
+}: AcceptInviteProps) {
+	const { error } = await supabase
+		.from("school_memberships")
+		.update({ status: "active" })
+		.eq("profile_id", profile_id)
+		.eq("school_id", school_id);
+
+	if (error) {
+		error.message = `acceptInvite error: ${error.message}`;
+		throw error;
+	}
 }
 
 type InviteUserToSchoolProps = {

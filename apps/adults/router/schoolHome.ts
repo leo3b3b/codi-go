@@ -13,7 +13,7 @@ export async function schoolHomeLoader({
 	const schoolId = params.schoolId;
 
 	const schools = await getSchoolsForCurrentUser();
-	const school = schools.find((school) => school.schoolId === schoolId);
+	const school = schools.find((school) => school.school_id === schoolId);
 
 	if (!school) {
 		throw new Response("Escola não encontrada", { status: 404 });
