@@ -43,7 +43,7 @@ export function SchoolHeader() {
 
 	return (
 		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
-			<div className="mx-auto grid min-h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 py-3 sm:(flex h-16 py-4)">
+			<div className="mx-auto grid min-h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 py-3 sm:(flex h-16 px-6 py-4) lg:px-8">
 				<NavLink
 					to="/escolas"
 					className="order-1 shrink-0 focus-visible:outline-none focus-visible:ring-(2 primary offset-2)"
