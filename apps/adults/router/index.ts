@@ -1,4 +1,5 @@
 export { HydrateFallback } from "./HydrateFallback";
+export { memberAdminLoader } from "./members";
 export { profileLoader } from "./profile";
 export { redirectRoot } from "./redirectRoot";
 export { requireAuth } from "./requireAuth";

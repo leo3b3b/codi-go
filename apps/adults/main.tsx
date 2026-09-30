@@ -16,6 +16,7 @@ import {
 } from "@/pages";
 import {
 	HydrateFallback,
+	memberAdminLoader,
 	profileLoader,
 	redirectRoot,
 	requireAuth,
@@ -85,6 +86,7 @@ const router = createBrowserRouter([
 									{
 										path: "membros",
 										Component: MemberAdminPage,
+										loader: memberAdminLoader,
 									},
 								],
 							},
