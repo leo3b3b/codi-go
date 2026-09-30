@@ -23,7 +23,7 @@ export function SchoolHomePage() {
 
 	return (
 		<div className="w-full h-full">
-			<h1 className="text-(xl heading) font-bold">{school.tradeName}</h1>
+			<h1 className="text-(xl heading) font-bold">{school.trade_name}</h1>
 			<HorizontalSeparator />
 			<div
 				className={`flex-(~ col) justify-center gap-4 ${isAdmin ? "md:(grid grid-cols-2 gap-8)" : "max-w-lg mx-auto"}`}

@@ -1,5 +1,12 @@
-import { getProfileForCurrentUser } from "@/services";
+import {
+	getInvitesForCurrentUser,
+	getProfileForCurrentUser,
+	getSchoolsForCurrentUser,
+} from "@/services";
 
 export async function profileLoader() {
-	return await getProfileForCurrentUser();
+	const profile = await getProfileForCurrentUser();
+	const schools = await getSchoolsForCurrentUser();
+	const invites = await getInvitesForCurrentUser();
+	return { profile, schools, invites };
 }

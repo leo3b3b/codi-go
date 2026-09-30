@@ -13,14 +13,14 @@ import {
 type HandleUpdateRoleProps = {
 	profile_id: string;
 	school_id: string;
-	username: string;
+	username: string | null;
 	current_role: "admin" | "teacher";
 };
 
 type HandleDeleteMembershipProps = {
 	profile_id: string;
 	school_id: string;
-	username: string;
+	username: string | null;
 	action: "remove" | "cancel";
 };
 
@@ -68,8 +68,8 @@ export function MemberAdminPage() {
 	}: HandleUpdateRoleProps) {
 		const confirmed = window.confirm(
 			current_role === "teacher"
-				? `Tem certeza de que quer promover ${username} a administrador?`
-				: `Tem certeza de que quer remover o cargo de administrador de ${username}?`,
+				? `Tem certeza de que quer promover ${username ?? "este usuário"} a administrador?`
+				: `Tem certeza de que quer rebaixar ${username ?? "este usuário"} a professor?`,
 		);
 		if (!confirmed) return;
 
@@ -94,8 +94,8 @@ export function MemberAdminPage() {
 	}: HandleDeleteMembershipProps) {
 		const confirmed = window.confirm(
 			action === "remove"
-				? `Tem certeza de que quer remover ${username} de ${school.trade_name}?`
-				: `Tem certeza de que quer cancelar o convite de ${username} para ${school.trade_name}?`,
+				? `Tem certeza de que quer remover ${username ?? "este usuário"} de ${school.trade_name}?`
+				: `Tem certeza de que quer cancelar o convite ${username ? `de ${username}` : "deste usuário"} para ${school.trade_name}?`,
 		);
 		if (!confirmed) return;
 		await deleteMembership({ profile_id, school_id });

@@ -1,20 +1,16 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { Icon } from "@/components";
+import { HorizontalSeparator, Icon, InviteCard } from "@/components";
 import type { profileLoader } from "@/router";
 import { type ProfileOutput, profileSchema } from "@/schemas";
 import { signOut, updateProfileForCurrentUser } from "@/services";
 import { deleteUserAccount } from "@/services/auth";
 
 export function ProfilePage() {
-	const profile = useLoaderData<typeof profileLoader>();
+	const { profile, schools, invites } = useLoaderData<typeof profileLoader>();
 	const navigate = useNavigate();
-
 	const { revalidate } = useRevalidator();
-
-	const [isSuccess, setIsSuccess] = useState(false);
 
 	const {
 		register,
@@ -33,8 +29,6 @@ export function ProfilePage() {
 
 	async function onSubmit({ name, username }: ProfileOutput) {
 		try {
-			setIsSuccess(false);
-
 			await updateProfileForCurrentUser({
 				name: name || null,
 				username: username || null,
@@ -42,7 +36,6 @@ export function ProfilePage() {
 
 			revalidate();
 			reset();
-			setIsSuccess(true);
 		} catch {
 			setError("root", {
 				message:
@@ -79,6 +72,43 @@ export function ProfilePage() {
 					</h1>
 					<p className="text-(lg muted) italic">@{profile.username}</p>
 				</div>
+			</section>
+
+			<section className="ui-card w-full">
+				<h2 className="text-(xl heading) font-bold">Minhas Escolas</h2>
+				<HorizontalSeparator />
+				{schools.map(({ school_id, legal_name, trade_name, role }) => (
+					<InviteCard
+						key={school_id}
+						school_id={school_id}
+						profile_id={profile.id}
+						legal_name={legal_name}
+						trade_name={trade_name}
+						user_role={role}
+						invite_status="active"
+					/>
+				))}
+				{schools.length === 0 && (
+					<p className="text-(sm muted center)">
+						Você não participa de nenhuma escola!
+					</p>
+				)}
+				<h2 className="text-(xl heading) font-bold mt-6">Convites</h2>
+				<HorizontalSeparator />
+				{invites.map(({ school_id, legal_name, trade_name, role }) => (
+					<InviteCard
+						key={school_id}
+						school_id={school_id}
+						profile_id={profile.id}
+						legal_name={legal_name}
+						trade_name={trade_name}
+						user_role={role}
+						invite_status="pending"
+					/>
+				))}
+				{invites.length === 0 && (
+					<p className="text-(sm muted center)">Você não tem convites!</p>
+				)}
 			</section>
 
 			<section className="ui-card w-full">
@@ -139,16 +169,6 @@ export function ProfilePage() {
 					{errors.root && (
 						<p role="alert" className="ui-alert-danger">
 							{errors.root.message}
-						</p>
-					)}
-
-					{isSuccess && !errors.root && (
-						<p
-							role="alert"
-							className="text-(sm primary) font-bold flex items-center gap-2"
-						>
-							<Icon icon="i-lucide-check-circle" color="primary" size={5} />
-							Perfil atualizado com sucesso!
 						</p>
 					)}
 

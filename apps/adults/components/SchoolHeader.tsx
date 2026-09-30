@@ -6,7 +6,7 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router";
-import { Select, Icon, VerticalSeparator } from "@/components";
+import { Icon, Select, VerticalSeparator } from "@/components";
 import type { schoolLayoutLoader } from "@/router";
 
 const adminOptions = [
@@ -67,8 +67,8 @@ export function SchoolHeader() {
 								navigate(`/escola/${nextSchoolId}`);
 							}}
 							options={schools.map((school) => ({
-								value: school.schoolId,
-								label: school.tradeName || school.legalName,
+								value: school.school_id,
+								label: school.trade_name || school.legal_name,
 							}))}
 							className="flex-1 sm:max-w-32"
 						/>
