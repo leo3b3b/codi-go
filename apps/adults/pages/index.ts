@@ -1,7 +1,12 @@
-export { CheckEmailPage } from "./CheckEmail";
-export { OnboardingPage } from "./Onboarding";
+export { ClassAdminPage } from "./admin/ClassAdmin";
+export { MemberAdminPage } from "./admin/MemberAdmin";
+export { StudentAdminPage } from "./admin/StudentAdmin";
+
+export { CheckEmailPage } from "./auth/CheckEmail";
+export { OnboardingPage } from "./auth/Onboarding";
+export { SignInPage } from "./auth/SignIn";
+export { SignUpPage } from "./auth/SignUp";
+
 export { ProfilePage } from "./Profile";
 export { SchoolHomePage } from "./SchoolHome";
 export { SchoolsPage } from "./Schools";
-export { SignInPage } from "./SignIn";
-export { SignUpPage } from "./SignUp";

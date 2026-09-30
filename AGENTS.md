@@ -30,7 +30,7 @@ O código existente é a referência para a estrutura atual. Este texto não dev
 
 Antes de propor alterações que dependam da implementação atual, consulte os arquivos relevantes.
 
-Não realizar operações de escrita no GitHub. Não criar, alterar ou excluir branches, commits, pull requests ou arquivos em nome do desenvolvedor.
+Não realizar operações de escrita no GitHub. Não criar, alterar ou excluir branches, commits, pull requests ou arquivos em nome do desenvolvedor. Tampouco criar um checkout local e aplicar alterações diretamente.
 
 ## Stack
 
@@ -70,9 +70,7 @@ codi-go/
 ├── vite.config.ts
 ├── uno.config.ts
 ├── biome.json
-├── tsconfig.json
-├── tsconfig.base.json
-└── tsconfig.node.json
+└── tsconfig.json
 ```
 
 As aplicações não possuem `src/`. Cada aplicação utiliza seu próprio diretório como source root.
@@ -210,5 +208,4 @@ Antes de modificar o projeto:
 3. consulte os decision docs relacionados;
 4. preserve as convenções existentes;
 5. determine se a mudança é local ou arquitetural;
-6. faça a menor alteração coerente com a arquitetura atual;
-7. execute os checks relevantes.
+6. faça a menor alteração coerente com a arquitetura atual.

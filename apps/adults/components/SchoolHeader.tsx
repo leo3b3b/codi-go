@@ -6,7 +6,7 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router";
-import { BreadcrumbSelect, Icon, VerticalSeparator } from "@/components";
+import { Select, Icon, VerticalSeparator } from "@/components";
 import type { schoolLayoutLoader } from "@/router";
 
 const adminOptions = [
@@ -43,7 +43,7 @@ export function SchoolHeader() {
 
 	return (
 		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
-			<div className="mx-auto grid min-h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 py-3 sm:(flex h-16 py-4)">
+			<div className="mx-auto grid min-h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 py-3 sm:(flex h-16 px-6 py-4) lg:px-8">
 				<NavLink
 					to="/escolas"
 					className="order-1 shrink-0 focus-visible:outline-none focus-visible:ring-(2 primary offset-2)"
@@ -60,7 +60,7 @@ export function SchoolHeader() {
 					>
 						<VerticalSeparator className="hidden sm:block" />
 
-						<BreadcrumbSelect
+						<Select
 							aria-label="Escola"
 							value={schoolId}
 							onChange={(nextSchoolId) => {
@@ -70,13 +70,14 @@ export function SchoolHeader() {
 								value: school.schoolId,
 								label: school.tradeName || school.legalName,
 							}))}
+							className="flex-1 sm:max-w-32"
 						/>
 
 						{isClassRoute && currentClass && (
 							<>
 								<VerticalSeparator className="hidden sm:block" />
 
-								<BreadcrumbSelect
+								<Select
 									aria-label="Turma"
 									value={classId}
 									onChange={(nextClassId) => {
@@ -86,6 +87,7 @@ export function SchoolHeader() {
 										value: schoolClass.id,
 										label: schoolClass.name,
 									}))}
+									className="flex-1 sm:max-w-32"
 								/>
 							</>
 						)}
@@ -94,13 +96,14 @@ export function SchoolHeader() {
 							<>
 								<VerticalSeparator className="hidden sm:block" />
 
-								<BreadcrumbSelect
+								<Select
 									aria-label="Administração"
 									value={currentAdminScreen}
 									onChange={(screen) => {
 										navigate(`/escola/${schoolId}/admin/${screen}`);
 									}}
 									options={adminOptions}
+									className="flex-1 sm:max-w-32"
 								/>
 							</>
 						)}
