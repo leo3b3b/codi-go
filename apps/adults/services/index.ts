@@ -26,5 +26,8 @@ export {
 	createStudent,
 	deleteStudent,
 	generateImageCode,
+	getStudentById,
 	getStudentsByClassId,
+	transferStudent,
+	updateStudent,
 } from "./students";

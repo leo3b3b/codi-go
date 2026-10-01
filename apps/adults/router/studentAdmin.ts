@@ -9,11 +9,16 @@ export async function studentAdminLoader({
 		studentId?: string;
 	};
 }) {
-	if (!params.studentId) {
+	if (!params.schoolId || !params.studentId) {
 		throw new Response("Aluno não encontrado", { status: 404 });
 	}
 
 	const student = await getStudentById(params.studentId);
+
+	if (student.school_id !== params.schoolId) {
+		throw new Response("Aluno não encontrado", { status: 404 });
+	}
+
 	const classes = await getClassesBySchool(params.schoolId);
 
 	return { student, classes };
