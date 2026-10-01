@@ -78,6 +78,11 @@ createRoot(document.getElementById("root") as HTMLElement).render(
 			position="top-center"
 			toastOptions={{
 				duration: 3000,
+				style: {
+					background: "var(--color-surface)",
+					color: "var(--color-fg)",
+					padding: "8px",
+				},
 			}}
 		/>
 		<RouterProvider router={router} />
