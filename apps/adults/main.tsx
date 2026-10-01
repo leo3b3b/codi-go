@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
+import { HydrateFallback } from "@/components";
 import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
@@ -18,7 +19,6 @@ import {
 import {
 	classAdminLoader,
 	classesAdminLoader,
-	HydrateFallback,
 	memberAdminLoader,
 	profileLoader,
 	redirectRoot,

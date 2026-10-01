@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
+import { HydrateFallback } from "@/components";
 import { ClassHome, MazeGame } from "@/pages";
 import { classLoader, mazeLoader } from "@/router";
 
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		Component: Layout,
+		HydrateFallback: HydrateFallback,
 		children: [
 			{
 				path: ":accessCode",
