@@ -59,7 +59,7 @@ export function EditClassForm({
 	}
 
 	function handleBack() {
-		navigate(`/escola/${classData.school_id}/admin/turmas`);
+		navigate(-1);
 	}
 
 	async function handleDeleteClass() {
@@ -137,7 +137,7 @@ export function EditClassForm({
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className="flex-(~ col) md:grid-(~ cols-2) gap-5 mb-4"
+				className="flex-(~ col) md:grid-(~ cols-2) gap-5"
 			>
 				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
 					<span>Nome da Turma</span>
@@ -166,7 +166,7 @@ export function EditClassForm({
 						<input
 							type="text"
 							{...register("teacher_username")}
-							autoComplete="username"
+							autoComplete="off"
 							placeholder="Nome de usuário do professor"
 							aria-invalid={Boolean(errors.teacher_username)}
 							disabled={classData.is_playing}
