@@ -27,13 +27,17 @@ export function CreateStudentForm({
 		resolver: valibotResolver(createStudentSchema),
 	});
 
-	async function onSubmit({ name }: CreateStudentOutput) {
+	async function onSubmit({ names }: CreateStudentOutput) {
 		try {
-			await createStudent({
-				name,
-				class_id: classData.id,
-				school_id: classData.school_id,
-			});
+			const studentNames = names.split(",").map((name) => name.trim());
+
+			for (const name of studentNames) {
+				await createStudent({
+					name,
+					class_id: classData.id,
+					school_id: classData.school_id,
+				});
+			}
 
 			reset();
 			await revalidate();
@@ -44,11 +48,18 @@ export function CreateStudentForm({
 		}
 	}
 
+	const namesValue = watch("names") ?? "";
+
+	const studentCount = namesValue
+		.split(",")
+		.map((name) => name.trim())
+		.filter(Boolean).length;
+
 	return (
 		<section className="ui-card">
 			<header>
 				<h2 className="text-(2xl heading) font-bold">
-					Criar Aluno em {classData.name}
+					Criar Alunos em {classData.name}
 				</h2>
 				<HorizontalSeparator />
 			</header>
@@ -71,25 +82,27 @@ export function CreateStudentForm({
 
 					<input
 						type="text"
-						{...register("name")}
-						placeholder="Digite o nome do aluno"
-						aria-invalid={Boolean(errors.name)}
+						{...register("names")}
+						placeholder="Digite um ou mais nomes, separados por vírgula"
+						aria-invalid={Boolean(errors.names)}
 						className="ui-field w-full h-14 pl-10"
 					/>
 				</div>
 
 				<button
 					type="submit"
-					disabled={isSubmitting || !watch("name")}
+					disabled={isSubmitting || !namesValue}
 					className="ui-button-(~ primary) h-14 mt-4 sm:(mt-0 w-40)"
 				>
-					{isSubmitting ? "Criando..." : "Criar Aluno"}
+					{isSubmitting
+						? "Criando..."
+						: `Criar ${studentCount >= 1 ? "Alunos" : "Aluno"}`}
 				</button>
 			</form>
 
-			{errors.name && (
+			{errors.names && (
 				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.name.message}
+					{errors.names.message}
 				</p>
 			)}
 
