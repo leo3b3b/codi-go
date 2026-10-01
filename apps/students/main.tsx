@@ -2,13 +2,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { HydrateFallback } from "@/components";
-import { ClassHome, MazeGame } from "@/pages";
+import { ClassHome, LevelsPage, MazeGame } from "@/pages";
 import { classLoader, mazeLoader, requireSession } from "@/router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
 
-function Layout() {
+function AppLayout() {
 	return (
 		<div className="fixed inset-0 h-dvh w-full overflow-y-auto ui-gradient text-fg">
 			<main
@@ -24,24 +24,27 @@ function Layout() {
 const router = createBrowserRouter([
 	{
 		path: "/",
-		Component: Layout,
+		Component: AppLayout,
 		HydrateFallback: HydrateFallback,
 		children: [
 			{
 				path: ":accessCode",
-				Component: Outlet,
+				Component: ClassHome,
 				loader: classLoader,
+			},
+			{
+				path: ":accessCode",
+				Component: Outlet,
+				middleware: [requireSession],
 				children: [
 					{
-						index: true,
-						Component: ClassHome,
-						loader: classLoader,
+						path: "fases",
+						Component: LevelsPage,
 					},
 					{
 						path: "labirinto/:levelId",
 						Component: MazeGame,
 						loader: mazeLoader,
-						middleware: [requireSession],
 					},
 				],
 			},
