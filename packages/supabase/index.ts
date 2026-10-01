@@ -7,3 +7,4 @@ export const supabase = createClient<Database>(
 );
 
 export type { Tables } from "./database.types";
+export { generateImageCode, type ImageCode, imageCodes } from "./imageCodes";
