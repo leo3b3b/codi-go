@@ -39,8 +39,9 @@ export function SchoolHomePage() {
 								<NavLink to={`turma/${id}`} key={id}>
 									<article
 										className="
-									bg-surface-subtle border-(~ border) rounded-lg px-8 py-4
-									transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
+											bg-surface-subtle border-(~ border) rounded-lg px-8 py-4
+											transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group
+										"
 									>
 										<h3 className="text-(xl primary) font-semibold group-hover:text-on-primary transition-(colors 500)">
 											{name}

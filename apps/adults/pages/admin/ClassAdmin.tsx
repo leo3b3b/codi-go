@@ -217,11 +217,11 @@ export function ClassAdminPage() {
 						</p>
 					)}
 
-					<div className="flex-(~ row) items-center gap-2 mt-2">
+					<div className="flex-(~ row) items-center gap-2 mt-2 h-14">
 						<button
 							type="submit"
 							disabled={isSubmitting || isUnchanged || classData.is_playing}
-							className="ui-button-(~ primary)"
+							className="ui-button-(~ primary) h-full"
 						>
 							<Icon icon="i-lucide-save" color="on-primary" size={5} />
 							{isSubmitting ? "Salvando..." : "Salvar Alterações"}
@@ -229,11 +229,11 @@ export function ClassAdminPage() {
 						<button
 							type="button"
 							disabled={isSubmitting || classData.is_playing}
-							className="ui-button-(~ danger)"
+							className="ui-button-(~ danger) h-full"
 							onClick={handleDeleteClass}
 						>
 							<Icon icon="i-lucide-trash" color="on-danger" size={5} />
-							{isSubmitting ? "Excluindo..." : "Excluir turma"}
+							{isSubmitting ? "Excluindo..." : "Excluir Turma"}
 						</button>
 					</div>
 				</form>
