@@ -8,6 +8,10 @@ export const profileSchema = v.object({
 				v.string("O nome deve ser um texto."),
 				v.trim(),
 				v.nonEmpty("O nome não pode estar vazio."),
+				v.regex(
+					/^\p{L}+(?: +\p{L}+)*$/u,
+					"O nome deve conter apenas letras e espaços.",
+				),
 			),
 		]),
 	),

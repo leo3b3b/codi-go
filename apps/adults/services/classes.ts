@@ -56,7 +56,7 @@ export async function getClassById(classId: string) {
 			is_playing,
 			school_id,
 			teacher_id,
-			teacher:profiles!classes_teacher_id_fkey(id, username)
+			teacher:profiles!classes_teacher_id_fkey(username)
 		`)
 		.eq("id", classId)
 		.single();
@@ -66,7 +66,8 @@ export async function getClassById(classId: string) {
 		throw error;
 	}
 
-	return data;
+	const { teacher, ...classData } = data;
+	return { ...classData, teacher_username: teacher?.username ?? null };
 }
 
 export async function updateClass({
@@ -137,6 +138,15 @@ export async function createClass({
 
 	if (error) {
 		error.message = `createClass error: ${error.message}`;
+		throw error;
+	}
+}
+
+export async function deleteClass(class_id: string) {
+	const { error } = await supabase.from("classes").delete().eq("id", class_id);
+
+	if (error) {
+		error.message = `deleteClass error: ${error.message}`;
 		throw error;
 	}
 }

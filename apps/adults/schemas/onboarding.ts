@@ -5,6 +5,10 @@ export const onboardingSchema = v.object({
 		v.string("O nome deve ser um texto."),
 		v.trim(),
 		v.nonEmpty("Informe seu nome."),
+		v.regex(
+			/^\p{L}+(?: +\p{L}+)*$/u,
+			"O nome deve conter apenas letras e espaços.",
+		),
 	),
 	username: v.pipe(
 		v.string("O nome de usuário deve ser um texto."),

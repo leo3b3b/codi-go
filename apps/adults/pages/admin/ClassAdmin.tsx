@@ -1,218 +1,159 @@
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { type ImageCode, imageCodes } from "@codi-go/supabase";
+import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
+import { Icon } from "@/components";
+import { CreateStudentForm, EditClassForm } from "@/forms";
 import type { classAdminLoader } from "@/router";
-import { type UpdateClassOutput, updateClassSchema } from "@/schemas";
-import {
-	generateClassAccessCode,
-	getUserIdByUsername,
-	updateClass,
-} from "@/services";
+import { deleteStudent } from "@/services";
+
+type Student = ReturnType<
+	typeof useLoaderData<typeof classAdminLoader>
+>["students"][number];
+
+interface StudentRowProps {
+	student: Student;
+	onDelete: (params: { student_id: string; student_name: string }) => void;
+	onUpdate: (student_id: string) => void | Promise<void>;
+}
+
+function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
+	const [showCredential, setShowCredential] = useState(false);
+
+	return (
+		<div
+			className="
+                grid grid-cols-[1fr_auto]
+                gap-x-4 gap-y-2 py-3
+                border-b-(~ border)
+                lg:grid-cols-[1fr_0.5fr_3fr]
+                lg:items-center
+            "
+		>
+			<div className="font-semibold text-heading">{student.name ?? "—"}</div>
+
+			<div className="h-14 flex items-center">
+				{showCredential ? (
+					<img
+						src={imageCodes[student.access_code as ImageCode].src}
+						aria-label={imageCodes[student.access_code as ImageCode].label}
+						className="h-14"
+					/>
+				) : (
+					<span className="text-sm text-muted font-mono tracking-widest">
+						••••••••
+					</span>
+				)}
+			</div>
+
+			<div className="flex gap-2 col-span-2 mt-2 lg:(col-span-1 mt-0)">
+				<button
+					type="button"
+					className="ui-button-(~ secondary) w-1/3"
+					onClick={() => setShowCredential(!showCredential)}
+				>
+					<Icon
+						icon={showCredential ? "i-lucide-eye-off" : "i-lucide-eye"}
+						color="fg"
+						size={5}
+					/>
+					{showCredential ? "Esconder" : "Mostrar Credencial"}
+				</button>
+
+				<button
+					type="button"
+					className="ui-button-(~ primary) w-1/3"
+					onClick={() => onUpdate(student.id)}
+				>
+					<Icon icon={"i-lucide-pencil"} color="on-primary" size={5} />
+					Editar
+				</button>
+
+				<button
+					type="button"
+					className="ui-button-(~ danger) w-1/3"
+					onClick={() =>
+						onDelete({
+							student_id: student.id,
+							student_name: student.name,
+						})
+					}
+				>
+					<Icon icon={"i-lucide-user-x"} color="on-danger" size={5} />
+					Excluir
+				</button>
+			</div>
+		</div>
+	);
+}
 
 export function ClassAdminPage() {
-	const classData = useLoaderData<typeof classAdminLoader>();
-	const navigate = useNavigate();
+	const { classData, students } = useLoaderData<typeof classAdminLoader>();
 	const { revalidate } = useRevalidator();
+	const navigate = useNavigate();
 
-	const initialValues: UpdateClassOutput = {
-		name: classData.name,
-		teacher_username: classData.teacher?.username ?? "",
-		access_code: classData.access_code ?? "",
-	};
-
-	const {
-		register,
-		handleSubmit,
-		setError,
-		setValue,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<UpdateClassOutput>({
-		resolver: valibotResolver(updateClassSchema),
-		defaultValues: initialValues,
-	});
-
-	const currentValues = watch();
-
-	const isUnchanged =
-		currentValues.name === initialValues.name &&
-		currentValues.teacher_username === initialValues.teacher_username &&
-		currentValues.access_code === initialValues.access_code;
-
-	function handleBack() {
-		navigate(`/escola/${classData.school_id}/admin/turmas`);
+	function handleUpdate(student_id: string) {
+		navigate(`/escola/${classData.school_id}/admin/aluno/${student_id}`);
 	}
 
-	function handleGenerateAccessCode() {
-		setValue("access_code", generateClassAccessCode(), {
-			shouldDirty: true,
-			shouldValidate: true,
-		});
-	}
+	async function handleDeleteStudent({
+		student_id,
+		student_name,
+	}: {
+		student_id: string;
+		student_name: string;
+	}) {
+		const confirmed = window.confirm(
+			`Tem certeza de que quer excluir ${student_name} e todos os seus registros? Essa ação é irreversível!`,
+		);
+		if (!confirmed) return;
 
-	async function onSubmit({
-		name,
-		teacher_username,
-		access_code,
-	}: UpdateClassOutput) {
-		try {
-			const teacher_id = teacher_username
-				? await getUserIdByUsername(teacher_username)
-				: null;
-
-			await updateClass({
-				class_id: classData.id,
-				name,
-				teacher_id,
-				access_code,
-			});
-
-			await revalidate();
-		} catch (error) {
-			if (
-				error instanceof Error &&
-				error.message.includes("getUserIdByUsername")
-			) {
-				setError("teacher_username", {
-					message: "Professor não encontrado.",
-				});
-				return;
-			}
-
-			setError("root", {
-				message: "Não foi possível salvar as alterações da turma.",
-			});
-		}
+		await deleteStudent(student_id);
+		revalidate();
 	}
 
 	return (
-		<div className="w-full max-w-2xl mx-auto">
+		<div className="w-full mx-auto flex-(~ col) gap-4">
 			<title>CodiGO! | Gerenciar Turma</title>
 
+			<EditClassForm classData={classData} />
+
+			<CreateStudentForm
+				classData={{
+					name: classData.name,
+					id: classData.id,
+					school_id: classData.school_id,
+				}}
+			/>
+
 			<section className="ui-card">
-				<header className="flex-(~ row) items-center gap-3">
-					<button
-						type="button"
-						onClick={handleBack}
-						aria-label="Voltar para turmas"
-						className="ui-button-(~ secondary) w-auto p-3"
-					>
-						<Icon icon="i-lucide-arrow-left" color="fg" size={6} />
-					</button>
-
-					<h1 className="text-(2xl heading) font-bold break-words">
-						{classData.name}
-					</h1>
+				<header>
+					<h2 className="text-(2xl heading) font-bold mb-4">
+						Gerenciar Alunos
+					</h2>
 				</header>
-
-				<HorizontalSeparator />
-
-				{classData.is_playing ? (
-					<div className="ui-alert-danger mb-5">
-						Esta turma está em atividade e não pode ser editada no momento.
-					</div>
-				) : null}
-
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className="flex-(~ col) gap-5"
+				<div
+					className="
+                        hidden lg:grid
+                        grid-cols-[1fr_0.5fr_3fr]
+                        gap-x-4 gap-y-2 py-3
+                        border-b-(~ border)
+                        text-(sm muted) font-bold
+                    "
 				>
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Nome da Turma</span>
-
-						<input
-							type="text"
-							{...register("name")}
-							autoComplete="off"
-							aria-invalid={Boolean(errors.name)}
-							disabled={classData.is_playing}
-							className="ui-field"
+					<div>Nome</div>
+					<div>Credencial</div>
+					<div>Ações</div>
+				</div>
+				<div className="flex-(~ col) gap-4 lg:gap-0">
+					{students.map((student) => (
+						<StudentRow
+							key={student.id}
+							student={student}
+							onUpdate={handleUpdate}
+							onDelete={handleDeleteStudent}
 						/>
-
-						{errors.name && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.name.message}
-							</p>
-						)}
-					</label>
-
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Professor Responsável</span>
-
-						<div className="relative flex items-center">
-							<Icon
-								icon="i-lucide-at-sign"
-								color="muted"
-								size={6}
-								className="absolute left-3 pointer-events-none"
-							/>
-
-							<input
-								type="text"
-								{...register("teacher_username")}
-								autoComplete="username"
-								placeholder="Nome de usuário do professor"
-								aria-invalid={Boolean(errors.teacher_username)}
-								disabled={classData.is_playing}
-								className="ui-field w-full pl-10"
-							/>
-						</div>
-
-						{errors.teacher_username && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.teacher_username.message}
-							</p>
-						)}
-					</label>
-
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Código de Acesso</span>
-
-						<div className="flex-(~ row) gap-2">
-							<input
-								type="text"
-								{...register("access_code")}
-								readOnly
-								aria-invalid={Boolean(errors.access_code)}
-								disabled={classData.is_playing}
-								className="ui-field flex-1 font-mono tracking-widest uppercase"
-							/>
-
-							<button
-								type="button"
-								onClick={handleGenerateAccessCode}
-								disabled={classData.is_playing}
-								aria-label="Gerar novo código de acesso"
-								className="ui-button-(~ secondary) w-auto px-4"
-							>
-								<Icon icon="i-lucide-shuffle" color="fg" size={6} />
-							</button>
-						</div>
-
-						{errors.access_code && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.access_code.message}
-							</p>
-						)}
-					</label>
-
-					{errors.root && (
-						<p role="alert" className="ui-alert-danger">
-							{errors.root.message}
-						</p>
-					)}
-
-					<button
-						type="submit"
-						disabled={isSubmitting || isUnchanged || classData.is_playing}
-						className="ui-button-(~ primary) mt-2"
-					>
-						<Icon icon="i-lucide-save" color="on-primary" size={6} />
-						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-					</button>
-				</form>
+					))}
+				</div>
 			</section>
 		</div>
 	);
