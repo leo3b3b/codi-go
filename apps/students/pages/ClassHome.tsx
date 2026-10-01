@@ -1,8 +1,9 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router";
-import { Icon } from "@/components";
+import { CodiToast, Icon } from "@/components";
 import type { classLoader } from "@/router";
 import { signInStudent } from "@/services";
 
@@ -21,13 +22,17 @@ export function ClassHome() {
 			return;
 		}
 
-		await signInStudent({
-			id: selectedStudent.id,
-			name: selectedStudent.name,
-			access_code: selectedCode,
-		});
+		try {
+			await signInStudent({
+				id: selectedStudent.id,
+				name: selectedStudent.name,
+				access_code: selectedCode,
+			});
 
-		navigate(`/${classData.access_code}/fases`);
+			navigate(`/${classData.access_code}/fases`);
+		} catch {
+			toast.custom((t) => <CodiToast t={t} />);
+		}
 	}
 
 	return (

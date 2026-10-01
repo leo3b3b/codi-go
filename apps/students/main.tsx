@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { HydrateFallback } from "@/components";
 import { ClassHome, LevelsPage, MazeGame } from "@/pages";
@@ -54,6 +55,12 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root") as HTMLElement).render(
 	<StrictMode>
+		<Toaster
+			position="top-center"
+			toastOptions={{
+				duration: 3000,
+			}}
+		/>
 		<RouterProvider router={router} />
 	</StrictMode>,
 );
