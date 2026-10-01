@@ -1,3 +1,4 @@
+export { type ClassOutput, classSchema } from "./class";
 export { type InviteOutput, inviteSchema } from "./invite";
 export { type OnboardingOutput, onboardingSchema } from "./onboarding";
 export { type ProfileOutput, profileSchema } from "./profile";

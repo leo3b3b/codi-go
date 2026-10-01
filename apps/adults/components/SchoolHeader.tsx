@@ -31,8 +31,9 @@ export function SchoolHeader() {
 	const navigate = useNavigate();
 
 	const isSchoolRoute = schoolId !== undefined;
-	const isClassRoute = schoolId !== undefined && classId !== undefined;
 	const isAdminRoute = location.pathname.includes("/admin/");
+	const isClassRoute =
+		schoolId !== undefined && classId !== undefined && !isAdminRoute;
 
 	const matchedOption = adminOptions.find((option) =>
 		location.pathname.includes(`/admin/${option.value}`),

@@ -15,6 +15,7 @@ import {
 	StudentAdminPage,
 } from "@/pages";
 import {
+	classAdminLoader,
 	HydrateFallback,
 	memberAdminLoader,
 	profileLoader,
@@ -78,9 +79,10 @@ const router = createBrowserRouter([
 									{
 										path: "turmas",
 										Component: ClassAdminPage,
+										loader: classAdminLoader,
 									},
 									{
-										path: "turma/:classId/alunos",
+										path: "turma/:classId",
 										Component: StudentAdminPage,
 									},
 									{
