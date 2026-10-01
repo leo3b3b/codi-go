@@ -68,7 +68,7 @@ export function CreateStudentForm({
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
 				className="
-					flex-(~ col) sm:flex-row items-center
+					flex-(~ col) md:flex-row items-center
 					gap-x-4 gap-y-2 py-3
 				"
 			>
@@ -92,7 +92,7 @@ export function CreateStudentForm({
 				<button
 					type="submit"
 					disabled={isSubmitting || !namesValue}
-					className="ui-button-(~ primary) h-14 mt-4 sm:(mt-0 w-40)"
+					className="ui-button-(~ primary) h-14 mt-4 md:(mt-0 w-40)"
 				>
 					{isSubmitting
 						? "Criando..."
