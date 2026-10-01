@@ -22,4 +22,8 @@ export {
 	updateProfileForCurrentUser,
 } from "./profile";
 export { getSchoolById } from "./schools";
-export { getStudentsByClassId } from "./students";
+export {
+	createStudent,
+	generateImageCode,
+	getStudentsByClassId,
+} from "./students";
