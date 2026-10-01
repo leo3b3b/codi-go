@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { HydrateFallback } from "@/components";
 import { ClassHome, MazeGame } from "@/pages";
-import { classLoader, mazeLoader } from "@/router";
+import { classLoader, mazeLoader, requireSession } from "@/router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -41,6 +41,7 @@ const router = createBrowserRouter([
 						path: "labirinto/:levelId",
 						Component: MazeGame,
 						loader: mazeLoader,
+						middleware: [requireSession],
 					},
 				],
 			},
