@@ -113,11 +113,7 @@ export async function updateClass({
 
 	const { error } = await supabase
 		.from("classes")
-		.update({
-			name,
-			teacher_id,
-			access_code,
-		})
+		.update(dataToUpdate)
 		.eq("id", class_id);
 
 	if (error) {
