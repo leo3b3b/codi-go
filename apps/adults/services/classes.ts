@@ -140,3 +140,12 @@ export async function createClass({
 		throw error;
 	}
 }
+
+export async function deleteClass(class_id: string) {
+	const { error } = await supabase.from("classes").delete().eq("id", class_id);
+
+	if (error) {
+		error.message = `deleteClass error: ${error.message}`;
+		throw error;
+	}
+}

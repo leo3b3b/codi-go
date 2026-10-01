@@ -177,7 +177,7 @@ export function ProfilePage() {
 						disabled={isSubmitting || isFormEmpty}
 						className="ui-button-(~ primary) mt-2"
 					>
-						<Icon icon="i-lucide-save" color="on-primary" size={6} />
+						<Icon icon="i-lucide-save" color="on-primary" size={5} />
 						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
 					</button>
 				</form>
@@ -188,7 +188,7 @@ export function ProfilePage() {
 					className="ui-button-(~ danger)"
 					onClick={handleSignOut}
 				>
-					<Icon icon="i-lucide-log-out" color="on-danger" size={6} />
+					<Icon icon="i-lucide-log-out" color="on-danger" size={5} />
 					Sair da Conta
 				</button>
 				<button
@@ -196,7 +196,7 @@ export function ProfilePage() {
 					className="ui-button-(~ danger)"
 					onClick={handleDeleteAccount}
 				>
-					<Icon icon="i-lucide-trash-2" color="on-danger" size={6} />
+					<Icon icon="i-lucide-trash-2" color="on-danger" size={5} />
 					Deletar Conta
 				</button>
 			</section>

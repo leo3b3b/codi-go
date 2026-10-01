@@ -5,6 +5,7 @@ import { HorizontalSeparator, Icon } from "@/components";
 import type { classAdminLoader } from "@/router";
 import { type UpdateClassOutput, updateClassSchema } from "@/schemas";
 import {
+	deleteClass,
 	generateClassAccessCode,
 	getUserIdByUsername,
 	updateClass,
@@ -49,6 +50,18 @@ export function ClassAdminPage() {
 			shouldDirty: true,
 			shouldValidate: true,
 		});
+	}
+
+	async function handleDeleteClass() {
+		const confirmed = window.confirm(
+			classData.name
+				? `Tem certeza de que quer deletar a turma ${classData.name}? Essa ação é irreversível!`
+				: "Tem certeza de que quer deletar esta turma? Essa ação é irreversível!",
+		);
+		if (!confirmed) return;
+
+		await deleteClass(classData.id);
+		handleBack();
 	}
 
 	async function onSubmit({
@@ -204,14 +217,25 @@ export function ClassAdminPage() {
 						</p>
 					)}
 
-					<button
-						type="submit"
-						disabled={isSubmitting || isUnchanged || classData.is_playing}
-						className="ui-button-(~ primary) mt-2"
-					>
-						<Icon icon="i-lucide-save" color="on-primary" size={6} />
-						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-					</button>
+					<div className="flex-(~ row) items-center gap-2 mt-2">
+						<button
+							type="submit"
+							disabled={isSubmitting || isUnchanged || classData.is_playing}
+							className="ui-button-(~ primary)"
+						>
+							<Icon icon="i-lucide-save" color="on-primary" size={5} />
+							{isSubmitting ? "Salvando..." : "Salvar Alterações"}
+						</button>
+						<button
+							type="button"
+							disabled={isSubmitting || classData.is_playing}
+							className="ui-button-(~ danger)"
+							onClick={handleDeleteClass}
+						>
+							<Icon icon="i-lucide-trash" color="on-danger" size={5} />
+							{isSubmitting ? "Excluindo..." : "Excluir turma"}
+						</button>
+					</div>
 				</form>
 			</section>
 		</div>

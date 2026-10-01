@@ -40,7 +40,7 @@ export function InviteCard({
 						revalidate();
 					}}
 				>
-					<Icon icon="i-lucide-exit" color="on-danger" size={5} />
+					<Icon icon="i-lucide-log-out" color="on-danger" size={5} />
 					Sair da escola
 				</button>
 			) : (
