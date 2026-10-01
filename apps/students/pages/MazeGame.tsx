@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useLoaderData } from "react-router";
 import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
@@ -93,6 +94,7 @@ export function MazeGame() {
 					...current,
 					status: "failure",
 				}));
+				toast.error("Ops! Tente outra sequência.");
 
 				return;
 			}
@@ -111,6 +113,7 @@ export function MazeGame() {
 					...current,
 					status: "success",
 				}));
+				toast.success("Muito bem! O Codi chegou ao objetivo.");
 
 				return;
 			}
@@ -123,49 +126,77 @@ export function MazeGame() {
 	}
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex-(~ col) md:grid-(~ cols-2) gap-6">
 			<title>CodiGO! | Labirinto</title>
-			<MazeRenderer
-				level={state.level}
-				playerPosition={state.playerPosition}
-				direction={state.direction}
-				moving={state.status === "running"}
-			/>
+			<section className="flex w-full h-full justify-center">
+				<MazeRenderer
+					level={state.level}
+					playerPosition={state.playerPosition}
+					direction={state.direction}
+					moving={state.status === "running"}
+				/>
+			</section>
 
-			<div className="flex flex-col gap-4 px-4">
-				<div className="flex items-center gap-4">
-					{commands.map((command) => (
-						<button
-							key={command}
-							type="button"
-							disabled={isRunning}
-							className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
-							onClick={() => addCommand(command)}
-						>
-							<span
-								className={`${commandIcons[command]} color-white h-10 w-10`}
-							/>
-						</button>
-					))}
+			<section className="ui-card flex-(~ col) gap-4">
+				<h1 className="text-(2xl heading) font-bold pb-2 mb-2 border-b-(~ border)">
+					Labirinto
+				</h1>
+
+				<div className="flex-(~ col) gap-1">
+					<h2 className="text-(xl heading) font-bold">Objetivo</h2>
+					<p className="text-muted">
+						Ajude o <b>Codi</b> a chegar até a <b>porta</b>. Escolha os comandos
+						na ordem em que ele deve se mover.
+					</p>
 				</div>
 
-				<div className="flex h-18 items-center gap-2 rounded-lg border p-3">
-					{state.commands.length === 0 ? (
-						<span className="text-(center muted) w-full">Comandos</span>
-					) : (
-						state.commands.map((command, index) => (
-							<div
-								key={`${index}-${command}`}
-								className="flex h-12 w-12 items-center justify-center rounded-md border"
+				<div className="flex-(~ col) gap-2">
+					<h2 className="text-(xl heading) font-bold">Comandos</h2>
+
+					<div className="flex items-center justify-center gap-2 py-2 bg-surface-subtle border-(~ border) rounded-xl">
+						{commands.map((command) => (
+							<button
+								key={command}
+								type="button"
+								disabled={isRunning}
+								className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
+								onClick={() => addCommand(command)}
 							>
-								<Icon
-									icon={commandIcons[command]}
-									color="on-primary"
-									size={8}
+								<span
+									className={`${commandIcons[command]} color-white size-10`}
 								/>
-							</div>
-						))
-					)}
+							</button>
+						))}
+					</div>
+				</div>
+
+				<div className="flex-(~ col) gap-2">
+					<h2 className="text-(xl heading) font-bold">Sua sequência</h2>
+
+					<p className="text-muted">
+						Os comandos serão executados nessa ordem:
+					</p>
+
+					<div className="flex-(~ wrap) min-h-20 items-center gap-2 rounded-lg border-(~ primary) p-3">
+						{state.commands.length === 0 ? (
+							<span className="text-(center muted) w-full">
+								Escolha os comandos acima
+							</span>
+						) : (
+							state.commands.map((command, index) => (
+								<div
+									key={`${index}-${command}`}
+									className="flex size-12 items-center justify-center rounded-md border-(~ primary) bg-surface-subtle"
+								>
+									<Icon
+										icon={commandIcons[command]}
+										size={8}
+										className="text-primary"
+									/>
+								</div>
+							))
+						)}
+					</div>
 				</div>
 
 				<div className="flex items-center gap-4">
@@ -187,17 +218,7 @@ export function MazeGame() {
 						Limpar
 					</button>
 				</div>
-
-				{state.status === "success" && (
-					<div className="rounded-lg p-4">
-						Muito bem! O Codi chegou ao objetivo!
-					</div>
-				)}
-
-				{state.status === "failure" && (
-					<div className="rounded-lg p-4">Ops! O Codi bateu em uma parede.</div>
-				)}
-			</div>
+			</section>
 		</div>
 	);
 }
