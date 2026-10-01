@@ -37,6 +37,7 @@ export function ClassHome() {
 
 	return (
 		<div className="flex flex-col gap-6">
+			<title>CodiGO! | Quem é você?</title>
 			<section className="ui-card w-full grid-(~ cols-[1fr_3fr_1fr]) items-center py-2">
 				<img src={logo} alt="Logo do CodiGO!" className="w-full" />
 
