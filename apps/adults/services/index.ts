@@ -24,6 +24,7 @@ export {
 export { getSchoolById } from "./schools";
 export {
 	createStudent,
+	deleteStudent,
 	generateImageCode,
 	getStudentsByClassId,
 } from "./students";

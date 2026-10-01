@@ -9,13 +9,9 @@ export function CreateStudentForm({
 	classData,
 }: {
 	classData: {
-		teacher_username: string;
-		id: string;
 		name: string;
-		access_code: string;
-		is_playing: boolean;
+		id: string;
 		school_id: string;
-		teacher_id: string;
 	};
 }) {
 	const { revalidate } = useRevalidator();

@@ -1,10 +1,28 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import { CreateStudentForm, EditClassForm } from "@/forms";
 import type { classAdminLoader } from "@/router";
+import { deleteStudent } from "@/services";
 
 export function ClassAdminPage() {
 	const { classData, students } = useLoaderData<typeof classAdminLoader>();
+	const { revalidate } = useRevalidator();
+
+	async function handleDeleteStudent({
+		student_id,
+		student_name,
+	}: {
+		student_id: string;
+		student_name: string;
+	}) {
+		const confirmed = window.confirm(
+			`Tem certeza de que quer excluir ${student_name} e todos os seus registros? Essa ação é irreversível!`,
+		);
+		if (!confirmed) return;
+
+		await deleteStudent(student_id);
+		revalidate();
+	}
 
 	return (
 		<div className="w-full mx-auto flex-(~ col) gap-4">
@@ -12,7 +30,13 @@ export function ClassAdminPage() {
 
 			<EditClassForm classData={classData} />
 
-			<CreateStudentForm classData={classData} />
+			<CreateStudentForm
+				classData={{
+					name: classData.name,
+					id: classData.id,
+					school_id: classData.school_id,
+				}}
+			/>
 
 			<section className="ui-card">
 				<header>
@@ -59,7 +83,16 @@ export function ClassAdminPage() {
 									<Icon icon={"i-lucide-pencil"} color="on-primary" size={5} />
 									Editar
 								</button>
-								<button type="button" className="ui-button-(~ danger) w-1/3">
+								<button
+									type="button"
+									className="ui-button-(~ danger) w-1/3"
+									onClick={() =>
+										handleDeleteStudent({
+											student_id: student.id,
+											student_name: student.name,
+										})
+									}
+								>
 									<Icon icon={"i-lucide-user-x"} color="on-danger" size={5} />
 									Excluir
 								</button>

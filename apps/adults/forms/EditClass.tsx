@@ -14,13 +14,13 @@ export function EditClassForm({
 	classData,
 }: {
 	classData: {
-		teacher_username: string;
+		teacher_username: string | null;
 		id: string;
 		name: string;
 		access_code: string;
 		is_playing: boolean;
 		school_id: string;
-		teacher_id: string;
+		teacher_id: string | null;
 	};
 }) {
 	const navigate = useNavigate();

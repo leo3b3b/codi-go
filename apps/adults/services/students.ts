@@ -38,3 +38,15 @@ export async function createStudent({
 		throw error;
 	}
 }
+
+export async function deleteStudent(student_id: string) {
+	const { error } = await supabase
+		.from("students")
+		.delete()
+		.eq("id", student_id);
+
+	if (error) {
+		error.message = `deleteStudent error: ${error.message}`;
+		throw error;
+	}
+}
