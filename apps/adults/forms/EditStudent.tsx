@@ -1,5 +1,6 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
@@ -17,6 +18,7 @@ export function EditStudentForm({
 }) {
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	const initialValues: UpdateStudentOutput = {
 		name: student.name,
@@ -55,12 +57,14 @@ export function EditStudentForm({
 		student_id: string;
 		student_name: string;
 	}) {
+		setIsDeleting(true);
 		const confirmed = window.confirm(
 			`Tem certeza de que quer excluir ${student_name} e todos os seus registros? Essa ação é irreversível!`,
 		);
 		if (!confirmed) return;
 
 		await deleteStudent(student_id);
+		setIsDeleting(false);
 		revalidate();
 	}
 
@@ -174,7 +178,7 @@ export function EditStudentForm({
 				<div className="flex-(~ row) items-center gap-2 mt-2 h-16">
 					<button
 						type="submit"
-						disabled={isSubmitting || isUnchanged}
+						disabled={isSubmitting || isUnchanged || isDeleting}
 						className="ui-button-(~ primary) h-full"
 					>
 						<Icon icon="i-lucide-save" color="on-primary" size={5} />
@@ -182,7 +186,7 @@ export function EditStudentForm({
 					</button>
 					<button
 						type="button"
-						disabled={isSubmitting}
+						disabled={isSubmitting || isDeleting}
 						className="ui-button-(~ danger) h-full"
 						onClick={() =>
 							handleDeleteStudent({
@@ -192,7 +196,7 @@ export function EditStudentForm({
 						}
 					>
 						<Icon icon="i-lucide-trash" color="on-danger" size={5} />
-						{isSubmitting ? "Excluindo..." : "Excluir Aluno"}
+						{isDeleting ? "Excluindo..." : "Excluir Aluno"}
 					</button>
 				</div>
 			</form>

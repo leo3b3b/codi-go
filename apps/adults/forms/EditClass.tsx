@@ -1,4 +1,5 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
@@ -25,6 +26,7 @@ export function EditClassForm({
 }) {
 	const navigate = useNavigate();
 	const { revalidate } = useRevalidator();
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	const initialValues: UpdateClassOutput = {
 		name: classData.name,
@@ -63,6 +65,7 @@ export function EditClassForm({
 	}
 
 	async function handleDeleteClass() {
+		setIsDeleting(true);
 		const confirmed = window.confirm(
 			classData.name
 				? `Tem certeza de que quer deletar a turma ${classData.name}? Essa ação é irreversível!`
@@ -71,6 +74,7 @@ export function EditClassForm({
 		if (!confirmed) return;
 
 		await deleteClass(classData.id);
+		setIsDeleting(false);
 		handleBack();
 	}
 
@@ -203,7 +207,9 @@ export function EditClassForm({
 				<div className="flex-(~ row) items-center gap-2 mt-2 h-16 md:self-end">
 					<button
 						type="submit"
-						disabled={isSubmitting || isUnchanged || classData.is_playing}
+						disabled={
+							isSubmitting || isUnchanged || isDeleting || classData.is_playing
+						}
 						className="ui-button-(~ primary) h-full"
 					>
 						<Icon icon="i-lucide-save" color="on-primary" size={5} />
@@ -211,12 +217,12 @@ export function EditClassForm({
 					</button>
 					<button
 						type="button"
-						disabled={isSubmitting || classData.is_playing}
+						disabled={isSubmitting || isDeleting || classData.is_playing}
 						className="ui-button-(~ danger) h-full"
 						onClick={handleDeleteClass}
 					>
 						<Icon icon="i-lucide-trash" color="on-danger" size={5} />
-						{isSubmitting ? "Excluindo..." : "Excluir Turma"}
+						{isDeleting ? "Excluindo..." : "Excluir Turma"}
 					</button>
 				</div>
 			</form>
