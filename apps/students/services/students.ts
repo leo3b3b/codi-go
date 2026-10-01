@@ -3,7 +3,7 @@ import { supabase } from "@codi-go/supabase";
 export async function getStudentsByClassId(class_id: string) {
 	const { data, error } = await supabase
 		.from("students")
-		.select("id, name, access_code")
+		.select("id, name")
 		.eq("class_id", class_id)
 		.order("name");
 
@@ -18,7 +18,7 @@ export async function getStudentsByClassId(class_id: string) {
 export async function getStudentById(student_id: string) {
 	const { data, error } = await supabase
 		.from("students")
-		.select("id, name, access_code, class_id, school_id")
+		.select("id, name, class_id, school_id")
 		.eq("id", student_id)
 		.single();
 
