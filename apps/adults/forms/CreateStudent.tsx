@@ -96,7 +96,7 @@ export function CreateStudentForm({
 				>
 					{isSubmitting
 						? "Criando..."
-						: `Criar ${studentCount >= 1 ? "Alunos" : "Aluno"}`}
+						: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
 				</button>
 			</form>
 
