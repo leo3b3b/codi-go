@@ -226,7 +226,7 @@ export function MemberAdminPage() {
 								{membership.name ?? "—"}
 							</div>
 
-							<div className="text-right text-muted md:text-left">
+							<div className="text-(muted right) md:text-left">
 								{membership.username ? `@${membership.username}` : "—"}
 							</div>
 
@@ -263,7 +263,7 @@ export function MemberAdminPage() {
 								</span>
 							</div>
 
-							<div className="col-span-2 flex gap-2 md:col-span-4 lg:col-span-1">
+							<div className="flex gap-2 col-span-2 md:col-span-4 lg:col-span-1">
 								{membership.status === "active" ? (
 									<button
 										type="button"

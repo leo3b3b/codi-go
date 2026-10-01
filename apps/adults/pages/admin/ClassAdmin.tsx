@@ -12,13 +12,13 @@ import {
 } from "@/services";
 
 export function ClassAdminPage() {
-	const classData = useLoaderData<typeof classAdminLoader>();
+	const { classData, students } = useLoaderData<typeof classAdminLoader>();
 	const navigate = useNavigate();
 	const { revalidate } = useRevalidator();
 
 	const initialValues: UpdateClassOutput = {
 		name: classData.name,
-		teacher_username: classData.teacher?.username ?? "",
+		teacher_username: classData.teacher_username ?? "",
 		access_code: classData.access_code ?? "",
 	};
 
@@ -100,7 +100,7 @@ export function ClassAdminPage() {
 	}
 
 	return (
-		<div className="w-full max-w-2xl mx-auto">
+		<div className="w-full mx-auto flex-(~ col) gap-4">
 			<title>CodiGO! | Gerenciar Turma</title>
 
 			<section className="ui-card">
@@ -130,7 +130,7 @@ export function ClassAdminPage() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className="flex-(~ col) gap-5"
+					className="flex-(~ col) md:grid-(~ cols-2) gap-5"
 				>
 					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
 						<span>Nome da Turma</span>
@@ -217,7 +217,7 @@ export function ClassAdminPage() {
 						</p>
 					)}
 
-					<div className="flex-(~ row) items-center gap-2 mt-2 h-14">
+					<div className="flex-(~ row) items-center gap-2 mt-2 h-16 md:self-end">
 						<button
 							type="submit"
 							disabled={isSubmitting || isUnchanged || classData.is_playing}
@@ -237,6 +237,60 @@ export function ClassAdminPage() {
 						</button>
 					</div>
 				</form>
+			</section>
+			<section className="ui-card">
+				<header>
+					<h2 className="text-(2xl heading) font-bold mb-4">
+						Gerenciar Alunos
+					</h2>
+				</header>
+				<div
+					className="
+						hidden lg:grid
+						grid-cols-[1fr_0.5fr_3fr]
+						gap-x-4 gap-y-2 py-3
+						border-b-(~ border)
+						text-(sm muted) font-bold
+					"
+				>
+					<div>Nome</div>
+					<div>Credencial</div>
+					<div>Ações</div>
+				</div>
+				<div className="flex-(~ col) gap-4 lg:gap-0">
+					{students.map((student) => (
+						<div
+							key={student.id}
+							className="
+								grid grid-cols-[1fr_auto]
+								gap-x-4 gap-y-2 py-3
+								border-b-(~ border)
+								lg:grid-cols-[1fr_0.5fr_3fr]
+								lg:items-center
+							"
+						>
+							<div className="font-semibold text-heading">
+								{student.name ?? "—"}
+							</div>
+
+							<div className="text-muted">{student.access_code ?? "—"}</div>
+							<div className="flex gap-2 col-span-2 mt-2 lg:(col-span-1 mt-0)">
+								<button type="button" className="ui-button-(~ secondary) w-1/3">
+									<Icon icon={"i-lucide-eye"} color="fg" size={5} />
+									Mostrar Credencial
+								</button>
+								<button type="button" className="ui-button-(~ primary) w-1/3">
+									<Icon icon={"i-lucide-pencil"} color="on-primary" size={5} />
+									Editar
+								</button>
+								<button type="button" className="ui-button-(~ danger) w-1/3">
+									<Icon icon={"i-lucide-user-x"} color="on-danger" size={5} />
+									Excluir
+								</button>
+							</div>
+						</div>
+					))}
+				</div>
 			</section>
 		</div>
 	);

@@ -22,3 +22,4 @@ export {
 	updateProfileForCurrentUser,
 } from "./profile";
 export { getSchoolById } from "./schools";
+export { getStudentsByClassId } from "./students";
