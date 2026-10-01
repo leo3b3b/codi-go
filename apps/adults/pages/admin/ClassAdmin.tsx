@@ -1,4 +1,4 @@
-import { imageCodes } from "@codi-go/supabase";
+import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { useState } from "react";
 import { useLoaderData, useRevalidator } from "react-router";
 import { Icon } from "@/components";
@@ -33,8 +33,8 @@ function StudentRow({ student, onDelete }: StudentRowProps) {
 			<div className="h-14 flex items-center">
 				{showCredential ? (
 					<img
-						src={imageCodes[student.access_code]}
-						aria-label={student.access_code}
+						src={imageCodes[student.access_code as ImageCode].src}
+						aria-label={imageCodes[student.access_code as ImageCode].label}
 						className="h-14"
 					/>
 				) : (
