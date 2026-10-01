@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useLoaderData, useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
 import type { classAdminLoader } from "@/router";
-import { type ClassOutput, classSchema } from "@/schemas";
+import { type CreateClassOutput, createClassSchema } from "@/schemas";
 import { createClass } from "@/services";
 
 export function ClassAdminPage() {
@@ -17,11 +17,11 @@ export function ClassAdminPage() {
 		reset,
 		watch,
 		formState: { errors, isSubmitting },
-	} = useForm<ClassOutput>({
-		resolver: valibotResolver(classSchema),
+	} = useForm<CreateClassOutput>({
+		resolver: valibotResolver(createClassSchema),
 	});
 
-	async function onSubmit({ name }: ClassOutput) {
+	async function onSubmit({ name }: CreateClassOutput) {
 		try {
 			await createClass({
 				name,
