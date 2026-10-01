@@ -1,6 +1,8 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import * as v from "valibot";
 
+const imageCodeValues = Object.keys(imageCodes) as [ImageCode, ...ImageCode[]];
+
 const studentNameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
 
 export const updateStudentSchema = v.object({
@@ -10,12 +12,9 @@ export const updateStudentSchema = v.object({
 		v.nonEmpty("O nome do aluno é obrigatório."),
 		v.regex(studentNameRegex, "O nome deve conter apenas letras e espaços."),
 	),
-	access_code: v.pipe(
-		v.string("O código de acesso deve ser um texto."),
-		v.check(
-			(value): value is ImageCode => value in imageCodes,
-			"O código de acesso deve ser uma imagem válida.",
-		),
+	access_code: v.picklist(
+		imageCodeValues,
+		"O código de acesso deve ser uma imagem válida.",
 	),
 });
 
