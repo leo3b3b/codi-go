@@ -88,7 +88,7 @@ export function ClassAdminPage() {
 
 	return (
 		<div className="w-full max-w-2xl mx-auto">
-			<title>CodiGO! | {classData.name}</title>
+			<title>CodiGO! | Gerenciar Turma</title>
 
 			<section className="ui-card">
 				<header className="flex-(~ row) items-center gap-3">

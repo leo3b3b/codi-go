@@ -16,7 +16,7 @@ export type Database = {
 		Tables: {
 			classes: {
 				Row: {
-					access_code: string | null;
+					access_code: string;
 					id: string;
 					is_playing: boolean;
 					name: string;
@@ -24,7 +24,7 @@ export type Database = {
 					teacher_id: string | null;
 				};
 				Insert: {
-					access_code?: string | null;
+					access_code: string;
 					id?: string;
 					is_playing?: boolean;
 					name: string;
@@ -32,7 +32,7 @@ export type Database = {
 					teacher_id?: string | null;
 				};
 				Update: {
-					access_code?: string | null;
+					access_code?: string;
 					id?: string;
 					is_playing?: boolean;
 					name?: string;
