@@ -56,9 +56,9 @@ function parseMazeLevel(row: LevelRow): MazeLevel {
 		tiles,
 		start: config.start,
 		goal: config.goal,
-		...(typeof config.maxCommands === "number"
-			? { maxCommands: config.maxCommands }
-			: {}),
+		// ...(typeof config.maxCommands === "number"
+		// 	? { maxCommands: config.maxCommands }
+		// 	: {}),
 	};
 }
 
