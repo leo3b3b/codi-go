@@ -1,6 +1,6 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { useState } from "react";
-import { useLoaderData, useRevalidator } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import { CreateStudentForm, EditClassForm } from "@/forms";
 import type { classAdminLoader } from "@/router";
@@ -13,9 +13,10 @@ type Student = ReturnType<
 interface StudentRowProps {
 	student: Student;
 	onDelete: (params: { student_id: string; student_name: string }) => void;
+	onUpdate: (student_id: string) => void | Promise<void>;
 }
 
-function StudentRow({ student, onDelete }: StudentRowProps) {
+function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 	const [showCredential, setShowCredential] = useState(false);
 
 	return (
@@ -58,7 +59,11 @@ function StudentRow({ student, onDelete }: StudentRowProps) {
 					{showCredential ? "Esconder" : "Mostrar Credencial"}
 				</button>
 
-				<button type="button" className="ui-button-(~ primary) w-1/3">
+				<button
+					type="button"
+					className="ui-button-(~ primary) w-1/3"
+					onClick={() => onUpdate(student.id)}
+				>
 					<Icon icon={"i-lucide-pencil"} color="on-primary" size={5} />
 					Editar
 				</button>
@@ -84,6 +89,11 @@ function StudentRow({ student, onDelete }: StudentRowProps) {
 export function ClassAdminPage() {
 	const { classData, students } = useLoaderData<typeof classAdminLoader>();
 	const { revalidate } = useRevalidator();
+	const navigate = useNavigate();
+
+	function handleUpdate(student_id: string) {
+		navigate(`/escola/${classData.school_id}/admin/aluno/${student_id}`);
+	}
 
 	async function handleDeleteStudent({
 		student_id,
@@ -139,6 +149,7 @@ export function ClassAdminPage() {
 						<StudentRow
 							key={student.id}
 							student={student}
+							onUpdate={handleUpdate}
 							onDelete={handleDeleteStudent}
 						/>
 					))}

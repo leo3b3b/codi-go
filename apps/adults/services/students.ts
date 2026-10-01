@@ -17,6 +17,21 @@ export async function getStudentsByClassId(class_id: string) {
 	return data;
 }
 
+export async function getStudentById(student_id: string) {
+	const { data, error } = await supabase
+		.from("students")
+		.select("id, name, access_code, class_id")
+		.eq("id", student_id)
+		.single();
+
+	if (error) {
+		error.message = `getStudentById error: ${error.message}`;
+		throw error;
+	}
+
+	return data;
+}
+
 export async function createStudent({
 	class_id,
 	school_id,
