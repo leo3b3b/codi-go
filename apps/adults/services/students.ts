@@ -6,7 +6,8 @@ export async function getStudentsByClassId(class_id: string) {
 	const { data, error } = await supabase
 		.from("students")
 		.select("id, name, access_code")
-		.eq("class_id", class_id);
+		.eq("class_id", class_id)
+		.order("name");
 
 	if (error) {
 		error.message = `getStudentsByClassId error: ${error.message}`;
