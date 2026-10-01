@@ -7,10 +7,23 @@ import { classLoader, mazeLoader } from "@/router";
 import "@codi-go/ui/css";
 import "virtual:uno.css";
 
+function Layout() {
+	return (
+		<div className="fixed inset-0 h-dvh w-full overflow-y-auto ui-gradient text-fg">
+			<main
+				key={location.pathname}
+				className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:(px-8 py-8)"
+			>
+				<Outlet />
+			</main>
+		</div>
+	);
+}
+
 const router = createBrowserRouter([
 	{
 		path: "/",
-		Component: Outlet,
+		Component: Layout,
 		children: [
 			{
 				path: ":accessCode",
