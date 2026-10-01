@@ -3,6 +3,7 @@ import * as v from "valibot";
 export const inviteSchema = v.object({
 	username: v.pipe(
 		v.string("O nome de usuário deve ser um texto."),
+		v.trim(),
 		v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
 		v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
 		v.regex(

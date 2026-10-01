@@ -1,21 +1,17 @@
 import { supabase } from "@codi-go/supabase";
 import { getUser } from "@/services";
 
-interface ProfileProps {
+export async function updateProfileForCurrentUser({
+	name,
+	username,
+}: {
 	name: string | null;
 	username: string | null;
-}
-
-export async function updateProfileForCurrentUser(props: ProfileProps) {
+}) {
 	const dataToUpdate: { name?: string; username?: string } = {};
 
-	if (props.name !== null) {
-		dataToUpdate.name = props.name;
-	}
-
-	if (props.username !== null) {
-		dataToUpdate.username = props.username;
-	}
+	if (name !== null) dataToUpdate.name = name;
+	if (username !== null) dataToUpdate.username = username;
 
 	if (Object.keys(dataToUpdate).length === 0) {
 		const data = await getProfileForCurrentUser();
@@ -24,19 +20,15 @@ export async function updateProfileForCurrentUser(props: ProfileProps) {
 
 	const user = await getUser();
 
-	const { data, error } = await supabase
+	const { error } = await supabase
 		.from("profiles")
 		.update(dataToUpdate)
-		.eq("id", user.id)
-		.select()
-		.single();
+		.eq("id", user.id);
 
 	if (error) {
 		error.message = `updateProfileForCurrentUser error: ${error.message}`;
 		throw error;
 	}
-
-	return data;
 }
 
 export async function getProfileForCurrentUser() {

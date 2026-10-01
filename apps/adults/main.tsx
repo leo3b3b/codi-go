@@ -5,6 +5,7 @@ import { AuthLayout, SchoolLayout } from "@/layouts";
 import {
 	CheckEmailPage,
 	ClassAdminPage,
+	ClassesAdminPage,
 	MemberAdminPage,
 	OnboardingPage,
 	ProfilePage,
@@ -12,9 +13,10 @@ import {
 	SchoolsPage,
 	SignInPage,
 	SignUpPage,
-	StudentAdminPage,
 } from "@/pages";
 import {
+	classAdminLoader,
+	classesAdminLoader,
 	HydrateFallback,
 	memberAdminLoader,
 	profileLoader,
@@ -77,11 +79,13 @@ const router = createBrowserRouter([
 								children: [
 									{
 										path: "turmas",
-										Component: ClassAdminPage,
+										Component: ClassesAdminPage,
+										loader: classesAdminLoader,
 									},
 									{
-										path: "turma/:classId/alunos",
-										Component: StudentAdminPage,
+										path: "turma/:classId",
+										Component: ClassAdminPage,
+										loader: classAdminLoader,
 									},
 									{
 										path: "membros",
