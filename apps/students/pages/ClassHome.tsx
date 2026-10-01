@@ -8,7 +8,7 @@ export function ClassHome() {
 
 	return (
 		<section className="ui-card w-full grid-(~ cols-[1fr_3fr_1fr]) items-center py-2">
-			<img src={logo} alt="Logo do CodiGO!" className="h-24" />
+			<img src={logo} alt="Logo do CodiGO!" className="w-full" />
 			<h1 className="text-(4xl heading center) font-bold">{classData.name}</h1>
 			<div
 				className={`ui-button ${classData.is_playing ? "ui-button-primary" : "ui-button-danger"}`}
