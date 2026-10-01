@@ -206,7 +206,7 @@ export function MazeGame() {
 						className="ui-button-(~ primary)"
 						onClick={play}
 					>
-						Começar
+						{isRunning ? "Andando…" : "Começar"}
 					</button>
 
 					<button
