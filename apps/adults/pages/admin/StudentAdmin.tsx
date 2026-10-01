@@ -1,3 +1,0 @@
-export function StudentAdminPage() {
-	return <div className="w-full h-full"></div>;
-}

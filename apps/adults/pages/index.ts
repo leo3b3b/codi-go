@@ -1,6 +1,6 @@
 export { ClassAdminPage } from "./admin/ClassAdmin";
+export { ClassesAdminPage } from "./admin/ClassesAdmin";
 export { MemberAdminPage } from "./admin/MemberAdmin";
-export { StudentAdminPage } from "./admin/StudentAdmin";
 
 export { CheckEmailPage } from "./auth/CheckEmail";
 export { OnboardingPage } from "./auth/Onboarding";

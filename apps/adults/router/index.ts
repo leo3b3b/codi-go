@@ -1,4 +1,5 @@
 export { classAdminLoader } from "./classAdmin";
+export { classesAdminLoader } from "./classesAdmin";
 export { HydrateFallback } from "./HydrateFallback";
 export { memberAdminLoader } from "./members";
 export { profileLoader } from "./profile";

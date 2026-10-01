@@ -1,19 +1,13 @@
-import { getClassesBySchool, getSchoolById } from "@/services";
+import { getClassById } from "@/services";
 
 export async function classAdminLoader({
 	params,
 }: {
-	params: { schoolId?: string };
+	params: { classId?: string };
 }) {
-	if (!params.schoolId) {
-		throw new Response("Escola não encontrada", { status: 404 });
+	if (!params.classId) {
+		throw new Response("Turma não encontrada", { status: 404 });
 	}
 
-	const school = await getSchoolById(params.schoolId);
-	const classes = await getClassesBySchool(params.schoolId);
-
-	return {
-		school,
-		classes,
-	};
+	return await getClassById(params.classId);
 }

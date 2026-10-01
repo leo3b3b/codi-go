@@ -1,8 +1,11 @@
 export { getUser, signInWithPassword, signOut, signUp } from "./auth";
 export {
 	createClass,
+	generateClassAccessCode,
+	getClassById,
 	getClassesBySchool,
 	getClassesForCurrentUser,
+	updateClass,
 } from "./classes";
 export {
 	adminGetMembershipsBySchool,

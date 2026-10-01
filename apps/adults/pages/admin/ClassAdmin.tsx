@@ -1,142 +1,218 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData, useRevalidator } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
 import type { classAdminLoader } from "@/router";
-import { type CreateClassOutput, createClassSchema } from "@/schemas";
-import { createClass } from "@/services";
+import { type UpdateClassOutput, updateClassSchema } from "@/schemas";
+import {
+	generateClassAccessCode,
+	getUserIdByUsername,
+	updateClass,
+} from "@/services";
 
 export function ClassAdminPage() {
-	const { school, classes } = useLoaderData<typeof classAdminLoader>();
+	const classData = useLoaderData<typeof classAdminLoader>();
+	const navigate = useNavigate();
 	const { revalidate } = useRevalidator();
+
+	const initialValues: UpdateClassOutput = {
+		name: classData.name,
+		teacher_username: classData.teacher?.username ?? "",
+		access_code: classData.access_code ?? "",
+	};
 
 	const {
 		register,
 		handleSubmit,
 		setError,
-		reset,
+		setValue,
 		watch,
 		formState: { errors, isSubmitting },
-	} = useForm<CreateClassOutput>({
-		resolver: valibotResolver(createClassSchema),
+	} = useForm<UpdateClassOutput>({
+		resolver: valibotResolver(updateClassSchema),
+		defaultValues: initialValues,
 	});
 
-	async function onSubmit({ name }: CreateClassOutput) {
+	const currentValues = watch();
+
+	const isUnchanged =
+		currentValues.name === initialValues.name &&
+		currentValues.teacher_username === initialValues.teacher_username &&
+		currentValues.access_code === initialValues.access_code;
+
+	function handleBack() {
+		navigate(`/escola/${classData.school_id}/admin/turmas`);
+	}
+
+	function handleGenerateAccessCode() {
+		setValue("access_code", generateClassAccessCode(), {
+			shouldDirty: true,
+			shouldValidate: true,
+		});
+	}
+
+	async function onSubmit({
+		name,
+		teacher_username,
+		access_code,
+	}: UpdateClassOutput) {
 		try {
-			await createClass({
+			const teacher_id = teacher_username
+				? await getUserIdByUsername(teacher_username)
+				: null;
+
+			await updateClass({
+				class_id: classData.id,
 				name,
-				school_id: school.id,
+				teacher_id,
+				access_code,
 			});
 
-			reset();
 			await revalidate();
-		} catch {
+		} catch (error) {
+			if (
+				error instanceof Error &&
+				error.message.includes("getUserIdByUsername")
+			) {
+				setError("teacher_username", {
+					message: "Professor não encontrado.",
+				});
+				return;
+			}
+
 			setError("root", {
-				message: "Não foi possível criar a classe.",
+				message: "Não foi possível salvar as alterações da turma.",
 			});
 		}
 	}
 
 	return (
-		<div className="flex-(~ col) gap-4">
-			<title>CodiGO! | Gerenciar Turmas</title>
+		<div className="w-full max-w-2xl mx-auto">
+			<title>CodiGO! | {classData.name}</title>
 
 			<section className="ui-card">
-				<header>
-					<h1 className="text-(2xl heading) font-bold">
-						Criar Turma em {school.trade_name || school.legal_name}
+				<header className="flex-(~ row) items-center gap-3">
+					<button
+						type="button"
+						onClick={handleBack}
+						aria-label="Voltar para turmas"
+						className="ui-button-(~ secondary) w-auto p-3"
+					>
+						<Icon icon="i-lucide-arrow-left" color="fg" size={6} />
+					</button>
+
+					<h1 className="text-(2xl heading) font-bold break-words">
+						{classData.name}
 					</h1>
-					<HorizontalSeparator />
 				</header>
+
+				<HorizontalSeparator />
+
+				{classData.is_playing ? (
+					<div className="ui-alert-danger mb-5">
+						Esta turma está em atividade e não pode ser editada no momento.
+					</div>
+				) : null}
 
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className="
-						flex-(~ col) sm:flex-row items-center
-						gap-x-4 gap-y-2 py-3
-					"
+					className="flex-(~ col) gap-5"
 				>
-					<div className="flex-(~ row) relative items-center font-bold w-full">
-						<Icon
-							icon="i-lucide-school"
-							color="muted"
-							size={6}
-							className="absolute left-3 pointer-events-none"
-						/>
+					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
+						<span>Nome da Turma</span>
 
 						<input
 							type="text"
 							{...register("name")}
-							placeholder="Digite o nome da turma"
+							autoComplete="off"
 							aria-invalid={Boolean(errors.name)}
-							className="ui-field w-full h-14 pl-10"
+							disabled={classData.is_playing}
+							className="ui-field"
 						/>
-					</div>
+
+						{errors.name && (
+							<p role="alert" className="text-(sm danger) font-medium">
+								{errors.name.message}
+							</p>
+						)}
+					</label>
+
+					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
+						<span>Professor Responsável</span>
+
+						<div className="relative flex items-center">
+							<Icon
+								icon="i-lucide-at-sign"
+								color="muted"
+								size={6}
+								className="absolute left-3 pointer-events-none"
+							/>
+
+							<input
+								type="text"
+								{...register("teacher_username")}
+								autoComplete="username"
+								placeholder="Nome de usuário do professor"
+								aria-invalid={Boolean(errors.teacher_username)}
+								disabled={classData.is_playing}
+								className="ui-field w-full pl-10"
+							/>
+						</div>
+
+						{errors.teacher_username && (
+							<p role="alert" className="text-(sm danger) font-medium">
+								{errors.teacher_username.message}
+							</p>
+						)}
+					</label>
+
+					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
+						<span>Código de Acesso</span>
+
+						<div className="flex-(~ row) gap-2">
+							<input
+								type="text"
+								{...register("access_code")}
+								readOnly
+								aria-invalid={Boolean(errors.access_code)}
+								disabled={classData.is_playing}
+								className="ui-field flex-1 font-mono tracking-widest uppercase"
+							/>
+
+							<button
+								type="button"
+								onClick={handleGenerateAccessCode}
+								disabled={classData.is_playing}
+								aria-label="Gerar novo código de acesso"
+								className="ui-button-(~ secondary) w-auto px-4"
+							>
+								<Icon icon="i-lucide-shuffle" color="fg" size={6} />
+							</button>
+						</div>
+
+						{errors.access_code && (
+							<p role="alert" className="text-(sm danger) font-medium">
+								{errors.access_code.message}
+							</p>
+						)}
+					</label>
+
+					{errors.root && (
+						<p role="alert" className="ui-alert-danger">
+							{errors.root.message}
+						</p>
+					)}
 
 					<button
 						type="submit"
-						disabled={isSubmitting || !watch("name")}
-						className="ui-button-(~ primary) h-14 mt-4 sm:(mt-0 w-40)"
+						disabled={isSubmitting || isUnchanged || classData.is_playing}
+						className="ui-button-(~ primary) mt-2"
 					>
-						{isSubmitting ? "Criando..." : "Criar turma"}
+						<Icon icon="i-lucide-save" color="on-primary" size={6} />
+						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
 					</button>
 				</form>
-
-				{errors.name && (
-					<p role="alert" className="text-(sm danger) font-medium">
-						{errors.name.message}
-					</p>
-				)}
-
-				{errors.root && (
-					<p role="alert" className="ui-alert-danger">
-						{errors.root.message}
-					</p>
-				)}
-			</section>
-
-			<section className="ui-card">
-				<header>
-					<h1 className="text-(2xl heading) font-bold mb-4">
-						Gerenciar Turmas
-					</h1>
-				</header>
-
-				{classes.length === 0 ? (
-					<p className="text-(lg center) py-6">
-						Esta escola ainda não possui turmas.
-					</p>
-				) : (
-					<div className="flex-(~ col) gap-2">
-						{classes.map(({ id, name }) => (
-							<Link key={id} to={`/escola/${school.id}/admin/turma/${id}`}>
-								<article
-									className="
-										bg-surface-subtle
-										border-(~ border)
-										rounded-lg
-										px-8 py-4
-										transition-(colors 500)
-										hover:(bg-primary-soft/70 border-primary)
-										group
-									"
-								>
-									<h2
-										className="
-											text-(xl primary)
-											font-semibold
-											group-hover:text-on-primary
-											transition-(colors 500)
-										"
-									>
-										{name}
-									</h2>
-								</article>
-							</Link>
-						))}
-					</div>
-				)}
 			</section>
 		</div>
 	);
