@@ -2,8 +2,8 @@ type IconSize = 4 | 5 | 6 | 8 | 10;
 
 interface IconProps {
 	icon: string;
-	size: IconSize;
-	color: string;
+	size?: IconSize;
+	color?: string;
 	className?: string;
 }
 
@@ -21,8 +21,8 @@ export function Icon(props: IconProps) {
 		<span
 			className={`
 				${icon}
-				${sizeClasses[size as keyof typeof sizeClasses]}
-				text-${color}
+				${size && sizeClasses[size as keyof typeof sizeClasses]}
+				${color && `text-${color}`}
 				${className}
 			`}
 			aria-hidden="true"
