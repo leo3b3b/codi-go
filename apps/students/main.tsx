@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
-import { MazeGame } from "@/pages";
-import { mazeLoader } from "@/router";
+import { ClassHome, MazeGame } from "@/pages";
+import { classLoader, mazeLoader } from "@/router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -13,9 +13,21 @@ const router = createBrowserRouter([
 		Component: Outlet,
 		children: [
 			{
-				path: "labirinto/:levelId",
-				loader: mazeLoader,
-				Component: MazeGame,
+				path: ":accessCode",
+				Component: Outlet,
+				loader: classLoader,
+				children: [
+					{
+						index: true,
+						Component: ClassHome,
+						loader: classLoader,
+					},
+					{
+						path: "labirinto/:levelId",
+						Component: MazeGame,
+						loader: mazeLoader,
+					},
+				],
 			},
 		],
 	},
