@@ -6,11 +6,11 @@ import { getStudentSession, signOutStudent } from "@/services";
 export function Header() {
 	const student = getStudentSession();
 	const navigate = useNavigate();
-	const { accessCode } = useParams();
+	const params = useParams();
 
 	function handleLogOut() {
 		signOutStudent();
-		navigate(`/${accessCode}`);
+		navigate(`/${params.accessCode ?? ""}`);
 	}
 
 	return (
