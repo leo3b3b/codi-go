@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import { Icon } from "@/components";
-import { EditClassForm } from "@/forms";
+import { CreateStudentForm, EditClassForm } from "@/forms";
 import type { classAdminLoader } from "@/router";
 
 export function ClassAdminPage() {
@@ -11,6 +11,8 @@ export function ClassAdminPage() {
 			<title>CodiGO! | Gerenciar Turma</title>
 
 			<EditClassForm classData={classData} />
+
+			<CreateStudentForm classData={classData} />
 
 			<section className="ui-card">
 				<header>

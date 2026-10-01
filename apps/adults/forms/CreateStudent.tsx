@@ -2,17 +2,20 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
-import { type CreateClassOutput, createClassSchema } from "@/schemas";
-import { createClass } from "@/services";
+import { type CreateStudentOutput, createStudentSchema } from "@/schemas";
+import { createStudent } from "@/services";
 
-export function CreateClassForm({
-	school,
+export function CreateStudentForm({
+	classData,
 }: {
-	school: {
+	classData: {
+		teacher_username: string;
 		id: string;
-		legal_name: string;
-		trade_name: string;
-		cnpj: string;
+		name: string;
+		access_code: string;
+		is_playing: boolean;
+		school_id: string;
+		teacher_id: string;
 	};
 }) {
 	const { revalidate } = useRevalidator();
@@ -24,22 +27,23 @@ export function CreateClassForm({
 		reset,
 		watch,
 		formState: { errors, isSubmitting },
-	} = useForm<CreateClassOutput>({
-		resolver: valibotResolver(createClassSchema),
+	} = useForm<CreateStudentOutput>({
+		resolver: valibotResolver(createStudentSchema),
 	});
 
-	async function onSubmit({ name }: CreateClassOutput) {
+	async function onSubmit({ name }: CreateStudentOutput) {
 		try {
-			await createClass({
+			await createStudent({
 				name,
-				school_id: school.id,
+				class_id: classData.id,
+				school_id: classData.school_id,
 			});
 
 			reset();
 			await revalidate();
 		} catch {
 			setError("root", {
-				message: "Não foi possível criar a turma.",
+				message: "Não foi possível criar o aluno.",
 			});
 		}
 	}
@@ -47,9 +51,9 @@ export function CreateClassForm({
 	return (
 		<section className="ui-card">
 			<header>
-				<h1 className="text-(2xl heading) font-bold">
-					Criar Turma em {school.trade_name || school.legal_name}
-				</h1>
+				<h2 className="text-(2xl heading) font-bold">
+					Criar Aluno em {classData.name}
+				</h2>
 				<HorizontalSeparator />
 			</header>
 
@@ -63,7 +67,7 @@ export function CreateClassForm({
 			>
 				<div className="flex-(~ row) relative items-center font-bold w-full">
 					<Icon
-						icon="i-lucide-school"
+						icon="i-lucide-baby"
 						color="muted"
 						size={6}
 						className="absolute left-3 pointer-events-none"
@@ -72,7 +76,7 @@ export function CreateClassForm({
 					<input
 						type="text"
 						{...register("name")}
-						placeholder="Digite o nome da turma"
+						placeholder="Digite o nome do aluno"
 						aria-invalid={Boolean(errors.name)}
 						className="ui-field w-full h-14 pl-10"
 					/>
@@ -83,7 +87,7 @@ export function CreateClassForm({
 					disabled={isSubmitting || !watch("name")}
 					className="ui-button-(~ primary) h-14 mt-4 sm:(mt-0 w-40)"
 				>
-					{isSubmitting ? "Criando..." : "Criar Turma"}
+					{isSubmitting ? "Criando..." : "Criar Aluno"}
 				</button>
 			</form>
 
