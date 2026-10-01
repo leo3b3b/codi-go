@@ -55,7 +55,7 @@ export function SchoolHeader() {
 				{isSchoolRoute && (
 					<div
 						className="
-							order-3 col-span-2 h-full flex w-full items-center
+							order-3 col-span-2 h-full flex-(~ 1) items-center
 							gap-2 mt-2 sm:(order-2 ml-4 w-auto gap-0 mt-0)
 						"
 					>
