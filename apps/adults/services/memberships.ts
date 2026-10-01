@@ -49,15 +49,13 @@ export async function getInvitesForCurrentUser() {
 	}));
 }
 
-type AcceptInviteProps = {
-	profile_id: string;
-	school_id: string;
-};
-
 export async function acceptInvite({
 	profile_id,
 	school_id,
-}: AcceptInviteProps) {
+}: {
+	profile_id: string;
+	school_id: string;
+}) {
 	const { error } = await supabase
 		.from("school_memberships")
 		.update({ status: "active" })
@@ -70,17 +68,15 @@ export async function acceptInvite({
 	}
 }
 
-type InviteUserToSchoolProps = {
-	username: string;
-	role: "admin" | "teacher";
-	school_id: string;
-};
-
 export async function inviteUserToSchool({
 	username,
 	role,
 	school_id,
-}: InviteUserToSchoolProps) {
+}: {
+	username: string;
+	role: "admin" | "teacher";
+	school_id: string;
+}) {
 	const profile_id = await getUserIdByUsername(username);
 
 	const { error } = await supabase.from("school_memberships").insert({
@@ -123,15 +119,13 @@ export async function adminGetMembershipsBySchool(schoolId: string) {
 	}));
 }
 
-type DeleteMembershipProps = {
-	profile_id: string;
-	school_id: string;
-};
-
 export async function deleteMembership({
 	profile_id,
 	school_id,
-}: DeleteMembershipProps) {
+}: {
+	profile_id: string;
+	school_id: string;
+}) {
 	const { error } = await supabase
 		.from("school_memberships")
 		.delete()
@@ -150,17 +144,15 @@ export async function deleteMembership({
 	}
 }
 
-type UpdateMembershipRoleProps = {
-	profile_id: string;
-	school_id: string;
-	role: "admin" | "teacher";
-};
-
 export async function updateMembershipRole({
 	profile_id,
 	school_id,
 	role,
-}: UpdateMembershipRoleProps) {
+}: {
+	profile_id: string;
+	school_id: string;
+	role: "admin" | "teacher";
+}) {
 	const { error } = await supabase
 		.from("school_memberships")
 		.update({ role })
