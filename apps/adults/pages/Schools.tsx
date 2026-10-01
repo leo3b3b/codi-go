@@ -9,7 +9,7 @@ export function SchoolsPage() {
 	return (
 		<>
 			{schools.length === 0 ? (
-				<div className="ui-card max-w-xl mx-auto">
+				<div className="ui-card max-w-2xl mx-auto">
 					<h1 className="text-(2xl heading center) font-bold">
 						Você não participa de nenhuma escola!
 					</h1>

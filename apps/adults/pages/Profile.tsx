@@ -59,7 +59,7 @@ export function ProfilePage() {
 	}
 
 	return (
-		<div className="w-full max-w-lg h-full mx-auto flex-(~ col) items-center gap-4">
+		<div className="w-full max-w-2xl h-full mx-auto flex-(~ col) items-center gap-4">
 			<title>CodiGO! | Meu Perfil</title>
 
 			<section className="ui-card w-full flex-(~ row) gap-6 items-center">

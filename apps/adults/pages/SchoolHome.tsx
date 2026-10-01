@@ -26,7 +26,7 @@ export function SchoolHomePage() {
 			<h1 className="text-(xl heading) font-bold">{school.trade_name}</h1>
 			<HorizontalSeparator />
 			<div
-				className={`flex-(~ col) justify-center gap-4 ${isAdmin ? "md:(grid grid-cols-2 gap-8)" : "max-w-lg mx-auto"}`}
+				className={`flex-(~ col) justify-center gap-4 ${isAdmin ? "md:(grid grid-cols-2 gap-8)" : "max-w-2xl mx-auto"}`}
 			>
 				<section className="ui-card w-full h-full flex flex-col">
 					<h2 className="text-(2xl heading center) font-bold">Suas Turmas</h2>
