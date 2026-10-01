@@ -130,7 +130,7 @@ export function ClassAdminPage() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className="flex-(~ col) md:grid-(~ cols-2) gap-5"
+					className="flex-(~ col) md:grid-(~ cols-2) gap-5 mb-4"
 				>
 					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
 						<span>Nome da Turma</span>
@@ -143,12 +143,6 @@ export function ClassAdminPage() {
 							disabled={classData.is_playing}
 							className="ui-field"
 						/>
-
-						{errors.name && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.name.message}
-							</p>
-						)}
 					</label>
 
 					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
@@ -172,12 +166,6 @@ export function ClassAdminPage() {
 								className="ui-field w-full pl-10"
 							/>
 						</div>
-
-						{errors.teacher_username && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.teacher_username.message}
-							</p>
-						)}
 					</label>
 
 					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
@@ -203,19 +191,7 @@ export function ClassAdminPage() {
 								<Icon icon="i-lucide-shuffle" color="fg" size={6} />
 							</button>
 						</div>
-
-						{errors.access_code && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.access_code.message}
-							</p>
-						)}
 					</label>
-
-					{errors.root && (
-						<p role="alert" className="ui-alert-danger">
-							{errors.root.message}
-						</p>
-					)}
 
 					<div className="flex-(~ row) items-center gap-2 mt-2 h-16 md:self-end">
 						<button
@@ -237,6 +213,26 @@ export function ClassAdminPage() {
 						</button>
 					</div>
 				</form>
+				{errors.name && (
+					<p role="alert" className="text-(sm danger) font-medium">
+						{errors.name.message}
+					</p>
+				)}
+				{errors.teacher_username && (
+					<p role="alert" className="text-(sm danger) font-medium">
+						{errors.teacher_username.message}
+					</p>
+				)}
+				{errors.access_code && (
+					<p role="alert" className="text-(sm danger) font-medium">
+						{errors.access_code.message}
+					</p>
+				)}
+				{errors.root && (
+					<p role="alert" className="ui-alert-danger">
+						{errors.root.message}
+					</p>
+				)}
 			</section>
 			<section className="ui-card">
 				<header>
