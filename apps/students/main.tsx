@@ -37,6 +37,9 @@ function ProtectedLayout() {
 			>
 				<Outlet />
 			</main>
+			<div className="pointer-events-none fixed bottom-0 left-1/2 -translate-x-1/2 z-50">
+				<span id="confettiDiv" className="relative block" />
+			</div>
 		</div>
 	);
 }
