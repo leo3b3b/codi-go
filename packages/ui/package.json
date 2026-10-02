@@ -12,6 +12,9 @@
 		"./components": "./components/index.ts",
 		"./images/*": "./images/*"
 	},
+	"devDependencies": {
+		"@iconify-json/lucide": "^1.2.133"
+	},
 	"peerDependencies": {
 		"unocss": "^66.10.2"
 	}
