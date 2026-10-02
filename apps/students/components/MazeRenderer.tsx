@@ -28,7 +28,7 @@ function Goal() {
 			src="/tiles/goal.png"
 			alt=""
 			draggable={false}
-			className="block h-full w-full object-contain"
+			className="block size-full object-contain"
 		/>
 	);
 }

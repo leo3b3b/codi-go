@@ -37,7 +37,7 @@ export function Codi({
 			src={`/codi/${direction}-${frame + 1}.png`}
 			alt="Codi"
 			draggable={false}
-			className="h-full w-full object-contain"
+			className="size-full object-contain"
 		/>
 	);
 }

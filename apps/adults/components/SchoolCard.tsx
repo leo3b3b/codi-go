@@ -15,7 +15,7 @@ export function SchoolCard({
 }: SchoolCardProps) {
 	return (
 		<NavLink to={`/escola/${schoolId}`}>
-			<article className="ui-card">
+			<article className="ui-card size-full">
 				<header className="w-full flex items-center justify-between mb-4">
 					<h2 className="text-(xl heading) font-semibold">{tradeName}</h2>
 					<span className="bg-primary-soft text-(xs on-primary) uppercase font-semibold px-2 py-2 rounded-lg tracking-wider">

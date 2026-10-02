@@ -198,7 +198,7 @@ export default function MazeGame() {
 			</header>
 
 			<div className="grid-(~ cols-1) lg:grid-cols-2 gap-6">
-				<section className="flex w-full h-full justify-center">
+				<section className="flex size-full justify-center">
 					<MazeRenderer
 						level={state.level}
 						playerPosition={state.playerPosition}

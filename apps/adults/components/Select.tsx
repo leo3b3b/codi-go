@@ -50,7 +50,7 @@ export function Select({
 				aria-expanded={isOpen}
 				onClick={() => setIsOpen(!isOpen)}
 				className="
-					flex w-full h-full
+					flex size-full
 					items-center justify-between rounded-lg border-(~ border)
 					bg-surface-subtle px-3 py-2 text-(sm fg) font-medium
 					outline-none transition-colors cursor-pointer

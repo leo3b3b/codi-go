@@ -52,13 +52,13 @@ export default function SchoolHomePage() {
 	const isAdmin = school.role === "admin";
 
 	return (
-		<div className="w-full h-full">
+		<div className="size-full">
 			<h1 className="text-(xl heading) font-bold">{school.trade_name}</h1>
 			<HorizontalSeparator />
 			<div
 				className={`flex-(~ col) justify-center gap-4 ${isAdmin ? "md:(grid grid-cols-2 gap-8)" : "max-w-2xl mx-auto"}`}
 			>
-				<section className="ui-card w-full h-full flex flex-col">
+				<section className="ui-card size-full flex flex-col">
 					<h2 className="text-(2xl heading center) font-bold">Suas Turmas</h2>
 					<HorizontalSeparator />
 					{classes.length === 0 ? (
@@ -84,7 +84,7 @@ export default function SchoolHomePage() {
 				</section>
 
 				{isAdmin && (
-					<section className="ui-card w-full h-full flex flex-col">
+					<section className="ui-card size-full flex flex-col">
 						<h2 className="text-(2xl heading center) font-bold">
 							Administração
 						</h2>

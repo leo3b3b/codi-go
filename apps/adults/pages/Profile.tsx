@@ -90,17 +90,19 @@ export default function ProfilePage() {
 			<section className="ui-card w-full">
 				<h2 className="text-(xl heading) font-bold">Minhas Escolas</h2>
 				<HorizontalSeparator />
-				{schools.map(({ school_id, legal_name, trade_name, role }) => (
-					<InviteCard
-						key={school_id}
-						school_id={school_id}
-						profile_id={profile.id}
-						legal_name={legal_name}
-						trade_name={trade_name}
-						user_role={role}
-						invite_status="active"
-					/>
-				))}
+				<div className="size-full flex-(~ col) gap-2">
+					{schools.map(({ school_id, legal_name, trade_name, role }) => (
+						<InviteCard
+							key={school_id}
+							school_id={school_id}
+							profile_id={profile.id}
+							legal_name={legal_name}
+							trade_name={trade_name}
+							user_role={role}
+							invite_status="active"
+						/>
+					))}
+				</div>
 				{schools.length === 0 && (
 					<p className="text-(sm muted center)">
 						Você não participa de nenhuma escola!
@@ -108,17 +110,19 @@ export default function ProfilePage() {
 				)}
 				<h2 className="text-(xl heading) font-bold mt-6">Convites</h2>
 				<HorizontalSeparator />
-				{invites.map(({ school_id, legal_name, trade_name, role }) => (
-					<InviteCard
-						key={school_id}
-						school_id={school_id}
-						profile_id={profile.id}
-						legal_name={legal_name}
-						trade_name={trade_name}
-						user_role={role}
-						invite_status="pending"
-					/>
-				))}
+				<div className="size-full flex-(~ col) gap-2">
+					{invites.map(({ school_id, legal_name, trade_name, role }) => (
+						<InviteCard
+							key={school_id}
+							school_id={school_id}
+							profile_id={profile.id}
+							legal_name={legal_name}
+							trade_name={trade_name}
+							user_role={role}
+							invite_status="pending"
+						/>
+					))}
+				</div>
 				{invites.length === 0 && (
 					<p className="text-(sm muted center)">Você não tem convites!</p>
 				)}

@@ -24,7 +24,7 @@ export default function SchoolsPage() {
 					</p>
 				</div>
 			) : (
-				<div className="grid-(~ cols-1) md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid-(~ cols-1) md:grid-cols-2 lg:grid-cols-3 gap-4">
 					{schools.map((school) => (
 						<SchoolCard
 							key={school.school_id}
