@@ -6,6 +6,7 @@ export {
 	getClassById,
 	getClassesBySchool,
 	getClassesForCurrentUser,
+	setClassPlaying,
 	updateClass,
 } from "./classes";
 export {
@@ -21,6 +22,7 @@ export {
 	getUserIdByUsername,
 	updateProfileForCurrentUser,
 } from "./profile";
+export { getStudentProgress } from "./progress";
 export { getSchoolById } from "./schools";
 export {
 	createStudent,

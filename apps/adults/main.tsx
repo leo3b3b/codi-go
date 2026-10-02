@@ -7,6 +7,7 @@ import {
 	CheckEmailPage,
 	ClassAdminPage,
 	ClassesAdminPage,
+	ClassPage,
 	MemberAdminPage,
 	OnboardingPage,
 	ProfilePage,
@@ -15,10 +16,12 @@ import {
 	SignInPage,
 	SignUpPage,
 	StudentAdminPage,
+	StudentPage,
 } from "@/pages";
 import {
 	classAdminLoader,
 	classesAdminLoader,
+	classLoader,
 	memberAdminLoader,
 	profileLoader,
 	redirectRoot,
@@ -27,6 +30,7 @@ import {
 	schoolLayoutLoader,
 	schoolsLoader,
 	studentAdminLoader,
+	studentLoader,
 } from "@/router";
 
 import "@codi-go/ui/css";
@@ -69,11 +73,13 @@ const router = createBrowserRouter([
 							},
 							{
 								path: "turma/:classId",
-								Component: Outlet,
+								Component: ClassPage,
+								loader: classLoader,
 							},
 							{
 								path: "aluno/:studentId",
-								Component: Outlet,
+								Component: StudentPage,
+								loader: studentLoader,
 							},
 							{
 								path: "admin",

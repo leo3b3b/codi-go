@@ -1,5 +1,5 @@
 export { getStudentSession, signInStudent, signOutStudent } from "./auth";
-export { getClassByAccessCode } from "./classes";
+export { getClassByAccessCode, isClassPlaying } from "./classes";
 export { listGames, listLevels } from "./levels";
 export { getMazeLevel, listMazeLevels } from "./maze";
 export { type ProgressResult, registerMazeProgress } from "./progress";

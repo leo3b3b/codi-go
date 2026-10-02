@@ -31,7 +31,9 @@ export function ClassHome() {
 
 			navigate(`/${classData.access_code}/fases`);
 		} catch {
-			toast.custom((t) => <CodiToast t={t} />);
+			toast.custom((t) => (
+				<CodiToast t={t} is_class_playing={classData.is_playing} />
+			));
 		}
 	}
 

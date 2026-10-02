@@ -8,7 +8,6 @@ export async function getSchoolById(id: string) {
 		.single();
 
 	if (error) {
-		error.message = `getSchoolById error: ${error.message}`;
 		throw error;
 	}
 

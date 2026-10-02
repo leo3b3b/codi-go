@@ -1,4 +1,5 @@
 import { type ImageCode, supabase } from "@codi-go/supabase";
+import { isClassPlaying } from "./classes";
 
 const STUDENT_SESSION_KEY = "student_session";
 
@@ -32,6 +33,12 @@ export async function signInStudent({
 
 	if (!data) {
 		throw new Error("Estudante não existe ou informações estão incorretas!");
+	}
+
+	const status = await isClassPlaying(data.class_id);
+
+	if (status === false) {
+		throw new Error("A turma não está em atividade.");
 	}
 
 	const json = {

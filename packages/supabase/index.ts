@@ -6,7 +6,7 @@ export const supabase = createClient<Database>(
 	import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
 );
 
-export type { Tables } from "./database.types";
+export type { Json, Tables } from "./database.types";
 export {
 	generateImageCode,
 	type ImageCode,

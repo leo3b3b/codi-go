@@ -10,7 +10,6 @@ export async function getStudentsByClassId(class_id: string) {
 		.order("name");
 
 	if (error) {
-		error.message = `getStudentsByClassId error: ${error.message}`;
 		throw error;
 	}
 
@@ -25,7 +24,6 @@ export async function getStudentById(student_id: string) {
 		.single();
 
 	if (error) {
-		error.message = `getStudentById error: ${error.message}`;
 		throw error;
 	}
 
@@ -49,7 +47,6 @@ export async function createStudent({
 	});
 
 	if (error) {
-		error.message = `createStudent error: ${error.message}`;
 		throw error;
 	}
 }
@@ -69,7 +66,6 @@ export async function updateStudent({
 		.eq("id", student_id);
 
 	if (error) {
-		error.message = `updateStudent error: ${error.message}`;
 		throw error;
 	}
 }
@@ -88,7 +84,6 @@ export async function transferStudent({
 		.single();
 
 	if (studentError) {
-		studentError.message = `transferStudent error: ${studentError.message}`;
 		throw studentError;
 	}
 
@@ -99,7 +94,6 @@ export async function transferStudent({
 		.single();
 
 	if (classError) {
-		classError.message = `transferStudent error: ${classError.message}`;
 		throw classError;
 	}
 
@@ -113,7 +107,6 @@ export async function transferStudent({
 		.eq("id", student_id);
 
 	if (error) {
-		error.message = `transferStudent error: ${error.message}`;
 		throw error;
 	}
 }
@@ -125,7 +118,6 @@ export async function deleteStudent(student_id: string) {
 		.eq("id", student_id);
 
 	if (error) {
-		error.message = `deleteStudent error: ${error.message}`;
 		throw error;
 	}
 }

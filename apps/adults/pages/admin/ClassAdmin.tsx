@@ -56,7 +56,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 						color="fg"
 						size={5}
 					/>
-					{showCredential ? "Esconder" : "Mostrar Credencial"}
+					{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
 				</button>
 
 				<button

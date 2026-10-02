@@ -17,10 +17,11 @@ async function getMembershipsForCurrentUser(status: "active" | "pending") {
 		`)
 		.eq("profile_id", user.id)
 		.eq("status", status)
-		.eq("schools.is_active", true);
+		.eq("schools.is_active", true)
+		.order("schools(legal_name)")
+		.order("schools(trade_name)");
 
 	if (error) {
-		error.message = `getMembershipsForCurrentUser error: ${error.message}`;
 		throw error;
 	}
 
@@ -63,7 +64,6 @@ export async function acceptInvite({
 		.eq("school_id", school_id);
 
 	if (error) {
-		error.message = `acceptInvite error: ${error.message}`;
 		throw error;
 	}
 }
@@ -86,7 +86,6 @@ export async function inviteUserToSchool({
 	});
 
 	if (error) {
-		error.message = `inviteUserToSchool error: ${error.message}`;
 		throw error;
 	}
 }
@@ -109,7 +108,6 @@ export async function adminGetMembershipsBySchool(schoolId: string) {
 		.order("profiles(username)");
 
 	if (error) {
-		error.message = `adminGetMembershipsBySchool error: ${error.message}`;
 		throw error;
 	}
 
@@ -139,7 +137,6 @@ export async function deleteMembership({
 			);
 		}
 
-		error.message = `deleteMembership error: ${error.message}`;
 		throw error;
 	}
 }
@@ -166,7 +163,6 @@ export async function updateMembershipRole({
 			);
 		}
 
-		error.message = `updateMembershipRole error: ${error.message}`;
 		throw error;
 	}
 }
