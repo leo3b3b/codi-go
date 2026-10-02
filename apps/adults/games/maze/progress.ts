@@ -5,7 +5,7 @@ interface MazeLevelConfig {
 }
 
 interface MazeProgressMetadata {
-	number_of_commands?: number;
+	number_of_commands?: number | null;
 }
 
 export interface MazeProgressRecord {
