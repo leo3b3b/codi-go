@@ -12,5 +12,6 @@ export default [
 		route("meu-perfil", "pages/Profile.tsx"),
 		route("escolas", "pages/Schools.tsx"),
 		route("escola/:schoolId", "pages/SchoolHome.tsx"),
+		route("aluno/:studentId", "pages/Student.tsx"),
 	]),
 ] satisfies RouteConfig;
