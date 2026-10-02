@@ -7,6 +7,7 @@ import {
 	CheckEmailPage,
 	ClassAdminPage,
 	ClassesAdminPage,
+	ClassPage,
 	MemberAdminPage,
 	OnboardingPage,
 	ProfilePage,
@@ -19,6 +20,7 @@ import {
 import {
 	classAdminLoader,
 	classesAdminLoader,
+	classLoader,
 	memberAdminLoader,
 	profileLoader,
 	redirectRoot,
@@ -69,7 +71,8 @@ const router = createBrowserRouter([
 							},
 							{
 								path: "turma/:classId",
-								Component: Outlet,
+								Component: ClassPage,
+								loader: classLoader,
 							},
 							{
 								path: "aluno/:studentId",
