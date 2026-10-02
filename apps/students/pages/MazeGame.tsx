@@ -56,13 +56,6 @@ export function MazeGame() {
 			return;
 		}
 
-		// if (
-		// 	state.level.maxCommands !== undefined &&
-		// 	state.commands.length >= state.level.maxCommands
-		// ) {
-		// 	return;
-		// }
-
 		setState((current) => ({
 			...current,
 			commands: [...current.commands, command],
