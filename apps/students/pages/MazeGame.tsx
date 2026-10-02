@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useLoaderData } from "react-router";
 import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
+import { registerMazeProgress } from "@/services";
 import type { Command, MazeLevel, MazeState } from "@/types";
 
 const commandIcons: Record<Command, string> = {
@@ -30,6 +31,18 @@ export function MazeGame() {
 	});
 
 	const isRunning = state.status === "running";
+
+	async function registerResult(
+		result: "success" | "failure",
+		level_id: number,
+		number_of_commands: number,
+	) {
+		await registerMazeProgress({
+			result,
+			level_id,
+			number_of_commands,
+		});
+	}
 
 	function addCommand(command: Command) {
 		if (isRunning) {
@@ -94,8 +107,14 @@ export function MazeGame() {
 					...current,
 					status: "failure",
 				}));
-				toast.error("Ops! Tente outra sequência.");
 
+				await registerResult(
+					"failure",
+					currentLevel.id,
+					commandsToExecute.length,
+				);
+
+				toast.error("Ops! Tente outra sequência.");
 				return;
 			}
 
@@ -113,6 +132,13 @@ export function MazeGame() {
 					...current,
 					status: "success",
 				}));
+
+				await registerResult(
+					"success",
+					currentLevel.id,
+					commandsToExecute.length,
+				);
+
 				toast.success("Muito bem! O Codi chegou ao objetivo.");
 
 				return;
@@ -123,6 +149,8 @@ export function MazeGame() {
 			...current,
 			status: "failure",
 		}));
+
+		await registerResult("failure", currentLevel.id, commandsToExecute.length);
 	}
 
 	return (
