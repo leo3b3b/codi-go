@@ -1,10 +1,10 @@
-import react from "@vitejs/plugin-react";
+import { reactRouter } from "@react-router/dev/vite";
 import UnoCSS from "unocss/vite";
 import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-	plugins: [UnoCSS(), react()],
+	plugins: [UnoCSS(), reactRouter()],
 
 	resolve: {
 		alias: {
