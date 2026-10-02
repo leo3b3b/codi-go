@@ -123,6 +123,7 @@ export type Database = {
 					id: number;
 					level_id: number;
 					metadata: Json;
+					register_time: string;
 					result: Database["public"]["Enums"]["progress_result"];
 					student_id: string;
 				};
@@ -130,6 +131,7 @@ export type Database = {
 					id?: number;
 					level_id: number;
 					metadata: Json;
+					register_time?: string;
 					result: Database["public"]["Enums"]["progress_result"];
 					student_id: string;
 				};
@@ -137,6 +139,7 @@ export type Database = {
 					id?: number;
 					level_id?: number;
 					metadata?: Json;
+					register_time?: string;
 					result?: Database["public"]["Enums"]["progress_result"];
 					student_id?: string;
 				};
