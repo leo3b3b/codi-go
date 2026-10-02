@@ -8,5 +8,5 @@ export default [
 		route("confirmar-email", "pages/auth/CheckEmail.tsx"),
 		route("onboarding", "pages/auth/Onboarding.tsx"),
 	]),
-	layout("layouts/School.tsx", []),
+	layout("layouts/School.tsx", [route("meu-perfil", "pages/Profile.tsx")]),
 ] satisfies RouteConfig;

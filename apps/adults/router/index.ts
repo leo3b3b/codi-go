@@ -2,7 +2,6 @@ export { classLoader } from "./class";
 export { classAdminLoader } from "./classAdmin";
 export { classesAdminLoader } from "./classesAdmin";
 export { memberAdminLoader } from "./members";
-export { profileLoader } from "./profile";
 export { redirectRoot } from "./redirectRoot";
 export { requireAuth } from "./requireAuth";
 export { schoolHomeLoader } from "./schoolHome";
