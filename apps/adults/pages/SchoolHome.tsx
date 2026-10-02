@@ -1,6 +1,36 @@
-import { NavLink, useLoaderData } from "react-router";
+import { NavLink, redirect, useLoaderData } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
-import type { schoolHomeLoader } from "@/router";
+import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
+
+export async function clientLoader({
+	params,
+}: {
+	params: { schoolId?: string };
+}) {
+	if (!params.schoolId) {
+		throw new Response("Escola não encontrada", { status: 404 });
+	}
+
+	const schoolId = params.schoolId;
+
+	const schools = await getSchoolsForCurrentUser();
+	const school = schools.find((school) => school.school_id === schoolId);
+
+	if (!school) {
+		throw new Response("Escola não encontrada", { status: 404 });
+	}
+
+	const classes = await getClassesForCurrentUser(schoolId);
+
+	if (school.role !== "admin" && classes.length === 1) {
+		throw redirect(`/escola/${schoolId}/turma/${classes[0].id}`);
+	}
+
+	return {
+		school,
+		classes,
+	};
+}
 
 const adminActions = [
 	{
@@ -17,8 +47,8 @@ const adminActions = [
 	},
 ];
 
-export function SchoolHomePage() {
-	const { school, classes } = useLoaderData<typeof schoolHomeLoader>();
+export default function SchoolHomePage() {
+	const { school, classes } = useLoaderData<typeof clientLoader>();
 	const isAdmin = school.role === "admin";
 
 	return (

@@ -4,6 +4,5 @@ export { classesAdminLoader } from "./classesAdmin";
 export { memberAdminLoader } from "./members";
 export { redirectRoot } from "./redirectRoot";
 export { requireAuth } from "./requireAuth";
-export { schoolHomeLoader } from "./schoolHome";
 export { studentLoader } from "./student";
 export { studentAdminLoader } from "./studentAdmin";
