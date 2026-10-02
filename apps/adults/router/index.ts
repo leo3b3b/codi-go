@@ -1,4 +1,3 @@
-export { classLoader } from "./class";
 export { classAdminLoader } from "./classAdmin";
 export { classesAdminLoader } from "./classesAdmin";
 export { memberAdminLoader } from "./members";

@@ -1,5 +1,5 @@
 import type { RouteConfig } from "@react-router/dev/routes";
-import { layout, route } from "@react-router/dev/routes";
+import { index, layout, prefix, route } from "@react-router/dev/routes";
 
 export default [
 	layout("layouts/Auth.tsx", [
@@ -11,7 +11,10 @@ export default [
 	layout("layouts/School.tsx", [
 		route("meu-perfil", "pages/Profile.tsx"),
 		route("escolas", "pages/Schools.tsx"),
-		route("escola/:schoolId", "pages/SchoolHome.tsx"),
-		route("aluno/:studentId", "pages/Student.tsx"),
+		...prefix("escola/:schoolId", [
+			index("pages/SchoolHome.tsx"),
+			route("turma/:classId", "pages/Class.tsx"),
+			route("aluno/:studentId", "pages/Student.tsx"),
+		]),
 	]),
 ] satisfies RouteConfig;

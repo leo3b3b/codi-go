@@ -2,11 +2,35 @@ import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
-import type { classLoader } from "@/router";
-import { setClassPlaying } from "@/services";
+import {
+	getClassById,
+	getStudentsByClassId,
+	setClassPlaying,
+} from "@/services";
+
+export async function clientLoader({
+	params,
+}: {
+	params: { schoolId?: string; classId?: string };
+}) {
+	if (!params.schoolId || !params.classId) {
+		throw new Response("Turma não encontrada", { status: 404 });
+	}
+
+	const [classData, students] = await Promise.all([
+		getClassById(params.classId),
+		getStudentsByClassId(params.classId),
+	]);
+
+	if (classData.school_id !== params.schoolId) {
+		throw new Response("Turma não encontrada", { status: 404 });
+	}
+
+	return { classData, students };
+}
 
 type Student = ReturnType<
-	typeof useLoaderData<typeof classLoader>
+	typeof useLoaderData<typeof clientLoader>
 >["students"][number];
 
 function StudentRow({
@@ -72,8 +96,8 @@ function StudentRow({
 	);
 }
 
-export function ClassPage() {
-	const { classData, students } = useLoaderData<typeof classLoader>();
+export default function ClassPage() {
+	const { classData, students } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
 	const [isUpdatingPlaying, setIsUpdatingPlaying] = useState(false);
