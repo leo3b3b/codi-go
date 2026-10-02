@@ -1,6 +1,9 @@
 import { Outlet, useLoaderData, useLocation } from "react-router";
 import { SchoolHeader } from "@/components";
+import { requireAuth } from "@/router/requireAuth";
 import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
+
+export const clientMiddleware = [requireAuth];
 
 export async function clientLoader({ request }: { request: Request }) {
 	const url = new URL(request.url);
