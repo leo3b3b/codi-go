@@ -4,7 +4,12 @@ import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { Header, HydrateFallback } from "@/components";
 import { ClassHome, LevelsPage, MazeGame } from "@/pages";
-import { classLoader, mazeLoader, requireSession } from "@/router";
+import {
+	classLoader,
+	levelsLoader,
+	mazeLoader,
+	requireSession,
+} from "@/router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
@@ -60,6 +65,7 @@ const router = createBrowserRouter([
 					{
 						path: "fases",
 						Component: LevelsPage,
+						loader: levelsLoader,
 					},
 					{
 						path: "labirinto/:levelId",
