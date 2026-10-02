@@ -12,7 +12,9 @@ dist
 build
 dist-ssr
 *.local
+
 .react-router
+.react-router/types/**/*
 
 supabase/.temp/
 
