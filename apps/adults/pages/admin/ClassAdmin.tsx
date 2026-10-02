@@ -3,11 +3,25 @@ import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import { CreateStudentForm, EditClassForm } from "@/forms";
-import type { classAdminLoader } from "@/router";
-import { deleteStudent } from "@/services";
+import { deleteStudent, getClassById, getStudentsByClassId } from "@/services";
+
+export async function clientLoader({
+	params,
+}: {
+	params: { classId?: string };
+}) {
+	if (!params.classId) {
+		throw new Response("Turma não encontrada", { status: 404 });
+	}
+
+	const classData = await getClassById(params.classId);
+	const students = await getStudentsByClassId(params.classId);
+
+	return { classData, students };
+}
 
 type Student = ReturnType<
-	typeof useLoaderData<typeof classAdminLoader>
+	typeof useLoaderData<typeof clientLoader>
 >["students"][number];
 
 interface StudentRowProps {
@@ -86,8 +100,8 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 	);
 }
 
-export function ClassAdminPage() {
-	const { classData, students } = useLoaderData<typeof classAdminLoader>();
+export default function ClassAdminPage() {
+	const { classData, students } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
 

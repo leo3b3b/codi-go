@@ -1,6 +1,6 @@
 import { Outlet, useLoaderData, useLocation } from "react-router";
 import { SchoolHeader } from "@/components";
-import { requireAuth } from "@/router/requireAuth";
+import { requireAuth } from "@/middlewares";
 import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
 
 export const clientMiddleware = [requireAuth];

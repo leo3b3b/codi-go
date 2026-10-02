@@ -1,8 +1,29 @@
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import { InviteUserForm } from "@/forms";
-import type { memberAdminLoader } from "@/router";
-import { deleteMembership, updateMembershipRole } from "@/services";
+import {
+	adminGetMembershipsBySchool,
+	deleteMembership,
+	getSchoolById,
+	getUser,
+	updateMembershipRole,
+} from "@/services";
+
+export async function clientLoader({
+	params,
+}: {
+	params: { schoolId?: string };
+}) {
+	if (!params.schoolId) {
+		throw new Response("Escola não encontrada", { status: 404 });
+	}
+
+	const user = await getUser();
+	const school = await getSchoolById(params.schoolId);
+	const memberships = await adminGetMembershipsBySchool(params.schoolId);
+
+	return { user, school, memberships };
+}
 
 type HandleUpdateRoleProps = {
 	profile_id: string;
@@ -18,9 +39,8 @@ type HandleDeleteMembershipProps = {
 	action: "remove" | "cancel";
 };
 
-export function MemberAdminPage() {
-	const { user, school, memberships } =
-		useLoaderData<typeof memberAdminLoader>();
+export default function MemberAdminPage() {
+	const { user, school, memberships } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
 

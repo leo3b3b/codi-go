@@ -2,7 +2,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { Icon } from "@/components";
-import { requireAuth } from "@/router";
+import { requireAuth } from "@/middlewares";
 import { type OnboardingOutput, onboardingSchema } from "@/schemas";
 import { updateProfileForCurrentUser } from "@/services";
 

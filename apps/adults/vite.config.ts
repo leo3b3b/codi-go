@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [UnoCSS(), reactRouter()],
+	publicDir: fileURLToPath(new URL("../../public", import.meta.url)),
 
 	resolve: {
 		alias: {
