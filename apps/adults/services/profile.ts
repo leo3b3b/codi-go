@@ -26,7 +26,6 @@ export async function updateProfileForCurrentUser({
 		.eq("id", user.id);
 
 	if (error) {
-		error.message = `updateProfileForCurrentUser error: ${error.message}`;
 		throw error;
 	}
 }
@@ -41,7 +40,6 @@ export async function getProfileForCurrentUser() {
 		.single();
 
 	if (error) {
-		error.message = `getProfileForCurrentUser error: ${error.message}`;
 		throw error;
 	}
 
@@ -56,7 +54,6 @@ export async function getUserIdByUsername(username: string) {
 		.single();
 
 	if (error) {
-		error.message = `getUserIdByUsername error: ${error.message}`;
 		throw error;
 	}
 

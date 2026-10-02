@@ -21,10 +21,10 @@ export async function getClassesForCurrentUser(school_id: string) {
 		.from("classes")
 		.select("id, name")
 		.eq("school_id", school_id)
-		.eq("teacher_id", user.id);
+		.eq("teacher_id", user.id)
+		.order("name");
 
 	if (error) {
-		error.message = `getClassesForCurrentUser error: ${error.message}`;
 		throw error;
 	}
 
@@ -39,7 +39,6 @@ export async function getClassesBySchool(school_id: string) {
 		.order("name");
 
 	if (error) {
-		error.message = `getClassesBySchool error: ${error.message}`;
 		throw error;
 	}
 
@@ -62,7 +61,6 @@ export async function getClassById(classId: string) {
 		.single();
 
 	if (error) {
-		error.message = `getClassById error: ${error.message}`;
 		throw error;
 	}
 
@@ -102,7 +100,6 @@ export async function updateClass({
 		.single();
 
 	if (currentClassError) {
-		currentClassError.message = `updateClass error: ${currentClassError.message}`;
 		throw currentClassError;
 	}
 
@@ -118,7 +115,6 @@ export async function updateClass({
 		.eq("id", class_id);
 
 	if (error) {
-		error.message = `updateClass error: ${error.message}`;
 		throw error;
 	}
 }
@@ -137,7 +133,6 @@ export async function createClass({
 	});
 
 	if (error) {
-		error.message = `createClass error: ${error.message}`;
 		throw error;
 	}
 }
@@ -146,7 +141,6 @@ export async function deleteClass(class_id: string) {
 	const { error } = await supabase.from("classes").delete().eq("id", class_id);
 
 	if (error) {
-		error.message = `deleteClass error: ${error.message}`;
 		throw error;
 	}
 }

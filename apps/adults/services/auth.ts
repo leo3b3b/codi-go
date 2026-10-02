@@ -11,7 +11,6 @@ export async function signUp(email: string, password: string) {
 	});
 
 	if (error) {
-		error.message = `signUp error: ${error.message}`;
 		throw error;
 	}
 
@@ -25,7 +24,6 @@ export async function signInWithPassword(email: string, password: string) {
 	});
 
 	if (error) {
-		error.message = `signInWithPassword error: ${error.message}`;
 		throw error;
 	}
 
@@ -36,7 +34,6 @@ export async function signOut() {
 	const { error } = await supabase.auth.signOut({ scope: "local" });
 
 	if (error) {
-		error.message = `signOut error: ${error.message}`;
 		throw error;
 	}
 }
@@ -45,7 +42,6 @@ export async function deleteUserAccount() {
 	const { error } = await supabase.rpc("delete_user_account");
 
 	if (error) {
-		error.message = `deleteUserAccount error: ${error.message}`;
 		throw error;
 	}
 }
