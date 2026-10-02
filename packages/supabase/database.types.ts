@@ -120,30 +120,24 @@ export type Database = {
 			};
 			progress: {
 				Row: {
-					end_time: string;
 					id: number;
 					level_id: number;
 					metadata: Json;
-					result: string;
-					start_time: string;
+					result: Database["public"]["Enums"]["progress_result"];
 					student_id: string;
 				};
 				Insert: {
-					end_time: string;
 					id?: number;
 					level_id: number;
 					metadata: Json;
-					result: string;
-					start_time: string;
+					result: Database["public"]["Enums"]["progress_result"];
 					student_id: string;
 				};
 				Update: {
-					end_time?: string;
 					id?: number;
 					level_id?: number;
 					metadata?: Json;
-					result?: string;
-					start_time?: string;
+					result?: Database["public"]["Enums"]["progress_result"];
 					student_id?: string;
 				};
 				Relationships: [
@@ -272,6 +266,7 @@ export type Database = {
 		Enums: {
 			invite_status: "pending" | "active";
 			profile_roles: "teacher" | "admin";
+			progress_result: "success" | "failure";
 		};
 		CompositeTypes: {
 			[_ in never]: never;
@@ -404,6 +399,7 @@ export const Constants = {
 		Enums: {
 			invite_status: ["pending", "active"],
 			profile_roles: ["teacher", "admin"],
+			progress_result: ["success", "failure"],
 		},
 	},
 } as const;

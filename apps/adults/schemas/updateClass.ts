@@ -25,7 +25,7 @@ export const updateClassSchema = v.object({
 		v.string("O código de acesso deve ser um texto."),
 		v.length(6, "O código de acesso deve ter 6 caracteres."),
 		v.regex(
-			/^[A-Z]+$/,
+			/^[A-Z]{6}$/,
 			"O código de acesso deve conter apenas letras maiúsculas.",
 		),
 	),

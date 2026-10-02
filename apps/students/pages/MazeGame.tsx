@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router";
+import toast from "react-hot-toast";
+import { useLoaderData, useNavigate } from "react-router";
 import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
+import { registerMazeProgress } from "@/services";
 import type { Command, MazeLevel, MazeState } from "@/types";
 
 const commandIcons: Record<Command, string> = {
@@ -19,6 +21,7 @@ function wait(ms: number) {
 
 export function MazeGame() {
 	const level = useLoaderData() as MazeLevel;
+	const navigate = useNavigate();
 
 	const [state, setState] = useState<MazeState>({
 		level,
@@ -30,17 +33,29 @@ export function MazeGame() {
 
 	const isRunning = state.status === "running";
 
+	async function registerResult(
+		result: "success" | "failure",
+		level_id: number,
+		number_of_commands: number,
+	) {
+		await registerMazeProgress({
+			result,
+			level_id,
+			number_of_commands,
+		});
+	}
+
 	function addCommand(command: Command) {
 		if (isRunning) {
 			return;
 		}
 
-		if (
-			state.level.maxCommands !== undefined &&
-			state.commands.length >= state.level.maxCommands
-		) {
-			return;
-		}
+		// if (
+		// 	state.level.maxCommands !== undefined &&
+		// 	state.commands.length >= state.level.maxCommands
+		// ) {
+		// 	return;
+		// }
 
 		setState((current) => ({
 			...current,
@@ -94,6 +109,13 @@ export function MazeGame() {
 					status: "failure",
 				}));
 
+				await registerResult(
+					"failure",
+					currentLevel.id,
+					commandsToExecute.length,
+				);
+
+				toast.error("Ops! Tente outra sequência.");
 				return;
 			}
 
@@ -112,6 +134,14 @@ export function MazeGame() {
 					status: "success",
 				}));
 
+				await registerResult(
+					"success",
+					currentLevel.id,
+					commandsToExecute.length,
+				);
+
+				toast.success("Muito bem! O Codi chegou ao objetivo.");
+
 				return;
 			}
 		}
@@ -120,83 +150,113 @@ export function MazeGame() {
 			...current,
 			status: "failure",
 		}));
+
+		await registerResult("failure", currentLevel.id, commandsToExecute.length);
 	}
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex-(~ col) gap-4">
 			<title>CodiGO! | Labirinto</title>
-			<MazeRenderer
-				level={state.level}
-				playerPosition={state.playerPosition}
-				direction={state.direction}
-				moving={state.status === "running"}
-			/>
+			<header className="ui-card w-full flex items-center gap-4 px-3 py-2">
+				<button
+					type="button"
+					className="ui-button-(~ secondary) h-10 w-auto"
+					onClick={() => navigate("../fases")}
+				>
+					<Icon icon="i-lucide-arrow-left" size={4} color="fg" />
+					Voltar para fases
+				</button>
+				<h1 className="text-(2xl heading) font-bold">{level.name}</h1>
+			</header>
 
-			<div className="flex flex-col gap-4 px-4">
-				<div className="flex items-center gap-4">
-					{commands.map((command) => (
-						<button
-							key={command}
-							type="button"
-							disabled={isRunning}
-							className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
-							onClick={() => addCommand(command)}
-						>
-							<span
-								className={`${commandIcons[command]} color-white h-10 w-10`}
-							/>
-						</button>
-					))}
-				</div>
+			<div className="grid-(~ cols-1) lg:grid-cols-2 gap-6">
+				<section className="flex w-full h-full justify-center">
+					<MazeRenderer
+						level={state.level}
+						playerPosition={state.playerPosition}
+						direction={state.direction}
+						moving={state.status === "running"}
+					/>
+				</section>
 
-				<div className="flex h-18 items-center gap-2 rounded-lg border p-3">
-					{state.commands.length === 0 ? (
-						<span className="text-(center muted) w-full">Comandos</span>
-					) : (
-						state.commands.map((command, index) => (
-							<div
-								key={`${index}-${command}`}
-								className="flex h-12 w-12 items-center justify-center rounded-md border"
-							>
-								<Icon
-									icon={commandIcons[command]}
-									color="on-primary"
-									size={8}
-								/>
-							</div>
-						))
-					)}
-				</div>
-
-				<div className="flex items-center gap-4">
-					<button
-						type="button"
-						disabled={isRunning || state.commands.length === 0}
-						className="ui-button-(~ primary)"
-						onClick={play}
-					>
-						Começar
-					</button>
-
-					<button
-						type="button"
-						disabled={isRunning || state.commands.length === 0}
-						className="ui-button-(~ secondary)"
-						onClick={clearCommands}
-					>
-						Limpar
-					</button>
-				</div>
-
-				{state.status === "success" && (
-					<div className="rounded-lg p-4">
-						Muito bem! O Codi chegou ao objetivo!
+				<section className="ui-card flex-(~ col) gap-4">
+					<div className="flex-(~ col) gap-1">
+						<h2 className="text-(xl heading) font-bold">Objetivo</h2>
+						<p className="text-muted">
+							Ajude o <b>Codi</b> a chegar até a <b>porta</b>. Escolha os
+							comandos na ordem em que ele deve se mover.
+						</p>
 					</div>
-				)}
 
-				{state.status === "failure" && (
-					<div className="rounded-lg p-4">Ops! O Codi bateu em uma parede.</div>
-				)}
+					<div className="flex-(~ col) gap-2">
+						<h2 className="text-(xl heading) font-bold">Comandos</h2>
+
+						<div className="flex items-center justify-center gap-2 py-2 bg-surface-subtle border-(~ border) rounded-xl">
+							{commands.map((command) => (
+								<button
+									key={command}
+									type="button"
+									disabled={isRunning}
+									className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
+									onClick={() => addCommand(command)}
+								>
+									<span
+										className={`${commandIcons[command]} color-white size-10`}
+									/>
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div className="flex-(~ col) gap-2">
+						<h2 className="text-(xl heading) font-bold">Sua sequência</h2>
+
+						<p className="text-muted">
+							Os comandos serão executados nessa ordem:
+						</p>
+
+						<div className="flex-(~ wrap) min-h-20 items-center gap-2 rounded-lg border-(~ primary) p-3">
+							{state.commands.length === 0 ? (
+								<span className="text-(center muted) w-full">
+									Escolha os comandos acima
+								</span>
+							) : (
+								state.commands.map((command, index) => (
+									<div
+										key={`${index}-${command}`}
+										className="flex size-12 items-center justify-center rounded-md border-(~ primary) bg-surface-subtle"
+									>
+										<Icon
+											icon={commandIcons[command]}
+											size={8}
+											className="text-primary"
+										/>
+									</div>
+								))
+							)}
+						</div>
+					</div>
+
+					<div className="flex items-center gap-4">
+						<button
+							type="button"
+							disabled={isRunning || state.commands.length === 0}
+							className="ui-button-(~ primary)"
+							onClick={play}
+						>
+							{isRunning ? "Andando…" : "Começar"}
+						</button>
+
+						<button
+							type="button"
+							disabled={isRunning || state.commands.length === 0}
+							className="ui-button-(~ secondary)"
+							onClick={clearCommands}
+						>
+							Limpar
+						</button>
+					</div>
+				</section>
 			</div>
 		</div>
 	);

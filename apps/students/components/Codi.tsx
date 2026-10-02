@@ -36,6 +36,7 @@ export function Codi({
 		<img
 			src={`/codi/${direction}-${frame + 1}.png`}
 			alt="Codi"
+			draggable={false}
 			className="h-full w-full object-contain"
 		/>
 	);
