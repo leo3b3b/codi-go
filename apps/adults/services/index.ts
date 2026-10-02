@@ -6,6 +6,7 @@ export {
 	getClassById,
 	getClassesBySchool,
 	getClassesForCurrentUser,
+	setClassPlaying,
 	updateClass,
 } from "./classes";
 export {

@@ -68,6 +68,23 @@ export async function getClassById(classId: string) {
 	return { ...classData, teacher_username: teacher?.username ?? null };
 }
 
+export async function setClassPlaying({
+	class_id,
+	is_playing,
+}: {
+	class_id: string;
+	is_playing: boolean;
+}) {
+	const { error } = await supabase
+		.from("classes")
+		.update({ is_playing })
+		.eq("id", class_id);
+
+	if (error) {
+		throw error;
+	}
+}
+
 export async function updateClass({
 	class_id,
 	name,

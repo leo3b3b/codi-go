@@ -1,8 +1,9 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import type { classLoader } from "@/router";
+import { setClassPlaying } from "@/services";
 
 type Student = ReturnType<
 	typeof useLoaderData<typeof classLoader>
@@ -73,13 +74,34 @@ function StudentRow({
 
 export function ClassPage() {
 	const { classData, students } = useLoaderData<typeof classLoader>();
+	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
+	const [isUpdatingPlaying, setIsUpdatingPlaying] = useState(false);
+
+	async function handleTogglePlaying() {
+		if (isUpdatingPlaying) {
+			return;
+		}
+
+		setIsUpdatingPlaying(true);
+
+		try {
+			await setClassPlaying({
+				class_id: classData.id,
+				is_playing: !classData.is_playing,
+			});
+
+			await revalidate();
+		} finally {
+			setIsUpdatingPlaying(false);
+		}
+	}
 
 	return (
 		<div className="w-full mx-auto flex-(~ col) gap-4">
 			<title>CodiGO! | {classData.name}</title>
 
-			<header className="flex items-center justify-between">
+			<header className="flex items-center justify-between gap-4">
 				<div>
 					<h1 className="text-(2xl heading) font-bold">{classData.name}</h1>
 
@@ -88,14 +110,40 @@ export function ClassPage() {
 					</p>
 				</div>
 
-				<button
-					type="button"
-					className="ui-button-(~ secondary) w-auto"
-					onClick={() => navigate(`/escola/${classData.school_id}`)}
-				>
-					<Icon icon="i-lucide-arrow-left" size={5} color="fg" />
-					Voltar
-				</button>
+				<div className="flex items-center gap-2">
+					<button
+						type="button"
+						className={`w-auto ui-button ${
+							classData.is_playing ? "ui-button-primary" : "ui-button-secondary"
+						}`}
+						disabled={isUpdatingPlaying}
+						onClick={handleTogglePlaying}
+					>
+						<Icon
+							icon={
+								classData.is_playing
+									? "i-lucide-circle-pause"
+									: "i-lucide-circle-play"
+							}
+							color={classData.is_playing ? "on-primary" : "fg"}
+							size={5}
+						/>
+						{isUpdatingPlaying
+							? "Atualizando…"
+							: classData.is_playing
+								? "Em atividade"
+								: "Iniciar atividade"}
+					</button>
+
+					<button
+						type="button"
+						className="ui-button-(~ secondary) w-auto"
+						onClick={() => navigate(`/escola/${classData.school_id}`)}
+					>
+						<Icon icon="i-lucide-arrow-left" size={5} color="fg" />
+						Voltar
+					</button>
+				</div>
 			</header>
 
 			<section className="ui-card">
