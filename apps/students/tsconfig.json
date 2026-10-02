@@ -1,5 +1,6 @@
 {
 	"extends": "../../tsconfig.base.json",
+	"rootDirs": [".", "./.react-router/types"],
 	"compilerOptions": {
 		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
 		"paths": {

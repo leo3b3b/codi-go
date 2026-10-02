@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { type SignUpOutput, signUpSchema } from "@/schemas";
 import { signUp } from "@/services";
 
-export function SignUpPage() {
+export default function SignUpPage() {
 	const navigate = useNavigate();
 
 	const {

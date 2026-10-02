@@ -2,13 +2,26 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon, InviteCard } from "@/components";
-import type { profileLoader } from "@/router";
 import { type ProfileOutput, profileSchema } from "@/schemas";
-import { signOut, updateProfileForCurrentUser } from "@/services";
+import {
+	getInvitesForCurrentUser,
+	getProfileForCurrentUser,
+	getSchoolsForCurrentUser,
+	signOut,
+	updateProfileForCurrentUser,
+} from "@/services";
 import { deleteUserAccount } from "@/services/auth";
 
-export function ProfilePage() {
-	const { profile, schools, invites } = useLoaderData<typeof profileLoader>();
+export async function clientLoader() {
+	const profile = await getProfileForCurrentUser();
+	const schools = await getSchoolsForCurrentUser();
+	const invites = await getInvitesForCurrentUser();
+
+	return { profile, schools, invites };
+}
+
+export default function ProfilePage() {
+	const { profile, schools, invites } = useLoaderData<typeof clientLoader>();
 	const navigate = useNavigate();
 	const { revalidate } = useRevalidator();
 

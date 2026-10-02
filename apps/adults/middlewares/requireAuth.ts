@@ -20,5 +20,5 @@ export const requireAuth: MiddlewareFunction = async ({ request }, next) => {
 		}
 	}
 
-	return next();
+	await next();
 };

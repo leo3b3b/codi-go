@@ -1,9 +1,27 @@
 import { Link, useLoaderData } from "react-router";
 import { CreateClassForm } from "@/forms";
-import type { classesAdminLoader } from "@/router";
+import { getClassesBySchool, getSchoolById } from "@/services";
 
-export function ClassesAdminPage() {
-	const { school, classes } = useLoaderData<typeof classesAdminLoader>();
+export async function clientLoader({
+	params,
+}: {
+	params: { schoolId?: string };
+}) {
+	if (!params.schoolId) {
+		throw new Response("Escola não encontrada", { status: 404 });
+	}
+
+	const school = await getSchoolById(params.schoolId);
+	const classes = await getClassesBySchool(params.schoolId);
+
+	return {
+		school,
+		classes,
+	};
+}
+
+export default function ClassesAdminPage() {
+	const { school, classes } = useLoaderData<typeof clientLoader>();
 
 	return (
 		<div className="flex-(~ col) gap-4">

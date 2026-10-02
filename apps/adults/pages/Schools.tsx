@@ -1,10 +1,14 @@
 import { useLoaderData } from "react-router";
 import { HorizontalSeparator } from "@/components";
 import { SchoolCard } from "@/components/SchoolCard";
-import type { schoolsLoader } from "@/router";
+import { getSchoolsForCurrentUser } from "@/services";
 
-export function SchoolsPage() {
-	const schools = useLoaderData<typeof schoolsLoader>();
+export async function clientLoader() {
+	return await getSchoolsForCurrentUser();
+}
+
+export default function SchoolsPage() {
+	const schools = useLoaderData<typeof clientLoader>();
 
 	return (
 		<>

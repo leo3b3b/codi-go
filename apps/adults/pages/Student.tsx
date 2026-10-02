@@ -9,11 +9,42 @@ import {
 	YAxis,
 } from "recharts";
 import { HorizontalSeparator, Icon } from "@/components";
-import type { studentLoader } from "@/router";
+import { parseMazeProgress } from "@/games/maze/progress";
+import { getStudentById, getStudentProgress } from "@/services";
 
-export function StudentPage() {
+export async function clientLoader({
+	params,
+}: {
+	params: {
+		schoolId?: string;
+		studentId?: string;
+	};
+}) {
+	if (!params.schoolId || !params.studentId) {
+		throw new Response("Aluno não encontrado", { status: 404 });
+	}
+
+	const [student, progress] = await Promise.all([
+		getStudentById(params.studentId),
+		getStudentProgress(params.studentId),
+	]);
+
+	if (student.school_id !== params.schoolId) {
+		throw new Response("Aluno não encontrado", { status: 404 });
+	}
+
+	return {
+		student,
+		progress,
+		mazeProgress: progress
+			.map(parseMazeProgress)
+			.filter((record) => record !== null),
+	};
+}
+
+export default function StudentPage() {
 	const { student, progress, mazeProgress } =
-		useLoaderData<typeof studentLoader>();
+		useLoaderData<typeof clientLoader>();
 
 	const navigate = useNavigate();
 

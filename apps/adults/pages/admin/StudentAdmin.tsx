@@ -2,11 +2,37 @@ import { useState } from "react";
 import { useLoaderData, useRevalidator } from "react-router";
 import { HorizontalSeparator, Icon } from "@/components";
 import { EditStudentForm } from "@/forms";
-import type { studentAdminLoader } from "@/router";
-import { transferStudent } from "@/services";
+import {
+	getClassesBySchool,
+	getStudentById,
+	transferStudent,
+} from "@/services";
 
-export function StudentAdminPage() {
-	const { student, classes } = useLoaderData<typeof studentAdminLoader>();
+export async function clientLoader({
+	params,
+}: {
+	params: {
+		schoolId?: string;
+		studentId?: string;
+	};
+}) {
+	if (!params.schoolId || !params.studentId) {
+		throw new Response("Aluno não encontrado", { status: 404 });
+	}
+
+	const student = await getStudentById(params.studentId);
+
+	if (student.school_id !== params.schoolId) {
+		throw new Response("Aluno não encontrado", { status: 404 });
+	}
+
+	const classes = await getClassesBySchool(params.schoolId);
+
+	return { student, classes };
+}
+
+export default function StudentAdminPage() {
+	const { student, classes } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
 
 	const [isTransferring, setIsTransferring] = useState(false);

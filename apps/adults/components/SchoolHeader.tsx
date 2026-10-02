@@ -1,13 +1,7 @@
 import logo from "@codi-go/ui/images/logo.png";
-import {
-	NavLink,
-	useLoaderData,
-	useLocation,
-	useNavigate,
-	useParams,
-} from "react-router";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router";
 import { Icon, Select, VerticalSeparator } from "@/components";
-import type { schoolLayoutLoader } from "@/router";
+import type { SchoolLayoutLoaderData } from "@/layouts/School";
 
 const adminOptions = [
 	{
@@ -20,12 +14,9 @@ const adminOptions = [
 	},
 ];
 
-export function SchoolHeader() {
-	const data = useLoaderData<typeof schoolLayoutLoader>();
+type SchoolHeaderProps = Pick<SchoolLayoutLoaderData, "schools" | "classes">;
 
-	const schools = data?.schools || [];
-	const classes = data?.classes || [];
-
+export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 	const { schoolId, classId } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();

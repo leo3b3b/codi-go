@@ -5,7 +5,7 @@ import { getClassByAccessCode } from "@/services";
 
 const ACCESS_CODE_PATTERN = /^[A-Z]{6}$/;
 
-export function AccessCodePage() {
+export default function AccessCodePage() {
 	const navigate = useNavigate();
 	const [accessCode, setAccessCode] = useState("");
 	const [error, setError] = useState("");
