@@ -25,8 +25,9 @@ export function MazeGame() {
 	const navigate = useNavigate();
 	const { reward } = useReward("confettiDiv", "confetti", {
 		position: "fixed",
-		elementCount: 300,
+		elementCount: 240,
 		angle: 90,
+		spread: 120,
 	});
 
 	const [state, setState] = useState<MazeState>({
