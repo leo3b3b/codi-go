@@ -27,7 +27,6 @@ export type MazeLevel = {
 	tiles: TileType[][];
 	start: Position;
 	goal: Position;
-	// maxCommands?: number;
 };
 
 export type MazeLevelSummary = {

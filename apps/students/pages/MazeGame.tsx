@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useReward } from "react-rewards";
 import { useLoaderData, useNavigate } from "react-router";
 import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
@@ -22,6 +23,11 @@ function wait(ms: number) {
 export function MazeGame() {
 	const level = useLoaderData() as MazeLevel;
 	const navigate = useNavigate();
+	const { reward } = useReward("confettiDiv", "confetti", {
+		position: "fixed",
+		elementCount: 200,
+		angle: 270,
+	});
 
 	const [state, setState] = useState<MazeState>({
 		level,
@@ -49,13 +55,6 @@ export function MazeGame() {
 		if (isRunning) {
 			return;
 		}
-
-		// if (
-		// 	state.level.maxCommands !== undefined &&
-		// 	state.commands.length >= state.level.maxCommands
-		// ) {
-		// 	return;
-		// }
 
 		setState((current) => ({
 			...current,
@@ -141,6 +140,7 @@ export function MazeGame() {
 				);
 
 				toast.success("Muito bem! O Codi chegou ao objetivo.");
+				reward();
 
 				return;
 			}
@@ -157,6 +157,7 @@ export function MazeGame() {
 	return (
 		<div className="flex-(~ col) gap-4">
 			<title>CodiGO! | Labirinto</title>
+			<span id="confettiDiv" className="mx-auto" />
 			<header className="ui-card w-full flex items-center gap-4 px-3 py-2">
 				<button
 					type="button"
