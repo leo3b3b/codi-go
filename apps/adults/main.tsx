@@ -16,6 +16,7 @@ import {
 	SignInPage,
 	SignUpPage,
 	StudentAdminPage,
+	StudentPage,
 } from "@/pages";
 import {
 	classAdminLoader,
@@ -29,6 +30,7 @@ import {
 	schoolLayoutLoader,
 	schoolsLoader,
 	studentAdminLoader,
+	studentLoader,
 } from "@/router";
 
 import "@codi-go/ui/css";
@@ -76,7 +78,8 @@ const router = createBrowserRouter([
 							},
 							{
 								path: "aluno/:studentId",
-								Component: Outlet,
+								Component: StudentPage,
+								loader: studentLoader,
 							},
 							{
 								path: "admin",

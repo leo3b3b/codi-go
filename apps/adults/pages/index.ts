@@ -12,3 +12,4 @@ export { ClassPage } from "./Class";
 export { ProfilePage } from "./Profile";
 export { SchoolHomePage } from "./SchoolHome";
 export { SchoolsPage } from "./Schools";
+export { StudentPage } from "./Student";

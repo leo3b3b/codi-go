@@ -21,6 +21,7 @@ export {
 	getUserIdByUsername,
 	updateProfileForCurrentUser,
 } from "./profile";
+export { getStudentProgress } from "./progress";
 export { getSchoolById } from "./schools";
 export {
 	createStudent,
