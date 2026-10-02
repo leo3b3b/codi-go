@@ -17,5 +17,9 @@
 		"react-hot-toast": "^2.6.0",
 		"react-rewards": "^2.1.0",
 		"react-router": "^8.3.1"
+	},
+	"devDependencies": {
+		"vite": "^8.3.0",
+		"@vitejs/plugin-react": "^6.1.1"
 	}
 }
