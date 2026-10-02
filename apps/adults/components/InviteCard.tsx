@@ -1,7 +1,7 @@
+import { useRevalidator } from "react-router";
 import { Icon } from "@/components";
 import { deleteMembership } from "@/services";
 import { acceptInvite } from "@/services/memberships";
-import { useRevalidator } from "react-router";
 
 type InviteCardProps = {
 	profile_id: string;
