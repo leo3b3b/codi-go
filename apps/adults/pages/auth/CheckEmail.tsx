@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { HorizontalSeparator } from "@/components";
 
-export function CheckEmailPage() {
+export default function CheckEmailPage() {
 	return (
 		<section className="ui-card">
 			<title>CodiGO! | Confirme seu e-mail</title>

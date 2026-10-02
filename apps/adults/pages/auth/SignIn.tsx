@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { type SignInOutput, signInSchema } from "@/schemas";
 import { signInWithPassword } from "@/services";
 
-export function SignInPage() {
+export default function SignInPage() {
 	const navigate = useNavigate();
 
 	const {

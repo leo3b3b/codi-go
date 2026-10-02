@@ -2,10 +2,13 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { Icon } from "@/components";
+import { requireAuth } from "@/router";
 import { type OnboardingOutput, onboardingSchema } from "@/schemas";
 import { updateProfileForCurrentUser } from "@/services";
 
-export function OnboardingPage() {
+export const clientMiddleware = [requireAuth];
+
+export default function OnboardingPage() {
 	const navigate = useNavigate();
 
 	const {
