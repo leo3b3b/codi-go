@@ -3,9 +3,10 @@ import type { Toast } from "react-hot-toast";
 
 type CodiToastProps = {
 	t: Toast;
+	is_class_playing: boolean;
 };
 
-export function CodiToast({ t }: CodiToastProps) {
+export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 	return (
 		<div
 			className={`
@@ -22,9 +23,17 @@ export function CodiToast({ t }: CodiToastProps) {
 				/>
 
 				<div className="flex-1">
-					<p className="text-(xl heading) font-bold">Ops! Não deu certo.</p>
+					<p className="text-(xl heading) font-bold">
+						{is_class_playing
+							? "Ops! Não deu certo."
+							: "Ops! A sala está fechada."}
+					</p>
 
-					<p className="mt-1 text-(base fg)">Tente escolher outra imagem.</p>
+					<p className="mt-1 text-(base fg)">
+						{is_class_playing
+							? "Tente escolher outra imagem."
+							: "Tente de novo depois"}
+					</p>
 				</div>
 			</div>
 		</div>

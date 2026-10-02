@@ -1,5 +1,5 @@
 import { supabase } from "@codi-go/supabase";
-import { getStudentSession } from "@/services";
+import { getStudentSession, isClassPlaying } from "@/services";
 
 export type ProgressResult = "success" | "failure";
 
@@ -16,6 +16,12 @@ export async function registerMazeProgress({
 
 	if (!session) {
 		throw new Error("Sessão de aluno não encontrada!.");
+	}
+
+	const status = await isClassPlaying(session.class_id);
+
+	if (status !== true) {
+		throw new Error("A turma não está em atividade.");
 	}
 
 	const { error } = await supabase.from("progress").insert({
