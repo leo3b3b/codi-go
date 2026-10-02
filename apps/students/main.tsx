@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { Header, HydrateFallback } from "@/components";
-import { ClassHome, LevelsPage, MazeGame } from "@/pages";
+import { AccessCodePage, ClassHome, LevelsPage, MazeGame } from "@/pages";
 import {
 	classLoader,
 	levelsLoader,
@@ -50,6 +50,10 @@ const router = createBrowserRouter([
 			{
 				Component: AppLayout,
 				children: [
+					{
+						index: true,
+						Component: AccessCodePage,
+					},
 					{
 						path: ":accessCode",
 						Component: ClassHome,
