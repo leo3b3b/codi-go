@@ -15,6 +15,7 @@ export default [
 			index("pages/SchoolHome.tsx"),
 			route("turma/:classId", "pages/Class.tsx"),
 			route("aluno/:studentId", "pages/Student.tsx"),
+			...prefix("admin", [route("turmas", "pages/admin/ClassesAdmin.tsx")]),
 		]),
 	]),
 ] satisfies RouteConfig;
