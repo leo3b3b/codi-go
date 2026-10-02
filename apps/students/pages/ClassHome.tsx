@@ -2,13 +2,33 @@ import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import logo from "@codi-go/ui/images/logo.png";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
 import { CodiToast, Icon } from "@/components";
-import type { classLoader } from "@/router";
-import { signInStudent } from "@/services";
+import {
+	getClassByAccessCode,
+	getStudentsByClassId,
+	signInStudent,
+} from "@/services";
 
-export function ClassHome() {
-	const { classData, students } = useLoaderData<typeof classLoader>();
+export async function clientLoader({ params }: LoaderFunctionArgs) {
+	if (!params.accessCode) {
+		throw new Response("Turma não encontrada", { status: 404 });
+	}
+
+	const classData = await getClassByAccessCode(params.accessCode);
+
+	if (!classData) {
+		throw new Response("Turma não encontrada", { status: 404 });
+	}
+
+	const students = await getStudentsByClassId(classData.id);
+
+	return { classData, students };
+}
+
+export default function ClassHome() {
+	const { classData, students } = useLoaderData<typeof clientLoader>();
 	const navigate = useNavigate();
 
 	const [selectedStudent, setSelectedStudent] = useState<{

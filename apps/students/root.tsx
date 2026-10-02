@@ -2,6 +2,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import "@codi-go/ui/css";
 import "virtual:uno.css";
+import { Toaster } from "react-hot-toast";
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
@@ -24,5 +25,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function Root() {
-	return <Outlet />;
+	return (
+		<>
+			<Outlet />
+
+			<Toaster
+				position="top-center"
+				toastOptions={{
+					duration: 3000,
+					style: {
+						background: "var(--color-surface)",
+						color: "var(--color-fg)",
+						padding: "8px",
+					},
+				}}
+			/>
+		</>
+	);
 }

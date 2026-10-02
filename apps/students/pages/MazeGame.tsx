@@ -1,11 +1,38 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useReward } from "react-rewards";
-import { useLoaderData, useNavigate } from "react-router";
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	useNavigate,
+} from "react-router";
 import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
-import { registerMazeProgress } from "@/services";
+import {
+	getMazeLevel,
+	getStudentSession,
+	isClassPlaying,
+	registerMazeProgress,
+} from "@/services";
 import type { Command, MazeLevel, MazeState } from "@/types";
+
+export async function clientLoader({ params }: LoaderFunctionArgs) {
+	const levelId = Number(params.levelId);
+
+	const session = getStudentSession();
+
+	if (!session) {
+		throw new Response("Sessão de aluno não encontrada.", { status: 401 });
+	}
+
+	const status = await isClassPlaying(session.class_id);
+
+	if (status !== true) {
+		throw new Response("A turma não está em atividade.", { status: 403 });
+	}
+
+	return getMazeLevel(levelId);
+}
 
 const commandIcons: Record<Command, string> = {
 	up: "i-lucide-arrow-up",
@@ -20,7 +47,7 @@ function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function MazeGame() {
+export default function MazeGame() {
 	const level = useLoaderData() as MazeLevel;
 	const navigate = useNavigate();
 	const { reward } = useReward("confettiDiv", "confetti", {
