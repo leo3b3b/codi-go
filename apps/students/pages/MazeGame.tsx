@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { Icon, MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
 import { registerMazeProgress } from "@/services";
@@ -21,6 +21,7 @@ function wait(ms: number) {
 
 export function MazeGame() {
 	const level = useLoaderData() as MazeLevel;
+	const navigate = useNavigate();
 
 	const [state, setState] = useState<MazeState>({
 		level,
@@ -154,99 +155,109 @@ export function MazeGame() {
 	}
 
 	return (
-		<div className="flex-(~ col) md:grid-(~ cols-2) gap-6">
+		<div className="flex-(~ col) gap-4">
 			<title>CodiGO! | Labirinto</title>
-			<section className="flex w-full h-full justify-center">
-				<MazeRenderer
-					level={state.level}
-					playerPosition={state.playerPosition}
-					direction={state.direction}
-					moving={state.status === "running"}
-				/>
-			</section>
+			<header className="ui-card w-full flex items-center gap-4 px-3 py-2">
+				<button
+					type="button"
+					className="ui-button-(~ secondary) h-10 w-auto"
+					onClick={() => navigate("../fases")}
+				>
+					<Icon icon="i-lucide-arrow-left" size={4} color="fg" />
+					Voltar para fases
+				</button>
+				<h1 className="text-(2xl heading) font-bold">{level.name}</h1>
+			</header>
 
-			<section className="ui-card flex-(~ col) gap-4">
-				<h1 className="text-(2xl heading) font-bold pb-2 mb-2 border-b-(~ border)">
-					Labirinto
-				</h1>
+			<div className="grid-(~ cols-1) lg:grid-cols-2 gap-6">
+				<section className="flex w-full h-full justify-center">
+					<MazeRenderer
+						level={state.level}
+						playerPosition={state.playerPosition}
+						direction={state.direction}
+						moving={state.status === "running"}
+					/>
+				</section>
 
-				<div className="flex-(~ col) gap-1">
-					<h2 className="text-(xl heading) font-bold">Objetivo</h2>
-					<p className="text-muted">
-						Ajude o <b>Codi</b> a chegar até a <b>porta</b>. Escolha os comandos
-						na ordem em que ele deve se mover.
-					</p>
-				</div>
-
-				<div className="flex-(~ col) gap-2">
-					<h2 className="text-(xl heading) font-bold">Comandos</h2>
-
-					<div className="flex items-center justify-center gap-2 py-2 bg-surface-subtle border-(~ border) rounded-xl">
-						{commands.map((command) => (
-							<button
-								key={command}
-								type="button"
-								disabled={isRunning}
-								className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
-								onClick={() => addCommand(command)}
-							>
-								<span
-									className={`${commandIcons[command]} color-white size-10`}
-								/>
-							</button>
-						))}
+				<section className="ui-card flex-(~ col) gap-4">
+					<div className="flex-(~ col) gap-1">
+						<h2 className="text-(xl heading) font-bold">Objetivo</h2>
+						<p className="text-muted">
+							Ajude o <b>Codi</b> a chegar até a <b>porta</b>. Escolha os
+							comandos na ordem em que ele deve se mover.
+						</p>
 					</div>
-				</div>
 
-				<div className="flex-(~ col) gap-2">
-					<h2 className="text-(xl heading) font-bold">Sua sequência</h2>
+					<div className="flex-(~ col) gap-2">
+						<h2 className="text-(xl heading) font-bold">Comandos</h2>
 
-					<p className="text-muted">
-						Os comandos serão executados nessa ordem:
-					</p>
-
-					<div className="flex-(~ wrap) min-h-20 items-center gap-2 rounded-lg border-(~ primary) p-3">
-						{state.commands.length === 0 ? (
-							<span className="text-(center muted) w-full">
-								Escolha os comandos acima
-							</span>
-						) : (
-							state.commands.map((command, index) => (
-								<div
-									key={`${index}-${command}`}
-									className="flex size-12 items-center justify-center rounded-md border-(~ primary) bg-surface-subtle"
+						<div className="flex items-center justify-center gap-2 py-2 bg-surface-subtle border-(~ border) rounded-xl">
+							{commands.map((command) => (
+								<button
+									key={command}
+									type="button"
+									disabled={isRunning}
+									className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
+									onClick={() => addCommand(command)}
 								>
-									<Icon
-										icon={commandIcons[command]}
-										size={8}
-										className="text-primary"
+									<span
+										className={`${commandIcons[command]} color-white size-10`}
 									/>
-								</div>
-							))
-						)}
+								</button>
+							))}
+						</div>
 					</div>
-				</div>
 
-				<div className="flex items-center gap-4">
-					<button
-						type="button"
-						disabled={isRunning || state.commands.length === 0}
-						className="ui-button-(~ primary)"
-						onClick={play}
-					>
-						{isRunning ? "Andando…" : "Começar"}
-					</button>
+					<div className="flex-(~ col) gap-2">
+						<h2 className="text-(xl heading) font-bold">Sua sequência</h2>
 
-					<button
-						type="button"
-						disabled={isRunning || state.commands.length === 0}
-						className="ui-button-(~ secondary)"
-						onClick={clearCommands}
-					>
-						Limpar
-					</button>
-				</div>
-			</section>
+						<p className="text-muted">
+							Os comandos serão executados nessa ordem:
+						</p>
+
+						<div className="flex-(~ wrap) min-h-20 items-center gap-2 rounded-lg border-(~ primary) p-3">
+							{state.commands.length === 0 ? (
+								<span className="text-(center muted) w-full">
+									Escolha os comandos acima
+								</span>
+							) : (
+								state.commands.map((command, index) => (
+									<div
+										key={`${index}-${command}`}
+										className="flex size-12 items-center justify-center rounded-md border-(~ primary) bg-surface-subtle"
+									>
+										<Icon
+											icon={commandIcons[command]}
+											size={8}
+											className="text-primary"
+										/>
+									</div>
+								))
+							)}
+						</div>
+					</div>
+
+					<div className="flex items-center gap-4">
+						<button
+							type="button"
+							disabled={isRunning || state.commands.length === 0}
+							className="ui-button-(~ primary)"
+							onClick={play}
+						>
+							{isRunning ? "Andando…" : "Começar"}
+						</button>
+
+						<button
+							type="button"
+							disabled={isRunning || state.commands.length === 0}
+							className="ui-button-(~ secondary)"
+							onClick={clearCommands}
+						>
+							Limpar
+						</button>
+					</div>
+				</section>
+			</div>
 		</div>
 	);
 }

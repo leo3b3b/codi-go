@@ -15,7 +15,7 @@ export function Header() {
 
 	return (
 		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
-			<div className="mx-auto flex h-16 max-w-7xl items-center px-4 py-3 sm:(px-6 py-4) lg:px-8 gap-6">
+			<div className="mx-auto flex h-16 max-w-7xl items-center px-4 py-3 sm:(px-6 py-4) gap-4">
 				<img src={logo} alt="Logo do CodiGO!" className="h-14" />
 				<span className="text-(xl heading) font-semibold truncate">
 					{student?.name ?? "Aluno"}
