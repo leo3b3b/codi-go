@@ -25,8 +25,8 @@ export function MazeGame() {
 	const navigate = useNavigate();
 	const { reward } = useReward("confettiDiv", "confetti", {
 		position: "fixed",
-		elementCount: 200,
-		angle: 270,
+		elementCount: 300,
+		angle: 90,
 	});
 
 	const [state, setState] = useState<MazeState>({
@@ -157,7 +157,6 @@ export function MazeGame() {
 	return (
 		<div className="flex-(~ col) gap-4">
 			<title>CodiGO! | Labirinto</title>
-			<span id="confettiDiv" className="mx-auto" />
 			<header className="ui-card w-full flex items-center gap-4 px-3 py-2">
 				<button
 					type="button"
