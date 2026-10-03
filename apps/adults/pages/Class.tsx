@@ -128,7 +128,7 @@ export default function ClassPage() {
 			<header className="flex items-center justify-between gap-4">
 				<div>
 					<h1 className="text-(2xl heading) font-bold">
-						{classData.name} ({classData.access_code})
+						{classData.name} | Código de Acesso: {classData.access_code}
 					</h1>
 
 					<p className="text-(sm muted)">
