@@ -123,11 +123,13 @@ export default function ClassPage() {
 
 	return (
 		<div className="w-full mx-auto flex-(~ col) gap-4">
-			<title>CodiGO! | {classData.name}</title>
+			<title>CodiGO! | Turma</title>
 
 			<header className="flex items-center justify-between gap-4">
 				<div>
-					<h1 className="text-(2xl heading) font-bold">{classData.name}</h1>
+					<h1 className="text-(2xl heading) font-bold">
+						{classData.name} ({classData.access_code})
+					</h1>
 
 					<p className="text-(sm muted)">
 						{students.length} {students.length === 1 ? "aluno" : "alunos"}
