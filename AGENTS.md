@@ -1,211 +1,104 @@
-# CodiGO!
+# CodiGO! — Guia para Agentes
 
-O CodiGO! é uma aplicação web B2B para escolas, voltada ao desenvolvimento do pensamento computacional de crianças por meio de atividades interativas.
+## Visão geral
 
-O monorepo possui duas aplicações frontend:
+O CodiGO! é um monorepo npm com duas aplicações frontend independentes e pacotes compartilhados:
 
-* `apps/adults` — aplicação para usuários adultos, principalmente administradores e professores;
-* `apps/students` — aplicação para alunos.
+* `apps/adults`: aplicação destinada a adultos, professores e administradores.
+* `apps/students`: aplicação destinada aos alunos.
+* `packages/`: código compartilhado entre as aplicações.
 
-Existem também packages compartilhados em `packages/`.
+As aplicações são produtos independentes e possuem configuração, build e deploy próprios.
 
-O comportamento do produto e suas regras de negócio podem evoluir. Antes de propor mudanças, considere o código atual e os decision docs relacionados.
+O projeto utiliza React, TypeScript, React Router e Supabase. A interface compartilhada fica em `@codi-go/ui` e o acesso ao Supabase fica em `@codi-go/supabase`.
 
-## Como Trabalhar
+## Estrutura e arquitetura
 
-* o usuário possui a palavra final sobre decisões arquiteturais;
-* discuta trade-offs, segurança, manutenibilidade, desempenho e dívida técnica quando relevantes;
-* questione decisões técnicas quando houver motivos concretos;
-* apresente alternativas quando existirem;
-* diferencie recomendações de decisões já tomadas;
-* busque manter os padrões de projeto já estabelecidos.
+Não assuma que uma determinada pasta, arquivo ou organização interna continuará existindo. Antes de alterar código, inspecione a estrutura atual da aplicação ou pacote afetado.
 
-## Repositório
+As aplicações utilizam React Router com o tooling de framework fornecido por `@react-router/dev`. A configuração de rotas faz parte da própria aplicação e deve seguir os padrões estabelecidos pelo código atual.
 
-O código-fonte está em:
+Cada aplicação possui sua própria configuração de Vite e UnoCSS. O preset compartilhado de UnoCSS é fornecido por `@codi-go/ui`.
 
-`github.com/leo3b3b/codi-go`
+O código compartilhado entre aplicações deve permanecer em `packages/` quando houver uma necessidade real de compartilhamento. Evite mover código para um pacote compartilhado apenas para eliminar duplicação local.
 
-O código existente é a referência para a estrutura atual. Este texto não deve ser tratado como mais atualizado que o repositório.
+## Acesso a dados
 
-Antes de propor alterações que dependam da implementação atual, consulte os arquivos relevantes.
-
-Não realizar operações de escrita no GitHub. Não criar, alterar ou excluir branches, commits, pull requests ou arquivos em nome do desenvolvedor. Tampouco criar um checkout local e aplicar alterações diretamente.
-
-## Stack
-
-O projeto utiliza atualmente:
-
-* React;
-* TypeScript;
-* Vite;
-* React Router em Data Mode;
-* Supabase JS;
-* UnoCSS;
-* Biome;
-* npm workspaces.
-
-A versão exata das dependências deve ser obtida dos `package.json` e do lockfile, em vez de ser duplicada neste documento.
-
-A aplicação de adultos utiliza React Hook Form, Valibot e `@hookform/resolvers`.
-
-Não substituir tecnologias existentes ou adicionar novas tecnologias sem justificativa técnica.
-
-## Monorepo
-
-A estrutura principal é:
-
-```text
-codi-go/
-├── apps/
-│   ├── adults/
-│   └── students/
-├── packages/
-│   ├── supabase/
-│   └── ui/
-├── docs/
-│   └── decisions/
-├── package.json
-├── package-lock.json
-├── vite.config.ts
-├── uno.config.ts
-├── biome.json
-└── tsconfig.json
-```
-
-As aplicações não possuem `src/`. Cada aplicação utiliza seu próprio diretório como source root.
-
-Não criar `src/` dentro de `apps/adults` ou `apps/students`.
-
-O root utiliza npm workspaces:
-
-```json
-{
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
-}
-```
-
-Dependências devem ser declaradas no workspace que realmente depende delas.
-
-Não promover dependências específicas de uma aplicação para o root apenas por conveniência.
-
-## Aplicações
-
-Cada aplicação atualmente organiza o código principalmente por:
-
-```text
-apps/<app>/
-├── components/
-├── layouts/
-├── pages/
-├── schemas/
-├── services/
-└── ...
-```
-
-Essa é a organização atual de referência para novas funcionalidades da aplicação.
-
-Use:
-
-* `pages/` para páginas;
-* `layouts/` para estruturas de layout e navegação;
-* `components/` para componentes reutilizáveis da aplicação;
-* `schemas/` para schemas de validação;
-* `services/` para lógica de integração e operações de negócio.
-* `router/` para loaders, middlewares e outros componentes associados ao router, mas não o router em si.
-
-Não criar novas camadas como `repositories/`, `data-access/` ou equivalentes sem uma decisão arquitetural explícita.
-
-## Packages
-
-Packages compartilhados ficam em `packages/`.
-
-Exemplo:
-
-```text
-packages/
-├── supabase/
-└── ui/
-```
-
-Crie um novo package somente quando existir uma fronteira real de compartilhamento entre aplicações.
-
-Não criar packages genéricos como `shared` ou `utils` antecipadamente.
-
-### `@codi-go/supabase`
-
-O package `@codi-go/supabase` fornece o cliente Supabase compartilhado e os tipos relacionados ao banco.
-
-As aplicações devem utilizar sua API pública:
+O cliente Supabase é disponibilizado por `@codi-go/supabase`:
 
 ```ts
 import { supabase } from "@codi-go/supabase";
 ```
 
-Não importar diretamente arquivos internos de outro workspace quando existir uma API pública definida pelo package.
+O acesso aos dados deve ser encapsulado em serviços. Componentes e páginas não devem realizar diretamente operações de persistência no Supabase.
 
-### `@codi-go/ui`
+Ao trabalhar com dados, consulte primeiro a implementação existente e `docs/decisions/0005-database.md` para entender as convenções do projeto.
 
-O package `@codi-go/ui` concentra estilos, tokens e configurações de UI compartilhadas.
+Não altere a arquitetura de acesso a dados sem avaliar o impacto nas aplicações e nos pacotes compartilhados.
 
-A configuração do UnoCSS utiliza esse package.
+## Formulários
 
-Não duplicar tokens, estilos ou configurações compartilhadas nas aplicações sem necessidade.
+Na aplicação de adultos, formulários devem seguir o padrão estabelecido pelo projeto:
 
-## Dados e Supabase
+* React Hook Form;
+* Valibot;
+* `@hookform/resolvers`.
 
-Alterações envolvendo Supabase, PostgreSQL, migrations, RLS, policies, RPCs, autenticação, autorização ou acesso a dados devem seguir:
+Antes de introduzir outra biblioteca ou padrão de formulário, verifique `docs/decisions/0001-react-hook-form-and-valibot.md`.
 
-`docs/decisions/0005-database.md`
+## UI e estilos
 
-Não introduzir outra estratégia de acesso a dados sem avaliar a arquitetura existente.
+`@codi-go/ui` concentra recursos compartilhados de interface, incluindo componentes, estilos, imagens e configuração/preset de UnoCSS.
 
-Por padrão, o acesso a dados deve permanecer encapsulado nos services existentes.
+Quando uma necessidade de UI for compartilhada entre as aplicações, prefira os recursos existentes em `@codi-go/ui` antes de criar implementações paralelas.
 
-Componentes, layouts e páginas não devem acessar diretamente o cliente Supabase para executar operações de persistência.
+Cada aplicação integra o UnoCSS usando o preset compartilhado. Respeite a configuração existente da aplicação afetada.
 
-## Formulários e validação
+## TypeScript e dependências
 
-A aplicação de adultos utiliza:
+O projeto utiliza TypeScript com configurações compartilhadas na raiz e configurações específicas por workspace quando necessário.
 
-* React Hook Form para gerenciamento de formulários;
-* Valibot para validação;
-* `@hookform/resolvers` para integração.
+As dependências devem ser declaradas no workspace que realmente depende delas. Não adicione dependências à raiz apenas por conveniência.
 
-A decisão está documentada em:
+Antes de adicionar uma biblioteca, verifique se o monorepo já possui uma solução equivalente.
 
-`docs/decisions/0001-react-hook-form-and-valibot.md`
+## Decisões arquiteturais
 
-Preserve esse padrão para novos formulários da aplicação de adultos, salvo decisão arquitetural diferente.
+As decisões específicas do projeto ficam em `docs/decisions/`.
 
-## Estilização
+Esses documentos são a fonte de referência para decisões arquiteturais e de domínio. Não replique seu conteúdo neste arquivo.
 
-A estilização utiliza UnoCSS.
+Antes de alterar uma área relevante, procure as decisões existentes relacionadas ao assunto. Atualmente, há decisões importantes relacionadas a:
 
-A configuração compartilhada fica no root, principalmente em:
+* formulários;
+* banco de dados e acesso a dados;
+* deploy e roteamento;
+* funcionalidades administrativas;
+* turmas.
 
-* `uno.config.ts`;
-* `packages/ui/preset.ts`;
-* `packages/ui/styles.css`.
+Quando uma mudança contradizer uma decisão existente, não simplesmente contorne a decisão no código. Avalie se a decisão continua válida e, se necessário, proponha sua revisão.
 
-Não duplicar configurações de UnoCSS entre as aplicações sem uma necessidade concreta.
+## Processo para alterações
 
-## Modelo de negócio
+Antes de implementar uma mudança:
 
-O modelo de negócio, bem como estratégias para implementação de features específicas, como routing, autenticação, etc. possuem decisões documentadas em `docs/decisions/`.
+1. Identifique a aplicação ou pacote afetado.
+2. Inspecione a implementação atual e os padrões utilizados naquela área.
+3. Procure decisões relevantes em `docs/decisions/`.
+4. Determine se a mudança é local ou se altera uma convenção compartilhada.
+5. Faça a menor alteração coerente com a arquitetura atual.
 
-Quando uma alteração envolver esses assuntos, consulte o decision doc correspondente antes de propor uma mudança.
+Não introduza abstrações, camadas ou pacotes compartilhados sem necessidade concreta.
 
-## Regra geral
+Quando houver divergência entre este arquivo e o código atual, trate o código como a referência para a implementação. Este documento deve ser atualizado quando suas orientações deixarem de refletir o projeto.
 
-Antes de modificar o projeto:
+## Princípios gerais
 
-1. identifique a aplicação ou package afetado;
-2. consulte a implementação atual;
-3. consulte os decision docs relacionados;
-4. preserve as convenções existentes;
-5. determine se a mudança é local ou arquitetural;
-6. faça a menor alteração coerente com a arquitetura atual.
+* Preserve os padrões já estabelecidos quando eles forem adequados.
+* Evite mudanças arquiteturais disfarçadas de refactors locais.
+* Não duplique lógica compartilhada sem uma justificativa clara.
+* Considere segurança, manutenibilidade, performance e dívida técnica ao propor alterações.
+* Questione decisões técnicas quando houver um motivo concreto para isso, apresentando os trade-offs.
+* Diferencie claramente o que já existe no projeto de uma recomendação nova.
+* Não assuma que a estrutura atual permanecerá estável; o código deve ser inspecionado antes de realizar alterações.
+* Em caso de dúvida sobre uma decisão arquitetural, consulte os documentos em `docs/decisions/` antes de criar um novo padrão.
