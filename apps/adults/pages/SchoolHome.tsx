@@ -1,5 +1,6 @@
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { NavLink, redirect, useLoaderData } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
 import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
 
 export async function clientLoader({
@@ -36,13 +37,13 @@ const adminActions = [
 	{
 		title: "Turmas",
 		description: "Gerencie as turmas desta escola.",
-		icon: "i-lucide-school",
+		icon: Icon.School,
 		to: "admin/turmas",
 	},
 	{
 		title: "Membros",
 		description: "Gerencie professores e demais membros.",
-		icon: "i-lucide-users",
+		icon: Icon.Users,
 		to: "admin/membros",
 	},
 ];
@@ -52,72 +53,86 @@ export default function SchoolHomePage() {
 	const isAdmin = school.role === "admin";
 
 	return (
-		<div className="size-full">
-			<h1 className="text-(xl heading) font-bold">{school.trade_name}</h1>
-			<HorizontalSeparator />
-			<div
-				className={`flex-(~ col) justify-center gap-4 ${isAdmin ? "md:(grid grid-cols-2 gap-8)" : "max-w-2xl mx-auto"}`}
+		<M.Stack w="100%">
+			<M.Title order={1}>{school.trade_name}</M.Title>
+
+			<M.Divider />
+
+			<M.SimpleGrid
+				cols={{ base: 1, md: isAdmin ? 2 : 1 }}
+				spacing="lg"
+				maw={isAdmin ? undefined : 672}
+				mx={isAdmin ? undefined : "auto"}
+				w="100%"
 			>
-				<section className="ui-card size-full flex flex-col">
-					<h2 className="text-(2xl heading center) font-bold">Suas Turmas</h2>
-					<HorizontalSeparator />
-					{classes.length === 0 ? (
-						<p className="text-(lg center)">Você não tem turmas!</p>
-					) : (
-						<div className="flex-(~ col) gap-2">
-							{classes.map(({ id, name }) => (
-								<NavLink to={`turma/${id}`} key={id}>
-									<article
-										className="
-											bg-surface-subtle border-(~ border) rounded-lg px-8 py-4
-											transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group
-										"
-									>
-										<h3 className="text-(xl primary) font-semibold group-hover:text-on-primary transition-(colors 500)">
-											{name}
-										</h3>
-									</article>
-								</NavLink>
-							))}
-						</div>
-					)}
-				</section>
+				<M.Paper>
+					<M.Stack>
+						<M.Title order={2} ta="center">
+							Suas Turmas
+						</M.Title>
+
+						<M.Divider />
+
+						{classes.length === 0 ? (
+							<M.Text size="lg" ta="center">
+								Você não tem turmas!
+							</M.Text>
+						) : (
+							<M.Stack gap="sm">
+								{classes.map(({ id, name }) => (
+									<NavLink to={`turma/${id}`} key={id}>
+										<M.Paper
+											bg="gray.1"
+											p="md"
+										>
+											<M.Text
+												c="violet"
+												fw={600}
+											>
+												{name}
+											</M.Text>
+										</M.Paper>
+									</NavLink>
+								))}
+							</M.Stack>
+						)}
+					</M.Stack>
+				</M.Paper>
 
 				{isAdmin && (
-					<section className="ui-card size-full flex flex-col">
-						<h2 className="text-(2xl heading center) font-bold">
-							Administração
-						</h2>
-						<HorizontalSeparator />
-						<div className="flex-(~ col) gap-2">
-							{adminActions.map(({ title, description, icon, to }) => (
-								<NavLink to={to} key={title}>
-									<article
-										className="
-											bg-surface-subtle border-(~ border) rounded-lg flex-(~ row) items-center gap-4 px-4 py-4
-											transition-(colors 500) hover:(bg-primary-soft/70 border-primary) group"
-									>
-										<Icon
-											icon={icon}
-											color="primary"
-											size={10}
-											className="group-hover:text-on-primary transition-(colors 500)"
-										/>
-										<div>
-											<h3 className="text-xl group-hover:text-on-primary transition-(colors 500)">
-												{title}
-											</h3>
-											<p className="text-(sm muted) group-hover:text-on-primary/70 transition-(colors 500)">
-												{description}
-											</p>
-										</div>
-									</article>
-								</NavLink>
-							))}
-						</div>
-					</section>
+					<M.Paper>
+						<M.Stack>
+							<M.Title order={2} ta="center">
+								Administração
+							</M.Title>
+
+							<M.Divider />
+
+							<M.Stack gap="sm">
+								{adminActions.map(
+									({ title, description, icon: ActionIcon, to }) => (
+										<NavLink to={to} key={title}>
+											<M.Paper bg="gray.1">
+												<M.Group gap="md" wrap="nowrap">
+													<ActionIcon size={28} />
+
+													<div>
+														<M.Text fw={500}>{title}</M.Text>
+
+														<M.Text size="sm" c="dimmed">
+															{description}
+														</M.Text>
+													</div>
+												</M.Group>
+											</M.Paper>
+										</NavLink>
+									),
+								)}
+							</M.Stack>
+						</M.Stack>
+					</M.Paper>
 				)}
-			</div>
-		</div>
+			</M.SimpleGrid>
+		</M.Stack>
 	);
 }
