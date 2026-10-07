@@ -1,7 +1,9 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon, InviteCard } from "@/components";
+import { InviteCard } from "@/components";
 import { type ProfileOutput, profileSchema } from "@/schemas";
 import {
 	getInvitesForCurrentUser,
@@ -72,151 +74,152 @@ export default function ProfilePage() {
 	}
 
 	return (
-		<div className="w-full max-w-2xl h-full mx-auto flex-(~ col) items-center gap-4">
+		<M.Container size="sm">
 			<title>CodiGO! | Meu Perfil</title>
 
-			<section className="ui-card w-full flex-(~ row) gap-6 items-center">
-				<div className="rounded-full bg-primary flex items-center justify-center size-16">
-					<Icon icon="i-lucide-user" color="on-primary" size={8} />
-				</div>
-				<div>
-					<h1 className="text-(2xl heading) sm:text-3xl font-bold break-words">
-						{profile.name}
-					</h1>
-					<p className="text-(lg muted) italic">@{profile.username}</p>
-				</div>
-			</section>
+			<M.Stack gap="md">
+				<M.Paper p="lg">
+					<M.Group gap="lg" wrap="nowrap">
+						<M.ThemeIcon size={64} radius="xl">
+							<Icon.User size={32} />
+						</M.ThemeIcon>
 
-			<section className="ui-card w-full">
-				<h2 className="text-(xl heading) font-bold">Minhas Escolas</h2>
-				<HorizontalSeparator />
-				<div className="size-full flex-(~ col) gap-2">
-					{schools.map(({ school_id, legal_name, trade_name, role }) => (
-						<InviteCard
-							key={school_id}
-							school_id={school_id}
-							profile_id={profile.id}
-							legal_name={legal_name}
-							trade_name={trade_name}
-							user_role={role}
-							invite_status="active"
-						/>
-					))}
-				</div>
-				{schools.length === 0 && (
-					<p className="text-(sm muted center)">
-						Você não participa de nenhuma escola!
-					</p>
-				)}
-				<h2 className="text-(xl heading) font-bold mt-6">Convites</h2>
-				<HorizontalSeparator />
-				<div className="size-full flex-(~ col) gap-2">
-					{invites.map(({ school_id, legal_name, trade_name, role }) => (
-						<InviteCard
-							key={school_id}
-							school_id={school_id}
-							profile_id={profile.id}
-							legal_name={legal_name}
-							trade_name={trade_name}
-							user_role={role}
-							invite_status="pending"
-						/>
-					))}
-				</div>
-				{invites.length === 0 && (
-					<p className="text-(sm muted center)">Você não tem convites!</p>
-				)}
-			</section>
+						<div>
+							<M.Title order={1} style={{ wordBreak: "break-word" }}>
+								{profile.name}
+							</M.Title>
 
-			<section className="ui-card w-full">
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className="flex-(~ col) gap-5"
-				>
-					<header className="flex-(~ col) gap-1 mb-2">
-						<h2 className="text-(xl heading) font-bold">Editar Perfil</h2>
-						<p className="text-(sm muted)">
-							Deixe em branco os campos que não deseja alterar.
-						</p>
-					</header>
+							<M.Text size="lg" c="dimmed" fs="italic">
+								@{profile.username}
+							</M.Text>
+						</div>
+					</M.Group>
+				</M.Paper>
 
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Novo nome</span>
-						<input
-							type="text"
-							{...register("name")}
-							autoComplete="name"
-							placeholder={profile.name || undefined}
-							aria-invalid={Boolean(errors.name)}
-							className="ui-field"
-						/>
-						{errors.name && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.name.message}
-							</p>
-						)}
-					</label>
+				<M.Paper p="lg">
+					<M.Title order={2}>Minhas Escolas</M.Title>
 
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Novo nome de usuário</span>
-						<div className="relative flex items-center">
-							<Icon
-								icon="i-lucide-at-sign"
-								color="muted"
-								size={6}
-								className="absolute left-3 pointer-events-none"
+					<M.Divider />
+
+					<M.Stack gap="sm">
+						{schools.map(({ school_id, legal_name, trade_name, role }) => (
+							<InviteCard
+								key={school_id}
+								school_id={school_id}
+								profile_id={profile.id}
+								legal_name={legal_name}
+								trade_name={trade_name}
+								user_role={role}
+								invite_status="active"
 							/>
-							<input
+						))}
+					</M.Stack>
+
+					{schools.length === 0 && (
+						<M.Text size="sm" c="dimmed" ta="center">
+							Você não participa de nenhuma escola!
+						</M.Text>
+					)}
+
+					<M.Title order={2} mt="xl">
+						Convites
+					</M.Title>
+
+					<M.Divider />
+
+					<M.Stack gap="sm">
+						{invites.map(({ school_id, legal_name, trade_name, role }) => (
+							<InviteCard
+								key={school_id}
+								school_id={school_id}
+								profile_id={profile.id}
+								legal_name={legal_name}
+								trade_name={trade_name}
+								user_role={role}
+								invite_status="pending"
+							/>
+						))}
+					</M.Stack>
+
+					{invites.length === 0 && (
+						<M.Text size="sm" c="dimmed" ta="center">
+							Você não tem convites!
+						</M.Text>
+					)}
+				</M.Paper>
+
+				<M.Paper p="lg">
+					<form onSubmit={handleSubmit(onSubmit)} noValidate>
+						<M.Stack gap="md">
+							<div>
+								<M.Title order={2} size="h3">
+									Editar Perfil
+								</M.Title>
+
+								<M.Text size="sm" c="dimmed">
+									Deixe em branco os campos que não deseja alterar.
+								</M.Text>
+							</div>
+
+							<M.TextInput
+								label="Novo nome"
+								type="text"
+								{...register("name")}
+								autoComplete="name"
+								placeholder={profile.name || undefined}
+								error={errors.name?.message}
+							/>
+
+							<M.TextInput
+								label="Novo nome de usuário"
 								type="text"
 								{...register("username")}
 								autoComplete="username"
 								placeholder={profile.username || undefined}
-								aria-invalid={Boolean(errors.username)}
-								className="ui-field w-full pl-10"
+								error={errors.username?.message}
+								leftSection={<Icon.AtSign size={18} />}
 							/>
-						</div>
-						{errors.username && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.username.message}
-							</p>
-						)}
-					</label>
 
-					{errors.root && (
-						<p role="alert" className="ui-alert-danger">
-							{errors.root.message}
-						</p>
-					)}
+							{errors.root && (
+								<M.Alert color="red" variant="light">
+									{errors.root.message}
+								</M.Alert>
+							)}
 
-					<button
-						type="submit"
-						disabled={isSubmitting || isFormEmpty}
-						className="ui-button-(~ primary) mt-2"
-					>
-						<Icon icon="i-lucide-save" color="on-primary" size={5} />
-						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-					</button>
-				</form>
-			</section>
-			<section className="ui-card w-full flex-(~ row) gap-4">
-				<button
-					type="button"
-					className="ui-button-(~ danger)"
-					onClick={handleSignOut}
-				>
-					<Icon icon="i-lucide-log-out" color="on-danger" size={5} />
-					Sair da Conta
-				</button>
-				<button
-					type="button"
-					className="ui-button-(~ danger)"
-					onClick={handleDeleteAccount}
-				>
-					<Icon icon="i-lucide-trash-2" color="on-danger" size={5} />
-					Deletar Conta
-				</button>
-			</section>
-		</div>
+							<M.Button
+								type="submit"
+								disabled={isSubmitting || isFormEmpty}
+								mt="xs"
+								leftSection={<Icon.Save size={18} />}
+							>
+								{isSubmitting ? "Salvando..." : "Salvar Alterações"}
+							</M.Button>
+						</M.Stack>
+					</form>
+				</M.Paper>
+
+				<M.Paper p="lg">
+					<M.Group grow>
+						<M.Button
+							type="button"
+							color="red"
+							onClick={handleSignOut}
+							leftSection={<Icon.LogOut size={18} />}
+						>
+							Sair da Conta
+						</M.Button>
+
+						<M.Button
+							type="button"
+							color="red"
+							onClick={handleDeleteAccount}
+							leftSection={<Icon.Trash2 size={18} />}
+						>
+							Deletar Conta
+						</M.Button>
+					</M.Group>
+				</M.Paper>
+			</M.Stack>
+		</M.Container>
 	);
 }
