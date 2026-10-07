@@ -9,6 +9,7 @@ import { theme } from "./theme";
 import "@mantine/core/styles.css";
 import "@codi-go/ui/css";
 import "virtual:uno.css";
+import "./app.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (

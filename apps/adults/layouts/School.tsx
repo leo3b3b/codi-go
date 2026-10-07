@@ -1,3 +1,4 @@
+import * as M from "@mantine/core";
 import { Outlet, useLoaderData, useLocation } from "react-router";
 import { SchoolHeader } from "@/components";
 import { requireAuth } from "@/middlewares";
@@ -33,22 +34,23 @@ export const shouldRevalidate = () => true;
 
 export type SchoolLayoutLoaderData = Awaited<ReturnType<typeof clientLoader>>;
 
-export function SchoolLayout() {
+export default function SchoolLayout() {
 	const data = useLoaderData<typeof clientLoader>();
 	const location = useLocation();
 
 	return (
-		<div className="fixed inset-0 h-dvh w-full overflow-y-auto ui-gradient text-fg">
+		<M.Box c="gray.9" className="ui-root">
 			<SchoolHeader schools={data.schools} classes={data.classes} />
 
-			<main
+			<M.Container
 				key={location.pathname}
-				className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:(px-8 py-8)"
+				component="main"
+				size="xl"
+				px="md"
+				py="lg"
 			>
 				<Outlet />
-			</main>
-		</div>
+			</M.Container>
+		</M.Box>
 	);
 }
-
-export default SchoolLayout;
