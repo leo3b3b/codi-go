@@ -1,3 +1,4 @@
+import * as M from "@mantine/core";
 import { Link, useLoaderData } from "react-router";
 import { CreateClassForm } from "@/forms";
 import { getClassesBySchool, getSchoolById } from "@/services";
@@ -24,53 +25,45 @@ export default function ClassesAdminPage() {
 	const { school, classes } = useLoaderData<typeof clientLoader>();
 
 	return (
-		<div className="flex-(~ col) gap-4">
+		<M.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Turmas</title>
 
 			<CreateClassForm school={school} />
 
-			<section className="ui-card">
-				<header>
-					<h1 className="text-(2xl heading) font-bold mb-4">
-						Gerenciar Turmas
-					</h1>
-				</header>
+			<M.Paper>
+				<M.Stack gap="md">
+					<M.Title order={2}>Gerenciar Turmas</M.Title>
 
-				{classes.length === 0 ? (
-					<p className="text-(lg center) py-6">
-						Esta escola ainda não possui turmas.
-					</p>
-				) : (
-					<div className="flex-(~ col) gap-2">
-						{classes.map(({ id, name }) => (
-							<Link key={id} to={`/escola/${school.id}/admin/turma/${id}`}>
-								<article
-									className="
-										bg-surface-subtle
-										border-(~ border)
-										rounded-lg
-										px-8 py-4
-										transition-(colors 500)
-										hover:(bg-primary-soft/70 border-primary)
-										group
-									"
+					{classes.length === 0 ? (
+						<M.Center py="xl">
+							<M.Text size="lg" ta="center">
+								Esta escola ainda não possui turmas.
+							</M.Text>
+						</M.Center>
+					) : (
+						<M.Stack gap="sm">
+							{classes.map(({ id, name }) => (
+								<M.Anchor
+									key={id}
+									component={Link}
+									to={`/escola/${school.id}/admin/turma/${id}`}
+									underline="never"
 								>
-									<h2
-										className="
-											text-(xl primary)
-											font-semibold
-											group-hover:text-on-primary
-											transition-(colors 500)
-										"
+									<M.Paper
+										component="article"
+										bg="gray.1"
+										p="md"
 									>
-										{name}
-									</h2>
-								</article>
-							</Link>
-						))}
-					</div>
-				)}
-			</section>
-		</div>
+										<M.Title order={2} c="violet">
+											{name}
+										</M.Title>
+									</M.Paper>
+								</M.Anchor>
+							))}
+						</M.Stack>
+					)}
+				</M.Stack>
+			</M.Paper>
+		</M.Stack>
 	);
 }

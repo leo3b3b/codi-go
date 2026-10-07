@@ -1,7 +1,8 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
 import { type CreateClassOutput, createClassSchema } from "@/schemas";
 import { createClass } from "@/services";
 
@@ -45,59 +46,47 @@ export function CreateClassForm({
 	}
 
 	return (
-		<section className="ui-card">
-			<header>
-				<h1 className="text-(2xl heading) font-bold">
+		<M.Paper>
+			<M.Stack gap="lg">
+				<M.Title order={1}>
 					Criar Turma em {school.trade_name || school.legal_name}
-				</h1>
-				<HorizontalSeparator />
-			</header>
+				</M.Title>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="
-					flex-(~ col) sm:flex-row items-center
-					gap-x-4 gap-y-2 py-3
-				"
-			>
-				<div className="flex-(~ row) relative items-center font-bold w-full">
-					<Icon
-						icon="i-lucide-school"
-						color="muted"
-						size={6}
-						className="absolute left-3 pointer-events-none"
-					/>
+				<M.Divider />
 
-					<input
-						type="text"
-						{...register("name")}
-						placeholder="Digite o nome da turma"
-						aria-invalid={Boolean(errors.name)}
-						className="ui-field w-full h-14 pl-10"
-					/>
-				</div>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+					<M.Group
+						align="flex-start"
+						gap="md"
+						wrap="nowrap"
+					>
+						<M.TextInput
+							flex={1}
+							size="lg"
+							leftSection={<Icon.School size={18} />}
+							placeholder="Digite o nome da turma"
+							{...register("name")}
+							error={errors.name?.message}
+						/>
 
-				<button
-					type="submit"
-					disabled={isSubmitting || !watch("name")}
-					className="ui-button-(~ primary) h-14 mt-4 sm:(mt-0 w-40)"
-				>
-					{isSubmitting ? "Criando..." : "Criar Turma"}
-				</button>
-			</form>
+						<M.Button
+							type="submit"
+							size="lg"
+							w={160}
+							loading={isSubmitting}
+							disabled={!watch("name")}
+						>
+							{isSubmitting ? "Criando..." : "Criar Turma"}
+						</M.Button>
+					</M.Group>
 
-			{errors.name && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.name.message}
-				</p>
-			)}
-
-			{errors.root && (
-				<p role="alert" className="ui-alert-danger">
-					{errors.root.message}
-				</p>
-			)}
-		</section>
+					{errors.root && (
+						<M.Alert mt="md">
+							{errors.root.message}
+						</M.Alert>
+					)}
+				</form>
+			</M.Stack>
+		</M.Paper>
 	);
 }
