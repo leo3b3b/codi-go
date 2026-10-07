@@ -1,4 +1,5 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { type SignInOutput, signInSchema } from "@/schemas";
@@ -28,78 +29,59 @@ export default function SignInPage() {
 	}
 
 	return (
-		<section className="ui-card">
+		<M.Paper>
 			<title>CodiGO! | Login</title>
-			<header className="mb-8 text-center">
-				<h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
+
+			<M.Stack gap="lg">
+				<M.Title order={1} ta="center">
 					Bom te ver!
-				</h1>
-			</header>
+				</M.Title>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="flex-(~ col) gap-5"
-			>
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>E-mail</span>
-
-					<input
-						type="email"
-						{...register("email")}
-						autoComplete="email"
-						placeholder="Digite seu e-mail"
-						aria-invalid={Boolean(errors.email)}
-						className="ui-field"
-					/>
-
-					{errors.email && (
-						<p role="alert" className="text-(sm danger) font-medium">
-							{errors.email.message}
-						</p>
-					)}
-				</label>
-
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Senha</span>
-
-					<input
-						type="password"
-						{...register("password")}
-						autoComplete="current-password"
-						placeholder="Digite sua senha"
-						aria-invalid={Boolean(errors.password)}
-						className="ui-field"
-					/>
-
-					{errors.password && (
-						<p role="alert" className="text-(sm danger) font-medium">
-							{errors.password.message}
-						</p>
-					)}
-				</label>
-
-				{errors.root && (
-					<p role="alert" className="ui-alert-danger">
-						{errors.root.message}
-					</p>
-				)}
-
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="ui-button-(~ primary) mt-1"
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
 				>
-					{isSubmitting ? "Entrando..." : "Entrar"}
-				</button>
-			</form>
+					<M.Stack gap="md">
+						<M.TextInput
+							label="E-mail"
+							type="email"
+							placeholder="Digite seu e-mail"
+							autoComplete="email"
+							{...register("email")}
+							error={errors.email?.message}
+						/>
 
-			<p className="mt-7 text-(center sm muted)">
-				Ainda não tem uma conta?{" "}
-				<Link to="/criar-conta" className="ui-link">
-					Criar conta
-				</Link>
-			</p>
-		</section>
+						<M.PasswordInput
+							label="Senha"
+							placeholder="Digite sua senha"
+							autoComplete="current-password"
+							{...register("password")}
+							error={errors.password?.message}
+						/>
+
+						{errors.root && (
+							<M.Alert>
+								{errors.root.message}
+							</M.Alert>
+						)}
+
+						<M.Button
+							type="submit"
+							loading={isSubmitting}
+							mt="xs"
+						>
+							{isSubmitting ? "Entrando..." : "Entrar"}
+						</M.Button>
+					</M.Stack>
+				</form>
+
+				<M.Text size="sm" c="dimmed" ta="center">
+					Ainda não tem uma conta?{" "}
+					<M.Anchor component={Link} to="/criar-conta" fw={700}>
+						Criar conta
+					</M.Anchor>
+				</M.Text>
+			</M.Stack>
+		</M.Paper>
 	);
 }

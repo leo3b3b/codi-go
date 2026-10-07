@@ -1,35 +1,42 @@
+import * as M from "@mantine/core";
 import { Link } from "react-router";
-import { HorizontalSeparator } from "@/components";
 
 export default function CheckEmailPage() {
 	return (
-		<section className="ui-card">
+		<M.Paper>
 			<title>CodiGO! | Confirme seu e-mail</title>
-			<header className="mb-8 text-center">
-				<h1 className="mb-4 text-(2xl heading) font-black tracking-tight">
-					Confirme seu e-mail
-				</h1>
 
-				<p className="text-muted">
-					Enviamos uma mensagem para confirmar sua conta.
-				</p>
-			</header>
-			<HorizontalSeparator />
-			<div className="flex-(~ col) gap-4 text-fg">
-				<p className="text-muted">
-					Se não encontrar a mensagem, verifique também a pasta de spam ou lixo
-					eletrônico.
-				</p>
+			<M.Stack gap="lg">
+				<M.Stack gap="xs" align="center">
+					<M.Title order={1} ta="center">
+						Confirme seu e-mail
+					</M.Title>
 
-				<p>Depois de confirmar seu e-mail, você poderá entrar na sua conta.</p>
-			</div>
+					<M.Text c="dimmed" ta="center">
+						Enviamos uma mensagem para confirmar sua conta.
+					</M.Text>
+				</M.Stack>
 
-			<p className="mt-7 text-(center sm muted)">
-				Já confirmou seu e-mail?{" "}
-				<Link to="/login" className="ui-link">
-					Entrar
-				</Link>
-			</p>
-		</section>
+				<M.Divider />
+
+				<M.Stack gap="md">
+					<M.Text c="dimmed">
+						Se não encontrar a mensagem, verifique também a pasta de spam ou
+						lixo eletrônico.
+					</M.Text>
+
+					<M.Text>
+						Depois de confirmar seu e-mail, você poderá entrar na sua conta.
+					</M.Text>
+				</M.Stack>
+
+				<M.Text size="sm" c="dimmed" ta="center" mt="sm">
+					Já confirmou seu e-mail?{" "}
+					<M.Anchor component={Link} to="/login" fw={700}>
+						Entrar
+					</M.Anchor>
+				</M.Text>
+			</M.Stack>
+		</M.Paper>
 	);
 }
