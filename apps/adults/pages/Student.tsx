@@ -1,3 +1,5 @@
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useLoaderData, useNavigate } from "react-router";
 import {
 	Bar,
@@ -8,7 +10,6 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { HorizontalSeparator, Icon } from "@/components";
 import { parseMazeProgress } from "@/games/maze/progress";
 import { getStudentById, getStudentProgress } from "@/services";
 
@@ -72,34 +73,46 @@ export default function StudentPage() {
 	}));
 
 	return (
-		<div className="flex-(~ col) gap-6">
+		<M.Stack w="100%" gap="xl">
 			<title>CodiGO! | Aluno</title>
 
-			<header className="ui-card flex items-center justify-between gap-4">
-				<div>
-					<h1 className="text-(2xl heading) font-bold">{student.name}</h1>
+			<M.Paper>
+				<M.Group justify="space-between" gap="md" wrap="nowrap">
+					<div>
+						<M.Title order={1}>{student.name}</M.Title>
+						<M.Text size="sm" c="dimmed">
+							Acompanhamento do aluno
+						</M.Text>
+					</div>
 
-					<p className="text-(sm muted)">Acompanhamento do aluno</p>
-				</div>
+					<M.Button
+						type="button"
+						variant="default"
+						w="auto"
+						leftSection={<Icon.ArrowLeft size={18} />}
+						onClick={() =>
+							navigate(
+								`/escola/${student.school_id}/turma/${student.class_id}`,
+							)
+						}
+					>
+						Voltar
+					</M.Button>
+				</M.Group>
+			</M.Paper>
 
-				<button
-					type="button"
-					className="ui-button-(~ secondary) w-auto"
-					onClick={() =>
-						navigate(`/escola/${student.school_id}/turma/${student.class_id}`)
-					}
-				>
-					<Icon icon="i-lucide-arrow-left" size={5} color="fg" />
-					Voltar
-				</button>
-			</header>
-
-			<section className="grid-(~ cols-1) sm:grid-cols-2 lg:grid-cols-4 gap-4">
+			<M.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
 				<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
 
-				<MetricCard label="Níveis concluídos" value={String(completedLevels)} />
+				<MetricCard
+					label="Níveis concluídos"
+					value={String(completedLevels)}
+				/>
 
-				<MetricCard label="Registros" value={String(progress.length)} />
+				<MetricCard
+					label="Registros"
+					value={String(progress.length)}
+				/>
 
 				<MetricCard
 					label="Última atividade"
@@ -109,89 +122,142 @@ export default function StudentPage() {
 							: "—"
 					}
 				/>
-			</section>
+			</M.SimpleGrid>
 
-			<section className="ui-card">
-				<header className="mb-6">
-					<h2 className="text-(2xl heading) font-bold">Jogo do Labirinto</h2>
-					<HorizontalSeparator />
+			<M.Paper>
+				<M.Stack gap="md">
+					<div>
+						<M.Title order={2}>Jogo do Labirinto</M.Title>
 
-					<p className="text-(sm muted)">
-						Diferença entre os comandos utilizados e a meta do nível{" "}
-						<b>(quanto menor, melhor)</b>.
-					</p>
-				</header>
+						<M.Divider />
 
-				{mazeChartData.length > 0 ? (
-					<div className="h-80">
-						<ResponsiveContainer width="100%" height="100%">
-							<BarChart data={mazeChartData}>
-								<CartesianGrid strokeDasharray="3 3" />
-								<XAxis dataKey="name" />
-								<YAxis />
-								<Tooltip
-									formatter={(value) => [`${value} comandos`, "Diferença"]}
-								/>
-								<Bar dataKey="difference" />
-							</BarChart>
-						</ResponsiveContainer>
+						<M.Text size="sm" c="dimmed" mt="md">
+							Diferença entre os comandos utilizados e a meta do nível{" "}
+							<b>(quanto menor, melhor)</b>.
+						</M.Text>
 					</div>
-				) : (
-					<p className="text-(sm muted)">
-						Ainda não há dados suficientes para o labirinto.
-					</p>
-				)}
-			</section>
 
-			<section className="ui-card">
-				<header className="mb-4">
-					<h2 className="text-(2xl heading) font-bold">Registros</h2>
-				</header>
+					{mazeChartData.length > 0 ? (
+						<M.Box h={320}>
+							<ResponsiveContainer width="100%" height="100%">
+								<BarChart data={mazeChartData}>
+									<CartesianGrid strokeDasharray="3 3" />
+									<XAxis dataKey="name" />
+									<YAxis />
+									<Tooltip
+										formatter={(value) => [
+											`${value} comandos`,
+											"Diferença",
+										]}
+									/>
+									<Bar dataKey="difference" />
+								</BarChart>
+							</ResponsiveContainer>
+						</M.Box>
+					) : (
+						<M.Text size="sm" c="dimmed">
+							Ainda não há dados suficientes para o labirinto.
+						</M.Text>
+					)}
+				</M.Stack>
+			</M.Paper>
 
-				<div className="overflow-x-auto">
-					<table className="w-full text-left">
-						<thead>
-							<tr className="border-b-(~ border) text-(sm muted)">
-								<th className="px-3 py-3">Nível</th>
-								<th className="px-3 py-3">Jogo</th>
-								<th className="px-3 py-3">Resultado</th>
-								<th className="px-3 py-3">Data</th>
-							</tr>
-						</thead>
+			<M.Paper>
+				<M.Stack gap="md">
+					<M.Title order={2}>Registros</M.Title>
 
-						<tbody>
-							{[...progress].reverse().map((record) => (
-								<tr key={record.id} className="border-b-(~ border)">
-									<td className="px-3 py-3 font-semibold">
+					<M.Grid
+						visibleFrom="md"
+						px="md"
+						py="sm"
+						style={{
+							borderBottom:
+								"1px solid var(--mantine-color-gray-3)",
+						}}
+					>
+						<M.Grid.Col span={3}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Nível
+							</M.Text>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={3}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Jogo
+							</M.Text>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={3}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Resultado
+							</M.Text>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={3}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Data
+							</M.Text>
+						</M.Grid.Col>
+					</M.Grid>
+
+					<M.Stack gap={0}>
+						{[...progress].reverse().map((record) => (
+							<M.Grid
+								key={record.id}
+								align="center"
+								px="md"
+								py="sm"
+								style={{
+									borderBottom:
+										"1px solid var(--mantine-color-gray-3)",
+								}}
+							>
+								<M.Grid.Col span={{ base: 12, md: 3 }}>
+									<M.Text fw={600}>
 										{record.level.name}
-									</td>
+									</M.Text>
+								</M.Grid.Col>
 
-									<td className="px-3 py-3 text-muted">
+								<M.Grid.Col span={{ base: 12, md: 3 }}>
+									<M.Text c="dimmed">
 										{record.level.game.name}
-									</td>
+									</M.Text>
+								</M.Grid.Col>
 
-									<td className="px-3 py-3">
-										{record.result === "success" ? "Sucesso" : "Falha"}
-									</td>
+								<M.Grid.Col span={{ base: 6, md: 3 }}>
+									<M.Text>
+										{record.result === "success"
+											? "Sucesso"
+											: "Falha"}
+									</M.Text>
+								</M.Grid.Col>
 
-									<td className="px-3 py-3 text-muted">
-										{new Date(record.register_time).toLocaleString("pt-BR")}
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-			</section>
-		</div>
+								<M.Grid.Col span={{ base: 6, md: 3 }}>
+									<M.Text c="dimmed">
+										{new Date(
+											record.register_time,
+										).toLocaleString("pt-BR")}
+									</M.Text>
+								</M.Grid.Col>
+							</M.Grid>
+						))}
+					</M.Stack>
+				</M.Stack>
+			</M.Paper>
+		</M.Stack>
 	);
 }
 
 function MetricCard({ label, value }: { label: string; value: string }) {
 	return (
-		<article className="ui-card">
-			<p className="text-(sm muted)">{label}</p>
-			<p className="mt-1 text-(2xl heading) font-bold">{value}</p>
-		</article>
+		<M.Paper component="article">
+			<M.Text size="sm" c="dimmed">
+				{label}
+			</M.Text>
+
+			<M.Text size="xl" fw={700} mt="xs">
+				{value}
+			</M.Text>
+		</M.Paper>
 	);
 }
