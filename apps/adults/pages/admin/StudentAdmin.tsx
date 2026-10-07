@@ -1,6 +1,7 @@
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useLoaderData, useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
 import { EditStudentForm } from "@/forms";
 import {
 	getClassesBySchool,
@@ -63,74 +64,99 @@ export default function StudentAdminPage() {
 	}
 
 	return (
-		<div className="w-full mx-auto flex-(~ col) gap-4">
+		<M.Stack w="100%" gap="md">
 			<title>CodiGO! | Editar Aluno</title>
 
 			<EditStudentForm student={student} />
 
-			<section className="ui-card">
-				<header>
-					<h2 className="text-(2xl heading) font-bold">Turma do Aluno</h2>
-					<p className="text-(sm muted)">
-						Selecione outra turma para transferir o aluno.
-					</p>
-					<HorizontalSeparator />
-				</header>
+			<M.Paper>
+				<M.Stack gap="lg">
+					<div>
+						<M.Title order={2}>Turma do Aluno</M.Title>
 
-				{transferError && (
-					<p role="alert" className="ui-alert-danger mb-4">
-						{transferError}
-					</p>
-				)}
+						<M.Text size="sm" c="dimmed">
+							Selecione outra turma para transferir o aluno.
+						</M.Text>
+					</div>
 
-				<div className="flex-(~ col) gap-2">
-					{classes.map((classData) => {
-						const isCurrentClass = classData.id === student.class_id;
+					<M.Divider />
 
-						return (
-							<article
-								key={classData.id}
-								className={`
-									flex-(~ row) items-center justify-between gap-4
-									rounded-xl border-(~ border)
-									px-4 py-3
-									${
-										isCurrentClass
-											? "bg-primary-soft/40 border-primary"
-											: "bg-surface-subtle"
-									}
-								`}
-							>
-								<div>
-									<h3 className="font-semibold text-heading">
-										{classData.name}
-									</h3>
+					{transferError && (
+						<M.Alert>
+							{transferError}
+						</M.Alert>
+					)}
 
-									{isCurrentClass && (
-										<p className="text-(sm primary) font-semibold">
-											Turma atual
-										</p>
-									)}
-								</div>
+					<M.Stack gap="sm">
+						{classes.map((classData) => {
+							const isCurrentClass =
+								classData.id === student.class_id;
 
-								{isCurrentClass ? (
-									<span className="text-(sm muted) font-semibold">Atual</span>
-								) : (
-									<button
-										type="button"
-										disabled={isTransferring}
-										onClick={() => handleTransfer(classData.id, classData.name)}
-										className="ui-button-(~ secondary) w-auto"
+							return (
+								<M.Paper
+									key={classData.id}
+									bg={isCurrentClass ? "violet.0" : "gray.1"}
+									style={{
+										borderColor: isCurrentClass
+											? "var(--mantine-color-violet-6)"
+											: undefined,
+									}}
+								>
+									<M.Group
+										justify="space-between"
+										gap="md"
+										wrap="nowrap"
 									>
-										<Icon icon="i-lucide-shuffle" color="fg" size={5} />
-										Transferir
-									</button>
-								)}
-							</article>
-						);
-					})}
-				</div>
-			</section>
-		</div>
+										<div>
+											<M.Text fw={600}>
+												{classData.name}
+											</M.Text>
+
+											{isCurrentClass && (
+												<M.Text
+													size="sm"
+													c="violet"
+													fw={600}
+												>
+													Turma atual
+												</M.Text>
+											)}
+										</div>
+
+										{isCurrentClass ? (
+											<M.Text
+												size="sm"
+												c="dimmed"
+												fw={600}
+											>
+												Atual
+											</M.Text>
+										) : (
+											<M.Button
+												type="button"
+												variant="default"
+												w="auto"
+												disabled={isTransferring}
+												leftSection={
+													<Icon.Shuffle size={18} />
+												}
+												onClick={() =>
+													handleTransfer(
+														classData.id,
+														classData.name,
+													)
+												}
+											>
+												Transferir
+											</M.Button>
+										)}
+									</M.Group>
+								</M.Paper>
+							);
+						})}
+					</M.Stack>
+				</M.Stack>
+			</M.Paper>
+		</M.Stack>
 	);
 }

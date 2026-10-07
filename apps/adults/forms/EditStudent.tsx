@@ -1,9 +1,10 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
 import { type UpdateStudentOutput, updateStudentSchema } from "@/schemas";
 import { deleteStudent, generateImageCode, updateStudent } from "@/services";
 
@@ -92,114 +93,105 @@ export function EditStudentForm({
 	const imageCode = imageCodes[accessCode];
 
 	return (
-		<section className="ui-card">
-			<header className="flex-(~ row) items-center gap-3">
-				<button
-					type="button"
-					onClick={handleBack}
-					aria-label="Voltar para turmas"
-					className="ui-button-(~ secondary) w-auto p-3"
-				>
-					<Icon icon="i-lucide-arrow-left" color="fg" size={6} />
-				</button>
+		<M.Paper>
+			<M.Stack gap="lg">
+				<M.Group gap="sm" wrap="nowrap">
+					<M.ActionIcon
+						variant="default"
+						size="lg"
+						aria-label="Voltar para turmas"
+						onClick={handleBack}
+					>
+						<Icon.ArrowLeft size={20} />
+					</M.ActionIcon>
 
-				<h1 className="text-(2xl heading) font-bold">Editar Aluno</h1>
-			</header>
-			<HorizontalSeparator />
+					<M.Title order={1}>Editar Aluno</M.Title>
+				</M.Group>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="flex-(~ col) gap-5"
-			>
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Nome do Aluno</span>
+				<M.Divider />
 
-					<input
-						type="text"
-						{...register("name")}
-						autoComplete="off"
-						aria-invalid={Boolean(errors.name)}
-						className="ui-field"
-					/>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+					<M.Stack gap="lg">
+						<M.TextInput
+							label="Nome do Aluno"
+							autoComplete="off"
+							{...register("name")}
+							error={errors.name?.message}
+						/>
 
-					{errors.name && (
-						<p role="alert" className="text-(sm danger) font-medium">
-							{errors.name.message}
-						</p>
-					)}
-				</label>
+						<M.Stack gap="xs">
+							<M.Text fw={700} size="sm">
+								Credencial
+							</M.Text>
 
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Credencial</span>
+							<M.Group align="center" gap="md" wrap="nowrap">
+								{imageCode && (
+									<M.Image
+										src={imageCode.src}
+										alt={imageCode.label}
+										h={80}
+										w={80}
+										fit="contain"
+									/>
+								)}
 
-					<div className="flex-(~ row) items-center gap-4">
-						{imageCode && (
-							<img
-								src={imageCode.src}
-								alt={imageCode.label}
-								className="h-20 w-20 object-contain"
-							/>
+								<M.TextInput
+									flex={1}
+									value={imageCodes[watch("access_code")].label}
+									readOnly
+									error={errors.access_code?.message}
+									rightSection={
+										<M.ActionIcon
+											variant="default"
+											aria-label="Gerar nova credencial"
+											onClick={handleGenerateAccessCode}
+										>
+											<Icon.Shuffle size={18} />
+										</M.ActionIcon>
+									}
+								/>
+							</M.Group>
+						</M.Stack>
+
+						{errors.root && (
+							<M.Alert>
+								{errors.root.message}
+							</M.Alert>
 						)}
 
-						<div className="flex-(~ row) gap-2 flex-1">
-							<input
-								type="text"
-								value={imageCodes[watch("access_code")].label}
-								readOnly
-								aria-invalid={Boolean(errors.access_code)}
-								className="ui-field flex-1"
-							/>
-
-							<button
-								type="button"
-								onClick={handleGenerateAccessCode}
-								aria-label="Gerar nova credencial"
-								className="ui-button-(~ secondary) w-auto px-4"
+						<M.Group gap="sm" mt="xs">
+							<M.Button
+								type="submit"
+								flex={1}
+								loading={isSubmitting}
+								disabled={isUnchanged || isDeleting}
+								leftSection={<Icon.Save size={18} />}
 							>
-								<Icon icon="i-lucide-shuffle" color="fg" size={6} />
-							</button>
-						</div>
-					</div>
+								{isSubmitting
+									? "Salvando..."
+									: "Salvar Alterações"}
+							</M.Button>
 
-					{errors.access_code && (
-						<p role="alert" className="text-(sm danger) font-medium">
-							{errors.access_code.message}
-						</p>
-					)}
-				</label>
-
-				{errors.root && (
-					<p role="alert" className="ui-alert-danger">
-						{errors.root.message}
-					</p>
-				)}
-
-				<div className="flex-(~ row) items-center gap-2 mt-2 h-16">
-					<button
-						type="submit"
-						disabled={isSubmitting || isUnchanged || isDeleting}
-						className="ui-button-(~ primary) h-full"
-					>
-						<Icon icon="i-lucide-save" color="on-primary" size={5} />
-						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-					</button>
-					<button
-						type="button"
-						disabled={isSubmitting || isDeleting}
-						className="ui-button-(~ danger) h-full"
-						onClick={() =>
-							handleDeleteStudent({
-								student_id: student.id,
-								student_name: student.name,
-							})
-						}
-					>
-						<Icon icon="i-lucide-trash" color="on-danger" size={5} />
-						{isDeleting ? "Excluindo..." : "Excluir Aluno"}
-					</button>
-				</div>
-			</form>
-		</section>
+							<M.Button
+								type="button"
+								flex={1}
+								color="red"
+								loading={isDeleting}
+								disabled={isSubmitting}
+								leftSection={<Icon.Trash2 size={18} />}
+								onClick={() =>
+									handleDeleteStudent({
+										student_id: student.id,
+										student_name: student.name,
+									})
+								}
+							>
+								{isDeleting ? "Excluindo..." : "Excluir Aluno"}
+							</M.Button>
+						</M.Group>
+					</M.Stack>
+				</form>
+			</M.Stack>
+		</M.Paper>
 	);
 }
