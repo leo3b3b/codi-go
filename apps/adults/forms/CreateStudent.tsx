@@ -1,7 +1,8 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
 import { type CreateStudentOutput, createStudentSchema } from "@/schemas";
 import { createStudent } from "@/services";
 
@@ -55,62 +56,56 @@ export function CreateStudentForm({
 		.map((name) => name.trim())
 		.filter(Boolean).length;
 
+
+
 	return (
-		<section className="ui-card">
-			<header>
-				<h2 className="text-(2xl heading) font-bold">
+		<M.Paper>
+			<M.Stack gap="lg">
+				<M.Title order={2}>
 					Criar Alunos em {classData.name}
-				</h2>
-				<HorizontalSeparator />
-			</header>
+				</M.Title>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="
-					flex-(~ col) md:flex-row items-center
-					gap-x-4 gap-y-2 py-3
-				"
-			>
-				<div className="flex-(~ row) relative items-center font-bold w-full">
-					<Icon
-						icon="i-lucide-baby"
-						color="muted"
-						size={6}
-						className="absolute left-3 pointer-events-none"
-					/>
+				<M.Divider />
 
-					<input
-						type="text"
-						{...register("names")}
-						placeholder="Digite um ou mais nomes, separados por vírgula"
-						aria-invalid={Boolean(errors.names)}
-						className="ui-field w-full h-14 pl-10"
-					/>
-				</div>
-
-				<button
-					type="submit"
-					disabled={isSubmitting || !namesValue}
-					className="ui-button-(~ primary) h-14 mt-4 md:(mt-0 w-40)"
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
 				>
-					{isSubmitting
-						? "Criando..."
-						: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
-				</button>
-			</form>
+					<M.Group
+						align="flex-start"
+						gap="md"
+						wrap="nowrap"
+					>
+						<M.TextInput
+							flex={1}
+							size="lg"
+							leftSection={<Icon.Baby size={18} />}
+							placeholder="Digite um ou mais nomes, separados por vírgula"
+							{...register("names")}
+							error={errors.names?.message}
+						/>
 
-			{errors.names && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.names.message}
-				</p>
-			)}
+						<M.Button
+							type="submit"
+							size="lg"
+							w={160}
+							mt={0}
+							loading={isSubmitting}
+							disabled={!namesValue}
+						>
+							{isSubmitting
+								? "Criando..."
+								: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
+						</M.Button>
+					</M.Group>
 
-			{errors.root && (
-				<p role="alert" className="ui-alert-danger">
-					{errors.root.message}
-				</p>
-			)}
-		</section>
+					{errors.root && (
+						<M.Alert mt="md">
+							{errors.root.message}
+						</M.Alert>
+					)}
+				</form>
+			</M.Stack>
+		</M.Paper>
 	);
 }

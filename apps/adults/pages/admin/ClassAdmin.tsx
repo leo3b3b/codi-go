@@ -1,7 +1,8 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { Icon } from "@/components";
 import { CreateStudentForm, EditClassForm } from "@/forms";
 import { deleteStudent, getClassById, getStudentsByClassId } from "@/services";
 
@@ -30,76 +31,6 @@ interface StudentRowProps {
 	onUpdate: (student_id: string) => void | Promise<void>;
 }
 
-function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
-	const [showCredential, setShowCredential] = useState(false);
-
-	return (
-		<div
-			className="
-                grid grid-cols-[1fr_auto]
-                gap-x-4 gap-y-2 py-3
-                border-b-(~ border)
-                lg:grid-cols-[1fr_0.5fr_3fr]
-                lg:items-center
-            "
-		>
-			<div className="font-semibold text-heading">{student.name ?? "—"}</div>
-
-			<div className="h-14 flex items-center">
-				{showCredential ? (
-					<img
-						src={imageCodes[student.access_code as ImageCode].src}
-						aria-label={imageCodes[student.access_code as ImageCode].label}
-						className="h-14"
-					/>
-				) : (
-					<span className="text-sm text-muted font-mono tracking-widest">
-						••••••••
-					</span>
-				)}
-			</div>
-
-			<div className="flex gap-2 col-span-2 mt-2 lg:(col-span-1 mt-0)">
-				<button
-					type="button"
-					className="ui-button-(~ secondary) w-1/3"
-					onClick={() => setShowCredential(!showCredential)}
-				>
-					<Icon
-						icon={showCredential ? "i-lucide-eye-off" : "i-lucide-eye"}
-						color="fg"
-						size={5}
-					/>
-					{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
-				</button>
-
-				<button
-					type="button"
-					className="ui-button-(~ primary) w-1/3"
-					onClick={() => onUpdate(student.id)}
-				>
-					<Icon icon={"i-lucide-pencil"} color="on-primary" size={5} />
-					Editar
-				</button>
-
-				<button
-					type="button"
-					className="ui-button-(~ danger) w-1/3"
-					onClick={() =>
-						onDelete({
-							student_id: student.id,
-							student_name: student.name,
-						})
-					}
-				>
-					<Icon icon={"i-lucide-user-x"} color="on-danger" size={5} />
-					Excluir
-				</button>
-			</div>
-		</div>
-	);
-}
-
 export default function ClassAdminPage() {
 	const { classData, students } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
@@ -126,7 +57,7 @@ export default function ClassAdminPage() {
 	}
 
 	return (
-		<div className="w-full mx-auto flex-(~ col) gap-4">
+		<M.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Turma</title>
 
 			<EditClassForm classData={classData} />
@@ -139,36 +70,137 @@ export default function ClassAdminPage() {
 				}}
 			/>
 
-			<section className="ui-card">
-				<header>
-					<h2 className="text-(2xl heading) font-bold mb-4">
+			<M.Paper>
+				<M.Stack gap="md">
+					<M.Title order={2}>
 						Gerenciar Alunos
-					</h2>
-				</header>
-				<div
-					className="
-                        hidden lg:grid
-                        grid-cols-[1fr_0.5fr_3fr]
-                        gap-x-4 gap-y-2 py-3
-                        border-b-(~ border)
-                        text-(sm muted) font-bold
-                    "
-				>
-					<div>Nome</div>
-					<div>Credencial</div>
-					<div>Ações</div>
-				</div>
-				<div className="flex-(~ col) gap-4 lg:gap-0">
-					{students.map((student) => (
-						<StudentRow
-							key={student.id}
-							student={student}
-							onUpdate={handleUpdate}
-							onDelete={handleDeleteStudent}
+					</M.Title>
+
+					<M.Grid
+						visibleFrom="lg"
+						px="md"
+						py="sm"
+						style={{
+							borderBottom: "1px solid var(--mantine-color-gray-3)",
+						}}
+					>
+						<M.Grid.Col span={4}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Nome
+							</M.Text>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={2}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Credencial
+							</M.Text>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={6}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Ações
+							</M.Text>
+						</M.Grid.Col>
+					</M.Grid>
+
+					<M.Stack gap="md">
+						{students.map((student) => (
+							<StudentRow
+								key={student.id}
+								student={student}
+								onUpdate={handleUpdate}
+								onDelete={handleDeleteStudent}
+							/>
+						))}
+					</M.Stack>
+				</M.Stack>
+			</M.Paper>
+		</M.Stack>
+	);
+}
+
+function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
+	const [showCredential, setShowCredential] = useState(false);
+
+	return (
+		<M.Grid
+			align="center"
+			px="md"
+			py="sm"
+			style={{
+				borderBottom: "1px solid var(--mantine-color-gray-3)",
+			}}
+		>
+			<M.Grid.Col span={{ base: 12, lg: 4 }}>
+				<M.Text fw={600}>
+					{student.name ?? "—"}
+				</M.Text>
+			</M.Grid.Col>
+
+			<M.Grid.Col span={{ base: 12, lg: 2 }}>
+				<M.Center h={56}>
+					{showCredential ? (
+						<M.Image
+							src={imageCodes[student.access_code as ImageCode].src}
+							alt={imageCodes[student.access_code as ImageCode].label}
+							h={56}
+							w="auto"
+							fit="contain"
 						/>
-					))}
-				</div>
-			</section>
-		</div>
+					) : (
+						<M.Text
+							size="sm"
+							ff="monospace"
+							c="dimmed"
+						>
+							••••••••
+						</M.Text>
+					)}
+				</M.Center>
+			</M.Grid.Col>
+
+			<M.Grid.Col span={{ base: 12, lg: 6 }}>
+				<M.Group gap="sm" grow>
+					<M.Button
+						type="button"
+						variant="default"
+						leftSection={
+							showCredential ? (
+								<Icon.EyeOff size={18} />
+							) : (
+								<Icon.Eye size={18} />
+							)
+						}
+						onClick={() => setShowCredential(!showCredential)}
+					>
+						{showCredential
+							? "Esconder Credencial"
+							: "Mostrar Credencial"}
+					</M.Button>
+
+					<M.Button
+						type="button"
+						leftSection={<Icon.Pencil size={18} />}
+						onClick={() => onUpdate(student.id)}
+					>
+						Editar
+					</M.Button>
+
+					<M.Button
+						type="button"
+						color="red"
+						leftSection={<Icon.UserX size={18} />}
+						onClick={() =>
+							onDelete({
+								student_id: student.id,
+								student_name: student.name,
+							})
+						}
+					>
+						Excluir
+					</M.Button>
+				</M.Group>
+			</M.Grid.Col>
+		</M.Grid>
 	);
 }

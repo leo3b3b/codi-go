@@ -1,8 +1,9 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
 import { type UpdateClassOutput, updateClassSchema } from "@/schemas";
 import {
 	deleteClass,
@@ -114,138 +115,124 @@ export function EditClassForm({
 	}
 
 	return (
-		<section className="ui-card">
-			<header className="flex-(~ row) items-center gap-3">
-				<button
-					type="button"
-					onClick={handleBack}
-					aria-label="Voltar para turmas"
-					className="ui-button-(~ secondary) w-auto p-3"
+		<M.Paper>
+			<M.Stack gap="lg">
+				<M.Group gap="sm" wrap="nowrap">
+					<M.ActionIcon
+						variant="default"
+						size="lg"
+						aria-label="Voltar para turmas"
+						onClick={handleBack}
+					>
+						<Icon.ArrowLeft size={20} />
+					</M.ActionIcon>
+
+					<M.Title order={1} style={{ overflowWrap: "anywhere" }}>
+						{classData.name}
+					</M.Title>
+				</M.Group>
+
+				<M.Divider />
+
+				{classData.is_playing && (
+					<M.Alert color="red">
+						Esta turma está em atividade e não pode ser editada no momento.
+					</M.Alert>
+				)}
+
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
 				>
-					<Icon icon="i-lucide-arrow-left" color="fg" size={6} />
-				</button>
+					<M.Stack gap="md">
+						<M.SimpleGrid cols={{ base: 1, md: 2 }}>
+							<M.TextInput
+								label="Nome da Turma"
+								autoComplete="off"
+								disabled={classData.is_playing}
+								{...register("name")}
+								error={errors.name?.message}
+							/>
 
-				<h1 className="text-(2xl heading) font-bold break-words">
-					{classData.name}
-				</h1>
-			</header>
+							<M.TextInput
+								label="Professor Responsável"
+								placeholder="Nome de usuário do professor"
+								autoComplete="off"
+								leftSection={<Icon.AtSign size={16} />}
+								disabled={classData.is_playing}
+								{...register("teacher_username")}
+								error={errors.teacher_username?.message}
+							/>
 
-			<HorizontalSeparator />
+							<M.TextInput
+								label="Código de Acesso"
+								readOnly
+								disabled={classData.is_playing}
+								rightSection={
+									<M.ActionIcon
+										variant="default"
+										aria-label="Gerar novo código de acesso"
+										disabled={classData.is_playing}
+										onClick={handleGenerateAccessCode}
+									>
+										<Icon.Shuffle size={18} />
+									</M.ActionIcon>
+								}
+								styles={{
+									input: {
+										fontFamily: "monospace",
+										letterSpacing: "0.15em",
+										textTransform: "uppercase",
+									},
+								}}
+								{...register("access_code")}
+								error={errors.access_code?.message}
+							/>
 
-			{classData.is_playing ? (
-				<div className="ui-alert-danger mb-5">
-					Esta turma está em atividade e não pode ser editada no momento.
-				</div>
-			) : null}
+							<M.Group
+								gap="sm"
+								align="stretch"
+								mt={{ base: 0, md: "xl" }}
+							>
+								<M.Button
+									type="submit"
+									flex={1}
+									loading={isSubmitting}
+									disabled={
+										isUnchanged ||
+										isDeleting ||
+										classData.is_playing
+									}
+									leftSection={<Icon.Save size={18} />}
+								>
+									{isSubmitting ? "Salvando..." : "Salvar Alterações"}
+								</M.Button>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="flex-(~ col) md:grid-(~ cols-2) gap-5"
-			>
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Nome da Turma</span>
+								<M.Button
+									type="button"
+									flex={1}
+									color="red"
+									loading={isDeleting}
+									disabled={
+										isSubmitting ||
+										classData.is_playing
+									}
+									leftSection={<Icon.Trash2 size={18} />}
+									onClick={handleDeleteClass}
+								>
+									{isDeleting ? "Excluindo..." : "Excluir Turma"}
+								</M.Button>
+							</M.Group>
+						</M.SimpleGrid>
 
-					<input
-						type="text"
-						{...register("name")}
-						autoComplete="off"
-						aria-invalid={Boolean(errors.name)}
-						disabled={classData.is_playing}
-						className="ui-field"
-					/>
-				</label>
-
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Professor Responsável</span>
-
-					<div className="relative flex items-center">
-						<Icon
-							icon="i-lucide-at-sign"
-							color="muted"
-							size={6}
-							className="absolute left-3 pointer-events-none"
-						/>
-
-						<input
-							type="text"
-							{...register("teacher_username")}
-							autoComplete="off"
-							placeholder="Nome de usuário do professor"
-							aria-invalid={Boolean(errors.teacher_username)}
-							disabled={classData.is_playing}
-							className="ui-field w-full pl-10"
-						/>
-					</div>
-				</label>
-
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Código de Acesso</span>
-
-					<div className="flex-(~ row) gap-2">
-						<input
-							type="text"
-							{...register("access_code")}
-							readOnly
-							aria-invalid={Boolean(errors.access_code)}
-							disabled={classData.is_playing}
-							className="ui-field flex-1 font-mono tracking-widest uppercase"
-						/>
-
-						<button
-							type="button"
-							onClick={handleGenerateAccessCode}
-							disabled={classData.is_playing}
-							aria-label="Gerar novo código de acesso"
-							className="ui-button-(~ secondary) w-auto px-4"
-						>
-							<Icon icon="i-lucide-shuffle" color="fg" size={6} />
-						</button>
-					</div>
-				</label>
-
-				<div className="flex-(~ row) items-center gap-2 mt-2 h-16 md:self-end">
-					<button
-						type="submit"
-						disabled={
-							isSubmitting || isUnchanged || isDeleting || classData.is_playing
-						}
-						className="ui-button-(~ primary) h-full"
-					>
-						<Icon icon="i-lucide-save" color="on-primary" size={5} />
-						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-					</button>
-					<button
-						type="button"
-						disabled={isSubmitting || isDeleting || classData.is_playing}
-						className="ui-button-(~ danger) h-full"
-						onClick={handleDeleteClass}
-					>
-						<Icon icon="i-lucide-trash" color="on-danger" size={5} />
-						{isDeleting ? "Excluindo..." : "Excluir Turma"}
-					</button>
-				</div>
-			</form>
-			{errors.name && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.name.message}
-				</p>
-			)}
-			{errors.teacher_username && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.teacher_username.message}
-				</p>
-			)}
-			{errors.access_code && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.access_code.message}
-				</p>
-			)}
-			{errors.root && (
-				<p role="alert" className="ui-alert-danger">
-					{errors.root.message}
-				</p>
-			)}
-		</section>
+						{errors.root && (
+							<M.Alert>
+								{errors.root.message}
+							</M.Alert>
+						)}
+					</M.Stack>
+				</form>
+			</M.Stack>
+		</M.Paper>
 	);
 }
