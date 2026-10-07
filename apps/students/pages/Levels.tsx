@@ -1,6 +1,7 @@
-import { useLoaderData, useNavigate } from "react-router";
-import { Icon } from "@/components";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import type { LoaderFunctionArgs } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import {
 	getStudentSession,
 	isClassPlaying,
@@ -38,62 +39,98 @@ export default function LevelsPage() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="flex flex-col gap-8">
+		<M.Stack w="100%" gap="xl">
 			<title>CodiGO! | Fases</title>
 
-			<header className="flex flex-col gap-2">
-				<h1 className="text-(3xl heading) font-bold">Fases</h1>
-				<p className="text-muted">Escolha um jogo e avance pelas fases.</p>
-			</header>
+			<div>
+				<M.Title order={1}>Fases</M.Title>
+				<M.Text c="dimmed" mt="xs">
+					Escolha um jogo e avance pelas fases.
+				</M.Text>
+			</div>
 
-			<div className="flex flex-col gap-8">
+			<M.Stack gap="xl">
 				{games.map((game) => (
-					<section key={game.key} className="flex flex-col gap-4">
-						<header className="flex items-center gap-3">
-							<div className="h-8 w-1 rounded-full bg-primary" />
+					<M.Stack key={game.key} gap="md">
+						<M.Group gap="md" align="center">
+							<M.Box
+								w={4}
+								h={32}
+								bg="violet"
+								style={{ borderRadius: "var(--mantine-radius-sm)" }}
+							/>
 
 							<div>
-								<h2 className="text-(2xl heading) font-bold">{game.name}</h2>
+								<M.Title order={2}>{game.name}</M.Title>
 
-								<p className="text-sm text-muted">
+								<M.Text size="sm" c="dimmed">
 									{game.levels.length}{" "}
 									{game.levels.length === 1 ? "fase" : "fases"}
-								</p>
+								</M.Text>
 							</div>
-						</header>
+						</M.Group>
 
-						<div className="grid-(~ cols-1) sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						<M.SimpleGrid
+							cols={{ base: 1, sm: 2, lg: 3 }}
+							spacing="md"
+						>
 							{game.levels.map((level) => (
-								<button
+								<M.Paper
 									key={level.id}
+									component="button"
 									type="button"
-									className="ui-card group flex items-center gap-4 text-left transition hover:border-primary hover:bg-surface-subtle"
-									onClick={() => navigate(`../labirinto/${level.id}`)}
+									w="100%"
+									onClick={() =>
+										navigate(`../labirinto/${level.id}`)
+									}
+									style={{
+										textAlign: "left",
+										cursor: "pointer",
+									}}
 								>
-									<div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-(xl on-primary) font-bold">
-										{level.id}
-									</div>
+									<M.Group gap="md" wrap="nowrap">
+										<M.Center
+											w={48}
+											h={48}
+											bg="violet.1"
+											style={{
+												borderRadius:
+													"var(--mantine-radius-md)",
+												flexShrink: 0,
+											}}
+										>
+											<M.Text size="xl" c="violet" fw={700}>
+												{level.id}
+											</M.Text>
+										</M.Center>
 
-									<div className="min-w-0">
-										<p className="text-xs font-semibold uppercase tracking-wide text-muted">
-											Fase {level.id}
-										</p>
+										<div style={{ minWidth: 0, flex: 1 }}>
+											<M.Text
+												size="xs"
+												fw={600}
+												c="dimmed"
+												tt="uppercase"
+											>
+												Fase {level.id}
+											</M.Text>
 
-										<h3 className="truncate text-lg font-bold">{level.name}</h3>
-									</div>
+											<M.Text fw={700} truncate>
+												{level.name}
+											</M.Text>
+										</div>
 
-									<Icon
-										icon="i-lucide-chevron-right"
-										size={5}
-										color="muted"
-										className="ml-auto shrink-0 transition-transform group-hover:translate-x-1 group-hover:text-primary"
-									/>
-								</button>
+										<Icon.ChevronRight
+											size={20}
+											color="var(--mantine-color-dimmed)"
+											style={{ flexShrink: 0 }}
+										/>
+									</M.Group>
+								</M.Paper>
 							))}
-						</div>
-					</section>
+						</M.SimpleGrid>
+					</M.Stack>
 				))}
-			</div>
-		</div>
+			</M.Stack>
+		</M.Stack>
 	);
 }

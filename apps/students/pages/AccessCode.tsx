@@ -1,3 +1,4 @@
+import * as M from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { getClassByAccessCode } from "@/services";
@@ -34,49 +35,60 @@ export default function AccessCodePage() {
 	}
 
 	return (
-		<section className="mx-auto w-full max-w-md">
+		<M.Center w="100%" mih="100vh" px="md">
 			<title>CodiGO! | Entrar</title>
-			<img src="/logo.png" alt="Logo do CodiGO!" className="w-sm mx-auto" />
 
-			<form className="ui-card flex-(~ col) gap-4" onSubmit={handleSubmit}>
-				<header className="flex-(~ col) gap-1">
-					<h1 className="text-(2xl heading) font-bold">Entrar em uma turma</h1>
-					<p className="text-(sm muted)">
-						Digite o código de acesso fornecido pelo professor.
-					</p>
-				</header>
+			<M.Stack w="100%" maw={448} gap="lg">
+				<M.Image
+					src="/logo.png"
+					alt="Logo do CodiGO!"
+					w="auto"
+					h={72}
+					fit="contain"
+					mx="auto"
+				/>
 
-				<div className="flex-(~ col) gap-2">
-					<input
-						className="ui-field"
-						value={accessCode}
-						onChange={(event) => {
-							setAccessCode(event.target.value.toUpperCase());
-							setError("");
-						}}
-						placeholder="Código de acesso"
-						autoComplete="off"
-						autoCapitalize="characters"
-						maxLength={6}
-						aria-invalid={Boolean(error)}
-						aria-describedby={error ? "access-code-error" : undefined}
-					/>
+				<M.Paper>
+					<form onSubmit={handleSubmit}>
+						<M.Stack gap="lg">
+							<div>
+								<M.Title order={1}>
+									Entrar em uma turma
+								</M.Title>
 
-					{error && (
-						<p id="access-code-error" className="text-sm text-danger">
-							{error}
-						</p>
-					)}
-				</div>
+								<M.Text size="sm" c="dimmed" mt="xs">
+									Digite o código de acesso fornecido pelo
+									professor.
+								</M.Text>
+							</div>
 
-				<button
-					type="submit"
-					className="ui-button-(~ primary)"
-					disabled={loading}
-				>
-					{loading ? "Entrando..." : "Entrar"}
-				</button>
-			</form>
-		</section>
+							<M.TextInput
+								label="Código de acesso"
+								value={accessCode}
+								onChange={(event) => {
+									setAccessCode(
+										event.currentTarget.value.toUpperCase(),
+									);
+									setError("");
+								}}
+								placeholder="Código de acesso"
+								autoComplete="off"
+								autoCapitalize="characters"
+								maxLength={6}
+								error={error || undefined}
+							/>
+
+							<M.Button
+								type="submit"
+								fullWidth
+								loading={loading}
+							>
+								{loading ? "Entrando..." : "Entrar"}
+							</M.Button>
+						</M.Stack>
+					</form>
+				</M.Paper>
+			</M.Stack>
+		</M.Center>
 	);
 }

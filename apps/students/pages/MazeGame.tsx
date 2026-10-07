@@ -1,3 +1,5 @@
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useReward } from "react-rewards";
@@ -6,7 +8,7 @@ import {
 	useLoaderData,
 	useNavigate,
 } from "react-router";
-import { Icon, MazeRenderer } from "@/components";
+import { MazeRenderer } from "@/components";
 import { executeCommand, isGoalReached } from "@/engine";
 import {
 	getMazeLevel,
@@ -34,11 +36,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 	return getMazeLevel(levelId);
 }
 
-const commandIcons: Record<Command, string> = {
-	up: "i-lucide-arrow-up",
-	down: "i-lucide-arrow-down",
-	left: "i-lucide-arrow-left",
-	right: "i-lucide-arrow-right",
+const commandIcons: Record<
+	Command,
+	React.ComponentType<{ size?: number; color?: string }>
+> = {
+	up: Icon.ArrowUp,
+	down: Icon.ArrowDown,
+	left: Icon.ArrowLeft,
+	right: Icon.ArrowRight,
 };
 
 const commands: Command[] = ["up", "left", "down", "right"];
@@ -179,113 +184,179 @@ export default function MazeGame() {
 			status: "failure",
 		}));
 
-		await registerResult("failure", currentLevel.id, commandsToExecute.length);
+		await registerResult(
+			"failure",
+			currentLevel.id,
+			commandsToExecute.length,
+		);
 	}
 
 	return (
-		<div className="flex-(~ col) gap-4">
+		<M.Stack w="100%" gap="md">
 			<title>CodiGO! | Labirinto</title>
-			<header className="ui-card w-full flex items-center gap-4 px-3 py-2">
-				<button
-					type="button"
-					className="ui-button-(~ secondary) h-10 w-auto"
-					onClick={() => navigate("../fases")}
-				>
-					<Icon icon="i-lucide-arrow-left" size={4} color="fg" />
-					Voltar para fases
-				</button>
-				<h1 className="text-(2xl heading) font-bold">{level.name}</h1>
-			</header>
 
-			<div className="grid-(~ cols-1) lg:grid-cols-2 gap-6">
-				<section className="flex size-full justify-center">
-					<MazeRenderer
-						level={state.level}
-						playerPosition={state.playerPosition}
-						direction={state.direction}
-						moving={state.status === "running"}
-					/>
-				</section>
+			<M.Paper>
+				<M.Group gap="md" wrap="nowrap">
+					<M.Button
+						type="button"
+						variant="default"
+						w="auto"
+						leftSection={<Icon.ArrowLeft size={18} />}
+						onClick={() => navigate("../fases")}
+					>
+						Voltar para fases
+					</M.Button>
 
-				<section className="ui-card flex-(~ col) gap-4">
-					<div className="flex-(~ col) gap-1">
-						<h2 className="text-(xl heading) font-bold">Objetivo</h2>
-						<p className="text-muted">
-							Ajude o <b>Codi</b> a chegar até a <b>porta</b>. Escolha os
-							comandos na ordem em que ele deve se mover.
-						</p>
-					</div>
+					<M.Title order={1}>{level.name}</M.Title>
+				</M.Group>
+			</M.Paper>
 
-					<div className="flex-(~ col) gap-2">
-						<h2 className="text-(xl heading) font-bold">Comandos</h2>
+			<M.Grid align="stretch">
+				<M.Grid.Col span={{ base: 12, lg: 6 }}>
+					<M.Center h="100%" mih={400}>
+						<MazeRenderer
+							level={state.level}
+							playerPosition={state.playerPosition}
+							direction={state.direction}
+							moving={state.status === "running"}
+						/>
+					</M.Center>
+				</M.Grid.Col>
 
-						<div className="flex items-center justify-center gap-2 py-2 bg-surface-subtle border-(~ border) rounded-xl">
-							{commands.map((command) => (
-								<button
-									key={command}
-									type="button"
-									disabled={isRunning}
-									className="ui-button-(~ primary) h-14 w-14 px-2 py-2"
-									onClick={() => addCommand(command)}
+				<M.Grid.Col span={{ base: 12, lg: 6 }}>
+					<M.Paper h="100%">
+						<M.Stack gap="lg">
+							<div>
+								<M.Title order={2}>Objetivo</M.Title>
+
+								<M.Text c="dimmed" mt="xs">
+									Ajude o <b>Codi</b> a chegar até a{" "}
+									<b>porta</b>. Escolha os comandos na ordem
+									em que ele deve se mover.
+								</M.Text>
+							</div>
+
+							<M.Stack gap="sm">
+								<M.Title order={2}>Comandos</M.Title>
+
+								<M.Group
+									justify="center"
+									gap="sm"
+									p="sm"
+									bg="gray.1"
+									style={{
+										border:
+											"1px solid var(--mantine-color-gray-3)",
+										borderRadius:
+											"var(--mantine-radius-md)",
+									}}
 								>
-									<span
-										className={`${commandIcons[command]} color-white size-10`}
-									/>
-								</button>
-							))}
-						</div>
-					</div>
+									{commands.map((command) => {
+										const CommandIcon = commandIcons[command];
 
-					<div className="flex-(~ col) gap-2">
-						<h2 className="text-(xl heading) font-bold">Sua sequência</h2>
+										return (
+											<M.ActionIcon
+												key={command}
+												type="button"
+												size="xl"
+												variant="filled"
+												color="violet"
+												disabled={isRunning}
+												aria-label={`Adicionar comando ${command}`}
+												onClick={() => addCommand(command)}
+											>
+												<CommandIcon size={24} color="white" />
+											</M.ActionIcon>
+										);
+									})}
+								</M.Group>
+							</M.Stack>
 
-						<p className="text-muted">
-							Os comandos serão executados nessa ordem:
-						</p>
+							<M.Stack gap="sm">
+								<M.Title order={2}>Sua sequência</M.Title>
 
-						<div className="flex-(~ wrap) min-h-20 items-center gap-2 rounded-lg border-(~ primary) p-3">
-							{state.commands.length === 0 ? (
-								<span className="text-(center muted) w-full">
-									Escolha os comandos acima
-								</span>
-							) : (
-								state.commands.map((command, index) => (
-									<div
-										key={`${index}-${command}`}
-										className="flex size-12 items-center justify-center rounded-md border-(~ primary) bg-surface-subtle"
-									>
-										<Icon
-											icon={commandIcons[command]}
-											size={8}
-											className="text-primary"
-										/>
-									</div>
-								))
-							)}
-						</div>
-					</div>
+								<M.Text c="dimmed">
+									Os comandos serão executados nessa ordem:
+								</M.Text>
 
-					<div className="flex items-center gap-4">
-						<button
-							type="button"
-							disabled={isRunning || state.commands.length === 0}
-							className="ui-button-(~ primary)"
-							onClick={play}
-						>
-							{isRunning ? "Andando…" : "Começar"}
-						</button>
+								<M.Group
+									gap="sm"
+									p="sm"
+									wrap="wrap"
+									mih={80}
+									style={{
+										border:
+											"1px solid var(--mantine-color-violet-6)",
+										borderRadius:
+											"var(--mantine-radius-md)",
+									}}
+								>
+									{state.commands.length === 0 ? (
+										<M.Text
+											c="dimmed"
+											ta="center"
+											w="100%"
+										>
+											Escolha os comandos acima
+										</M.Text>
+									) : (
+										state.commands.map((command, index) => {
+											const CommandIcon = commandIcons[command];
 
-						<button
-							type="button"
-							disabled={isRunning || state.commands.length === 0}
-							className="ui-button-(~ secondary)"
-							onClick={clearCommands}
-						>
-							Limpar
-						</button>
-					</div>
-				</section>
-			</div>
-		</div>
+											return (
+												<M.Center
+													key={`${index}-${command}`}
+													w={48}
+													h={48}
+													bg="gray.1"
+													style={{
+														border:
+															"1px solid var(--mantine-color-violet-6)",
+														borderRadius:
+															"var(--mantine-radius-sm)",
+													}}
+												>
+													<CommandIcon
+														size={24}
+														color="var(--mantine-color-violet-6)"
+													/>
+												</M.Center>
+											);
+										})
+									)}
+								</M.Group>
+							</M.Stack>
+
+							<M.Group gap="sm">
+								<M.Button
+									type="button"
+									flex={1}
+									disabled={
+										isRunning ||
+										state.commands.length === 0
+									}
+									onClick={play}
+								>
+									{isRunning ? "Andando…" : "Começar"}
+								</M.Button>
+
+								<M.Button
+									type="button"
+									flex={1}
+									variant="default"
+									disabled={
+										isRunning ||
+										state.commands.length === 0
+									}
+									onClick={clearCommands}
+								>
+									Limpar
+								</M.Button>
+							</M.Group>
+						</M.Stack>
+					</M.Paper>
+				</M.Grid.Col>
+			</M.Grid>
+		</M.Stack>
 	);
 }

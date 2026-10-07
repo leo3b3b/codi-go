@@ -1,16 +1,20 @@
+import * as M from "@mantine/core";
 import { Outlet, useLocation } from "react-router";
 
 export default function AppLayout() {
 	const location = useLocation();
 
 	return (
-		<div className="fixed inset-0 h-dvh w-full overflow-y-auto ui-gradient text-fg">
-			<main
+		<div className="ui-root">
+			<M.Container
 				key={location.pathname}
-				className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:(px-8 py-8)"
+				component="main"
+				size="xl"
+				px={{ base: "md", sm: "xl", lg: "2xl" }}
+				py={{ base: "lg", lg: "xl" }}
 			>
 				<Outlet />
-			</main>
+			</M.Container>
 		</div>
 	);
 }

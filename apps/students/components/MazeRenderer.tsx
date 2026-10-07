@@ -1,3 +1,4 @@
+import * as M from "@mantine/core";
 import { Codi } from "@/components";
 import type { Command, MazeLevel, Position, TileType } from "@/types";
 import { tileImages } from "@/types";
@@ -28,7 +29,12 @@ function Goal() {
 			src="/tiles/goal.png"
 			alt=""
 			draggable={false}
-			className="block size-full object-contain"
+			style={{
+				display: "block",
+				width: "100%",
+				height: "100%",
+				objectFit: "contain"
+			}}
 		/>
 	);
 }
@@ -43,20 +49,20 @@ function Entity({
 	children: React.ReactNode;
 }) {
 	return (
-		<div
-			className={[
-				"absolute aspect-square w-[var(--tile-size)]",
-				animate && "transition-[left,top] duration-300 ease-in-out",
-			]
-				.filter(Boolean)
-				.join(" ")}
+		<M.Box
+			pos="absolute"
 			style={{
+				aspectRatio: "1",
+				width: "var(--tile-size)",
 				left: `calc(${position.x} * var(--tile-size))`,
 				top: `calc(${position.y} * var(--tile-size))`,
+				...(animate && {
+					transition: "left 300ms ease-in-out, top 300ms ease-in-out",
+				}),
 			}}
 		>
 			{children}
-		</div>
+		</M.Box>
 	);
 }
 
@@ -67,26 +73,26 @@ export function MazeRenderer({
 	moving,
 }: MazeRendererProps) {
 	return (
-		<div
-			className="relative"
-			style={
-				{
-					"--tile-size": "64px",
-				} as React.CSSProperties
-			}
+		<M.Box
+			pos="relative"
+			style={{
+				"--tile-size": "64px",
+			}}
 		>
-			<div
-				className="grid"
+			<M.Box
+				display="grid"
 				style={{
 					gridTemplateColumns: `repeat(${level.tiles[0].length}, var(--tile-size))`,
 				}}
 			>
 				{level.tiles.flatMap((row, y) =>
-					row.map((tile, x) => <Tile key={`${x}-${y}`} type={tile} />),
+					row.map((tile, x) => (
+						<Tile key={`${x}-${y}`} type={tile} />
+					)),
 				)}
-			</div>
+			</M.Box>
 
-			<div className="absolute inset-0">
+			<M.Box pos="absolute" inset={0}>
 				<Entity animate={false} position={level.goal}>
 					<Goal />
 				</Entity>
@@ -94,7 +100,7 @@ export function MazeRenderer({
 				<Entity animate={moving} position={playerPosition}>
 					<Codi direction={direction} moving={moving} />
 				</Entity>
-			</div>
-		</div>
+			</M.Box>
+		</M.Box>
 	);
 }

@@ -80,7 +80,7 @@ export default function SchoolHomePage() {
 						) : (
 							<M.Stack gap="sm">
 								{classes.map(({ id, name }) => (
-									<NavLink to={`turma/${id}`} key={id}>
+									<NavLink to={`turma/${id}`} key={id} style={{ textDecoration: "none" }}>
 										<M.Paper
 											bg="gray.1"
 											p="md"
@@ -111,7 +111,7 @@ export default function SchoolHomePage() {
 							<M.Stack gap="sm">
 								{adminActions.map(
 									({ title, description, icon: ActionIcon, to }) => (
-										<NavLink to={to} key={title}>
+										<NavLink to={to} key={title} style={{ textDecoration: "none" }}>
 											<M.Paper bg="gray.1">
 												<M.Group gap="md" wrap="nowrap">
 													<ActionIcon size={28} />

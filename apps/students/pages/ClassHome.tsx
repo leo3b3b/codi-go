@@ -1,9 +1,11 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
-import { CodiToast, Icon } from "@/components";
+import { CodiToast } from "@/components";
 import {
 	getClassByAccessCode,
 	getStudentsByClassId,
@@ -57,107 +59,147 @@ export default function ClassHome() {
 	}
 
 	return (
-		<div className="flex flex-col gap-6">
+		<M.Stack w="100%" gap="xl">
 			<title>CodiGO! | Quem é você?</title>
-			<section className="ui-card w-full grid-(~ cols-[1fr_3fr_1fr]) items-center py-2">
-				<img src="/logo.png" alt="Logo do CodiGO!" className="w-full" />
 
-				<h1 className="text-(4xl heading center) font-bold">
-					{classData.name}
-				</h1>
+			<M.Paper>
+				<M.Grid align="center">
+					<M.Grid.Col span={{ base: 12, md: 2 }}>
+						<M.Image
+							src="/logo.png"
+							alt="Logo do CodiGO!"
+							w="100%"
+							maw={160}
+							mx="auto"
+						/>
+					</M.Grid.Col>
 
-				<div
-					className={`px-4 py-2 gap-2 w-full rounded-lg flex-(~ row) items-center justify-center
-						text-lg font-semibold ${
-							classData.is_playing
-								? "bg-primary-soft text-on-primary"
-								: "bg-danger-soft text-on-danger"
-						}`}
-				>
-					<Icon
-						icon={
-							classData.is_playing
-								? "i-lucide-lock-keyhole-open"
-								: "i-lucide-lock-keyhole"
-						}
-						color={classData.is_playing ? "on-primary" : "on-danger"}
-						size={5}
-					/>
-					{classData.is_playing ? "Sala Aberta" : "Sala Fechada"}
-				</div>
-			</section>
+					<M.Grid.Col span={{ base: 12, md: 7 }}>
+						<M.Title order={1} ta="center">
+							{classData.name}
+						</M.Title>
+					</M.Grid.Col>
 
-			<section className="ui-card flex flex-col gap-4">
-				<h2 className="text-(2xl heading center) font-bold">Quem é você?</h2>
+					<M.Grid.Col span={{ base: 12, md: 3 }}>
+						<M.Badge
+							size="lg"
+							variant="light"
+							color={classData.is_playing ? "violet" : "red"}
+							leftSection={
+								classData.is_playing ? (
+									<Icon.LockKeyholeOpen size={18} />
+								) : (
+									<Icon.LockKeyhole size={18} />
+								)
+							}
+							w="100%"
+							h={44}
+						>
+							{classData.is_playing
+								? "Sala Aberta"
+								: "Sala Fechada"}
+						</M.Badge>
+					</M.Grid.Col>
+				</M.Grid>
+			</M.Paper>
 
-				<div className="grid-(~ cols-1) sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center gap-3">
-					{students.map((student) => {
-						const selected = selectedStudent?.id === student.id;
+			<M.Paper>
+				<M.Stack gap="lg">
+					<M.Title order={2} ta="center">
+						Quem é você?
+					</M.Title>
 
-						return (
-							<button
-								key={student.id}
-								type="button"
-								className={`ui-button w-auto ${
-									selected ? "ui-button-primary" : "ui-button-secondary"
-								}`}
-								onClick={() => {
-									setSelectedStudent({
-										id: student.id,
-										name: student.name,
-									});
-									setSelectedCode(null);
-								}}
-							>
-								{student.name}
-							</button>
-						);
-					})}
-				</div>
-			</section>
-
-			{selectedStudent && (
-				<section className="ui-card flex flex-col gap-4">
-					<h2 className="text-(2xl heading center) font-bold">
-						Escolha sua imagem
-					</h2>
-
-					<div className="flex flex-wrap justify-center gap-4">
-						{(Object.keys(imageCodes) as ImageCode[]).map((code) => {
-							const imageCode = imageCodes[code];
-							const selected = selectedCode === code;
+					<M.SimpleGrid
+						cols={{ base: 1, sm: 2, md: 3, lg: 4 }}
+						spacing="sm"
+					>
+						{students.map((student) => {
+							const selected =
+								selectedStudent?.id === student.id;
 
 							return (
-								<button
-									key={code}
+								<M.Button
+									key={student.id}
 									type="button"
-									className={`rounded-xl border-4 p-2 transition cursor-pointer ${
-										selected ? "border-primary" : "border-transparent"
-									}`}
-									onClick={() => setSelectedCode(code)}
+									variant={selected ? "filled" : "default"}
+									color={selected ? "violet" : "gray"}
+									fullWidth
+									onClick={() => {
+										setSelectedStudent({
+											id: student.id,
+											name: student.name,
+										});
+										setSelectedCode(null);
+									}}
 								>
-									<img
-										src={imageCode.src}
-										alt={imageCode.label}
-										className="h-24 w-24 object-contain"
-									/>
-								</button>
+									{student.name}
+								</M.Button>
 							);
 						})}
-					</div>
+					</M.SimpleGrid>
+				</M.Stack>
+			</M.Paper>
 
-					<div className="flex justify-center">
-						<button
-							type="button"
-							className="ui-button-(~ primary)"
-							disabled={!selectedCode}
-							onClick={handleStart}
-						>
-							Começar
-						</button>
-					</div>
-				</section>
+			{selectedStudent && (
+				<M.Paper>
+					<M.Stack gap="lg">
+						<M.Title order={2} ta="center">
+							Escolha sua imagem
+						</M.Title>
+
+						<M.Group justify="center" gap="md">
+							{(Object.keys(imageCodes) as ImageCode[]).map(
+								(code) => {
+									const imageCode = imageCodes[code];
+									const selected = selectedCode === code;
+
+									return (
+										<M.ActionIcon
+											key={code}
+											type="button"
+											variant="default"
+											size={112}
+											p={8}
+											radius="lg"
+											aria-label={imageCode.label}
+											aria-pressed={selected}
+											style={{
+												border: `4px solid ${selected
+													? "var(--mantine-color-violet-6)"
+													: "transparent"
+													}`,
+											}}
+											onClick={() =>
+												setSelectedCode(code)
+											}
+										>
+											<M.Image
+												src={imageCode.src}
+												alt={imageCode.label}
+												w={88}
+												h={88}
+												fit="contain"
+											/>
+										</M.ActionIcon>
+									);
+								},
+							)}
+						</M.Group>
+
+						<M.Group justify="center">
+							<M.Button
+								type="button"
+								w="100%"
+								maw={320}
+								disabled={!selectedCode}
+								onClick={handleStart}
+							>
+								Começar
+							</M.Button>
+						</M.Group>
+					</M.Stack>
+				</M.Paper>
 			)}
-		</div>
+		</M.Stack>
 	);
 }
