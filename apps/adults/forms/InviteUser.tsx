@@ -1,7 +1,9 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon, Select } from "@/components";
+import { Select } from "@/components";
 import { type InviteOutput, inviteSchema } from "@/schemas";
 import { inviteUserToSchool } from "@/services";
 
@@ -48,87 +50,75 @@ export function InviteUserForm({
 	}
 
 	return (
-		<section className="ui-card">
-			<header>
-				<h1 className="text-(2xl heading) font-bold">
+		<M.Paper>
+			<M.Stack gap="lg">
+				<M.Title order={1}>
 					Convidar Usuário para {school.trade_name || school.legal_name}
-				</h1>
-				<HorizontalSeparator />
-			</header>
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="
-                            flex-(~ col)
-                            gap-x-4 gap-y-2 py-3
-                            md:grid-(~ cols-4)
-                            lg:grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
-                            items-center
-                        "
-			>
-				<div
-					className="
-                                flex-(~ row) relative items-center font-bold
-                                w-full md:col-span-2 lg:col-span-3
-                            "
-				>
-					<Icon
-						icon="i-lucide-at-sign"
-						color="muted"
-						size={6}
-						className="absolute left-3 pointer-events-none"
-					/>
+				</M.Title>
 
-					<input
-						type="text"
-						{...register("username")}
-						autoComplete="username"
-						placeholder="Digite o nome do usuário"
-						aria-invalid={Boolean(errors.username)}
-						className="ui-field w-full h-14 pl-10"
-					/>
-				</div>
+				<M.Divider />
 
-				<Controller
-					name="role"
-					control={control}
-					render={({ field }) => (
-						<Select
-							aria-label="Cargo"
-							value={field.value}
-							onChange={field.onChange}
-							options={[
-								{ value: "teacher", label: "Professor" },
-								{ value: "admin", label: "Administrador" },
-							]}
-							className="h-14 w-full"
-						/>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+					<M.Grid align="flex-start">
+						<M.Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+							<M.TextInput
+								autoComplete="username"
+								placeholder="Digite o nome do usuário"
+								leftSection={<Icon.AtSign size={18} />}
+								{...register("username")}
+								error={errors.username?.message}
+							/>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+							<Controller
+								name="role"
+								control={control}
+								render={({ field }) => (
+									<Select
+										aria-label="Cargo"
+										value={field.value}
+										onChange={field.onChange}
+										options={[
+											{
+												value: "teacher",
+												label: "Professor",
+											},
+											{
+												value: "admin",
+												label: "Administrador",
+											},
+										]}
+										className="w-full"
+									/>
+								)}
+							/>
+							{errors.role && (
+								<M.Text size="sm" c="red" mt={4}>
+									{errors.role.message}
+								</M.Text>
+							)}
+						</M.Grid.Col>
+
+						<M.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+							<M.Button
+								type="submit"
+								fullWidth
+								loading={isSubmitting}
+								disabled={!watch("username")}
+							>
+								{isSubmitting ? "Convidando..." : "Convidar"}
+							</M.Button>
+						</M.Grid.Col>
+					</M.Grid>
+
+					{errors.root && (
+						<M.Alert mt="md">
+							{errors.root.message}
+						</M.Alert>
 					)}
-				/>
-
-				<button
-					type="submit"
-					disabled={isSubmitting || !watch("username")}
-					className="ui-button-(~ primary) h-14 mt-4 md:mt-0"
-				>
-					{isSubmitting ? "Convidando..." : "Convidar"}
-				</button>
-			</form>
-			{errors.username && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.username.message}
-				</p>
-			)}
-			{errors.role && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.role.message}
-				</p>
-			)}
-			{errors.root && (
-				<p role="alert" className="ui-alert-danger">
-					{errors.root.message}
-				</p>
-			)}
-		</section>
+				</form>
+			</M.Stack>
+		</M.Paper>
 	);
 }

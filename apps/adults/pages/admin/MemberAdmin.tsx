@@ -1,5 +1,6 @@
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { Icon } from "@/components";
 import { InviteUserForm } from "@/forms";
 import {
 	adminGetMembershipsBySchool,
@@ -87,150 +88,182 @@ export default function MemberAdminPage() {
 	}
 
 	return (
-		<div className="flex-(~ col) gap-4">
+		<M.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Membros</title>
 
 			<InviteUserForm school={school} />
 
-			<section className="ui-card">
-				<header>
-					<h1 className="text-(2xl heading) font-bold mb-4">
-						Gerenciar Membros
-					</h1>
-				</header>
-				<div
-					className="
-						hidden lg:grid
-						grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
-						gap-x-4 gap-y-2 py-3
-						border-b-(~ border)
-						text-(sm muted) font-bold
-					"
-				>
-					<div>Nome</div>
-					<div>Nome de Usuário</div>
-					<div>Cargo</div>
-					<div>Vínculo</div>
-					<div>Ações</div>
-				</div>
+			<M.Paper>
+				<M.Stack gap="md">
+					<M.Title order={1}>Gerenciar Membros</M.Title>
 
-				<div className="flex-(~ col) gap-4 lg:gap-0">
-					{memberships.map((membership) => (
-						<div
-							key={`${membership.school_id}-${membership.profile_id}`}
-							className="
-								grid grid-cols-[1fr_auto]
-								gap-x-4 gap-y-2 py-3
-								border-b-(~ border)
-								md:grid-cols-4
-								lg:grid-cols-[2fr_1.5fr_1.25fr_1.25fr_2.5fr]
-								lg:items-center
-							"
-						>
-							<div className="font-semibold text-heading">
-								{membership.name ?? "—"}
-							</div>
+					<M.Grid
+						visibleFrom="lg"
+						w="100%"
+						px="md"
+						py="sm"
+						style={{
+							borderBottom: "1px solid var(--mantine-color-gray-3)",
+						}}
+					>
+						<M.Grid.Col span={2}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Nome
+							</M.Text>
+						</M.Grid.Col>
 
-							<div className="text-(muted right) md:text-left">
-								{membership.username ? `@${membership.username}` : "—"}
-							</div>
+						<M.Grid.Col span={2}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Nome de Usuário
+							</M.Text>
+						</M.Grid.Col>
 
-							<div className="md:col-span-1">
-								{membership.role === "admin" ? "Administrador" : "Professor"}
-							</div>
+						<M.Grid.Col span={2}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Cargo
+							</M.Text>
+						</M.Grid.Col>
 
-							<div className="justify-self-end md:justify-self-start">
-								<span
-									className={`
-										inline-flex items-center gap-2 rounded-full
-										px-3 py-1 text-sm font-bold
-										${
-											membership.status === "active"
-												? "bg-primary-soft text-on-primary"
-												: "bg-danger-soft text-on-danger"
+						<M.Grid.Col span={2}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Vínculo
+							</M.Text>
+						</M.Grid.Col>
+
+						<M.Grid.Col span={4}>
+							<M.Text size="sm" c="dimmed" fw={700}>
+								Ações
+							</M.Text>
+						</M.Grid.Col>
+					</M.Grid>
+
+					<M.Stack gap="md">
+						{memberships.map((membership) => (
+							<M.Grid
+								key={`${membership.school_id}-${membership.profile_id}`}
+								w="100%"
+								align="center"
+								px="md"
+								py="sm"
+								style={{
+									borderBottom: "1px solid var(--mantine-color-gray-3)",
+								}}
+							>
+								<M.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
+									<M.Text fw={600}>{membership.name ?? "—"}</M.Text>
+								</M.Grid.Col>
+
+								<M.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
+									<M.Text c="dimmed">
+										{membership.username ? `@${membership.username}` : "—"}
+									</M.Text>
+								</M.Grid.Col>
+
+								<M.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
+									<M.Text>
+										{membership.role === "admin" ? "Administrador" : "Professor"}
+									</M.Text>
+								</M.Grid.Col>
+
+								<M.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
+									<M.Badge
+										variant="light"
+										color={membership.status === "active" ? "violet" : "red"}
+										leftSection={
+											membership.status === "active" ? (
+												<Icon.CircleCheck size={14} />
+											) : (
+												<Icon.Clock3 size={14} />
+											)
 										}
-									`}
-								>
-									<Icon
-										icon={
-											membership.status === "active"
-												? "i-lucide-circle-check"
-												: "i-lucide-clock-3"
-										}
-										color={
-											membership.status === "active"
-												? "on-primary"
-												: "on-danger"
-										}
-										size={4}
-									/>
-									{membership.status === "active" ? "Ativo" : "Pendente"}
-								</span>
-							</div>
-
-							<div className="flex gap-2 col-span-2 md:col-span-4 lg:col-span-1">
-								{membership.status === "active" ? (
-									<button
-										type="button"
-										className="ui-button-(~ secondary) w-1/2"
-										onClick={() => {
-											const { profile_id, school_id, username, name, role } =
-												membership;
-
-											handleUpdateRole({
-												profile_id,
-												school_id,
-												username: username ? `@${username}` : name,
-												current_role: role,
-											});
-										}}
 									>
-										<Icon
-											icon={
-												membership.role === "admin"
-													? "i-lucide-arrow-down"
-													: "i-lucide-arrow-up"
+										{membership.status === "active" ? "Ativo" : "Pendente"}
+									</M.Badge>
+								</M.Grid.Col>
+
+								<M.Grid.Col span={{ base: 12, md: 2, lg: 4 }}>
+									<M.Group gap="sm" grow>
+										{membership.status === "active" ? (
+											<M.Button
+												type="button"
+												variant="default"
+												leftSection={
+													membership.role === "admin" ? (
+														<Icon.ArrowDown size={18} />
+													) : (
+														<Icon.ArrowUp size={18} />
+													)
+												}
+												onClick={() => {
+													const {
+														profile_id,
+														school_id,
+														username,
+														name,
+														role,
+													} = membership;
+
+													handleUpdateRole({
+														profile_id,
+														school_id,
+														username: username
+															? `@${username}`
+															: name,
+														current_role: role,
+													});
+												}}
+											>
+												{membership.role === "admin"
+													? "Rebaixar"
+													: "Promover"}
+											</M.Button>
+										) : (
+											<div />
+										)}
+
+										<M.Button
+											type="button"
+											color="red"
+											leftSection={
+												membership.status === "active" ? (
+													<Icon.UserMinus size={18} />
+												) : (
+													<Icon.X size={18} />
+												)
 											}
-											color="fg"
-											size={5}
-										/>
-										{membership.role === "admin" ? "Rebaixar" : "Promover"}
-									</button>
-								) : (
-									<div className="w-1/2"></div>
-								)}
+											onClick={() => {
+												const {
+													profile_id,
+													school_id,
+													username,
+													name,
+													status,
+												} = membership;
 
-								<button
-									type="button"
-									className="ui-button-(~ danger) w-1/2"
-									onClick={() => {
-										const { profile_id, school_id, username, name, status } =
-											membership;
-
-										handleDeleteMembership({
-											profile_id,
-											school_id,
-											username: username ? `@${username}` : name,
-											action: status === "active" ? "remove" : "cancel",
-										});
-									}}
-								>
-									<Icon
-										icon={
-											membership.status === "active"
-												? "i-lucide-user-minus"
-												: "i-lucide-x"
-										}
-										color="on-danger"
-										size={5}
-									/>
-									{membership.status === "active" ? "Remover" : "Cancelar"}
-								</button>
-							</div>
-						</div>
-					))}
-				</div>
-			</section>
-		</div>
+												handleDeleteMembership({
+													profile_id,
+													school_id,
+													username: username
+														? `@${username}`
+														: name,
+													action:
+														status === "active"
+															? "remove"
+															: "cancel",
+												});
+											}}
+										>
+											{membership.status === "active"
+												? "Remover"
+												: "Cancelar"}
+										</M.Button>
+									</M.Group>
+								</M.Grid.Col>
+							</M.Grid>
+						))}
+					</M.Stack>
+				</M.Stack>
+			</M.Paper>
+		</M.Stack>
 	);
 }
