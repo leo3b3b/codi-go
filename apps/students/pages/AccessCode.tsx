@@ -1,4 +1,3 @@
-import logo from "@codi-go/ui/images/logo.png";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { getClassByAccessCode } from "@/services";
@@ -37,7 +36,7 @@ export default function AccessCodePage() {
 	return (
 		<section className="mx-auto w-full max-w-md">
 			<title>CodiGO! | Entrar</title>
-			<img src={logo} alt="Logo do CodiGO!" className="w-sm mx-auto" />
+			<img src="/logo.png" alt="Logo do CodiGO!" className="w-sm mx-auto" />
 
 			<form className="ui-card flex-(~ col) gap-4" onSubmit={handleSubmit}>
 				<header className="flex-(~ col) gap-1">

@@ -1,5 +1,4 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import logo from "@codi-go/ui/images/logo.png";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import type { LoaderFunctionArgs } from "react-router";
@@ -61,7 +60,7 @@ export default function ClassHome() {
 		<div className="flex flex-col gap-6">
 			<title>CodiGO! | Quem é você?</title>
 			<section className="ui-card w-full grid-(~ cols-[1fr_3fr_1fr]) items-center py-2">
-				<img src={logo} alt="Logo do CodiGO!" className="w-full" />
+				<img src="/logo.png" alt="Logo do CodiGO!" className="w-full" />
 
 				<h1 className="text-(4xl heading center) font-bold">
 					{classData.name}

@@ -1,4 +1,3 @@
-import logo from "@codi-go/ui/images/logo.png";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router";
 import { Icon, Select, VerticalSeparator } from "@/components";
 import type { SchoolLayoutLoaderData } from "@/layouts/School";
@@ -40,7 +39,7 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 					to="/escolas"
 					className="order-1 shrink-0 focus-visible:outline-none focus-visible:ring-(2 primary offset-2)"
 				>
-					<img src={logo} alt="Logo do CodiGO!" className="h-12 w-auto" />
+					<img src="/logo.png" alt="Logo do CodiGO!" className="h-12 w-auto" />
 				</NavLink>
 
 				{isSchoolRoute && (

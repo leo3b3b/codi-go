@@ -1,55 +1,91 @@
-import icebergBackground from "@codi-go/ui/images/backgroundIceberg.png";
-import mascot from "@codi-go/ui/images/codiPisca.png";
-import logo from "@codi-go/ui/images/logo.png";
+import * as M from "@mantine/core";
 import { Outlet } from "react-router";
 
 export default function AuthLayout() {
 	return (
-		<main className="grid h-screen bg-bg text-fg lg:grid-cols-2">
-			<section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:px-12">
-				<div className="w-full max-w-md">
-					<img
-						src={logo}
-						alt="CodiGO!"
-						className="mx-auto mb-3 h-18 w-auto object-contain lg:hidden"
-					/>
+		<M.Grid mih="100vh" bg="gray.1">
+			<M.Grid.Col span={{ base: 12, lg: 6 }}>
+				<M.Center mih="100vh" px={{ base: "md", sm: "xl", lg: "2xl" }}>
+					<M.Stack w="100%" maw={448}>
+						<M.Image
+							src="/logo.png"
+							alt="CodiGO!"
+							w="auto"
+							h={72}
+							fit="contain"
+							hiddenFrom="lg"
+							mx="auto"
+						/>
 
-					<Outlet />
-				</div>
-			</section>
+						<Outlet />
+					</M.Stack>
+				</M.Center>
+			</M.Grid.Col>
 
-			<section
-				className="relative hidden min-h-screen overflow-hidden bg-hero px-12 py-16 lg:(flex flex-col justify-between) xl:px-20"
+			<M.Grid.Col
+				span={6}
+				visibleFrom="lg"
 				style={{
-					backgroundImage: `linear-gradient(180deg, var(--color-hero-overlay-start), var(--color-hero-overlay-end)), url(${icebergBackground})`,
+					position: "relative",
+					overflow: "hidden",
+					backgroundImage: `
+						linear-gradient(
+							180deg,
+							var(--color-hero-overlay-start),
+							var(--color-hero-overlay-end)
+						),
+						url("/backgroundIceberg.png")
+					`,
 					backgroundPosition: "center",
 					backgroundSize: "cover",
 				}}
 			>
-				<div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.24),transparent_26%),radial-gradient(circle_at_80%_76%,rgba(230,201,255,0.34),transparent_24%)]" />
+				<M.Stack
+					h="100%"
+					justify="space-between"
+					p="xl"
+					style={{ position: "relative" }}
+				>
+					<div>
+						<M.Image
+							src="/logo.png"
+							alt="CodiGO!"
+							w="auto"
+							h={128}
+							fit="contain"
+						/>
 
-				<div className="relative max-w-md text-on-primary">
-					<img
-						src={logo}
-						alt="CodiGO!"
-						className="h-32 w-auto object-contain"
+						<M.Title
+							order={1}
+							c="white"
+							mt="xl"
+							size="2.75rem"
+							lh={1.1}
+						>
+							Pronto para se aventurar?
+						</M.Title>
+
+						<M.Text
+							c="white"
+							size="lg"
+							lh={1.6}
+							mt="md"
+							maw={384}
+						>
+							Entre na sua conta e acompanhe a jornada dos seus alunos!
+						</M.Text>
+					</div>
+
+					<M.Image
+						src="/codiPisca.png"
+						alt="Mascote do CodiGO!"
+						w="100%"
+						maw={448}
+						mx="auto"
+						fit="contain"
 					/>
-
-					<h1 className="mt-6 text-4xl leading-tight font-black tracking-tight xl:text-5xl">
-						Pronto para se aventurar?
-					</h1>
-
-					<p className="mt-4 max-w-sm text-(lg on-primary/88) leading-relaxed">
-						Entre na sua conta e acompanhe a jornada dos seus alunos!
-					</p>
-				</div>
-
-				<img
-					src={mascot}
-					alt="Mascote do CodiGO!"
-					className="relative mx-auto mt-12 w-full max-w-sm object-contain xl:max-w-md"
-				/>
-			</section>
-		</main>
+				</M.Stack>
+			</M.Grid.Col>
+		</M.Grid>
 	);
 }

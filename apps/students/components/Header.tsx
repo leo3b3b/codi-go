@@ -1,4 +1,3 @@
-import logo from "@codi-go/ui/images/logo.png";
 import { useNavigate, useParams } from "react-router";
 import { Icon } from "@/components";
 import { getStudentSession, signOutStudent } from "@/services";
@@ -16,7 +15,7 @@ export function Header() {
 	return (
 		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
 			<div className="mx-auto flex h-16 max-w-7xl items-center px-4 py-3 sm:(px-6 py-4) gap-4">
-				<img src={logo} alt="Logo do CodiGO!" className="h-14" />
+				<img src="/logo.png" alt="Logo do CodiGO!" className="h-14" />
 				<span className="text-(xl heading) font-semibold truncate">
 					{student?.name ?? "Aluno"}
 				</span>
