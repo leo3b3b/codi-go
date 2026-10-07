@@ -1,5 +1,7 @@
+import * as M from "@mantine/core";
+import * as Icon from "lucide-react";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router";
-import { Icon, Select, VerticalSeparator } from "@/components";
+import { Select } from "@/components";
 import type { SchoolLayoutLoaderData } from "@/layouts/School";
 
 const adminOptions = [
@@ -33,84 +35,84 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 	const currentClass = classes.find((item) => item.id === classId);
 
 	return (
-		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
-			<div className="mx-auto grid min-h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 py-3 sm:(flex h-16 px-6 py-4) lg:px-8">
-				<NavLink
-					to="/escolas"
-					className="order-1 shrink-0 focus-visible:outline-none focus-visible:ring-(2 primary offset-2)"
+		<M.Paper component="header"
+			pos="sticky"
+			top={0}
+			withBorder
+			radius="none"
+			style={{ zIndex: 40 }}
+		>
+			<M.Container size="xl">
+				<M.Group
+					h={40}
+					py="sm"
+					justify="space-between"
+					wrap="nowrap"
 				>
-					<img src="/logo.png" alt="Logo do CodiGO!" className="h-12 w-auto" />
-				</NavLink>
+					<M.Group gap="md" wrap="nowrap" flex={1}>
+						<NavLink to="/escolas">
+							<M.Image
+								src="/logo.png"
+								alt="Logo do CodiGO!"
+								h={48}
+								w="auto"
+							/>
+						</NavLink>
 
-				{isSchoolRoute && (
-					<div
-						className="
-							order-3 col-span-2 h-full flex-(~ 1) items-center
-							gap-2 mt-2 sm:(order-2 ml-4 w-auto gap-0 mt-0)
-						"
-					>
-						<VerticalSeparator className="hidden sm:block" />
-
-						<Select
-							aria-label="Escola"
-							value={schoolId}
-							onChange={(nextSchoolId) => {
-								navigate(`/escola/${nextSchoolId}`);
-							}}
-							options={schools.map((school) => ({
-								value: school.school_id,
-								label: school.trade_name || school.legal_name,
-							}))}
-							className="flex-1 sm:max-w-32"
-						/>
-
-						{isClassRoute && currentClass && (
-							<>
-								<VerticalSeparator className="hidden sm:block" />
-
+						{isSchoolRoute && (
+							<M.Group gap="sm" wrap="nowrap" flex={1}>
 								<Select
-									aria-label="Turma"
-									value={classId}
-									onChange={(nextClassId) => {
-										navigate(`/escola/${schoolId}/turma/${nextClassId}`);
+									aria-label="Escola"
+									value={schoolId}
+									onChange={(nextSchoolId) => {
+										navigate(`/escola/${nextSchoolId}`);
 									}}
-									options={classes.map((schoolClass) => ({
-										value: schoolClass.id,
-										label: schoolClass.name,
+									options={schools.map((school) => ({
+										value: school.school_id,
+										label: school.trade_name || school.legal_name,
 									}))}
-									className="flex-1 sm:max-w-32"
 								/>
-							</>
+
+								{isClassRoute && currentClass && (
+									<Select
+										aria-label="Turma"
+										value={classId}
+										onChange={(nextClassId) => {
+											navigate(`/escola/${schoolId}/turma/${nextClassId}`);
+										}}
+										options={classes.map((schoolClass) => ({
+											value: schoolClass.id,
+											label: schoolClass.name,
+										}))}
+									/>
+								)}
+
+								{isAdminRoute && (
+									<Select
+										aria-label="Administração"
+										value={currentAdminScreen}
+										onChange={(screen) => {
+											navigate(`/escola/${schoolId}/admin/${screen}`);
+										}}
+										options={adminOptions}
+									/>
+								)}
+							</M.Group>
 						)}
+					</M.Group>
 
-						{isAdminRoute && (
-							<>
-								<VerticalSeparator className="hidden sm:block" />
-
-								<Select
-									aria-label="Administração"
-									value={currentAdminScreen}
-									onChange={(screen) => {
-										navigate(`/escola/${schoolId}/admin/${screen}`);
-									}}
-									options={adminOptions}
-									className="flex-1 sm:max-w-32"
-								/>
-							</>
-						)}
-					</div>
-				)}
-
-				<NavLink
-					to="/meu-perfil"
-					className="order-2 col-start-2 row-start-1 flex
-					h-10 w-10 items-center justify-center rounded-full
-					bg-primary-soft transition-colors hover:bg-primary
-					sm:(order-3 ml-auto)"
-				>
-					<Icon icon="i-lucide-user" color="on-primary" size={6} />
-				</NavLink>
-			</div>
-		</header>
+					<NavLink to="/meu-perfil">
+						<M.ThemeIcon
+							size={40}
+							radius="xl"
+							variant="light"
+							color="violet"
+						>
+							<Icon.User size={20} />
+						</M.ThemeIcon>
+					</NavLink>
+				</M.Group>
+			</M.Container>
+		</M.Paper>
 	);
 }
