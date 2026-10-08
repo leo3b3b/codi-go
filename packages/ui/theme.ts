@@ -38,5 +38,21 @@ export const theme = createTheme({
 				my: "md",
 			},
 		},
+
+		TextInput: {
+			defaultProps: {
+				variant: "filled",
+				size: "md",
+				radius: "lg",
+			}
+		},
+
+		Button: {
+			defaultProps: {
+				variant: "filled",
+				size: "md",
+				radius: "lg"
+			}
+		}
 	},
 });
