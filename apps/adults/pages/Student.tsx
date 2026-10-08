@@ -91,9 +91,7 @@ export default function StudentPage() {
 						w="auto"
 						leftSection={<Icon.ArrowLeft size={18} />}
 						onClick={() =>
-							navigate(
-								`/escola/${student.school_id}/turma/${student.class_id}`,
-							)
+							navigate(`/escola/${student.school_id}/turma/${student.class_id}`)
 						}
 					>
 						Voltar
@@ -104,15 +102,9 @@ export default function StudentPage() {
 			<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
 				<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
 
-				<MetricCard
-					label="Níveis concluídos"
-					value={String(completedLevels)}
-				/>
+				<MetricCard label="Níveis concluídos" value={String(completedLevels)} />
 
-				<MetricCard
-					label="Registros"
-					value={String(progress.length)}
-				/>
+				<MetricCard label="Registros" value={String(progress.length)} />
 
 				<MetricCard
 					label="Última atividade"
@@ -145,10 +137,7 @@ export default function StudentPage() {
 									<XAxis dataKey="name" />
 									<YAxis />
 									<Tooltip
-										formatter={(value) => [
-											`${value} comandos`,
-											"Diferença",
-										]}
+										formatter={(value) => [`${value} comandos`, "Diferença"]}
 									/>
 									<Bar dataKey="difference" />
 								</BarChart>
@@ -171,8 +160,7 @@ export default function StudentPage() {
 						px="md"
 						py="sm"
 						style={{
-							borderBottom:
-								"1px solid var(--mantine-color-gray-3)",
+							borderBottom: "1px solid var(--mantine-color-gray-3)",
 						}}
 					>
 						<UI.Grid.Col span={3}>
@@ -208,35 +196,26 @@ export default function StudentPage() {
 								px="md"
 								py="sm"
 								style={{
-									borderBottom:
-										"1px solid var(--mantine-color-gray-3)",
+									borderBottom: "1px solid var(--mantine-color-gray-3)",
 								}}
 							>
 								<UI.Grid.Col span={{ base: 12, md: 3 }}>
-									<UI.Text fw={600}>
-										{record.level.name}
-									</UI.Text>
+									<UI.Text fw={600}>{record.level.name}</UI.Text>
 								</UI.Grid.Col>
 
 								<UI.Grid.Col span={{ base: 12, md: 3 }}>
-									<UI.Text c="dimmed">
-										{record.level.game.name}
-									</UI.Text>
+									<UI.Text c="dimmed">{record.level.game.name}</UI.Text>
 								</UI.Grid.Col>
 
 								<UI.Grid.Col span={{ base: 6, md: 3 }}>
 									<UI.Text>
-										{record.result === "success"
-											? "Sucesso"
-											: "Falha"}
+										{record.result === "success" ? "Sucesso" : "Falha"}
 									</UI.Text>
 								</UI.Grid.Col>
 
 								<UI.Grid.Col span={{ base: 6, md: 3 }}>
 									<UI.Text c="dimmed">
-										{new Date(
-											record.register_time,
-										).toLocaleString("pt-BR")}
+										{new Date(record.register_time).toLocaleString("pt-BR")}
 									</UI.Text>
 								</UI.Grid.Col>
 							</UI.Grid>

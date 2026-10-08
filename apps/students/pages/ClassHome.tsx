@@ -95,9 +95,7 @@ export default function ClassHome() {
 							w="100%"
 							h={44}
 						>
-							{classData.is_playing
-								? "Sala Aberta"
-								: "Sala Fechada"}
+							{classData.is_playing ? "Sala Aberta" : "Sala Fechada"}
 						</UI.Badge>
 					</UI.Grid.Col>
 				</UI.Grid>
@@ -109,13 +107,9 @@ export default function ClassHome() {
 						Quem é você?
 					</UI.Title>
 
-					<UI.SimpleGrid
-						cols={{ base: 1, sm: 2, md: 3, lg: 4 }}
-						spacing="sm"
-					>
+					<UI.SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="sm">
 						{students.map((student) => {
-							const selected =
-								selectedStudent?.id === student.id;
+							const selected = selectedStudent?.id === student.id;
 
 							return (
 								<UI.Button
@@ -148,42 +142,39 @@ export default function ClassHome() {
 						</UI.Title>
 
 						<UI.Group justify="center" gap="md">
-							{(Object.keys(imageCodes) as ImageCode[]).map(
-								(code) => {
-									const imageCode = imageCodes[code];
-									const selected = selectedCode === code;
+							{(Object.keys(imageCodes) as ImageCode[]).map((code) => {
+								const imageCode = imageCodes[code];
+								const selected = selectedCode === code;
 
-									return (
-										<UI.ActionIcon
-											key={code}
-											type="button"
-											variant="default"
-											size={112}
-											p={8}
-											radius="lg"
-											aria-label={imageCode.label}
-											aria-pressed={selected}
-											style={{
-												border: `4px solid ${selected
+								return (
+									<UI.ActionIcon
+										key={code}
+										type="button"
+										variant="default"
+										size={112}
+										p={8}
+										radius="lg"
+										aria-label={imageCode.label}
+										aria-pressed={selected}
+										style={{
+											border: `4px solid ${
+												selected
 													? "var(--mantine-color-violet-6)"
 													: "transparent"
-													}`,
-											}}
-											onClick={() =>
-												setSelectedCode(code)
-											}
-										>
-											<UI.Image
-												src={imageCode.src}
-												alt={imageCode.label}
-												w={88}
-												h={88}
-												fit="contain"
-											/>
-										</UI.ActionIcon>
-									);
-								},
-							)}
+											}`,
+										}}
+										onClick={() => setSelectedCode(code)}
+									>
+										<UI.Image
+											src={imageCode.src}
+											alt={imageCode.label}
+											w={88}
+											h={88}
+											fit="contain"
+										/>
+									</UI.ActionIcon>
+								);
+							})}
 						</UI.Group>
 
 						<UI.Group justify="center">

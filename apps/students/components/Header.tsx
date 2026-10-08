@@ -23,24 +23,10 @@ export function Header() {
 			style={{ zIndex: 40 }}
 		>
 			<UI.Container size="xl">
-				<UI.Group
-					h={40}
-					py="sm"
-					gap="md"
-					wrap="nowrap"
-				>
-					<UI.Image
-						src="/logo.png"
-						alt="Logo do CodiGO!"
-						h={56}
-						w="auto"
-					/>
+				<UI.Group h={40} py="sm" gap="md" wrap="nowrap">
+					<UI.Image src="/logo.png" alt="Logo do CodiGO!" h={56} w="auto" />
 
-					<UI.Text
-						size="xl"
-						fw={600}
-						truncate
-					>
+					<UI.Text size="xl" fw={600} truncate>
 						{student?.name ?? "Aluno"}
 					</UI.Text>
 

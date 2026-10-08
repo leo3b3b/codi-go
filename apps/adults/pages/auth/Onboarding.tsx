@@ -42,10 +42,7 @@ export default function OnboardingPage() {
 					Complete seu perfil
 				</UI.Title>
 
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-				>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="md">
 						<UI.TextInput
 							label="Nome"
@@ -64,17 +61,9 @@ export default function OnboardingPage() {
 							error={errors.username?.message}
 						/>
 
-						{errors.root && (
-							<UI.Alert>
-								{errors.root.message}
-							</UI.Alert>
-						)}
+						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
 
-						<UI.Button
-							type="submit"
-							loading={isSubmitting}
-							mt="xs"
-						>
+						<UI.Button type="submit" loading={isSubmitting} mt="xs">
 							{isSubmitting ? "Salvando..." : "Salvar"}
 						</UI.Button>
 					</UI.Stack>

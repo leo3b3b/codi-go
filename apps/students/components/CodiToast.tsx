@@ -24,13 +24,7 @@ export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 				}}
 			>
 				<UI.Group gap="md" wrap="nowrap">
-					<UI.Image
-						src="/codi.png"
-						alt=""
-						h={64}
-						w={64}
-						fit="contain"
-					/>
+					<UI.Image src="/codi.png" alt="" h={64} w={64} fit="contain" />
 
 					<UI.Box style={{ flex: 1 }}>
 						<UI.Text size="xl" fw={700}>

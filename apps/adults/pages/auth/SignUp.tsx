@@ -37,10 +37,7 @@ export default function SignUpPage() {
 					Crie sua conta
 				</UI.Title>
 
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-				>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="md">
 						<UI.TextInput
 							label="E-mail"
@@ -67,17 +64,9 @@ export default function SignUpPage() {
 							error={errors.confirmation?.message}
 						/>
 
-						{errors.root && (
-							<UI.Alert>
-								{errors.root.message}
-							</UI.Alert>
-						)}
+						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
 
-						<UI.Button
-							type="submit"
-							loading={isSubmitting}
-							mt="xs"
-						>
+						<UI.Button type="submit" loading={isSubmitting} mt="xs">
 							{isSubmitting ? "Criando..." : "Criar conta"}
 						</UI.Button>
 					</UI.Stack>

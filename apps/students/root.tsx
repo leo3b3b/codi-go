@@ -2,7 +2,7 @@ import {
 	ColorSchemeScript,
 	MantineProvider,
 	mantineHtmlProps,
-	theme
+	theme,
 } from "@codi-go/ui";
 import { Toaster } from "react-hot-toast";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";

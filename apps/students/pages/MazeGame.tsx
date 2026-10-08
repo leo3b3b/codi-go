@@ -184,11 +184,7 @@ export default function MazeGame() {
 			status: "failure",
 		}));
 
-		await registerResult(
-			"failure",
-			currentLevel.id,
-			commandsToExecute.length,
-		);
+		await registerResult("failure", currentLevel.id, commandsToExecute.length);
 	}
 
 	return (
@@ -230,9 +226,8 @@ export default function MazeGame() {
 								<UI.Title order={2}>Objetivo</UI.Title>
 
 								<UI.Text c="dimmed" mt="xs">
-									Ajude o <b>Codi</b> a chegar até a{" "}
-									<b>porta</b>. Escolha os comandos na ordem
-									em que ele deve se mover.
+									Ajude o <b>Codi</b> a chegar até a <b>porta</b>. Escolha os
+									comandos na ordem em que ele deve se mover.
 								</UI.Text>
 							</div>
 
@@ -245,10 +240,8 @@ export default function MazeGame() {
 									p="sm"
 									bg="gray.1"
 									style={{
-										border:
-											"1px solid var(--mantine-color-gray-3)",
-										borderRadius:
-											"var(--mantine-radius-md)",
+										border: "1px solid var(--mantine-color-gray-3)",
+										borderRadius: "var(--mantine-radius-md)",
 									}}
 								>
 									{commands.map((command) => {
@@ -285,18 +278,12 @@ export default function MazeGame() {
 									wrap="wrap"
 									mih={80}
 									style={{
-										border:
-											"1px solid var(--mantine-color-violet-6)",
-										borderRadius:
-											"var(--mantine-radius-md)",
+										border: "1px solid var(--mantine-color-violet-6)",
+										borderRadius: "var(--mantine-radius-md)",
 									}}
 								>
 									{state.commands.length === 0 ? (
-										<UI.Text
-											c="dimmed"
-											ta="center"
-											w="100%"
-										>
+										<UI.Text c="dimmed" ta="center" w="100%">
 											Escolha os comandos acima
 										</UI.Text>
 									) : (
@@ -310,10 +297,8 @@ export default function MazeGame() {
 													h={48}
 													bg="gray.1"
 													style={{
-														border:
-															"1px solid var(--mantine-color-violet-6)",
-														borderRadius:
-															"var(--mantine-radius-sm)",
+														border: "1px solid var(--mantine-color-violet-6)",
+														borderRadius: "var(--mantine-radius-sm)",
 													}}
 												>
 													<CommandIcon
@@ -331,10 +316,7 @@ export default function MazeGame() {
 								<UI.Button
 									type="button"
 									flex={1}
-									disabled={
-										isRunning ||
-										state.commands.length === 0
-									}
+									disabled={isRunning || state.commands.length === 0}
 									onClick={play}
 								>
 									{isRunning ? "Andando…" : "Começar"}
@@ -344,10 +326,7 @@ export default function MazeGame() {
 									type="button"
 									flex={1}
 									variant="default"
-									disabled={
-										isRunning ||
-										state.commands.length === 0
-									}
+									disabled={isRunning || state.commands.length === 0}
 									onClick={clearCommands}
 								>
 									Limpar

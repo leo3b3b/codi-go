@@ -1,5 +1,5 @@
+import { fileURLToPath } from "node:url";
 import { reactRouter } from "@react-router/dev/vite";
-import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
 
 export default defineConfig({

@@ -81,14 +81,8 @@ export default function SchoolHomePage() {
 							<UI.Stack gap="sm">
 								{classes.map(({ id, name }) => (
 									<NavLink to={`turma/${id}`} key={id}>
-										<UI.Paper
-											bg="gray.1"
-											p="md"
-										>
-											<UI.Text
-												c="violet"
-												fw={600}
-											>
+										<UI.Paper bg="gray.1" p="md">
+											<UI.Text c="violet" fw={600}>
 												{name}
 											</UI.Text>
 										</UI.Paper>

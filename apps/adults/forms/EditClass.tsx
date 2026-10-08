@@ -140,10 +140,7 @@ export function EditClassForm({
 					</UI.Alert>
 				)}
 
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-				>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="md">
 						<UI.SimpleGrid cols={{ base: 1, md: 2 }}>
 							<UI.TextInput
@@ -189,20 +186,12 @@ export function EditClassForm({
 								error={errors.access_code?.message}
 							/>
 
-							<UI.Group
-								gap="sm"
-								align="stretch"
-								mt={{ base: 0, md: "xl" }}
-							>
+							<UI.Group gap="sm" align="stretch" mt={{ base: 0, md: "xl" }}>
 								<UI.Button
 									type="submit"
 									flex={1}
 									loading={isSubmitting}
-									disabled={
-										isUnchanged ||
-										isDeleting ||
-										classData.is_playing
-									}
+									disabled={isUnchanged || isDeleting || classData.is_playing}
 									leftSection={<Icon.Save size={18} />}
 								>
 									{isSubmitting ? "Salvando..." : "Salvar Alterações"}
@@ -213,10 +202,7 @@ export function EditClassForm({
 									flex={1}
 									color="red"
 									loading={isDeleting}
-									disabled={
-										isSubmitting ||
-										classData.is_playing
-									}
+									disabled={isSubmitting || classData.is_playing}
 									leftSection={<Icon.Trash2 size={18} />}
 									onClick={handleDeleteClass}
 								>
@@ -225,11 +211,7 @@ export function EditClassForm({
 							</UI.Group>
 						</UI.SimpleGrid>
 
-						{errors.root && (
-							<UI.Alert>
-								{errors.root.message}
-							</UI.Alert>
-						)}
+						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
 					</UI.Stack>
 				</form>
 			</UI.Stack>

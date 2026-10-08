@@ -45,7 +45,7 @@ export const theme = createTheme({
 				variant: "filled",
 				size: "md",
 				radius: "lg",
-			}
+			},
 		},
 
 		PasswordInput: {
@@ -53,9 +53,9 @@ export const theme = createTheme({
 				variant: "filled",
 				size: "md",
 				radius: "lg",
-			}
+			},
 		},
 
-		Button: button
+		Button: button,
 	},
 });

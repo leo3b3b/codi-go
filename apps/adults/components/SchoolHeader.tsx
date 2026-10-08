@@ -35,7 +35,8 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 	const currentClass = classes.find((item) => item.id === classId);
 
 	return (
-		<UI.Paper component="header"
+		<UI.Paper
+			component="header"
 			pos="sticky"
 			top={0}
 			withBorder
@@ -43,20 +44,10 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 			style={{ zIndex: 40 }}
 		>
 			<UI.Container size="xl">
-				<UI.Group
-					h={40}
-					py="sm"
-					justify="space-between"
-					wrap="nowrap"
-				>
+				<UI.Group h={40} py="sm" justify="space-between" wrap="nowrap">
 					<UI.Group gap="md" wrap="nowrap" flex={1}>
 						<NavLink to="/escolas">
-							<UI.Image
-								src="/logo.png"
-								alt="Logo do CodiGO!"
-								h={48}
-								w="auto"
-							/>
+							<UI.Image src="/logo.png" alt="Logo do CodiGO!" h={48} w="auto" />
 						</NavLink>
 
 						{isSchoolRoute && (
@@ -102,12 +93,7 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 					</UI.Group>
 
 					<NavLink to="/meu-perfil">
-						<UI.ThemeIcon
-							size={40}
-							radius="xl"
-							variant="light"
-							color="violet"
-						>
+						<UI.ThemeIcon size={40} radius="xl" variant="light" color="violet">
 							<Icon.User size={20} />
 						</UI.ThemeIcon>
 					</NavLink>

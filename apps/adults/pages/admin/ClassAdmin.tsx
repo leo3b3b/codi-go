@@ -72,9 +72,7 @@ export default function ClassAdminPage() {
 
 			<UI.Paper>
 				<UI.Stack gap="md">
-					<UI.Title order={2}>
-						Gerenciar Alunos
-					</UI.Title>
+					<UI.Title order={2}>Gerenciar Alunos</UI.Title>
 
 					<UI.Grid
 						visibleFrom="lg"
@@ -132,9 +130,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 			}}
 		>
 			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
-				<UI.Text fw={600}>
-					{student.name ?? "—"}
-				</UI.Text>
+				<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
 			</UI.Grid.Col>
 
 			<UI.Grid.Col span={{ base: 12, lg: 2 }}>
@@ -148,11 +144,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 							fit="contain"
 						/>
 					) : (
-						<UI.Text
-							size="sm"
-							ff="monospace"
-							c="dimmed"
-						>
+						<UI.Text size="sm" ff="monospace" c="dimmed">
 							••••••••
 						</UI.Text>
 					)}
@@ -173,9 +165,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 						}
 						onClick={() => setShowCredential(!showCredential)}
 					>
-						{showCredential
-							? "Esconder Credencial"
-							: "Mostrar Credencial"}
+						{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
 					</UI.Button>
 
 					<UI.Button

@@ -112,11 +112,7 @@ export function InviteUserForm({
 						</UI.Grid.Col>
 					</UI.Grid>
 
-					{errors.root && (
-						<UI.Alert mt="md">
-							{errors.root.message}
-						</UI.Alert>
-					)}
+					{errors.root && <UI.Alert mt="md">{errors.root.message}</UI.Alert>}
 				</form>
 			</UI.Stack>
 		</UI.Paper>

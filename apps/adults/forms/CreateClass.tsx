@@ -55,11 +55,7 @@ export function CreateClassForm({
 				<UI.Divider />
 
 				<form onSubmit={handleSubmit(onSubmit)} noValidate>
-					<UI.Group
-						align="flex-start"
-						gap="md"
-						wrap="nowrap"
-					>
+					<UI.Group align="flex-start" gap="md" wrap="nowrap">
 						<UI.TextInput
 							flex={1}
 							size="lg"
@@ -80,11 +76,7 @@ export function CreateClassForm({
 						</UI.Button>
 					</UI.Group>
 
-					{errors.root && (
-						<UI.Alert mt="md">
-							{errors.root.message}
-						</UI.Alert>
-					)}
+					{errors.root && <UI.Alert mt="md">{errors.root.message}</UI.Alert>}
 				</form>
 			</UI.Stack>
 		</UI.Paper>

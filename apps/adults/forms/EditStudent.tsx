@@ -153,11 +153,7 @@ export function EditStudentForm({
 							</UI.Group>
 						</UI.Stack>
 
-						{errors.root && (
-							<UI.Alert>
-								{errors.root.message}
-							</UI.Alert>
-						)}
+						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
 
 						<UI.Group gap="sm" mt="xs">
 							<UI.Button
@@ -167,9 +163,7 @@ export function EditStudentForm({
 								disabled={isUnchanged || isDeleting}
 								leftSection={<Icon.Save size={18} />}
 							>
-								{isSubmitting
-									? "Salvando..."
-									: "Salvar Alterações"}
+								{isSubmitting ? "Salvando..." : "Salvar Alterações"}
 							</UI.Button>
 
 							<UI.Button

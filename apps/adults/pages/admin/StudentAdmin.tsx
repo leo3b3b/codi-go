@@ -81,16 +81,11 @@ export default function StudentAdminPage() {
 
 					<UI.Divider />
 
-					{transferError && (
-						<UI.Alert>
-							{transferError}
-						</UI.Alert>
-					)}
+					{transferError && <UI.Alert>{transferError}</UI.Alert>}
 
 					<UI.Stack gap="sm">
 						{classes.map((classData) => {
-							const isCurrentClass =
-								classData.id === student.class_id;
+							const isCurrentClass = classData.id === student.class_id;
 
 							return (
 								<UI.Paper
@@ -102,33 +97,19 @@ export default function StudentAdminPage() {
 											: undefined,
 									}}
 								>
-									<UI.Group
-										justify="space-between"
-										gap="md"
-										wrap="nowrap"
-									>
+									<UI.Group justify="space-between" gap="md" wrap="nowrap">
 										<div>
-											<UI.Text fw={600}>
-												{classData.name}
-											</UI.Text>
+											<UI.Text fw={600}>{classData.name}</UI.Text>
 
 											{isCurrentClass && (
-												<UI.Text
-													size="sm"
-													c="violet"
-													fw={600}
-												>
+												<UI.Text size="sm" c="violet" fw={600}>
 													Turma atual
 												</UI.Text>
 											)}
 										</div>
 
 										{isCurrentClass ? (
-											<UI.Text
-												size="sm"
-												c="dimmed"
-												fw={600}
-											>
+											<UI.Text size="sm" c="dimmed" fw={600}>
 												Atual
 											</UI.Text>
 										) : (
@@ -137,14 +118,9 @@ export default function StudentAdminPage() {
 												variant="default"
 												w="auto"
 												disabled={isTransferring}
-												leftSection={
-													<Icon.Shuffle size={18} />
-												}
+												leftSection={<Icon.Shuffle size={18} />}
 												onClick={() =>
-													handleTransfer(
-														classData.id,
-														classData.name,
-													)
+													handleTransfer(classData.id, classData.name)
 												}
 											>
 												Transferir

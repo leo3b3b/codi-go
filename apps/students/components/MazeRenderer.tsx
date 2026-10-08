@@ -33,7 +33,7 @@ function Goal() {
 				display: "block",
 				width: "100%",
 				height: "100%",
-				objectFit: "contain"
+				objectFit: "contain",
 			}}
 		/>
 	);
@@ -86,9 +86,7 @@ export function MazeRenderer({
 				}}
 			>
 				{level.tiles.flatMap((row, y) =>
-					row.map((tile, x) => (
-						<Tile key={`${x}-${y}`} type={tile} />
-					)),
+					row.map((tile, x) => <Tile key={`${x}-${y}`} type={tile} />),
 				)}
 			</UI.Box>
 

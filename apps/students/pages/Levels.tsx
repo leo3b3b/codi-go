@@ -70,19 +70,14 @@ export default function LevelsPage() {
 							</div>
 						</UI.Group>
 
-						<UI.SimpleGrid
-							cols={{ base: 1, sm: 2, lg: 3 }}
-							spacing="md"
-						>
+						<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
 							{game.levels.map((level) => (
 								<UI.Paper
 									key={level.id}
 									component="button"
 									type="button"
 									w="100%"
-									onClick={() =>
-										navigate(`../labirinto/${level.id}`)
-									}
+									onClick={() => navigate(`../labirinto/${level.id}`)}
 									style={{
 										textAlign: "left",
 										cursor: "pointer",
@@ -94,8 +89,7 @@ export default function LevelsPage() {
 											h={48}
 											bg="violet.1"
 											style={{
-												borderRadius:
-													"var(--mantine-radius-md)",
+												borderRadius: "var(--mantine-radius-md)",
 												flexShrink: 0,
 											}}
 										>
@@ -105,12 +99,7 @@ export default function LevelsPage() {
 										</UI.Center>
 
 										<div style={{ minWidth: 0, flex: 1 }}>
-											<UI.Text
-												size="xs"
-												fw={600}
-												c="dimmed"
-												tt="uppercase"
-											>
+											<UI.Text size="xs" fw={600} c="dimmed" tt="uppercase">
 												Fase {level.id}
 											</UI.Text>
 

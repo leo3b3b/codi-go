@@ -55,23 +55,11 @@ export default function AuthLayout() {
 							fit="contain"
 						/>
 
-						<UI.Title
-							order={1}
-							c="white"
-							mt="xl"
-							size="2.75rem"
-							lh={1.1}
-						>
+						<UI.Title order={1} c="white" mt="xl" size="2.75rem" lh={1.1}>
 							Pronto para se aventurar?
 						</UI.Title>
 
-						<UI.Text
-							c="white"
-							size="lg"
-							lh={1.6}
-							mt="md"
-							maw={384}
-						>
+						<UI.Text c="white" size="lg" lh={1.6} mt="md" maw={384}>
 							Entre na sua conta e acompanhe a jornada dos seus alunos!
 						</UI.Text>
 					</div>

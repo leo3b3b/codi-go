@@ -37,10 +37,7 @@ export default function SignInPage() {
 					Bom te ver!
 				</UI.Title>
 
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-				>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="md">
 						<UI.TextInput
 							label="E-mail"
@@ -59,17 +56,9 @@ export default function SignInPage() {
 							error={errors.password?.message}
 						/>
 
-						{errors.root && (
-							<UI.Alert>
-								{errors.root.message}
-							</UI.Alert>
-						)}
+						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
 
-						<UI.Button
-							type="submit"
-							loading={isSubmitting}
-							mt="xs"
-						>
+						<UI.Button type="submit" loading={isSubmitting} mt="xs">
 							{isSubmitting ? "Entrando..." : "Entrar"}
 						</UI.Button>
 					</UI.Stack>

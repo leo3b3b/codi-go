@@ -52,13 +52,10 @@ export default function AccessCodePage() {
 					<form onSubmit={handleSubmit}>
 						<UI.Stack gap="lg">
 							<div>
-								<UI.Title order={1}>
-									Entrar em uma turma
-								</UI.Title>
+								<UI.Title order={1}>Entrar em uma turma</UI.Title>
 
 								<UI.Text size="sm" c="dimmed" mt="xs">
-									Digite o código de acesso fornecido pelo
-									professor.
+									Digite o código de acesso fornecido pelo professor.
 								</UI.Text>
 							</div>
 
@@ -66,9 +63,7 @@ export default function AccessCodePage() {
 								label="Código de acesso"
 								value={accessCode}
 								onChange={(event) => {
-									setAccessCode(
-										event.currentTarget.value.toUpperCase(),
-									);
+									setAccessCode(event.currentTarget.value.toUpperCase());
 									setError("");
 								}}
 								placeholder="Código de acesso"
@@ -78,11 +73,7 @@ export default function AccessCodePage() {
 								error={error || undefined}
 							/>
 
-							<UI.Button
-								type="submit"
-								fullWidth
-								loading={loading}
-							>
+							<UI.Button type="submit" fullWidth loading={loading}>
 								{loading ? "Entrando..." : "Entrar"}
 							</UI.Button>
 						</UI.Stack>

@@ -161,7 +161,9 @@ export default function MemberAdminPage() {
 
 								<UI.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
 									<UI.Text>
-										{membership.role === "admin" ? "Administrador" : "Professor"}
+										{membership.role === "admin"
+											? "Administrador"
+											: "Professor"}
 									</UI.Text>
 								</UI.Grid.Col>
 
@@ -206,16 +208,12 @@ export default function MemberAdminPage() {
 													handleUpdateRole({
 														profile_id,
 														school_id,
-														username: username
-															? `@${username}`
-															: name,
+														username: username ? `@${username}` : name,
 														current_role: role,
 													});
 												}}
 											>
-												{membership.role === "admin"
-													? "Rebaixar"
-													: "Promover"}
+												{membership.role === "admin" ? "Rebaixar" : "Promover"}
 											</UI.Button>
 										) : (
 											<div />
@@ -243,19 +241,12 @@ export default function MemberAdminPage() {
 												handleDeleteMembership({
 													profile_id,
 													school_id,
-													username: username
-														? `@${username}`
-														: name,
-													action:
-														status === "active"
-															? "remove"
-															: "cancel",
+													username: username ? `@${username}` : name,
+													action: status === "active" ? "remove" : "cancel",
 												});
 											}}
 										>
-											{membership.status === "active"
-												? "Remover"
-												: "Cancelar"}
+											{membership.status === "active" ? "Remover" : "Cancelar"}
 										</UI.Button>
 									</UI.Group>
 								</UI.Grid.Col>
