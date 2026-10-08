@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { Outlet, useLoaderData, useLocation } from "react-router";
 import { SchoolHeader } from "@/components";
 import { requireAuth } from "@/middlewares";
@@ -39,10 +39,10 @@ export default function SchoolLayout() {
 	const location = useLocation();
 
 	return (
-		<M.Box c="gray.9" className="ui-root">
+		<UI.Box c="gray.9" className="ui-root">
 			<SchoolHeader schools={data.schools} classes={data.classes} />
 
-			<M.Container
+			<UI.Container
 				key={location.pathname}
 				component="main"
 				size="xl"
@@ -50,7 +50,7 @@ export default function SchoolLayout() {
 				py="lg"
 			>
 				<Outlet />
-			</M.Container>
-		</M.Box>
+			</UI.Container>
+		</UI.Box>
 	);
 }

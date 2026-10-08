@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
@@ -39,21 +39,21 @@ export default function LevelsPage() {
 	const navigate = useNavigate();
 
 	return (
-		<M.Stack w="100%" gap="xl">
+		<UI.Stack w="100%" gap="xl">
 			<title>CodiGO! | Fases</title>
 
 			<div>
-				<M.Title order={1}>Fases</M.Title>
-				<M.Text c="dimmed" mt="xs">
+				<UI.Title order={1}>Fases</UI.Title>
+				<UI.Text c="dimmed" mt="xs">
 					Escolha um jogo e avance pelas fases.
-				</M.Text>
+				</UI.Text>
 			</div>
 
-			<M.Stack gap="xl">
+			<UI.Stack gap="xl">
 				{games.map((game) => (
-					<M.Stack key={game.key} gap="md">
-						<M.Group gap="md" align="center">
-							<M.Box
+					<UI.Stack key={game.key} gap="md">
+						<UI.Group gap="md" align="center">
+							<UI.Box
 								w={4}
 								h={32}
 								bg="violet"
@@ -61,21 +61,21 @@ export default function LevelsPage() {
 							/>
 
 							<div>
-								<M.Title order={2}>{game.name}</M.Title>
+								<UI.Title order={2}>{game.name}</UI.Title>
 
-								<M.Text size="sm" c="dimmed">
+								<UI.Text size="sm" c="dimmed">
 									{game.levels.length}{" "}
 									{game.levels.length === 1 ? "fase" : "fases"}
-								</M.Text>
+								</UI.Text>
 							</div>
-						</M.Group>
+						</UI.Group>
 
-						<M.SimpleGrid
+						<UI.SimpleGrid
 							cols={{ base: 1, sm: 2, lg: 3 }}
 							spacing="md"
 						>
 							{game.levels.map((level) => (
-								<M.Paper
+								<UI.Paper
 									key={level.id}
 									component="button"
 									type="button"
@@ -88,8 +88,8 @@ export default function LevelsPage() {
 										cursor: "pointer",
 									}}
 								>
-									<M.Group gap="md" wrap="nowrap">
-										<M.Center
+									<UI.Group gap="md" wrap="nowrap">
+										<UI.Center
 											w={48}
 											h={48}
 											bg="violet.1"
@@ -99,24 +99,24 @@ export default function LevelsPage() {
 												flexShrink: 0,
 											}}
 										>
-											<M.Text size="xl" c="violet" fw={700}>
+											<UI.Text size="xl" c="violet" fw={700}>
 												{level.id}
-											</M.Text>
-										</M.Center>
+											</UI.Text>
+										</UI.Center>
 
 										<div style={{ minWidth: 0, flex: 1 }}>
-											<M.Text
+											<UI.Text
 												size="xs"
 												fw={600}
 												c="dimmed"
 												tt="uppercase"
 											>
 												Fase {level.id}
-											</M.Text>
+											</UI.Text>
 
-											<M.Text fw={700} truncate>
+											<UI.Text fw={700} truncate>
 												{level.name}
-											</M.Text>
+											</UI.Text>
 										</div>
 
 										<Icon.ChevronRight
@@ -124,13 +124,13 @@ export default function LevelsPage() {
 											color="var(--mantine-color-dimmed)"
 											style={{ flexShrink: 0 }}
 										/>
-									</M.Group>
-								</M.Paper>
+									</UI.Group>
+								</UI.Paper>
 							))}
-						</M.SimpleGrid>
-					</M.Stack>
+						</UI.SimpleGrid>
+					</UI.Stack>
 				))}
-			</M.Stack>
-		</M.Stack>
+			</UI.Stack>
+		</UI.Stack>
 	);
 }

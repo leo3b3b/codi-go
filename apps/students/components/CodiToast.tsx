@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import type { Toast } from "react-hot-toast";
 
 type CodiToastProps = {
@@ -8,7 +8,7 @@ type CodiToastProps = {
 
 export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 	return (
-		<M.Box
+		<UI.Box
 			style={{
 				pointerEvents: "auto",
 				width: "min(90vw, 28rem)",
@@ -17,14 +17,14 @@ export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 				transition: "transform 300ms, opacity 300ms",
 			}}
 		>
-			<M.Paper
+			<UI.Paper
 				bg="red.0"
 				style={{
 					border: "2px solid var(--mantine-color-red-2)",
 				}}
 			>
-				<M.Group gap="md" wrap="nowrap">
-					<M.Image
+				<UI.Group gap="md" wrap="nowrap">
+					<UI.Image
 						src="/codi.png"
 						alt=""
 						h={64}
@@ -32,21 +32,21 @@ export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 						fit="contain"
 					/>
 
-					<M.Box style={{ flex: 1 }}>
-						<M.Text size="xl" fw={700}>
+					<UI.Box style={{ flex: 1 }}>
+						<UI.Text size="xl" fw={700}>
 							{is_class_playing
 								? "Ops! Não deu certo."
 								: "Ops! A sala está fechada."}
-						</M.Text>
+						</UI.Text>
 
-						<M.Text mt={4}>
+						<UI.Text mt={4}>
 							{is_class_playing
 								? "Tente escolher outra imagem."
 								: "Tente de novo depois"}
-						</M.Text>
-					</M.Box>
-				</M.Group>
-			</M.Paper>
-		</M.Box>
+						</UI.Text>
+					</UI.Box>
+				</UI.Group>
+			</UI.Paper>
+		</UI.Box>
 	);
 }

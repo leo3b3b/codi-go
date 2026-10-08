@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { Outlet, useLocation } from "react-router";
 import { Header } from "@/components";
 import { requireSession } from "@/middlewares";
@@ -12,7 +12,7 @@ export default function ProtectedLayout() {
 		<div className="ui-root">
 			<Header />
 
-			<M.Container
+			<UI.Container
 				key={location.pathname}
 				component="main"
 				size="xl"
@@ -20,9 +20,9 @@ export default function ProtectedLayout() {
 				py={{ base: "lg", sm: "xl" }}
 			>
 				<Outlet />
-			</M.Container>
+			</UI.Container>
 
-			<M.Box
+			<UI.Box
 				pos="fixed"
 				bottom={0}
 				left="50%"
@@ -33,7 +33,7 @@ export default function ProtectedLayout() {
 				}}
 			>
 				<span id="confettiDiv" />
-			</M.Box>
+			</UI.Box>
 		</div>
 	);
 }

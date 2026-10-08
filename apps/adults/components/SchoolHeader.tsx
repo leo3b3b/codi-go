@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router";
 import { Select } from "@/components";
@@ -35,23 +35,23 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 	const currentClass = classes.find((item) => item.id === classId);
 
 	return (
-		<M.Paper component="header"
+		<UI.Paper component="header"
 			pos="sticky"
 			top={0}
 			withBorder
 			radius="none"
 			style={{ zIndex: 40 }}
 		>
-			<M.Container size="xl">
-				<M.Group
+			<UI.Container size="xl">
+				<UI.Group
 					h={40}
 					py="sm"
 					justify="space-between"
 					wrap="nowrap"
 				>
-					<M.Group gap="md" wrap="nowrap" flex={1}>
+					<UI.Group gap="md" wrap="nowrap" flex={1}>
 						<NavLink to="/escolas">
-							<M.Image
+							<UI.Image
 								src="/logo.png"
 								alt="Logo do CodiGO!"
 								h={48}
@@ -60,7 +60,7 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 						</NavLink>
 
 						{isSchoolRoute && (
-							<M.Group gap="sm" wrap="nowrap" flex={1}>
+							<UI.Group gap="sm" wrap="nowrap" flex={1}>
 								<Select
 									aria-label="Escola"
 									value={schoolId}
@@ -97,22 +97,22 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 										options={adminOptions}
 									/>
 								)}
-							</M.Group>
+							</UI.Group>
 						)}
-					</M.Group>
+					</UI.Group>
 
 					<NavLink to="/meu-perfil">
-						<M.ThemeIcon
+						<UI.ThemeIcon
 							size={40}
 							radius="xl"
 							variant="light"
 							color="violet"
 						>
 							<Icon.User size={20} />
-						</M.ThemeIcon>
+						</UI.ThemeIcon>
 					</NavLink>
-				</M.Group>
-			</M.Container>
-		</M.Paper>
+				</UI.Group>
+			</UI.Container>
+		</UI.Paper>
 	);
 }

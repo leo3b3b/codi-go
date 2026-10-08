@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import { InviteUserForm } from "@/forms";
@@ -88,16 +88,16 @@ export default function MemberAdminPage() {
 	}
 
 	return (
-		<M.Stack w="100%" gap="md">
+		<UI.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Membros</title>
 
 			<InviteUserForm school={school} />
 
-			<M.Paper>
-				<M.Stack gap="md">
-					<M.Title order={1}>Gerenciar Membros</M.Title>
+			<UI.Paper>
+				<UI.Stack gap="md">
+					<UI.Title order={1}>Gerenciar Membros</UI.Title>
 
-					<M.Grid
+					<UI.Grid
 						visibleFrom="lg"
 						w="100%"
 						px="md"
@@ -106,40 +106,40 @@ export default function MemberAdminPage() {
 							borderBottom: "1px solid var(--mantine-color-gray-3)",
 						}}
 					>
-						<M.Grid.Col span={2}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={2}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Nome
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={2}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={2}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Nome de Usuário
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={2}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={2}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Cargo
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={2}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={2}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Vínculo
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={4}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={4}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Ações
-							</M.Text>
-						</M.Grid.Col>
-					</M.Grid>
+							</UI.Text>
+						</UI.Grid.Col>
+					</UI.Grid>
 
-					<M.Stack gap="md">
+					<UI.Stack gap="md">
 						{memberships.map((membership) => (
-							<M.Grid
+							<UI.Grid
 								key={`${membership.school_id}-${membership.profile_id}`}
 								w="100%"
 								align="center"
@@ -149,24 +149,24 @@ export default function MemberAdminPage() {
 									borderBottom: "1px solid var(--mantine-color-gray-3)",
 								}}
 							>
-								<M.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
-									<M.Text fw={600}>{membership.name ?? "—"}</M.Text>
-								</M.Grid.Col>
+								<UI.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
+									<UI.Text fw={600}>{membership.name ?? "—"}</UI.Text>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
-									<M.Text c="dimmed">
+								<UI.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
+									<UI.Text c="dimmed">
 										{membership.username ? `@${membership.username}` : "—"}
-									</M.Text>
-								</M.Grid.Col>
+									</UI.Text>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
-									<M.Text>
+								<UI.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
+									<UI.Text>
 										{membership.role === "admin" ? "Administrador" : "Professor"}
-									</M.Text>
-								</M.Grid.Col>
+									</UI.Text>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
-									<M.Badge
+								<UI.Grid.Col span={{ base: 6, md: 2, lg: 2 }}>
+									<UI.Badge
 										variant="light"
 										color={membership.status === "active" ? "violet" : "red"}
 										leftSection={
@@ -178,13 +178,13 @@ export default function MemberAdminPage() {
 										}
 									>
 										{membership.status === "active" ? "Ativo" : "Pendente"}
-									</M.Badge>
-								</M.Grid.Col>
+									</UI.Badge>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 12, md: 2, lg: 4 }}>
-									<M.Group gap="sm" grow>
+								<UI.Grid.Col span={{ base: 12, md: 2, lg: 4 }}>
+									<UI.Group gap="sm" grow>
 										{membership.status === "active" ? (
-											<M.Button
+											<UI.Button
 												type="button"
 												variant="default"
 												leftSection={
@@ -216,12 +216,12 @@ export default function MemberAdminPage() {
 												{membership.role === "admin"
 													? "Rebaixar"
 													: "Promover"}
-											</M.Button>
+											</UI.Button>
 										) : (
 											<div />
 										)}
 
-										<M.Button
+										<UI.Button
 											type="button"
 											color="red"
 											leftSection={
@@ -256,14 +256,14 @@ export default function MemberAdminPage() {
 											{membership.status === "active"
 												? "Remover"
 												: "Cancelar"}
-										</M.Button>
-									</M.Group>
-								</M.Grid.Col>
-							</M.Grid>
+										</UI.Button>
+									</UI.Group>
+								</UI.Grid.Col>
+							</UI.Grid>
 						))}
-					</M.Stack>
-				</M.Stack>
-			</M.Paper>
-		</M.Stack>
+					</UI.Stack>
+				</UI.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }

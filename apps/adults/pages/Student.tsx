@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useLoaderData, useNavigate } from "react-router";
 import {
@@ -73,19 +73,19 @@ export default function StudentPage() {
 	}));
 
 	return (
-		<M.Stack w="100%" gap="xl">
+		<UI.Stack w="100%" gap="xl">
 			<title>CodiGO! | Aluno</title>
 
-			<M.Paper>
-				<M.Group justify="space-between" gap="md" wrap="nowrap">
+			<UI.Paper>
+				<UI.Group justify="space-between" gap="md" wrap="nowrap">
 					<div>
-						<M.Title order={1}>{student.name}</M.Title>
-						<M.Text size="sm" c="dimmed">
+						<UI.Title order={1}>{student.name}</UI.Title>
+						<UI.Text size="sm" c="dimmed">
 							Acompanhamento do aluno
-						</M.Text>
+						</UI.Text>
 					</div>
 
-					<M.Button
+					<UI.Button
 						type="button"
 						variant="default"
 						w="auto"
@@ -97,11 +97,11 @@ export default function StudentPage() {
 						}
 					>
 						Voltar
-					</M.Button>
-				</M.Group>
-			</M.Paper>
+					</UI.Button>
+				</UI.Group>
+			</UI.Paper>
 
-			<M.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
+			<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
 				<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
 
 				<MetricCard
@@ -122,23 +122,23 @@ export default function StudentPage() {
 							: "—"
 					}
 				/>
-			</M.SimpleGrid>
+			</UI.SimpleGrid>
 
-			<M.Paper>
-				<M.Stack gap="md">
+			<UI.Paper>
+				<UI.Stack gap="md">
 					<div>
-						<M.Title order={2}>Jogo do Labirinto</M.Title>
+						<UI.Title order={2}>Jogo do Labirinto</UI.Title>
 
-						<M.Divider />
+						<UI.Divider />
 
-						<M.Text size="sm" c="dimmed" mt="md">
+						<UI.Text size="sm" c="dimmed" mt="md">
 							Diferença entre os comandos utilizados e a meta do nível{" "}
 							<b>(quanto menor, melhor)</b>.
-						</M.Text>
+						</UI.Text>
 					</div>
 
 					{mazeChartData.length > 0 ? (
-						<M.Box h={320}>
+						<UI.Box h={320}>
 							<ResponsiveContainer width="100%" height="100%">
 								<BarChart data={mazeChartData}>
 									<CartesianGrid strokeDasharray="3 3" />
@@ -153,20 +153,20 @@ export default function StudentPage() {
 									<Bar dataKey="difference" />
 								</BarChart>
 							</ResponsiveContainer>
-						</M.Box>
+						</UI.Box>
 					) : (
-						<M.Text size="sm" c="dimmed">
+						<UI.Text size="sm" c="dimmed">
 							Ainda não há dados suficientes para o labirinto.
-						</M.Text>
+						</UI.Text>
 					)}
-				</M.Stack>
-			</M.Paper>
+				</UI.Stack>
+			</UI.Paper>
 
-			<M.Paper>
-				<M.Stack gap="md">
-					<M.Title order={2}>Registros</M.Title>
+			<UI.Paper>
+				<UI.Stack gap="md">
+					<UI.Title order={2}>Registros</UI.Title>
 
-					<M.Grid
+					<UI.Grid
 						visibleFrom="md"
 						px="md"
 						py="sm"
@@ -175,34 +175,34 @@ export default function StudentPage() {
 								"1px solid var(--mantine-color-gray-3)",
 						}}
 					>
-						<M.Grid.Col span={3}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={3}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Nível
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={3}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={3}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Jogo
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={3}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={3}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Resultado
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={3}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={3}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Data
-							</M.Text>
-						</M.Grid.Col>
-					</M.Grid>
+							</UI.Text>
+						</UI.Grid.Col>
+					</UI.Grid>
 
-					<M.Stack gap={0}>
+					<UI.Stack gap={0}>
 						{[...progress].reverse().map((record) => (
-							<M.Grid
+							<UI.Grid
 								key={record.id}
 								align="center"
 								px="md"
@@ -212,52 +212,52 @@ export default function StudentPage() {
 										"1px solid var(--mantine-color-gray-3)",
 								}}
 							>
-								<M.Grid.Col span={{ base: 12, md: 3 }}>
-									<M.Text fw={600}>
+								<UI.Grid.Col span={{ base: 12, md: 3 }}>
+									<UI.Text fw={600}>
 										{record.level.name}
-									</M.Text>
-								</M.Grid.Col>
+									</UI.Text>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 12, md: 3 }}>
-									<M.Text c="dimmed">
+								<UI.Grid.Col span={{ base: 12, md: 3 }}>
+									<UI.Text c="dimmed">
 										{record.level.game.name}
-									</M.Text>
-								</M.Grid.Col>
+									</UI.Text>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 6, md: 3 }}>
-									<M.Text>
+								<UI.Grid.Col span={{ base: 6, md: 3 }}>
+									<UI.Text>
 										{record.result === "success"
 											? "Sucesso"
 											: "Falha"}
-									</M.Text>
-								</M.Grid.Col>
+									</UI.Text>
+								</UI.Grid.Col>
 
-								<M.Grid.Col span={{ base: 6, md: 3 }}>
-									<M.Text c="dimmed">
+								<UI.Grid.Col span={{ base: 6, md: 3 }}>
+									<UI.Text c="dimmed">
 										{new Date(
 											record.register_time,
 										).toLocaleString("pt-BR")}
-									</M.Text>
-								</M.Grid.Col>
-							</M.Grid>
+									</UI.Text>
+								</UI.Grid.Col>
+							</UI.Grid>
 						))}
-					</M.Stack>
-				</M.Stack>
-			</M.Paper>
-		</M.Stack>
+					</UI.Stack>
+				</UI.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }
 
 function MetricCard({ label, value }: { label: string; value: string }) {
 	return (
-		<M.Paper component="article">
-			<M.Text size="sm" c="dimmed">
+		<UI.Paper component="article">
+			<UI.Text size="sm" c="dimmed">
 				{label}
-			</M.Text>
+			</UI.Text>
 
-			<M.Text size="xl" fw={700} mt="xs">
+			<UI.Text size="xl" fw={700} mt="xs">
 				{value}
-			</M.Text>
-		</M.Paper>
+			</UI.Text>
+		</UI.Paper>
 	);
 }

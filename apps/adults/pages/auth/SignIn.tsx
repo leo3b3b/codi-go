@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { type SignInOutput, signInSchema } from "@/schemas";
@@ -29,20 +29,20 @@ export default function SignInPage() {
 	}
 
 	return (
-		<M.Paper>
+		<UI.Paper>
 			<title>CodiGO! | Login</title>
 
-			<M.Stack gap="lg">
-				<M.Title order={1} ta="center">
+			<UI.Stack gap="lg">
+				<UI.Title order={1} ta="center">
 					Bom te ver!
-				</M.Title>
+				</UI.Title>
 
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 				>
-					<M.Stack gap="md">
-						<M.TextInput
+					<UI.Stack gap="md">
+						<UI.TextInput
 							label="E-mail"
 							type="email"
 							placeholder="Digite seu e-mail"
@@ -51,7 +51,7 @@ export default function SignInPage() {
 							error={errors.email?.message}
 						/>
 
-						<M.PasswordInput
+						<UI.PasswordInput
 							label="Senha"
 							placeholder="Digite sua senha"
 							autoComplete="current-password"
@@ -60,28 +60,28 @@ export default function SignInPage() {
 						/>
 
 						{errors.root && (
-							<M.Alert>
+							<UI.Alert>
 								{errors.root.message}
-							</M.Alert>
+							</UI.Alert>
 						)}
 
-						<M.Button
+						<UI.Button
 							type="submit"
 							loading={isSubmitting}
 							mt="xs"
 						>
 							{isSubmitting ? "Entrando..." : "Entrar"}
-						</M.Button>
-					</M.Stack>
+						</UI.Button>
+					</UI.Stack>
 				</form>
 
-				<M.Text size="sm" c="dimmed" ta="center">
+				<UI.Text size="sm" c="dimmed" ta="center">
 					Ainda não tem uma conta?{" "}
-					<M.Anchor component={Link} to="/criar-conta" fw={700}>
+					<UI.Anchor component={Link} to="/criar-conta" fw={700}>
 						Criar conta
-					</M.Anchor>
-				</M.Text>
-			</M.Stack>
-		</M.Paper>
+					</UI.Anchor>
+				</UI.Text>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

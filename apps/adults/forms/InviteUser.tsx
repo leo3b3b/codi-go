@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import * as Icon from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
@@ -50,27 +50,27 @@ export function InviteUserForm({
 	}
 
 	return (
-		<M.Paper>
-			<M.Stack gap="lg">
-				<M.Title order={1}>
+		<UI.Paper>
+			<UI.Stack gap="lg">
+				<UI.Title order={1}>
 					Convidar Usuário para {school.trade_name || school.legal_name}
-				</M.Title>
+				</UI.Title>
 
-				<M.Divider />
+				<UI.Divider />
 
 				<form onSubmit={handleSubmit(onSubmit)} noValidate>
-					<M.Grid align="flex-start">
-						<M.Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-							<M.TextInput
+					<UI.Grid align="flex-start">
+						<UI.Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+							<UI.TextInput
 								autoComplete="username"
 								placeholder="Digite o nome do usuário"
 								leftSection={<Icon.AtSign size={18} />}
 								{...register("username")}
 								error={errors.username?.message}
 							/>
-						</M.Grid.Col>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+						<UI.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
 							<Controller
 								name="role"
 								control={control}
@@ -94,31 +94,31 @@ export function InviteUserForm({
 								)}
 							/>
 							{errors.role && (
-								<M.Text size="sm" c="red" mt={4}>
+								<UI.Text size="sm" c="red" mt={4}>
 									{errors.role.message}
-								</M.Text>
+								</UI.Text>
 							)}
-						</M.Grid.Col>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-							<M.Button
+						<UI.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+							<UI.Button
 								type="submit"
 								fullWidth
 								loading={isSubmitting}
 								disabled={!watch("username")}
 							>
 								{isSubmitting ? "Convidando..." : "Convidar"}
-							</M.Button>
-						</M.Grid.Col>
-					</M.Grid>
+							</UI.Button>
+						</UI.Grid.Col>
+					</UI.Grid>
 
 					{errors.root && (
-						<M.Alert mt="md">
+						<UI.Alert mt="md">
 							{errors.root.message}
-						</M.Alert>
+						</UI.Alert>
 					)}
 				</form>
-			</M.Stack>
-		</M.Paper>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

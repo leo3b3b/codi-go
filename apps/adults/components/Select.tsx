@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 
 interface Option {
@@ -24,9 +24,9 @@ export function Select({
 	const selectedOption = options.find((option) => option.value === value);
 
 	return (
-		<M.Menu position="bottom-start">
-			<M.Menu.Target>
-				<M.Button
+		<UI.Menu position="bottom-start">
+			<UI.Menu.Target>
+				<UI.Button
 					type="button"
 					aria-label={ariaLabel}
 					variant="default"
@@ -34,24 +34,24 @@ export function Select({
 					className={className}
 					rightSection={<Icon.ChevronDown size={16} />}
 				>
-					<M.Text truncate size="sm" fw={500}>
+					<UI.Text truncate size="sm" fw={500}>
 						{selectedOption?.label ?? "Selecione…"}
-					</M.Text>
-				</M.Button>
-			</M.Menu.Target>
+					</UI.Text>
+				</UI.Button>
+			</UI.Menu.Target>
 
-			<M.Menu.Dropdown>
+			<UI.Menu.Dropdown>
 				{options.map((option) => (
-					<M.Menu.Item
+					<UI.Menu.Item
 						key={option.value}
 						onClick={() => onChange(option.value)}
 						fw={option.value === value ? 600 : undefined}
 						color={option.value === value ? "violet" : undefined}
 					>
 						{option.label}
-					</M.Menu.Item>
+					</UI.Menu.Item>
 				))}
-			</M.Menu.Dropdown>
-		</M.Menu>
+			</UI.Menu.Dropdown>
+		</UI.Menu>
 	);
 }

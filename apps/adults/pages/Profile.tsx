@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
@@ -74,34 +74,34 @@ export default function ProfilePage() {
 	}
 
 	return (
-		<M.Container size="sm">
+		<UI.Container size="sm">
 			<title>CodiGO! | Meu Perfil</title>
 
-			<M.Stack gap="md">
-				<M.Paper p="lg">
-					<M.Group gap="lg" wrap="nowrap">
-						<M.ThemeIcon size={64} radius="xl">
+			<UI.Stack gap="md">
+				<UI.Paper p="lg">
+					<UI.Group gap="lg" wrap="nowrap">
+						<UI.ThemeIcon size={64} radius="xl">
 							<Icon.User size={32} />
-						</M.ThemeIcon>
+						</UI.ThemeIcon>
 
 						<div>
-							<M.Title order={1} style={{ wordBreak: "break-word" }}>
+							<UI.Title order={1} style={{ wordBreak: "break-word" }}>
 								{profile.name}
-							</M.Title>
+							</UI.Title>
 
-							<M.Text size="lg" c="dimmed" fs="italic">
+							<UI.Text size="lg" c="dimmed" fs="italic">
 								@{profile.username}
-							</M.Text>
+							</UI.Text>
 						</div>
-					</M.Group>
-				</M.Paper>
+					</UI.Group>
+				</UI.Paper>
 
-				<M.Paper p="lg">
-					<M.Title order={2}>Minhas Escolas</M.Title>
+				<UI.Paper p="lg">
+					<UI.Title order={2}>Minhas Escolas</UI.Title>
 
-					<M.Divider />
+					<UI.Divider />
 
-					<M.Stack gap="sm">
+					<UI.Stack gap="sm">
 						{schools.map(({ school_id, legal_name, trade_name, role }) => (
 							<InviteCard
 								key={school_id}
@@ -113,21 +113,21 @@ export default function ProfilePage() {
 								invite_status="active"
 							/>
 						))}
-					</M.Stack>
+					</UI.Stack>
 
 					{schools.length === 0 && (
-						<M.Text size="sm" c="dimmed" ta="center">
+						<UI.Text size="sm" c="dimmed" ta="center">
 							Você não participa de nenhuma escola!
-						</M.Text>
+						</UI.Text>
 					)}
 
-					<M.Title order={2} mt="xl">
+					<UI.Title order={2} mt="xl">
 						Convites
-					</M.Title>
+					</UI.Title>
 
-					<M.Divider />
+					<UI.Divider />
 
-					<M.Stack gap="sm">
+					<UI.Stack gap="sm">
 						{invites.map(({ school_id, legal_name, trade_name, role }) => (
 							<InviteCard
 								key={school_id}
@@ -139,29 +139,29 @@ export default function ProfilePage() {
 								invite_status="pending"
 							/>
 						))}
-					</M.Stack>
+					</UI.Stack>
 
 					{invites.length === 0 && (
-						<M.Text size="sm" c="dimmed" ta="center">
+						<UI.Text size="sm" c="dimmed" ta="center">
 							Você não tem convites!
-						</M.Text>
+						</UI.Text>
 					)}
-				</M.Paper>
+				</UI.Paper>
 
-				<M.Paper p="lg">
+				<UI.Paper p="lg">
 					<form onSubmit={handleSubmit(onSubmit)} noValidate>
-						<M.Stack gap="md">
+						<UI.Stack gap="md">
 							<div>
-								<M.Title order={2} size="h3">
+								<UI.Title order={2} size="h3">
 									Editar Perfil
-								</M.Title>
+								</UI.Title>
 
-								<M.Text size="sm" c="dimmed">
+								<UI.Text size="sm" c="dimmed">
 									Deixe em branco os campos que não deseja alterar.
-								</M.Text>
+								</UI.Text>
 							</div>
 
-							<M.TextInput
+							<UI.TextInput
 								label="Novo nome"
 								type="text"
 								{...register("name")}
@@ -170,7 +170,7 @@ export default function ProfilePage() {
 								error={errors.name?.message}
 							/>
 
-							<M.TextInput
+							<UI.TextInput
 								label="Novo nome de usuário"
 								type="text"
 								{...register("username")}
@@ -181,45 +181,45 @@ export default function ProfilePage() {
 							/>
 
 							{errors.root && (
-								<M.Alert color="red" variant="light">
+								<UI.Alert color="red" variant="light">
 									{errors.root.message}
-								</M.Alert>
+								</UI.Alert>
 							)}
 
-							<M.Button
+							<UI.Button
 								type="submit"
 								disabled={isSubmitting || isFormEmpty}
 								mt="xs"
 								leftSection={<Icon.Save size={18} />}
 							>
 								{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-							</M.Button>
-						</M.Stack>
+							</UI.Button>
+						</UI.Stack>
 					</form>
-				</M.Paper>
+				</UI.Paper>
 
-				<M.Paper p="lg">
-					<M.Group grow>
-						<M.Button
+				<UI.Paper p="lg">
+					<UI.Group grow>
+						<UI.Button
 							type="button"
 							color="red"
 							onClick={handleSignOut}
 							leftSection={<Icon.LogOut size={18} />}
 						>
 							Sair da Conta
-						</M.Button>
+						</UI.Button>
 
-						<M.Button
+						<UI.Button
 							type="button"
 							color="red"
 							onClick={handleDeleteAccount}
 							leftSection={<Icon.Trash2 size={18} />}
 						>
 							Deletar Conta
-						</M.Button>
-					</M.Group>
-				</M.Paper>
-			</M.Stack>
-		</M.Container>
+						</UI.Button>
+					</UI.Group>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
 	);
 }

@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { getStudentSession, signOutStudent } from "@/services";
@@ -14,7 +14,7 @@ export function Header() {
 	}
 
 	return (
-		<M.Paper
+		<UI.Paper
 			component="header"
 			pos="sticky"
 			top={0}
@@ -22,29 +22,29 @@ export function Header() {
 			radius="none"
 			style={{ zIndex: 40 }}
 		>
-			<M.Container size="xl">
-				<M.Group
+			<UI.Container size="xl">
+				<UI.Group
 					h={40}
 					py="sm"
 					gap="md"
 					wrap="nowrap"
 				>
-					<M.Image
+					<UI.Image
 						src="/logo.png"
 						alt="Logo do CodiGO!"
 						h={56}
 						w="auto"
 					/>
 
-					<M.Text
+					<UI.Text
 						size="xl"
 						fw={600}
 						truncate
 					>
 						{student?.name ?? "Aluno"}
-					</M.Text>
+					</UI.Text>
 
-					<M.Button
+					<UI.Button
 						type="button"
 						color="red"
 						size="lg"
@@ -53,10 +53,10 @@ export function Header() {
 						onClick={handleLogOut}
 						leftSection={<Icon.LogOut size={20} />}
 					>
-						<M.Text visibleFrom="sm">Sair</M.Text>
-					</M.Button>
-				</M.Group>
-			</M.Container>
-		</M.Paper>
+						<UI.Text visibleFrom="sm">Sair</UI.Text>
+					</UI.Button>
+				</UI.Group>
+			</UI.Container>
+		</UI.Paper>
 	);
 }

@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { Outlet, useLocation } from "react-router";
 
 export default function AppLayout() {
@@ -6,7 +6,7 @@ export default function AppLayout() {
 
 	return (
 		<div className="ui-root">
-			<M.Container
+			<UI.Container
 				key={location.pathname}
 				component="main"
 				size="xl"
@@ -14,7 +14,7 @@ export default function AppLayout() {
 				py={{ base: "lg", lg: "xl" }}
 			>
 				<Outlet />
-			</M.Container>
+			</UI.Container>
 		</div>
 	);
 }

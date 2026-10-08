@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { getClassByAccessCode } from "@/services";
@@ -35,11 +35,11 @@ export default function AccessCodePage() {
 	}
 
 	return (
-		<M.Center w="100%" mih="100vh" px="md">
+		<UI.Center w="100%" mih="100vh" px="md">
 			<title>CodiGO! | Entrar</title>
 
-			<M.Stack w="100%" maw={448} gap="lg">
-				<M.Image
+			<UI.Stack w="100%" maw={448} gap="lg">
+				<UI.Image
 					src="/logo.png"
 					alt="Logo do CodiGO!"
 					w="auto"
@@ -48,21 +48,21 @@ export default function AccessCodePage() {
 					mx="auto"
 				/>
 
-				<M.Paper>
+				<UI.Paper>
 					<form onSubmit={handleSubmit}>
-						<M.Stack gap="lg">
+						<UI.Stack gap="lg">
 							<div>
-								<M.Title order={1}>
+								<UI.Title order={1}>
 									Entrar em uma turma
-								</M.Title>
+								</UI.Title>
 
-								<M.Text size="sm" c="dimmed" mt="xs">
+								<UI.Text size="sm" c="dimmed" mt="xs">
 									Digite o código de acesso fornecido pelo
 									professor.
-								</M.Text>
+								</UI.Text>
 							</div>
 
-							<M.TextInput
+							<UI.TextInput
 								label="Código de acesso"
 								value={accessCode}
 								onChange={(event) => {
@@ -78,17 +78,17 @@ export default function AccessCodePage() {
 								error={error || undefined}
 							/>
 
-							<M.Button
+							<UI.Button
 								type="submit"
 								fullWidth
 								loading={loading}
 							>
 								{loading ? "Entrando..." : "Entrar"}
-							</M.Button>
-						</M.Stack>
+							</UI.Button>
+						</UI.Stack>
 					</form>
-				</M.Paper>
-			</M.Stack>
-		</M.Center>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Center>
 	);
 }

@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useLoaderData, useRevalidator } from "react-router";
@@ -64,36 +64,36 @@ export default function StudentAdminPage() {
 	}
 
 	return (
-		<M.Stack w="100%" gap="md">
+		<UI.Stack w="100%" gap="md">
 			<title>CodiGO! | Editar Aluno</title>
 
 			<EditStudentForm student={student} />
 
-			<M.Paper>
-				<M.Stack gap="lg">
+			<UI.Paper>
+				<UI.Stack gap="lg">
 					<div>
-						<M.Title order={2}>Turma do Aluno</M.Title>
+						<UI.Title order={2}>Turma do Aluno</UI.Title>
 
-						<M.Text size="sm" c="dimmed">
+						<UI.Text size="sm" c="dimmed">
 							Selecione outra turma para transferir o aluno.
-						</M.Text>
+						</UI.Text>
 					</div>
 
-					<M.Divider />
+					<UI.Divider />
 
 					{transferError && (
-						<M.Alert>
+						<UI.Alert>
 							{transferError}
-						</M.Alert>
+						</UI.Alert>
 					)}
 
-					<M.Stack gap="sm">
+					<UI.Stack gap="sm">
 						{classes.map((classData) => {
 							const isCurrentClass =
 								classData.id === student.class_id;
 
 							return (
-								<M.Paper
+								<UI.Paper
 									key={classData.id}
 									bg={isCurrentClass ? "violet.0" : "gray.1"}
 									style={{
@@ -102,37 +102,37 @@ export default function StudentAdminPage() {
 											: undefined,
 									}}
 								>
-									<M.Group
+									<UI.Group
 										justify="space-between"
 										gap="md"
 										wrap="nowrap"
 									>
 										<div>
-											<M.Text fw={600}>
+											<UI.Text fw={600}>
 												{classData.name}
-											</M.Text>
+											</UI.Text>
 
 											{isCurrentClass && (
-												<M.Text
+												<UI.Text
 													size="sm"
 													c="violet"
 													fw={600}
 												>
 													Turma atual
-												</M.Text>
+												</UI.Text>
 											)}
 										</div>
 
 										{isCurrentClass ? (
-											<M.Text
+											<UI.Text
 												size="sm"
 												c="dimmed"
 												fw={600}
 											>
 												Atual
-											</M.Text>
+											</UI.Text>
 										) : (
-											<M.Button
+											<UI.Button
 												type="button"
 												variant="default"
 												w="auto"
@@ -148,15 +148,15 @@ export default function StudentAdminPage() {
 												}
 											>
 												Transferir
-											</M.Button>
+											</UI.Button>
 										)}
-									</M.Group>
-								</M.Paper>
+									</UI.Group>
+								</UI.Paper>
 							);
 						})}
-					</M.Stack>
-				</M.Stack>
-			</M.Paper>
-		</M.Stack>
+					</UI.Stack>
+				</UI.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }

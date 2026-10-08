@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useRevalidator } from "react-router";
 import { deleteMembership } from "@/services";
@@ -24,23 +24,23 @@ export function InviteCard({
 	const { revalidate } = useRevalidator();
 
 	return (
-		<M.Paper component="article" p={{ base: "sm", md: "md" }} bg="gray.1">
-			<M.Group justify="space-between" align="center" mb="xs">
-				<M.Title order={3} size="h4">
+		<UI.Paper component="article" p={{ base: "sm", md: "md" }} bg="gray.1">
+			<UI.Group justify="space-between" align="center" mb="xs">
+				<UI.Title order={3} size="h4">
 					{trade_name}
-				</M.Title>
+				</UI.Title>
 
-				<M.Badge variant="light" color="violet">
+				<UI.Badge variant="light" color="violet">
 					{user_role === "admin" ? "Administrador" : "Professor"}
-				</M.Badge>
-			</M.Group>
+				</UI.Badge>
+			</UI.Group>
 
-			<M.Text size="sm" c="dimmed" mb="md">
+			<UI.Text size="sm" c="dimmed" mb="md">
 				{legal_name}
-			</M.Text>
+			</UI.Text>
 
 			{invite_status === "active" ? (
-				<M.Button
+				<UI.Button
 					type="button"
 					color="red"
 					onClick={() => {
@@ -50,10 +50,10 @@ export function InviteCard({
 					leftSection={<Icon.LogOut size={18} />}
 				>
 					Sair da escola
-				</M.Button>
+				</UI.Button>
 			) : (
-				<M.Group>
-					<M.Button
+				<UI.Group>
+					<UI.Button
 						type="button"
 						onClick={() => {
 							acceptInvite({ profile_id, school_id });
@@ -62,9 +62,9 @@ export function InviteCard({
 						leftSection={<Icon.Check size={18} />}
 					>
 						Aceitar
-					</M.Button>
+					</UI.Button>
 
-					<M.Button
+					<UI.Button
 						type="button"
 						color="red"
 						onClick={() => {
@@ -74,9 +74,9 @@ export function InviteCard({
 						leftSection={<Icon.X size={18} />}
 					>
 						Recusar
-					</M.Button>
-				</M.Group>
+					</UI.Button>
+				</UI.Group>
 			)}
-		</M.Paper>
+		</UI.Paper>
 	);
 }

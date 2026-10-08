@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { NavLink, redirect, useLoaderData } from "react-router";
 import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
@@ -53,86 +53,86 @@ export default function SchoolHomePage() {
 	const isAdmin = school.role === "admin";
 
 	return (
-		<M.Stack w="100%">
-			<M.Title order={1}>{school.trade_name}</M.Title>
+		<UI.Stack w="100%">
+			<UI.Title order={1}>{school.trade_name}</UI.Title>
 
-			<M.Divider />
+			<UI.Divider />
 
-			<M.SimpleGrid
+			<UI.SimpleGrid
 				cols={{ base: 1, md: isAdmin ? 2 : 1 }}
 				spacing="lg"
 				maw={isAdmin ? undefined : 672}
 				mx={isAdmin ? undefined : "auto"}
 				w="100%"
 			>
-				<M.Paper>
-					<M.Stack>
-						<M.Title order={2} ta="center">
+				<UI.Paper>
+					<UI.Stack>
+						<UI.Title order={2} ta="center">
 							Suas Turmas
-						</M.Title>
+						</UI.Title>
 
-						<M.Divider />
+						<UI.Divider />
 
 						{classes.length === 0 ? (
-							<M.Text size="lg" ta="center">
+							<UI.Text size="lg" ta="center">
 								Você não tem turmas!
-							</M.Text>
+							</UI.Text>
 						) : (
-							<M.Stack gap="sm">
+							<UI.Stack gap="sm">
 								{classes.map(({ id, name }) => (
-									<NavLink to={`turma/${id}`} key={id} style={{ textDecoration: "none" }}>
-										<M.Paper
+									<NavLink to={`turma/${id}`} key={id}>
+										<UI.Paper
 											bg="gray.1"
 											p="md"
 										>
-											<M.Text
+											<UI.Text
 												c="violet"
 												fw={600}
 											>
 												{name}
-											</M.Text>
-										</M.Paper>
+											</UI.Text>
+										</UI.Paper>
 									</NavLink>
 								))}
-							</M.Stack>
+							</UI.Stack>
 						)}
-					</M.Stack>
-				</M.Paper>
+					</UI.Stack>
+				</UI.Paper>
 
 				{isAdmin && (
-					<M.Paper>
-						<M.Stack>
-							<M.Title order={2} ta="center">
+					<UI.Paper>
+						<UI.Stack>
+							<UI.Title order={2} ta="center">
 								Administração
-							</M.Title>
+							</UI.Title>
 
-							<M.Divider />
+							<UI.Divider />
 
-							<M.Stack gap="sm">
+							<UI.Stack gap="sm">
 								{adminActions.map(
 									({ title, description, icon: ActionIcon, to }) => (
-										<NavLink to={to} key={title} style={{ textDecoration: "none" }}>
-											<M.Paper bg="gray.1">
-												<M.Group gap="md" wrap="nowrap">
+										<NavLink to={to} key={title}>
+											<UI.Paper bg="gray.1">
+												<UI.Group gap="md" wrap="nowrap">
 													<ActionIcon size={28} />
 
 													<div>
-														<M.Text fw={500}>{title}</M.Text>
+														<UI.Text fw={500}>{title}</UI.Text>
 
-														<M.Text size="sm" c="dimmed">
+														<UI.Text size="sm" c="dimmed">
 															{description}
-														</M.Text>
+														</UI.Text>
 													</div>
-												</M.Group>
-											</M.Paper>
+												</UI.Group>
+											</UI.Paper>
 										</NavLink>
 									),
 								)}
-							</M.Stack>
-						</M.Stack>
-					</M.Paper>
+							</UI.Stack>
+						</UI.Stack>
+					</UI.Paper>
 				)}
-			</M.SimpleGrid>
-		</M.Stack>
+			</UI.SimpleGrid>
+		</UI.Stack>
 	);
 }

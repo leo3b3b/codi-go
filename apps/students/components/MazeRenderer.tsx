@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { Codi } from "@/components";
 import type { Command, MazeLevel, Position, TileType } from "@/types";
 import { tileImages } from "@/types";
@@ -49,7 +49,7 @@ function Entity({
 	children: React.ReactNode;
 }) {
 	return (
-		<M.Box
+		<UI.Box
 			pos="absolute"
 			style={{
 				aspectRatio: "1",
@@ -62,7 +62,7 @@ function Entity({
 			}}
 		>
 			{children}
-		</M.Box>
+		</UI.Box>
 	);
 }
 
@@ -73,13 +73,13 @@ export function MazeRenderer({
 	moving,
 }: MazeRendererProps) {
 	return (
-		<M.Box
+		<UI.Box
 			pos="relative"
 			style={{
 				"--tile-size": "64px",
 			}}
 		>
-			<M.Box
+			<UI.Box
 				display="grid"
 				style={{
 					gridTemplateColumns: `repeat(${level.tiles[0].length}, var(--tile-size))`,
@@ -90,9 +90,9 @@ export function MazeRenderer({
 						<Tile key={`${x}-${y}`} type={tile} />
 					)),
 				)}
-			</M.Box>
+			</UI.Box>
 
-			<M.Box pos="absolute" inset={0}>
+			<UI.Box pos="absolute" inset={0}>
 				<Entity animate={false} position={level.goal}>
 					<Goal />
 				</Entity>
@@ -100,7 +100,7 @@ export function MazeRenderer({
 				<Entity animate={moving} position={playerPosition}>
 					<Codi direction={direction} moving={moving} />
 				</Entity>
-			</M.Box>
-		</M.Box>
+			</UI.Box>
+		</UI.Box>
 	);
 }

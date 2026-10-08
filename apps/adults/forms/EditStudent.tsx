@@ -1,6 +1,6 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -93,40 +93,40 @@ export function EditStudentForm({
 	const imageCode = imageCodes[accessCode];
 
 	return (
-		<M.Paper>
-			<M.Stack gap="lg">
-				<M.Group gap="sm" wrap="nowrap">
-					<M.ActionIcon
+		<UI.Paper>
+			<UI.Stack gap="lg">
+				<UI.Group gap="sm" wrap="nowrap">
+					<UI.ActionIcon
 						variant="default"
 						size="lg"
 						aria-label="Voltar para turmas"
 						onClick={handleBack}
 					>
 						<Icon.ArrowLeft size={20} />
-					</M.ActionIcon>
+					</UI.ActionIcon>
 
-					<M.Title order={1}>Editar Aluno</M.Title>
-				</M.Group>
+					<UI.Title order={1}>Editar Aluno</UI.Title>
+				</UI.Group>
 
-				<M.Divider />
+				<UI.Divider />
 
 				<form onSubmit={handleSubmit(onSubmit)} noValidate>
-					<M.Stack gap="lg">
-						<M.TextInput
+					<UI.Stack gap="lg">
+						<UI.TextInput
 							label="Nome do Aluno"
 							autoComplete="off"
 							{...register("name")}
 							error={errors.name?.message}
 						/>
 
-						<M.Stack gap="xs">
-							<M.Text fw={700} size="sm">
+						<UI.Stack gap="xs">
+							<UI.Text fw={700} size="sm">
 								Credencial
-							</M.Text>
+							</UI.Text>
 
-							<M.Group align="center" gap="md" wrap="nowrap">
+							<UI.Group align="center" gap="md" wrap="nowrap">
 								{imageCode && (
-									<M.Image
+									<UI.Image
 										src={imageCode.src}
 										alt={imageCode.label}
 										h={80}
@@ -135,32 +135,32 @@ export function EditStudentForm({
 									/>
 								)}
 
-								<M.TextInput
+								<UI.TextInput
 									flex={1}
 									value={imageCodes[watch("access_code")].label}
 									readOnly
 									error={errors.access_code?.message}
 									rightSection={
-										<M.ActionIcon
+										<UI.ActionIcon
 											variant="default"
 											aria-label="Gerar nova credencial"
 											onClick={handleGenerateAccessCode}
 										>
 											<Icon.Shuffle size={18} />
-										</M.ActionIcon>
+										</UI.ActionIcon>
 									}
 								/>
-							</M.Group>
-						</M.Stack>
+							</UI.Group>
+						</UI.Stack>
 
 						{errors.root && (
-							<M.Alert>
+							<UI.Alert>
 								{errors.root.message}
-							</M.Alert>
+							</UI.Alert>
 						)}
 
-						<M.Group gap="sm" mt="xs">
-							<M.Button
+						<UI.Group gap="sm" mt="xs">
+							<UI.Button
 								type="submit"
 								flex={1}
 								loading={isSubmitting}
@@ -170,9 +170,9 @@ export function EditStudentForm({
 								{isSubmitting
 									? "Salvando..."
 									: "Salvar Alterações"}
-							</M.Button>
+							</UI.Button>
 
-							<M.Button
+							<UI.Button
 								type="button"
 								flex={1}
 								color="red"
@@ -187,11 +187,11 @@ export function EditStudentForm({
 								}
 							>
 								{isDeleting ? "Excluindo..." : "Excluir Aluno"}
-							</M.Button>
-						</M.Group>
-					</M.Stack>
+							</UI.Button>
+						</UI.Group>
+					</UI.Stack>
 				</form>
-			</M.Stack>
-		</M.Paper>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

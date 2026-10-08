@@ -2,13 +2,12 @@ import {
 	ColorSchemeScript,
 	MantineProvider,
 	mantineHtmlProps,
-} from "@mantine/core";
+	theme
+} from "@codi-go/ui";
 import { Toaster } from "react-hot-toast";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import { theme } from "./theme";
 
-import "@mantine/core/styles.css";
-import "./app.css";
+import "@codi-go/ui/styles.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (

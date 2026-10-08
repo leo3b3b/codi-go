@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -34,20 +34,20 @@ export default function OnboardingPage() {
 	}
 
 	return (
-		<M.Paper>
+		<UI.Paper>
 			<title>CodiGO! | Complete seu perfil</title>
 
-			<M.Stack gap="lg">
-				<M.Title order={1} ta="center">
+			<UI.Stack gap="lg">
+				<UI.Title order={1} ta="center">
 					Complete seu perfil
-				</M.Title>
+				</UI.Title>
 
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 				>
-					<M.Stack gap="md">
-						<M.TextInput
+					<UI.Stack gap="md">
+						<UI.TextInput
 							label="Nome"
 							placeholder="Digite seu nome"
 							autoComplete="name"
@@ -55,7 +55,7 @@ export default function OnboardingPage() {
 							error={errors.name?.message}
 						/>
 
-						<M.TextInput
+						<UI.TextInput
 							label="Nome de usuário"
 							placeholder="Escolha um nome de usuário"
 							autoComplete="username"
@@ -65,21 +65,21 @@ export default function OnboardingPage() {
 						/>
 
 						{errors.root && (
-							<M.Alert>
+							<UI.Alert>
 								{errors.root.message}
-							</M.Alert>
+							</UI.Alert>
 						)}
 
-						<M.Button
+						<UI.Button
 							type="submit"
 							loading={isSubmitting}
 							mt="xs"
 						>
 							{isSubmitting ? "Salvando..." : "Salvar"}
-						</M.Button>
-					</M.Stack>
+						</UI.Button>
+					</UI.Stack>
 				</form>
-			</M.Stack>
-		</M.Paper>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

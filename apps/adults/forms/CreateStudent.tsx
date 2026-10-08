@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
@@ -59,24 +59,24 @@ export function CreateStudentForm({
 
 
 	return (
-		<M.Paper>
-			<M.Stack gap="lg">
-				<M.Title order={2}>
+		<UI.Paper>
+			<UI.Stack gap="lg">
+				<UI.Title order={2}>
 					Criar Alunos em {classData.name}
-				</M.Title>
+				</UI.Title>
 
-				<M.Divider />
+				<UI.Divider />
 
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 				>
-					<M.Group
+					<UI.Group
 						align="flex-start"
 						gap="md"
 						wrap="nowrap"
 					>
-						<M.TextInput
+						<UI.TextInput
 							flex={1}
 							size="lg"
 							leftSection={<Icon.Baby size={18} />}
@@ -85,7 +85,7 @@ export function CreateStudentForm({
 							error={errors.names?.message}
 						/>
 
-						<M.Button
+						<UI.Button
 							type="submit"
 							size="lg"
 							w={160}
@@ -96,16 +96,16 @@ export function CreateStudentForm({
 							{isSubmitting
 								? "Criando..."
 								: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
-						</M.Button>
-					</M.Group>
+						</UI.Button>
+					</UI.Group>
 
 					{errors.root && (
-						<M.Alert mt="md">
+						<UI.Alert mt="md">
 							{errors.root.message}
-						</M.Alert>
+						</UI.Alert>
 					)}
 				</form>
-			</M.Stack>
-		</M.Paper>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

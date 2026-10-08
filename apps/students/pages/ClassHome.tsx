@@ -1,5 +1,5 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -59,29 +59,29 @@ export default function ClassHome() {
 	}
 
 	return (
-		<M.Stack w="100%" gap="xl">
+		<UI.Stack w="100%" gap="xl">
 			<title>CodiGO! | Quem é você?</title>
 
-			<M.Paper>
-				<M.Grid align="center">
-					<M.Grid.Col span={{ base: 12, md: 2 }}>
-						<M.Image
+			<UI.Paper>
+				<UI.Grid align="center">
+					<UI.Grid.Col span={{ base: 12, md: 2 }}>
+						<UI.Image
 							src="/logo.png"
 							alt="Logo do CodiGO!"
 							w="100%"
 							maw={160}
 							mx="auto"
 						/>
-					</M.Grid.Col>
+					</UI.Grid.Col>
 
-					<M.Grid.Col span={{ base: 12, md: 7 }}>
-						<M.Title order={1} ta="center">
+					<UI.Grid.Col span={{ base: 12, md: 7 }}>
+						<UI.Title order={1} ta="center">
 							{classData.name}
-						</M.Title>
-					</M.Grid.Col>
+						</UI.Title>
+					</UI.Grid.Col>
 
-					<M.Grid.Col span={{ base: 12, md: 3 }}>
-						<M.Badge
+					<UI.Grid.Col span={{ base: 12, md: 3 }}>
+						<UI.Badge
 							size="lg"
 							variant="light"
 							color={classData.is_playing ? "violet" : "red"}
@@ -98,18 +98,18 @@ export default function ClassHome() {
 							{classData.is_playing
 								? "Sala Aberta"
 								: "Sala Fechada"}
-						</M.Badge>
-					</M.Grid.Col>
-				</M.Grid>
-			</M.Paper>
+						</UI.Badge>
+					</UI.Grid.Col>
+				</UI.Grid>
+			</UI.Paper>
 
-			<M.Paper>
-				<M.Stack gap="lg">
-					<M.Title order={2} ta="center">
+			<UI.Paper>
+				<UI.Stack gap="lg">
+					<UI.Title order={2} ta="center">
 						Quem é você?
-					</M.Title>
+					</UI.Title>
 
-					<M.SimpleGrid
+					<UI.SimpleGrid
 						cols={{ base: 1, sm: 2, md: 3, lg: 4 }}
 						spacing="sm"
 					>
@@ -118,7 +118,7 @@ export default function ClassHome() {
 								selectedStudent?.id === student.id;
 
 							return (
-								<M.Button
+								<UI.Button
 									key={student.id}
 									type="button"
 									variant={selected ? "filled" : "default"}
@@ -133,28 +133,28 @@ export default function ClassHome() {
 									}}
 								>
 									{student.name}
-								</M.Button>
+								</UI.Button>
 							);
 						})}
-					</M.SimpleGrid>
-				</M.Stack>
-			</M.Paper>
+					</UI.SimpleGrid>
+				</UI.Stack>
+			</UI.Paper>
 
 			{selectedStudent && (
-				<M.Paper>
-					<M.Stack gap="lg">
-						<M.Title order={2} ta="center">
+				<UI.Paper>
+					<UI.Stack gap="lg">
+						<UI.Title order={2} ta="center">
 							Escolha sua imagem
-						</M.Title>
+						</UI.Title>
 
-						<M.Group justify="center" gap="md">
+						<UI.Group justify="center" gap="md">
 							{(Object.keys(imageCodes) as ImageCode[]).map(
 								(code) => {
 									const imageCode = imageCodes[code];
 									const selected = selectedCode === code;
 
 									return (
-										<M.ActionIcon
+										<UI.ActionIcon
 											key={code}
 											type="button"
 											variant="default"
@@ -173,21 +173,21 @@ export default function ClassHome() {
 												setSelectedCode(code)
 											}
 										>
-											<M.Image
+											<UI.Image
 												src={imageCode.src}
 												alt={imageCode.label}
 												w={88}
 												h={88}
 												fit="contain"
 											/>
-										</M.ActionIcon>
+										</UI.ActionIcon>
 									);
 								},
 							)}
-						</M.Group>
+						</UI.Group>
 
-						<M.Group justify="center">
-							<M.Button
+						<UI.Group justify="center">
+							<UI.Button
 								type="button"
 								w="100%"
 								maw={320}
@@ -195,11 +195,11 @@ export default function ClassHome() {
 								onClick={handleStart}
 							>
 								Começar
-							</M.Button>
-						</M.Group>
-					</M.Stack>
-				</M.Paper>
+							</UI.Button>
+						</UI.Group>
+					</UI.Stack>
+				</UI.Paper>
 			)}
-		</M.Stack>
+		</UI.Stack>
 	);
 }

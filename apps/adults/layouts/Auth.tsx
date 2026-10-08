@@ -1,13 +1,13 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { Outlet } from "react-router";
 
 export default function AuthLayout() {
 	return (
-		<M.Grid mih="100vh" bg="gray.1">
-			<M.Grid.Col span={{ base: 12, lg: 6 }}>
-				<M.Center mih="100vh" px={{ base: "md", sm: "xl", lg: "2xl" }}>
-					<M.Stack w="100%" maw={448}>
-						<M.Image
+		<UI.Grid mih="100vh" bg="gray.1">
+			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+				<UI.Center mih="100vh" px={{ base: "md", sm: "xl", lg: "2xl" }}>
+					<UI.Stack w="100%" maw={448}>
+						<UI.Image
 							src="/logo.png"
 							alt="CodiGO!"
 							w="auto"
@@ -18,11 +18,11 @@ export default function AuthLayout() {
 						/>
 
 						<Outlet />
-					</M.Stack>
-				</M.Center>
-			</M.Grid.Col>
+					</UI.Stack>
+				</UI.Center>
+			</UI.Grid.Col>
 
-			<M.Grid.Col
+			<UI.Grid.Col
 				span={6}
 				visibleFrom="lg"
 				style={{
@@ -40,14 +40,14 @@ export default function AuthLayout() {
 					backgroundSize: "cover",
 				}}
 			>
-				<M.Stack
+				<UI.Stack
 					h="100%"
 					justify="space-between"
 					p="xl"
 					style={{ position: "relative" }}
 				>
 					<div>
-						<M.Image
+						<UI.Image
 							src="/logo.png"
 							alt="CodiGO!"
 							w="auto"
@@ -55,7 +55,7 @@ export default function AuthLayout() {
 							fit="contain"
 						/>
 
-						<M.Title
+						<UI.Title
 							order={1}
 							c="white"
 							mt="xl"
@@ -63,9 +63,9 @@ export default function AuthLayout() {
 							lh={1.1}
 						>
 							Pronto para se aventurar?
-						</M.Title>
+						</UI.Title>
 
-						<M.Text
+						<UI.Text
 							c="white"
 							size="lg"
 							lh={1.6}
@@ -73,10 +73,10 @@ export default function AuthLayout() {
 							maw={384}
 						>
 							Entre na sua conta e acompanhe a jornada dos seus alunos!
-						</M.Text>
+						</UI.Text>
 					</div>
 
-					<M.Image
+					<UI.Image
 						src="/codiPisca.png"
 						alt="Mascote do CodiGO!"
 						w="100%"
@@ -84,8 +84,8 @@ export default function AuthLayout() {
 						mx="auto"
 						fit="contain"
 					/>
-				</M.Stack>
-			</M.Grid.Col>
-		</M.Grid>
+				</UI.Stack>
+			</UI.Grid.Col>
+		</UI.Grid>
 	);
 }

@@ -1,5 +1,5 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
@@ -57,7 +57,7 @@ export default function ClassAdminPage() {
 	}
 
 	return (
-		<M.Stack w="100%" gap="md">
+		<UI.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Turma</title>
 
 			<EditClassForm classData={classData} />
@@ -70,13 +70,13 @@ export default function ClassAdminPage() {
 				}}
 			/>
 
-			<M.Paper>
-				<M.Stack gap="md">
-					<M.Title order={2}>
+			<UI.Paper>
+				<UI.Stack gap="md">
+					<UI.Title order={2}>
 						Gerenciar Alunos
-					</M.Title>
+					</UI.Title>
 
-					<M.Grid
+					<UI.Grid
 						visibleFrom="lg"
 						px="md"
 						py="sm"
@@ -84,26 +84,26 @@ export default function ClassAdminPage() {
 							borderBottom: "1px solid var(--mantine-color-gray-3)",
 						}}
 					>
-						<M.Grid.Col span={4}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={4}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Nome
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={2}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={2}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Credencial
-							</M.Text>
-						</M.Grid.Col>
+							</UI.Text>
+						</UI.Grid.Col>
 
-						<M.Grid.Col span={6}>
-							<M.Text size="sm" c="dimmed" fw={700}>
+						<UI.Grid.Col span={6}>
+							<UI.Text size="sm" c="dimmed" fw={700}>
 								Ações
-							</M.Text>
-						</M.Grid.Col>
-					</M.Grid>
+							</UI.Text>
+						</UI.Grid.Col>
+					</UI.Grid>
 
-					<M.Stack gap="md">
+					<UI.Stack gap="md">
 						{students.map((student) => (
 							<StudentRow
 								key={student.id}
@@ -112,10 +112,10 @@ export default function ClassAdminPage() {
 								onDelete={handleDeleteStudent}
 							/>
 						))}
-					</M.Stack>
-				</M.Stack>
-			</M.Paper>
-		</M.Stack>
+					</UI.Stack>
+				</UI.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }
 
@@ -123,7 +123,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 	const [showCredential, setShowCredential] = useState(false);
 
 	return (
-		<M.Grid
+		<UI.Grid
 			align="center"
 			px="md"
 			py="sm"
@@ -131,16 +131,16 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 				borderBottom: "1px solid var(--mantine-color-gray-3)",
 			}}
 		>
-			<M.Grid.Col span={{ base: 12, lg: 4 }}>
-				<M.Text fw={600}>
+			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
+				<UI.Text fw={600}>
 					{student.name ?? "—"}
-				</M.Text>
-			</M.Grid.Col>
+				</UI.Text>
+			</UI.Grid.Col>
 
-			<M.Grid.Col span={{ base: 12, lg: 2 }}>
-				<M.Center h={56}>
+			<UI.Grid.Col span={{ base: 12, lg: 2 }}>
+				<UI.Center h={56}>
 					{showCredential ? (
-						<M.Image
+						<UI.Image
 							src={imageCodes[student.access_code as ImageCode].src}
 							alt={imageCodes[student.access_code as ImageCode].label}
 							h={56}
@@ -148,20 +148,20 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 							fit="contain"
 						/>
 					) : (
-						<M.Text
+						<UI.Text
 							size="sm"
 							ff="monospace"
 							c="dimmed"
 						>
 							••••••••
-						</M.Text>
+						</UI.Text>
 					)}
-				</M.Center>
-			</M.Grid.Col>
+				</UI.Center>
+			</UI.Grid.Col>
 
-			<M.Grid.Col span={{ base: 12, lg: 6 }}>
-				<M.Group gap="sm" grow>
-					<M.Button
+			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+				<UI.Group gap="sm" grow>
+					<UI.Button
 						type="button"
 						variant="default"
 						leftSection={
@@ -176,17 +176,17 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 						{showCredential
 							? "Esconder Credencial"
 							: "Mostrar Credencial"}
-					</M.Button>
+					</UI.Button>
 
-					<M.Button
+					<UI.Button
 						type="button"
 						leftSection={<Icon.Pencil size={18} />}
 						onClick={() => onUpdate(student.id)}
 					>
 						Editar
-					</M.Button>
+					</UI.Button>
 
-					<M.Button
+					<UI.Button
 						type="button"
 						color="red"
 						leftSection={<Icon.UserX size={18} />}
@@ -198,9 +198,9 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 						}
 					>
 						Excluir
-					</M.Button>
-				</M.Group>
-			</M.Grid.Col>
-		</M.Grid>
+					</UI.Button>
+				</UI.Group>
+			</UI.Grid.Col>
+		</UI.Grid>
 	);
 }

@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { type SignUpOutput, signUpSchema } from "@/schemas";
@@ -29,20 +29,20 @@ export default function SignUpPage() {
 	}
 
 	return (
-		<M.Paper>
+		<UI.Paper>
 			<title>CodiGO! | Crie sua conta</title>
 
-			<M.Stack gap="lg">
-				<M.Title order={1} ta="center">
+			<UI.Stack gap="lg">
+				<UI.Title order={1} ta="center">
 					Crie sua conta
-				</M.Title>
+				</UI.Title>
 
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 				>
-					<M.Stack gap="md">
-						<M.TextInput
+					<UI.Stack gap="md">
+						<UI.TextInput
 							label="E-mail"
 							type="email"
 							placeholder="Digite seu e-mail"
@@ -51,7 +51,7 @@ export default function SignUpPage() {
 							error={errors.email?.message}
 						/>
 
-						<M.PasswordInput
+						<UI.PasswordInput
 							label="Senha"
 							placeholder="Crie uma senha"
 							autoComplete="new-password"
@@ -59,7 +59,7 @@ export default function SignUpPage() {
 							error={errors.password?.message}
 						/>
 
-						<M.PasswordInput
+						<UI.PasswordInput
 							label="Confirmar senha"
 							placeholder="Confirme sua senha"
 							autoComplete="new-password"
@@ -68,28 +68,28 @@ export default function SignUpPage() {
 						/>
 
 						{errors.root && (
-							<M.Alert>
+							<UI.Alert>
 								{errors.root.message}
-							</M.Alert>
+							</UI.Alert>
 						)}
 
-						<M.Button
+						<UI.Button
 							type="submit"
 							loading={isSubmitting}
 							mt="xs"
 						>
 							{isSubmitting ? "Criando..." : "Criar conta"}
-						</M.Button>
-					</M.Stack>
+						</UI.Button>
+					</UI.Stack>
 				</form>
 
-				<M.Text size="sm" c="dimmed" ta="center">
+				<UI.Text size="sm" c="dimmed" ta="center">
 					Já possui uma conta?{" "}
-					<M.Anchor component={Link} to="/login" fw={700}>
+					<UI.Anchor component={Link} to="/login" fw={700}>
 						Entrar
-					</M.Anchor>
-				</M.Text>
-			</M.Stack>
-		</M.Paper>
+					</UI.Anchor>
+				</UI.Text>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -192,12 +192,12 @@ export default function MazeGame() {
 	}
 
 	return (
-		<M.Stack w="100%" gap="md">
+		<UI.Stack w="100%" gap="md">
 			<title>CodiGO! | Labirinto</title>
 
-			<M.Paper>
-				<M.Group gap="md" wrap="nowrap">
-					<M.Button
+			<UI.Paper>
+				<UI.Group gap="md" wrap="nowrap">
+					<UI.Button
 						type="button"
 						variant="default"
 						w="auto"
@@ -205,41 +205,41 @@ export default function MazeGame() {
 						onClick={() => navigate("../fases")}
 					>
 						Voltar para fases
-					</M.Button>
+					</UI.Button>
 
-					<M.Title order={1}>{level.name}</M.Title>
-				</M.Group>
-			</M.Paper>
+					<UI.Title order={1}>{level.name}</UI.Title>
+				</UI.Group>
+			</UI.Paper>
 
-			<M.Grid align="stretch">
-				<M.Grid.Col span={{ base: 12, lg: 6 }}>
-					<M.Center h="100%" mih={400}>
+			<UI.Grid align="stretch">
+				<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+					<UI.Center h="100%" mih={400}>
 						<MazeRenderer
 							level={state.level}
 							playerPosition={state.playerPosition}
 							direction={state.direction}
 							moving={state.status === "running"}
 						/>
-					</M.Center>
-				</M.Grid.Col>
+					</UI.Center>
+				</UI.Grid.Col>
 
-				<M.Grid.Col span={{ base: 12, lg: 6 }}>
-					<M.Paper h="100%">
-						<M.Stack gap="lg">
+				<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+					<UI.Paper h="100%">
+						<UI.Stack gap="lg">
 							<div>
-								<M.Title order={2}>Objetivo</M.Title>
+								<UI.Title order={2}>Objetivo</UI.Title>
 
-								<M.Text c="dimmed" mt="xs">
+								<UI.Text c="dimmed" mt="xs">
 									Ajude o <b>Codi</b> a chegar até a{" "}
 									<b>porta</b>. Escolha os comandos na ordem
 									em que ele deve se mover.
-								</M.Text>
+								</UI.Text>
 							</div>
 
-							<M.Stack gap="sm">
-								<M.Title order={2}>Comandos</M.Title>
+							<UI.Stack gap="sm">
+								<UI.Title order={2}>Comandos</UI.Title>
 
-								<M.Group
+								<UI.Group
 									justify="center"
 									gap="sm"
 									p="sm"
@@ -255,7 +255,7 @@ export default function MazeGame() {
 										const CommandIcon = commandIcons[command];
 
 										return (
-											<M.ActionIcon
+											<UI.ActionIcon
 												key={command}
 												type="button"
 												size="xl"
@@ -266,20 +266,20 @@ export default function MazeGame() {
 												onClick={() => addCommand(command)}
 											>
 												<CommandIcon size={24} color="white" />
-											</M.ActionIcon>
+											</UI.ActionIcon>
 										);
 									})}
-								</M.Group>
-							</M.Stack>
+								</UI.Group>
+							</UI.Stack>
 
-							<M.Stack gap="sm">
-								<M.Title order={2}>Sua sequência</M.Title>
+							<UI.Stack gap="sm">
+								<UI.Title order={2}>Sua sequência</UI.Title>
 
-								<M.Text c="dimmed">
+								<UI.Text c="dimmed">
 									Os comandos serão executados nessa ordem:
-								</M.Text>
+								</UI.Text>
 
-								<M.Group
+								<UI.Group
 									gap="sm"
 									p="sm"
 									wrap="wrap"
@@ -292,19 +292,19 @@ export default function MazeGame() {
 									}}
 								>
 									{state.commands.length === 0 ? (
-										<M.Text
+										<UI.Text
 											c="dimmed"
 											ta="center"
 											w="100%"
 										>
 											Escolha os comandos acima
-										</M.Text>
+										</UI.Text>
 									) : (
 										state.commands.map((command, index) => {
 											const CommandIcon = commandIcons[command];
 
 											return (
-												<M.Center
+												<UI.Center
 													key={`${index}-${command}`}
 													w={48}
 													h={48}
@@ -320,15 +320,15 @@ export default function MazeGame() {
 														size={24}
 														color="var(--mantine-color-violet-6)"
 													/>
-												</M.Center>
+												</UI.Center>
 											);
 										})
 									)}
-								</M.Group>
-							</M.Stack>
+								</UI.Group>
+							</UI.Stack>
 
-							<M.Group gap="sm">
-								<M.Button
+							<UI.Group gap="sm">
+								<UI.Button
 									type="button"
 									flex={1}
 									disabled={
@@ -338,9 +338,9 @@ export default function MazeGame() {
 									onClick={play}
 								>
 									{isRunning ? "Andando…" : "Começar"}
-								</M.Button>
+								</UI.Button>
 
-								<M.Button
+								<UI.Button
 									type="button"
 									flex={1}
 									variant="default"
@@ -351,12 +351,12 @@ export default function MazeGame() {
 									onClick={clearCommands}
 								>
 									Limpar
-								</M.Button>
-							</M.Group>
-						</M.Stack>
-					</M.Paper>
-				</M.Grid.Col>
-			</M.Grid>
-		</M.Stack>
+								</UI.Button>
+							</UI.Group>
+						</UI.Stack>
+					</UI.Paper>
+				</UI.Grid.Col>
+			</UI.Grid>
+		</UI.Stack>
 	);
 }

@@ -1,5 +1,5 @@
+import * as UI from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as M from "@mantine/core";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -115,38 +115,38 @@ export function EditClassForm({
 	}
 
 	return (
-		<M.Paper>
-			<M.Stack gap="lg">
-				<M.Group gap="sm" wrap="nowrap">
-					<M.ActionIcon
+		<UI.Paper>
+			<UI.Stack gap="lg">
+				<UI.Group gap="sm" wrap="nowrap">
+					<UI.ActionIcon
 						variant="default"
 						size="lg"
 						aria-label="Voltar para turmas"
 						onClick={handleBack}
 					>
 						<Icon.ArrowLeft size={20} />
-					</M.ActionIcon>
+					</UI.ActionIcon>
 
-					<M.Title order={1} style={{ overflowWrap: "anywhere" }}>
+					<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
 						{classData.name}
-					</M.Title>
-				</M.Group>
+					</UI.Title>
+				</UI.Group>
 
-				<M.Divider />
+				<UI.Divider />
 
 				{classData.is_playing && (
-					<M.Alert color="red">
+					<UI.Alert color="red">
 						Esta turma está em atividade e não pode ser editada no momento.
-					</M.Alert>
+					</UI.Alert>
 				)}
 
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 				>
-					<M.Stack gap="md">
-						<M.SimpleGrid cols={{ base: 1, md: 2 }}>
-							<M.TextInput
+					<UI.Stack gap="md">
+						<UI.SimpleGrid cols={{ base: 1, md: 2 }}>
+							<UI.TextInput
 								label="Nome da Turma"
 								autoComplete="off"
 								disabled={classData.is_playing}
@@ -154,7 +154,7 @@ export function EditClassForm({
 								error={errors.name?.message}
 							/>
 
-							<M.TextInput
+							<UI.TextInput
 								label="Professor Responsável"
 								placeholder="Nome de usuário do professor"
 								autoComplete="off"
@@ -164,19 +164,19 @@ export function EditClassForm({
 								error={errors.teacher_username?.message}
 							/>
 
-							<M.TextInput
+							<UI.TextInput
 								label="Código de Acesso"
 								readOnly
 								disabled={classData.is_playing}
 								rightSection={
-									<M.ActionIcon
+									<UI.ActionIcon
 										variant="default"
 										aria-label="Gerar novo código de acesso"
 										disabled={classData.is_playing}
 										onClick={handleGenerateAccessCode}
 									>
 										<Icon.Shuffle size={18} />
-									</M.ActionIcon>
+									</UI.ActionIcon>
 								}
 								styles={{
 									input: {
@@ -189,12 +189,12 @@ export function EditClassForm({
 								error={errors.access_code?.message}
 							/>
 
-							<M.Group
+							<UI.Group
 								gap="sm"
 								align="stretch"
 								mt={{ base: 0, md: "xl" }}
 							>
-								<M.Button
+								<UI.Button
 									type="submit"
 									flex={1}
 									loading={isSubmitting}
@@ -206,9 +206,9 @@ export function EditClassForm({
 									leftSection={<Icon.Save size={18} />}
 								>
 									{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-								</M.Button>
+								</UI.Button>
 
-								<M.Button
+								<UI.Button
 									type="button"
 									flex={1}
 									color="red"
@@ -221,18 +221,18 @@ export function EditClassForm({
 									onClick={handleDeleteClass}
 								>
 									{isDeleting ? "Excluindo..." : "Excluir Turma"}
-								</M.Button>
-							</M.Group>
-						</M.SimpleGrid>
+								</UI.Button>
+							</UI.Group>
+						</UI.SimpleGrid>
 
 						{errors.root && (
-							<M.Alert>
+							<UI.Alert>
 								{errors.root.message}
-							</M.Alert>
+							</UI.Alert>
 						)}
-					</M.Stack>
+					</UI.Stack>
 				</form>
-			</M.Stack>
-		</M.Paper>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

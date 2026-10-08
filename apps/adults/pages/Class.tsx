@@ -1,5 +1,5 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
@@ -45,15 +45,15 @@ function StudentRow({
 	const navigate = useNavigate();
 
 	return (
-		<M.Grid align="center" py="md">
-			<M.Grid.Col span={{ base: 12, lg: 4 }}>
-				<M.Text fw={600}>{student.name ?? "—"}</M.Text>
-			</M.Grid.Col>
+		<UI.Grid align="center" py="md">
+			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
+				<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
+			</UI.Grid.Col>
 
-			<M.Grid.Col span={{ base: 12, lg: 2 }}>
-				<M.Group h={56}>
+			<UI.Grid.Col span={{ base: 12, lg: 2 }}>
+				<UI.Group h={56}>
 					{showCredential ? (
-						<M.Image
+						<UI.Image
 							src={imageCodes[student.access_code as ImageCode].src}
 							alt={imageCodes[student.access_code as ImageCode].label}
 							h={56}
@@ -61,16 +61,16 @@ function StudentRow({
 							fit="contain"
 						/>
 					) : (
-						<M.Text size="sm" ff="monospace" lts="0.25em">
+						<UI.Text size="sm" ff="monospace" lts="0.25em">
 							••••••••
-						</M.Text>
+						</UI.Text>
 					)}
-				</M.Group>
-			</M.Grid.Col>
+				</UI.Group>
+			</UI.Grid.Col>
 
-			<M.Grid.Col span={{ base: 12, lg: 6 }}>
-				<M.Group grow>
-					<M.Button
+			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+				<UI.Group grow>
+					<UI.Button
 						variant="light"
 						onClick={() => setShowCredential(!showCredential)}
 						leftSection={
@@ -82,17 +82,17 @@ function StudentRow({
 						}
 					>
 						{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
-					</M.Button>
+					</UI.Button>
 
-					<M.Button
+					<UI.Button
 						onClick={() => navigate(`/escola/${schoolId}/aluno/${student.id}`)}
 						leftSection={<Icon.FileText size={18} />}
 					>
 						Ver Registros
-					</M.Button>
-				</M.Group>
-			</M.Grid.Col>
-		</M.Grid>
+					</UI.Button>
+				</UI.Group>
+			</UI.Grid.Col>
+		</UI.Grid>
 	);
 }
 
@@ -122,22 +122,22 @@ export default function ClassPage() {
 	}
 
 	return (
-		<M.Stack w="100%" mx="auto" gap="md">
+		<UI.Stack w="100%" mx="auto" gap="md">
 			<title>CodiGO! | Turma</title>
 
-			<M.Group justify="space-between" align="center" gap="md">
+			<UI.Group justify="space-between" align="center" gap="md">
 				<div>
-					<M.Title order={1} size="h2">
+					<UI.Title order={1} size="h2">
 						{classData.name} | Código de Acesso: {classData.access_code}
-					</M.Title>
+					</UI.Title>
 
-					<M.Text size="sm" c="dimmed">
+					<UI.Text size="sm" c="dimmed">
 						{students.length} {students.length === 1 ? "aluno" : "alunos"}
-					</M.Text>
+					</UI.Text>
 				</div>
 
-				<M.Group gap="sm">
-					<M.Button
+				<UI.Group gap="sm">
+					<UI.Button
 						variant={classData.is_playing ? "filled" : "light"}
 						disabled={isUpdatingPlaying}
 						onClick={handleTogglePlaying}
@@ -154,24 +154,24 @@ export default function ClassPage() {
 							: classData.is_playing
 								? "Em atividade"
 								: "Iniciar atividade"}
-					</M.Button>
+					</UI.Button>
 
-					<M.Button
+					<UI.Button
 						variant="light"
 						onClick={() => navigate(`/escola/${classData.school_id}`)}
 						leftSection={<Icon.ArrowLeft size={18} />}
 					>
 						Voltar
-					</M.Button>
-				</M.Group>
-			</M.Group>
+					</UI.Button>
+				</UI.Group>
+			</UI.Group>
 
-			<M.Paper p="lg">
-				<M.Title order={2} size="h3" mb="md">
+			<UI.Paper p="lg">
+				<UI.Title order={2} size="h3" mb="md">
 					Alunos
-				</M.Title>
+				</UI.Title>
 
-				<M.Grid
+				<UI.Grid
 					visibleFrom="lg"
 					align="center"
 					py="md"
@@ -179,26 +179,26 @@ export default function ClassPage() {
 						borderBottom: "1px solid var(--mantine-color-default-border)",
 					}}
 				>
-					<M.Grid.Col span={4}>
-						<M.Text size="sm" c="dimmed" fw={700}>
+					<UI.Grid.Col span={4}>
+						<UI.Text size="sm" c="dimmed" fw={700}>
 							Nome
-						</M.Text>
-					</M.Grid.Col>
+						</UI.Text>
+					</UI.Grid.Col>
 
-					<M.Grid.Col span={2}>
-						<M.Text size="sm" c="dimmed" fw={700}>
+					<UI.Grid.Col span={2}>
+						<UI.Text size="sm" c="dimmed" fw={700}>
 							Credencial
-						</M.Text>
-					</M.Grid.Col>
+						</UI.Text>
+					</UI.Grid.Col>
 
-					<M.Grid.Col span={6}>
-						<M.Text size="sm" c="dimmed" fw={700}>
+					<UI.Grid.Col span={6}>
+						<UI.Text size="sm" c="dimmed" fw={700}>
 							Ações
-						</M.Text>
-					</M.Grid.Col>
-				</M.Grid>
+						</UI.Text>
+					</UI.Grid.Col>
+				</UI.Grid>
 
-				<M.Stack gap={0}>
+				<UI.Stack gap={0}>
 					{students.map((student) => (
 						<>
 							<StudentRow
@@ -206,17 +206,17 @@ export default function ClassPage() {
 								student={student}
 								schoolId={classData.school_id}
 							/>
-							<M.Divider />
+							<UI.Divider />
 						</>
 					))}
-				</M.Stack>
+				</UI.Stack>
 
 				{students.length === 0 && (
-					<M.Text size="lg" ta="center" py="xl">
+					<UI.Text size="lg" ta="center" py="xl">
 						Esta turma ainda não possui alunos.
-					</M.Text>
+					</UI.Text>
 				)}
-			</M.Paper>
-		</M.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }

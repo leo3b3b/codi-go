@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { Link, useLoaderData } from "react-router";
 import { CreateClassForm } from "@/forms";
 import { getClassesBySchool, getSchoolById } from "@/services";
@@ -25,45 +25,45 @@ export default function ClassesAdminPage() {
 	const { school, classes } = useLoaderData<typeof clientLoader>();
 
 	return (
-		<M.Stack w="100%" gap="md">
+		<UI.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Turmas</title>
 
 			<CreateClassForm school={school} />
 
-			<M.Paper>
-				<M.Stack gap="md">
-					<M.Title order={2}>Gerenciar Turmas</M.Title>
+			<UI.Paper>
+				<UI.Stack gap="md">
+					<UI.Title order={2}>Gerenciar Turmas</UI.Title>
 
 					{classes.length === 0 ? (
-						<M.Center py="xl">
-							<M.Text size="lg" ta="center">
+						<UI.Center py="xl">
+							<UI.Text size="lg" ta="center">
 								Esta escola ainda não possui turmas.
-							</M.Text>
-						</M.Center>
+							</UI.Text>
+						</UI.Center>
 					) : (
-						<M.Stack gap="sm">
+						<UI.Stack gap="sm">
 							{classes.map(({ id, name }) => (
-								<M.Anchor
+								<UI.Anchor
 									key={id}
 									component={Link}
 									to={`/escola/${school.id}/admin/turma/${id}`}
 									underline="never"
 								>
-									<M.Paper
+									<UI.Paper
 										component="article"
 										bg="gray.1"
 										p="md"
 									>
-										<M.Title order={2} c="violet">
+										<UI.Title order={2} c="violet">
 											{name}
-										</M.Title>
-									</M.Paper>
-								</M.Anchor>
+										</UI.Title>
+									</UI.Paper>
+								</UI.Anchor>
 							))}
-						</M.Stack>
+						</UI.Stack>
 					)}
-				</M.Stack>
-			</M.Paper>
-		</M.Stack>
+				</UI.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }

@@ -1,4 +1,4 @@
-import * as M from "@mantine/core";
+import * as UI from "@codi-go/ui";
 import { NavLink } from "react-router";
 
 type SchoolCardProps = {
@@ -16,21 +16,21 @@ export function SchoolCard({
 }: SchoolCardProps) {
 	return (
 		<NavLink to={`/escola/${schoolId}`}>
-			<M.Paper component="article" h="100%">
-				<M.Group justify="space-between" mb="md">
-					<M.Title order={2} size="h3">
+			<UI.Paper component="article" h="100%">
+				<UI.Group justify="space-between" mb="md">
+					<UI.Title order={2} size="h3">
 						{tradeName}
-					</M.Title>
+					</UI.Title>
 
-					<M.Badge variant="light" color="violet">
+					<UI.Badge variant="light" color="violet">
 						{userRole === "admin" ? "Administrador" : "Professor"}
-					</M.Badge>
-				</M.Group>
+					</UI.Badge>
+				</UI.Group>
 
-				<M.Divider />
+				<UI.Divider />
 
-				<M.Text c="dimmed">{legalName}</M.Text>
-			</M.Paper>
+				<UI.Text c="dimmed">{legalName}</UI.Text>
+			</UI.Paper>
 		</NavLink>
 	);
 }
