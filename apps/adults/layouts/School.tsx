@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { Outlet, useLoaderData, useLocation } from "react-router";
 import { SchoolHeader } from "@/components";
 import { requireAuth } from "@/middlewares";

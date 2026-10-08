@@ -84,7 +84,7 @@ A camada de UI compartilhada atualmente é baseada em Mantine.
 As aplicações normalmente importam os recursos de interface através de:
 
 ```ts
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 ```
 
 O tema compartilhado deve ser usado através do `MantineProvider` no `root.tsx` de cada aplicação.

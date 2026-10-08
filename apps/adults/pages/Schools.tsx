@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { useLoaderData } from "react-router";
 import { SchoolCard } from "@/components/SchoolCard";
 import { getSchoolsForCurrentUser } from "@/services";

@@ -1,5 +1,5 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as Icon from "lucide-react";
 import { useState } from "react";

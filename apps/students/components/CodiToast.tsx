@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import type { Toast } from "react-hot-toast";
 
 type CodiToastProps = {

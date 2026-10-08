@@ -1,5 +1,4 @@
-import * as UI from "@codi-go/ui";
-import * as Icon from "lucide-react";
+import { Icon, UI } from "@codi-go/ui";
 import { useNavigate, useParams } from "react-router";
 import { getStudentSession, signOutStudent } from "@/services";
 

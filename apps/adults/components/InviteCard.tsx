@@ -1,5 +1,4 @@
-import * as UI from "@codi-go/ui";
-import * as Icon from "lucide-react";
+import { Icon, UI } from "@codi-go/ui";
 import { useRevalidator } from "react-router";
 import { deleteMembership } from "@/services";
 import { acceptInvite } from "@/services/memberships";

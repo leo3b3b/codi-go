@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { getClassByAccessCode } from "@/services";

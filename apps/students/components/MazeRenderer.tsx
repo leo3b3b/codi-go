@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { Codi } from "@/components";
 import type { Command, MazeLevel, Position, TileType } from "@/types";
 import { tileImages } from "@/types";

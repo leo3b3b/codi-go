@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { NavLink } from "react-router";
 
 type SchoolCardProps = {

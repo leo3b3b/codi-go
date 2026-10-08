@@ -1,6 +1,5 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import * as UI from "@codi-go/ui";
-import * as Icon from "lucide-react";
+import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import type { LoaderFunctionArgs } from "react-router";

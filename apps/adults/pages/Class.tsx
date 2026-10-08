@@ -1,6 +1,5 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import * as UI from "@codi-go/ui";
-import * as Icon from "lucide-react";
+import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import {

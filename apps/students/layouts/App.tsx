@@ -1,4 +1,4 @@
-import * as UI from "@codi-go/ui";
+import { UI } from "@codi-go/ui";
 import { Outlet, useLocation } from "react-router";
 
 export default function AppLayout() {

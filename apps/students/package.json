@@ -14,7 +14,6 @@
 		"@codi-go/ui": "*",
 		"@react-router/node": "^8.4.0",
 		"isbot": "^5",
-		"lucide-react": "^1.52.0",
 		"react": "^19.3.0",
 		"react-dom": "^19.3.0",
 		"react-hot-toast": "^2.6.0",
