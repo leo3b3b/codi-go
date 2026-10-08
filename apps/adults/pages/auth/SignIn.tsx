@@ -2,8 +2,24 @@ import { UI } from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { type SignInOutput, signInSchema } from "@/schemas";
+import * as v from "valibot";
 import { signInWithPassword } from "@/services";
+
+const signInSchema = v.object({
+	email: v.pipe(
+		v.string("O e-mail deve ser um texto."),
+		v.trim(),
+		v.nonEmpty("Informe seu e-mail."),
+		v.email("Informe um endereço de e-mail válido (ex: nome@dominio.com)."),
+	),
+	password: v.pipe(
+		v.string("A senha deve ser um texto."),
+		v.trim(),
+		v.nonEmpty("Informe sua senha."),
+	),
+});
+
+type SignInOutput = v.InferOutput<typeof signInSchema>;
 
 export default function SignInPage() {
 	const navigate = useNavigate();

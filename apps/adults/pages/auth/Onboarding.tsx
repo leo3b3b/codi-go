@@ -3,9 +3,34 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import * as v from "valibot";
 import { requireAuth } from "@/middlewares";
-import { type OnboardingOutput, onboardingSchema } from "@/schemas";
 import { updateProfileForCurrentUser } from "@/services";
+
+const onboardingSchema = v.object({
+	name: v.pipe(
+		v.string("O nome deve ser um texto."),
+		v.trim(),
+		v.nonEmpty("Informe seu nome."),
+		v.regex(
+			/^\p{L}+(?: +\p{L}+)*$/u,
+			"O nome deve conter apenas letras e espaços.",
+		),
+	),
+	username: v.pipe(
+		v.string("O nome de usuário deve ser um texto."),
+		v.trim(),
+		v.nonEmpty("Informe um nome de usuário."),
+		v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
+		v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
+		v.regex(
+			/^[a-z0-9._-]+$/,
+			"Use apenas letras minúsculas, números, pontos, traços ou sublinhados.",
+		),
+	),
+});
+
+type OnboardingOutput = v.InferOutput<typeof onboardingSchema>;
 
 export const clientMiddleware = [requireAuth];
 

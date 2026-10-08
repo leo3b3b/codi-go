@@ -3,8 +3,18 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
-import { type CreateClassOutput, createClassSchema } from "@/schemas";
+import * as v from "valibot";
 import { createClass } from "@/services";
+
+const createClassSchema = v.object({
+	name: v.pipe(
+		v.string("O nome da turma deve ser um texto."),
+		v.trim(),
+		v.nonEmpty("O nome da turma é obrigatório."),
+	),
+});
+
+type CreateClassOutput = v.InferOutput<typeof createClassSchema>;
 
 export function CreateClassForm({
 	school,

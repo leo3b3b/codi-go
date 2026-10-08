@@ -3,16 +3,50 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
+import * as v from "valibot";
 import { InviteCard } from "@/components";
-import { type ProfileOutput, profileSchema } from "@/schemas";
 import {
+	deleteUserAccount,
 	getInvitesForCurrentUser,
 	getProfileForCurrentUser,
 	getSchoolsForCurrentUser,
 	signOut,
 	updateProfileForCurrentUser,
 } from "@/services";
-import { deleteUserAccount } from "@/services/auth";
+
+export const profileSchema = v.object({
+	name: v.optional(
+		v.union([
+			v.literal(""),
+			v.pipe(
+				v.string("O nome deve ser um texto."),
+				v.trim(),
+				v.nonEmpty("O nome não pode estar vazio."),
+				v.regex(
+					/^\p{L}+(?: +\p{L}+)*$/u,
+					"O nome deve conter apenas letras e espaços.",
+				),
+			),
+		]),
+	),
+	username: v.optional(
+		v.union([
+			v.literal(""),
+			v.pipe(
+				v.string("O nome de usuário deve ser um texto."),
+				v.trim(),
+				v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
+				v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
+				v.regex(
+					/^[a-z0-9._-]+$/,
+					"Use apenas letras minúsculas, números, pontos, traços ou sublinhados.",
+				),
+			),
+		]),
+	),
+});
+
+type ProfileOutput = v.InferOutput<typeof profileSchema>;
 
 export async function clientLoader() {
 	const profile = await getProfileForCurrentUser();

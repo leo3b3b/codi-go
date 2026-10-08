@@ -2,8 +2,39 @@ import { UI } from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { type SignUpOutput, signUpSchema } from "@/schemas";
+import * as v from "valibot";
 import { signUp } from "@/services";
+
+const signUpSchema = v.pipe(
+	v.object({
+		email: v.pipe(
+			v.string("O e-mail deve ser um texto."),
+			v.trim(),
+			v.nonEmpty("Informe seu e-mail."),
+			v.email("Informe um endereço de e-mail válido (ex: nome@dominio.com)."),
+		),
+		password: v.pipe(
+			v.string("A senha deve ser um texto."),
+			v.trim(),
+			v.nonEmpty("Crie uma senha."),
+			v.minLength(6, "A senha deve ter no mínimo 6 caracteres."),
+		),
+		confirmation: v.pipe(
+			v.string("A confirmação deve ser um texto."),
+			v.trim(),
+			v.nonEmpty("Confirme sua senha."),
+		),
+	}),
+	v.forward(
+		v.check(
+			({ password, confirmation }) => password === confirmation,
+			"As senhas não coincidem. Digite a mesma senha nos dois campos.",
+		),
+		["confirmation"],
+	),
+);
+
+type SignUpOutput = v.InferOutput<typeof signUpSchema>;
 
 export default function SignUpPage() {
 	const navigate = useNavigate();

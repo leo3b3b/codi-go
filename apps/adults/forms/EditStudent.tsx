@@ -5,8 +5,27 @@ import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";
-import { type UpdateStudentOutput, updateStudentSchema } from "@/schemas";
+import * as v from "valibot";
 import { deleteStudent, generateImageCode, updateStudent } from "@/services";
+
+const imageCodeValues = Object.keys(imageCodes) as [ImageCode, ...ImageCode[]];
+
+const studentNameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
+
+const updateStudentSchema = v.object({
+	name: v.pipe(
+		v.string("O nome do aluno deve ser um texto."),
+		v.trim(),
+		v.nonEmpty("O nome do aluno é obrigatório."),
+		v.regex(studentNameRegex, "O nome deve conter apenas letras e espaços."),
+	),
+	access_code: v.picklist(
+		imageCodeValues,
+		"O código de acesso deve ser uma imagem válida.",
+	),
+});
+
+type UpdateStudentOutput = v.InferOutput<typeof updateStudentSchema>;
 
 export function EditStudentForm({
 	student,

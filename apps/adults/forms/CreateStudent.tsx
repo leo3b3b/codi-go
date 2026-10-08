@@ -3,8 +3,25 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as Icon from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
-import { type CreateStudentOutput, createStudentSchema } from "@/schemas";
+import * as v from "valibot";
 import { createStudent } from "@/services";
+
+const studentNameRegex =
+	/^\p{L}+(?: +\p{L}+)*(?:\s*,\s*\p{L}+(?: +\p{L}+)*)*$/u;
+
+const createStudentSchema = v.object({
+	names: v.pipe(
+		v.string("Os nomes dos alunos devem ser um texto."),
+		v.trim(),
+		v.nonEmpty("O nome do aluno é obrigatório."),
+		v.regex(
+			studentNameRegex,
+			"Os nomes devem conter apenas letras e espaços, separados por vírgulas.",
+		),
+	),
+});
+
+type CreateStudentOutput = v.InferOutput<typeof createStudentSchema>;
 
 export function CreateStudentForm({
 	classData,

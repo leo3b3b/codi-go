@@ -3,9 +3,28 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import * as Icon from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
+import * as v from "valibot";
 import { Select } from "@/components";
-import { type InviteOutput, inviteSchema } from "@/schemas";
 import { inviteUserToSchool } from "@/services";
+
+const inviteSchema = v.object({
+	username: v.pipe(
+		v.string("O nome de usuário deve ser um texto."),
+		v.trim(),
+		v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
+		v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
+		v.regex(
+			/^[a-z0-9._-]+$/,
+			"Use apenas letras minúsculas, números, pontos, traços ou sublinhados.",
+		),
+	),
+	role: v.union(
+		[v.literal("teacher"), v.literal("admin")],
+		"O usuário deve ser administrador ou professor.",
+	),
+});
+
+type InviteOutput = v.InferOutput<typeof inviteSchema>;
 
 export function InviteUserForm({
 	school,
