@@ -1,4 +1,5 @@
 import { createTheme } from "@mantine/core";
+import button from "./button.ts";
 
 export const theme = createTheme({
 	primaryColor: "violet",
@@ -47,12 +48,14 @@ export const theme = createTheme({
 			}
 		},
 
-		Button: {
+		PasswordInput: {
 			defaultProps: {
 				variant: "filled",
 				size: "md",
-				radius: "lg"
+				radius: "lg",
 			}
-		}
+		},
+
+		Button: button
 	},
 });

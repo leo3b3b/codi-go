@@ -31,8 +31,8 @@ export default function AuthLayout() {
 					backgroundImage: `
 						linear-gradient(
 							180deg,
-							var(--color-hero-overlay-start),
-							var(--color-hero-overlay-end)
+							color-mix(in srgb, var(--mantine-color-violet-4) 60%, transparent),
+							color-mix(in srgb, var(--mantine-color-violet-8) 20%, transparent)
 						),
 						url("/backgroundIceberg.png")
 					`,
