@@ -14,7 +14,7 @@ import {
 	updateProfileForCurrentUser,
 } from "@/services";
 
-export const profileSchema = v.object({
+const profileSchema = v.object({
 	name: v.optional(
 		v.union([
 			v.literal(""),
