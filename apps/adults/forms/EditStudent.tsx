@@ -1,7 +1,6 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import { UI } from "@codi-go/ui";
+import { Icon, UI } from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as Icon from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";

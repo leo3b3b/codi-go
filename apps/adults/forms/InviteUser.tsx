@@ -1,6 +1,5 @@
-import { UI } from "@codi-go/ui";
+import { Icon, UI } from "@codi-go/ui";
 import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as Icon from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useRevalidator } from "react-router";
 import * as v from "valibot";
