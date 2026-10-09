@@ -1,29 +1,8 @@
-import { Icon, UI } from "@codi-go/ui";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { Controller, useForm } from "react-hook-form";
+import { form, Icon, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { useRevalidator } from "react-router";
-import * as v from "valibot";
 import { Select } from "@/components";
 import { inviteUserToSchool } from "@/services";
-
-const inviteSchema = v.object({
-	username: v.pipe(
-		v.string("O nome de usuário deve ser um texto."),
-		v.trim(),
-		v.minLength(3, "O nome de usuário deve ter pelo menos 3 caracteres."),
-		v.maxLength(30, "O nome de usuário pode ter no máximo 30 caracteres."),
-		v.regex(
-			/^[a-z0-9._-]+$/,
-			"Use apenas letras minúsculas, números, pontos, traços ou sublinhados.",
-		),
-	),
-	role: v.union(
-		[v.literal("teacher"), v.literal("admin")],
-		"O usuário deve ser administrador ou professor.",
-	),
-});
-
-type InviteOutput = v.InferOutput<typeof inviteSchema>;
 
 export function InviteUserForm({
 	school,
@@ -36,35 +15,44 @@ export function InviteUserForm({
 	};
 }) {
 	const { revalidate } = useRevalidator();
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		watch,
-		control,
-		reset,
-		formState: { errors, isSubmitting },
-	} = useForm<InviteOutput>({
-		resolver: valibotResolver(inviteSchema),
-		defaultValues: { role: "teacher" },
+	const inviteForm = form.useForm({
+		mode: "controlled",
+		initialValues: { username: "", role: "teacher" as "teacher" | "admin" },
+		validate: {
+			username: (value) => {
+				const username = value.trim();
+
+				if (username.length < 3)
+					return "O nome de usuário deve ter pelo menos 3 caracteres.";
+				if (username.length > 30)
+					return "O nome de usuário pode ter no máximo 30 caracteres.";
+				if (!/^[a-z0-9._-]+$/.test(username))
+					return "Use apenas letras minúsculas, números, pontos, traços ou sublinhados.";
+				return null;
+			},
+			role: (value) =>
+				value === "teacher" || value === "admin"
+					? null
+					: "O usuário deve ser administrador ou professor.",
+		},
 	});
 
-	async function onSubmit({ username, role }: InviteOutput) {
+	async function onSubmit(values: typeof inviteForm.values) {
+		setRootError(null);
+
 		try {
 			await inviteUserToSchool({
-				username,
-				role,
+				username: values.username.trim(),
+				role: values.role,
 				school_id: school.id,
 			});
+			inviteForm.reset();
+			await revalidate();
 		} catch {
-			setError("root", {
-				message: "Não foi possível convidar o usuário.",
-			});
+			setRootError("Não foi possível convidar o usuário.");
 		}
-
-		revalidate();
-		reset();
 	}
 
 	return (
@@ -73,64 +61,55 @@ export function InviteUserForm({
 				<UI.Title order={1}>
 					Convidar Usuário para {school.trade_name || school.legal_name}
 				</UI.Title>
-
 				<UI.Divider />
 
-				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+				<form onSubmit={inviteForm.onSubmit(onSubmit)} noValidate>
 					<UI.Grid align="flex-start">
-						<UI.Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+						<UI.Grid.Col span={{ base: 12, md: 6 }}>
 							<UI.TextInput
 								autoComplete="username"
-								placeholder="Digite o nome do usuário"
+								placeholder="Digite o nome de usuário"
 								leftSection={<Icon.AtSign size={18} />}
-								{...register("username")}
-								error={errors.username?.message}
+								{...inviteForm.getInputProps("username")}
 							/>
 						</UI.Grid.Col>
 
-						<UI.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-							<Controller
-								name="role"
-								control={control}
-								render={({ field }) => (
-									<Select
-										aria-label="Cargo"
-										value={field.value}
-										onChange={field.onChange}
-										options={[
-											{
-												value: "teacher",
-												label: "Professor",
-											},
-											{
-												value: "admin",
-												label: "Administrador",
-											},
-										]}
-										className="w-full"
-									/>
-								)}
+						<UI.Grid.Col span={{ base: 12, md: 3 }}>
+							<Select
+								aria-label="Cargo"
+								value={inviteForm.values.role}
+								onChange={(value) =>
+									inviteForm.setFieldValue(
+										"role",
+										value === "admin" ? "admin" : "teacher",
+									)
+								}
+								options={[
+									{ value: "teacher", label: "Professor" },
+									{ value: "admin", label: "Administrador" },
+								]}
+								w="100%"
 							/>
-							{errors.role && (
+							{inviteForm.errors.role && (
 								<UI.Text size="sm" c="red" mt={4}>
-									{errors.role.message}
+									{inviteForm.errors.role}
 								</UI.Text>
 							)}
 						</UI.Grid.Col>
 
-						<UI.Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+						<UI.Grid.Col span={{ base: 12, md: 3 }}>
 							<UI.Button
 								type="submit"
 								fullWidth
-								loading={isSubmitting}
-								disabled={!watch("username")}
+								loading={inviteForm.submitting}
+								disabled={!inviteForm.values.username.trim()}
 							>
-								{isSubmitting ? "Convidando..." : "Convidar"}
+								{inviteForm.submitting ? "Convidando..." : "Convidar"}
 							</UI.Button>
 						</UI.Grid.Col>
 					</UI.Grid>
 
-					{errors.root && <UI.Alert mt="md">{errors.root.message}</UI.Alert>}
+					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
 				</form>
 			</UI.Stack>
 		</UI.Paper>

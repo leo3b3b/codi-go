@@ -1,30 +1,11 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import { Icon, UI } from "@codi-go/ui";
-import { valibotResolver } from "@hookform/resolvers/valibot";
+import { form, Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate, useRevalidator } from "react-router";
-import * as v from "valibot";
 import { deleteStudent, generateImageCode, updateStudent } from "@/services";
 
 const imageCodeValues = Object.keys(imageCodes) as [ImageCode, ...ImageCode[]];
-
 const studentNameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
-
-const updateStudentSchema = v.object({
-	name: v.pipe(
-		v.string("O nome do aluno deve ser um texto."),
-		v.trim(),
-		v.nonEmpty("O nome do aluno é obrigatório."),
-		v.regex(studentNameRegex, "O nome deve conter apenas letras e espaços."),
-	),
-	access_code: v.picklist(
-		imageCodeValues,
-		"O código de acesso deve ser uma imagem válida.",
-	),
-});
-
-type UpdateStudentOutput = v.InferOutput<typeof updateStudentSchema>;
 
 export function EditStudentForm({
 	student,
@@ -38,77 +19,64 @@ export function EditStudentForm({
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
 	const [isDeleting, setIsDeleting] = useState(false);
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const initialValues: UpdateStudentOutput = {
-		name: student.name,
-		access_code: student.access_code as ImageCode,
-	};
-
-	const {
-		register,
-		handleSubmit,
-		setError,
-		setValue,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<UpdateStudentOutput>({
-		resolver: valibotResolver(updateStudentSchema),
-		defaultValues: initialValues,
+	const studentForm = form.useForm({
+		mode: "controlled",
+		initialValues: {
+			name: student.name,
+			access_code: student.access_code as ImageCode,
+		},
+		validate: {
+			name: (value) =>
+				!value.trim()
+					? "O nome do aluno é obrigatório."
+					: !studentNameRegex.test(value.trim())
+						? "O nome deve conter apenas letras e espaços."
+						: null,
+			access_code: (value) =>
+				imageCodeValues.includes(value)
+					? null
+					: "O código de acesso deve ser uma imagem válida.",
+		},
 	});
 
-	const currentValues = watch();
-
-	const isUnchanged =
-		currentValues.name === initialValues.name &&
-		currentValues.access_code === initialValues.access_code;
-
-	function handleGenerateAccessCode() {
-		setValue("access_code", generateImageCode(), {
-			shouldDirty: true,
-			shouldValidate: true,
-		});
-	}
-
-	async function handleDeleteStudent({
-		student_id,
-		student_name,
-	}: {
-		student_id: string;
-		student_name: string;
-	}) {
-		setIsDeleting(true);
-		const confirmed = window.confirm(
-			`Tem certeza de que quer excluir ${student_name} e todos os seus registros? Essa ação é irreversível!`,
-		);
-		if (!confirmed) return;
-
-		await deleteStudent(student_id);
-		setIsDeleting(false);
-		revalidate();
-	}
+	const imageCode = imageCodes[studentForm.values.access_code];
 
 	function handleBack() {
 		navigate(-1);
 	}
 
-	async function onSubmit({ name, access_code }: UpdateStudentOutput) {
-		try {
-			await updateStudent({
-				student_id: student.id,
-				name,
-				access_code,
-			});
+	async function handleDeleteStudent() {
+		const confirmed = window.confirm(
+			`Tem certeza de que quer excluir ${student.name} e todos os seus registros? Essa ação é irreversível!`,
+		);
+		if (!confirmed) return;
 
-			await revalidate();
-		} catch {
-			setError("root", {
-				message: "Não foi possível salvar as alterações do aluno.",
-			});
+		setIsDeleting(true);
+		try {
+			await deleteStudent(student.id);
+			handleBack();
+		} finally {
+			setIsDeleting(false);
 		}
 	}
 
-	const accessCode = currentValues.access_code as ImageCode;
-	const imageCode = imageCodes[accessCode];
+	async function onSubmit(values: typeof studentForm.values) {
+		setRootError(null);
+		try {
+			await updateStudent({
+				student_id: student.id,
+				name: values.name.trim(),
+				access_code: values.access_code,
+			});
+			studentForm.setInitialValues(studentForm.getValues());
+			studentForm.resetDirty();
+			await revalidate();
+		} catch {
+			setRootError("Não foi possível salvar as alterações do aluno.");
+		}
+	}
 
 	return (
 		<UI.Paper>
@@ -122,26 +90,23 @@ export function EditStudentForm({
 					>
 						<Icon.ArrowLeft size={20} />
 					</UI.ActionIcon>
-
 					<UI.Title order={1}>Editar Aluno</UI.Title>
 				</UI.Group>
 
 				<UI.Divider />
 
-				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="lg">
 						<UI.TextInput
 							label="Nome do Aluno"
 							autoComplete="off"
-							{...register("name")}
-							error={errors.name?.message}
+							{...studentForm.getInputProps("name")}
 						/>
 
 						<UI.Stack gap="xs">
 							<UI.Text fw={700} size="sm">
 								Credencial
 							</UI.Text>
-
 							<UI.Group align="center" gap="md" wrap="nowrap">
 								{imageCode && (
 									<UI.Image
@@ -152,17 +117,21 @@ export function EditStudentForm({
 										fit="contain"
 									/>
 								)}
-
 								<UI.TextInput
 									flex={1}
-									value={imageCodes[watch("access_code")].label}
+									value={imageCode?.label ?? ""}
 									readOnly
-									error={errors.access_code?.message}
+									error={studentForm.errors.access_code}
 									rightSection={
 										<UI.ActionIcon
 											variant="default"
 											aria-label="Gerar nova credencial"
-											onClick={handleGenerateAccessCode}
+											onClick={() =>
+												studentForm.setFieldValue(
+													"access_code",
+													generateImageCode(),
+												)
+											}
 										>
 											<Icon.Shuffle size={18} />
 										</UI.ActionIcon>
@@ -171,32 +140,25 @@ export function EditStudentForm({
 							</UI.Group>
 						</UI.Stack>
 
-						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
+						{rootError && <UI.Alert>{rootError}</UI.Alert>}
 
 						<UI.Group gap="sm" mt="xs">
 							<UI.Button
 								type="submit"
 								flex={1}
-								loading={isSubmitting}
-								disabled={isUnchanged || isDeleting}
+								loading={studentForm.submitting}
+								disabled={!studentForm.isDirty() || isDeleting}
 								leftSection={<Icon.Save size={18} />}
 							>
-								{isSubmitting ? "Salvando..." : "Salvar Alterações"}
+								{studentForm.submitting ? "Salvando..." : "Salvar Alterações"}
 							</UI.Button>
-
 							<UI.Button
 								type="button"
 								flex={1}
-								color="red"
 								loading={isDeleting}
-								disabled={isSubmitting}
+								disabled={studentForm.submitting}
 								leftSection={<Icon.Trash2 size={18} />}
-								onClick={() =>
-									handleDeleteStudent({
-										student_id: student.id,
-										student_name: student.name,
-									})
-								}
+								onClick={handleDeleteStudent}
 							>
 								{isDeleting ? "Excluindo..." : "Excluir Aluno"}
 							</UI.Button>

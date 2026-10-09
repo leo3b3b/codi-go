@@ -1,24 +1,27 @@
 import { Icon, UI } from "@codi-go/ui";
+import type { ButtonProps } from "@mantine/core";
 
 interface Option {
 	value: string;
 	label: string;
 }
 
-interface SelectProps {
+type SelectProps = Omit<
+	ButtonProps,
+	"children" | "type" | "rightSection" | "value" | "onChange" | "aria-label"
+> & {
 	"aria-label": string;
 	value: string;
 	onChange: (value: string) => void;
 	options: Option[];
-	className?: string;
-}
+};
 
 export function Select({
 	"aria-label": ariaLabel,
 	value,
 	onChange,
 	options,
-	className,
+	...buttonProps
 }: SelectProps) {
 	const selectedOption = options.find((option) => option.value === value);
 
@@ -30,8 +33,8 @@ export function Select({
 					aria-label={ariaLabel}
 					variant="default"
 					color="gray"
-					className={className}
 					rightSection={<Icon.ChevronDown size={16} />}
+					{...buttonProps}
 				>
 					<UI.Text truncate size="sm" fw={500}>
 						{selectedOption?.label ?? "Selecione…"}
