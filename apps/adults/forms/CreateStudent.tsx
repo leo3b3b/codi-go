@@ -89,7 +89,9 @@ export function CreateStudentForm({
 							loading={isSubmitting}
 							disabled={!namesValue}
 						>
-							{isSubmitting ? "Criando..." : `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
+							{isSubmitting
+								? "Criando..."
+								: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
 						</UI.Button>
 					</UI.Group>
 

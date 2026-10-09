@@ -34,13 +34,16 @@ export function EditClassForm({
 			access_code: classData.access_code ?? "",
 		},
 		validate: {
-			name: (value) => value.trim() ? null : "O nome da turma não pode estar vazio.",
+			name: (value) =>
+				value.trim() ? null : "O nome da turma não pode estar vazio.",
 			teacher_username: (value) => {
 				if (value === "") return null;
 				const username = value.trim();
 
-				if (username.length < 3) return "O nome de usuário deve ter pelo menos 3 caracteres.";
-				if (username.length > 30) return "O nome de usuário pode ter no máximo 30 caracteres.";
+				if (username.length < 3)
+					return "O nome de usuário deve ter pelo menos 3 caracteres.";
+				if (username.length > 30)
+					return "O nome de usuário pode ter no máximo 30 caracteres.";
 				if (!/^[a-z0-9._-]+$/.test(username))
 					return "Use apenas letras minúsculas, números, pontos, traços ou sublinhados.";
 				return null;
@@ -84,7 +87,10 @@ export function EditClassForm({
 				try {
 					teacher_id = await getUserIdByUsername(teacherUsername);
 				} catch {
-					classForm.setFieldError("teacher_username", "Professor não encontrado.");
+					classForm.setFieldError(
+						"teacher_username",
+						"Professor não encontrado.",
+					);
 					return;
 				}
 			}
@@ -124,7 +130,9 @@ export function EditClassForm({
 				<UI.Divider />
 
 				{classData.is_playing && (
-					<UI.Alert>Esta turma está em atividade e não pode ser editada no momento.</UI.Alert>
+					<UI.Alert>
+						Esta turma está em atividade e não pode ser editada no momento.
+					</UI.Alert>
 				)}
 
 				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
@@ -177,7 +185,9 @@ export function EditClassForm({
 									type="submit"
 									flex={1}
 									loading={classForm.submitting}
-									disabled={!classForm.isDirty() || isDeleting || classData.is_playing}
+									disabled={
+										!classForm.isDirty() || isDeleting || classData.is_playing
+									}
 									leftSection={<Icon.Save size={18} />}
 								>
 									{classForm.submitting ? "Salvando..." : "Salvar Alterações"}
