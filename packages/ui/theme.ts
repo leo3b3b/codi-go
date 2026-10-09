@@ -57,5 +57,13 @@ export const theme = createTheme({
 		},
 
 		Button: button,
+
+		Alert: {
+			defaultProps: {
+				variant: "outline",
+				color: "red",
+				radius: "lg",
+			},
+		},
 	},
 });

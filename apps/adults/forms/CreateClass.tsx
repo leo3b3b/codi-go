@@ -1,19 +1,7 @@
-import { Icon, UI } from "@codi-go/ui";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, Icon, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { useRevalidator } from "react-router";
-import * as v from "valibot";
 import { createClass } from "@/services";
-
-const createClassSchema = v.object({
-	name: v.pipe(
-		v.string("O nome da turma deve ser um texto."),
-		v.trim(),
-		v.nonEmpty("O nome da turma é obrigatório."),
-	),
-});
-
-type CreateClassOutput = v.InferOutput<typeof createClassSchema>;
 
 export function CreateClassForm({
 	school,
@@ -26,31 +14,36 @@ export function CreateClassForm({
 	};
 }) {
 	const { revalidate } = useRevalidator();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		reset,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<CreateClassOutput>({
-		resolver: valibotResolver(createClassSchema),
+	const classForm = form.useForm({
+		mode: "uncontrolled",
+		initialValues: {
+			name: "",
+		},
+		validate: {
+			name: (value) =>
+				value.trim().length === 0 ? "O nome da turma é obrigatório." : null,
+		},
 	});
 
-	async function onSubmit({ name }: CreateClassOutput) {
+	async function onSubmit({ name }: typeof classForm.values) {
+		setIsSubmitting(true);
+		setRootError(null);
+
 		try {
 			await createClass({
-				name,
+				name: name.trim(),
 				school_id: school.id,
 			});
 
-			reset();
+			classForm.reset();
 			await revalidate();
 		} catch {
-			setError("root", {
-				message: "Não foi possível criar a turma.",
-			});
+			setRootError("Não foi possível criar a turma.");
+		} finally {
+			setIsSubmitting(false);
 		}
 	}
 
@@ -63,15 +56,15 @@ export function CreateClassForm({
 
 				<UI.Divider />
 
-				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
 					<UI.Group align="flex-start" gap="md" wrap="nowrap">
 						<UI.TextInput
+							key={classForm.key("name")}
 							flex={1}
 							size="lg"
 							leftSection={<Icon.School size={18} />}
 							placeholder="Digite o nome da turma"
-							{...register("name")}
-							error={errors.name?.message}
+							{...classForm.getInputProps("name")}
 						/>
 
 						<UI.Button
@@ -79,13 +72,13 @@ export function CreateClassForm({
 							size="lg"
 							w={160}
 							loading={isSubmitting}
-							disabled={!watch("name")}
+							disabled={!classForm.getValues().name}
 						>
 							{isSubmitting ? "Criando..." : "Criar Turma"}
 						</UI.Button>
 					</UI.Group>
 
-					{errors.root && <UI.Alert mt="md">{errors.root.message}</UI.Alert>}
+					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
 				</form>
 			</UI.Stack>
 		</UI.Paper>
