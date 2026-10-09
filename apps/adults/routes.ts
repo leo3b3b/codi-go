@@ -2,6 +2,7 @@ import type { RouteConfig } from "@react-router/dev/routes";
 import { index, layout, prefix, route } from "@react-router/dev/routes";
 
 export default [
+	route("/", "pages/Landing.tsx"),
 	layout("layouts/Auth.tsx", [
 		route("login", "pages/auth/SignIn.tsx"),
 		route("criar-conta", "pages/auth/SignUp.tsx"),

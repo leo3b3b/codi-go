@@ -1,3 +1,4 @@
+import { UI } from "@codi-go/ui";
 import { Link, useLoaderData } from "react-router";
 import { CreateClassForm } from "@/forms";
 import { getClassesBySchool, getSchoolById } from "@/services";
@@ -24,53 +25,41 @@ export default function ClassesAdminPage() {
 	const { school, classes } = useLoaderData<typeof clientLoader>();
 
 	return (
-		<div className="flex-(~ col) gap-4">
+		<UI.Stack w="100%" gap="md">
 			<title>CodiGO! | Gerenciar Turmas</title>
 
 			<CreateClassForm school={school} />
 
-			<section className="ui-card">
-				<header>
-					<h1 className="text-(2xl heading) font-bold mb-4">
-						Gerenciar Turmas
-					</h1>
-				</header>
+			<UI.Paper>
+				<UI.Stack gap="md">
+					<UI.Title order={2}>Gerenciar Turmas</UI.Title>
 
-				{classes.length === 0 ? (
-					<p className="text-(lg center) py-6">
-						Esta escola ainda não possui turmas.
-					</p>
-				) : (
-					<div className="flex-(~ col) gap-2">
-						{classes.map(({ id, name }) => (
-							<Link key={id} to={`/escola/${school.id}/admin/turma/${id}`}>
-								<article
-									className="
-										bg-surface-subtle
-										border-(~ border)
-										rounded-lg
-										px-8 py-4
-										transition-(colors 500)
-										hover:(bg-primary-soft/70 border-primary)
-										group
-									"
+					{classes.length === 0 ? (
+						<UI.Center py="xl">
+							<UI.Text size="lg" ta="center">
+								Esta escola ainda não possui turmas.
+							</UI.Text>
+						</UI.Center>
+					) : (
+						<UI.Stack gap="sm">
+							{classes.map(({ id, name }) => (
+								<UI.Anchor
+									key={id}
+									component={Link}
+									to={`/escola/${school.id}/admin/turma/${id}`}
+									underline="never"
 								>
-									<h2
-										className="
-											text-(xl primary)
-											font-semibold
-											group-hover:text-on-primary
-											transition-(colors 500)
-										"
-									>
-										{name}
-									</h2>
-								</article>
-							</Link>
-						))}
-					</div>
-				)}
-			</section>
-		</div>
+									<UI.Paper component="article" bg="gray.1" p="md">
+										<UI.Title order={2} c="violet">
+											{name}
+										</UI.Title>
+									</UI.Paper>
+								</UI.Anchor>
+							))}
+						</UI.Stack>
+					)}
+				</UI.Stack>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }

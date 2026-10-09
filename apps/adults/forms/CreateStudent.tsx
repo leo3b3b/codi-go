@@ -1,9 +1,10 @@
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, Icon, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
-import { type CreateStudentOutput, createStudentSchema } from "@/schemas";
 import { createStudent } from "@/services";
+
+const studentNameRegex =
+	/^\p{L}+(?: +\p{L}+)*(?:\s*,\s*\p{L}+(?: +\p{L}+)*)*$/u;
 
 export function CreateStudentForm({
 	classData,
@@ -15,19 +16,28 @@ export function CreateStudentForm({
 	};
 }) {
 	const { revalidate } = useRevalidator();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		reset,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<CreateStudentOutput>({
-		resolver: valibotResolver(createStudentSchema),
+	const studentForm = form.useForm({
+		mode: "uncontrolled",
+		initialValues: {
+			names: "",
+		},
+		validate: {
+			names: (value) => {
+				if (!value.trim()) return "O nome do aluno é obrigatório.";
+				if (!studentNameRegex.test(value.trim()))
+					return "Os nomes devem conter apenas letras e espaços, separados por vírgulas.";
+				return null;
+			},
+		},
 	});
 
-	async function onSubmit({ names }: CreateStudentOutput) {
+	async function onSubmit({ names }: typeof studentForm.values) {
+		setIsSubmitting(true);
+		setRootError(null);
+
 		try {
 			const studentNames = names.split(",").map((name) => name.trim());
 
@@ -39,78 +49,55 @@ export function CreateStudentForm({
 				});
 			}
 
-			reset();
+			studentForm.reset();
 			await revalidate();
 		} catch {
-			setError("root", {
-				message: "Não foi possível criar o aluno.",
-			});
+			setRootError("Não foi possível criar o aluno.");
+		} finally {
+			setIsSubmitting(false);
 		}
 	}
 
-	const namesValue = watch("names") ?? "";
-
+	const namesValue = studentForm.getValues().names;
 	const studentCount = namesValue
 		.split(",")
 		.map((name) => name.trim())
 		.filter(Boolean).length;
 
 	return (
-		<section className="ui-card">
-			<header>
-				<h2 className="text-(2xl heading) font-bold">
-					Criar Alunos em {classData.name}
-				</h2>
-				<HorizontalSeparator />
-			</header>
+		<UI.Paper>
+			<UI.Stack gap="lg">
+				<UI.Title order={2}>Criar Alunos em {classData.name}</UI.Title>
+				<UI.Divider />
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="
-					flex-(~ col) md:flex-row items-center
-					gap-x-4 gap-y-2 py-3
-				"
-			>
-				<div className="flex-(~ row) relative items-center font-bold w-full">
-					<Icon
-						icon="i-lucide-baby"
-						color="muted"
-						size={6}
-						className="absolute left-3 pointer-events-none"
-					/>
+				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
+					<UI.Group align="flex-start" gap="md" wrap="nowrap">
+						<UI.TextInput
+							key={studentForm.key("names")}
+							flex={1}
+							size="lg"
+							leftSection={<Icon.Baby size={18} />}
+							placeholder="Digite um ou mais nomes, separados por vírgula"
+							{...studentForm.getInputProps("names")}
+						/>
 
-					<input
-						type="text"
-						{...register("names")}
-						placeholder="Digite um ou mais nomes, separados por vírgula"
-						aria-invalid={Boolean(errors.names)}
-						className="ui-field w-full h-14 pl-10"
-					/>
-				</div>
+						<UI.Button
+							type="submit"
+							size="lg"
+							w={160}
+							mt={0}
+							loading={isSubmitting}
+							disabled={!namesValue}
+						>
+							{isSubmitting
+								? "Criando..."
+								: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
+						</UI.Button>
+					</UI.Group>
 
-				<button
-					type="submit"
-					disabled={isSubmitting || !namesValue}
-					className="ui-button-(~ primary) h-14 mt-4 md:(mt-0 w-40)"
-				>
-					{isSubmitting
-						? "Criando..."
-						: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
-				</button>
-			</form>
-
-			{errors.names && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.names.message}
-				</p>
-			)}
-
-			{errors.root && (
-				<p role="alert" className="ui-alert-danger">
-					{errors.root.message}
-				</p>
-			)}
-		</section>
+					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
+				</form>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

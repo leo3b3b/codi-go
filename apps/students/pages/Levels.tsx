@@ -1,6 +1,6 @@
-import { useLoaderData, useNavigate } from "react-router";
-import { Icon } from "@/components";
+import { Icon, UI } from "@codi-go/ui";
 import type { LoaderFunctionArgs } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import {
 	getStudentSession,
 	isClassPlaying,
@@ -38,62 +38,87 @@ export default function LevelsPage() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="flex flex-col gap-8">
+		<UI.Stack w="100%" gap="xl">
 			<title>CodiGO! | Fases</title>
 
-			<header className="flex flex-col gap-2">
-				<h1 className="text-(3xl heading) font-bold">Fases</h1>
-				<p className="text-muted">Escolha um jogo e avance pelas fases.</p>
-			</header>
+			<div>
+				<UI.Title order={1}>Fases</UI.Title>
+				<UI.Text c="dimmed" mt="xs">
+					Escolha um jogo e avance pelas fases.
+				</UI.Text>
+			</div>
 
-			<div className="flex flex-col gap-8">
+			<UI.Stack gap="xl">
 				{games.map((game) => (
-					<section key={game.key} className="flex flex-col gap-4">
-						<header className="flex items-center gap-3">
-							<div className="h-8 w-1 rounded-full bg-primary" />
+					<UI.Stack key={game.key} gap="md">
+						<UI.Group gap="md" align="center">
+							<UI.Box
+								w={4}
+								h={32}
+								bg="violet"
+								style={{ borderRadius: "var(--mantine-radius-sm)" }}
+							/>
 
 							<div>
-								<h2 className="text-(2xl heading) font-bold">{game.name}</h2>
+								<UI.Title order={2}>{game.name}</UI.Title>
 
-								<p className="text-sm text-muted">
+								<UI.Text size="sm" c="dimmed">
 									{game.levels.length}{" "}
 									{game.levels.length === 1 ? "fase" : "fases"}
-								</p>
+								</UI.Text>
 							</div>
-						</header>
+						</UI.Group>
 
-						<div className="grid-(~ cols-1) sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
 							{game.levels.map((level) => (
-								<button
+								<UI.Paper
 									key={level.id}
+									component="button"
 									type="button"
-									className="ui-card group flex items-center gap-4 text-left transition hover:border-primary hover:bg-surface-subtle"
+									w="100%"
 									onClick={() => navigate(`../labirinto/${level.id}`)}
+									style={{
+										textAlign: "left",
+										cursor: "pointer",
+									}}
 								>
-									<div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-(xl on-primary) font-bold">
-										{level.id}
-									</div>
+									<UI.Group gap="md" wrap="nowrap">
+										<UI.Center
+											w={48}
+											h={48}
+											bg="violet.1"
+											style={{
+												borderRadius: "var(--mantine-radius-md)",
+												flexShrink: 0,
+											}}
+										>
+											<UI.Text size="xl" c="violet" fw={700}>
+												{level.id}
+											</UI.Text>
+										</UI.Center>
 
-									<div className="min-w-0">
-										<p className="text-xs font-semibold uppercase tracking-wide text-muted">
-											Fase {level.id}
-										</p>
+										<div style={{ minWidth: 0, flex: 1 }}>
+											<UI.Text size="xs" fw={600} c="dimmed" tt="uppercase">
+												Fase {level.id}
+											</UI.Text>
 
-										<h3 className="truncate text-lg font-bold">{level.name}</h3>
-									</div>
+											<UI.Text fw={700} truncate>
+												{level.name}
+											</UI.Text>
+										</div>
 
-									<Icon
-										icon="i-lucide-chevron-right"
-										size={5}
-										color="muted"
-										className="ml-auto shrink-0 transition-transform group-hover:translate-x-1 group-hover:text-primary"
-									/>
-								</button>
+										<Icon.ChevronRight
+											size={20}
+											color="var(--mantine-color-dimmed)"
+											style={{ flexShrink: 0 }}
+										/>
+									</UI.Group>
+								</UI.Paper>
 							))}
-						</div>
-					</section>
+						</UI.SimpleGrid>
+					</UI.Stack>
 				))}
-			</div>
-		</div>
+			</UI.Stack>
+		</UI.Stack>
 	);
 }

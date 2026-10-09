@@ -1,105 +1,86 @@
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { type SignInOutput, signInSchema } from "@/schemas";
 import { signInWithPassword } from "@/services";
 
 export default function SignInPage() {
 	const navigate = useNavigate();
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		formState: { errors, isSubmitting },
-	} = useForm<SignInOutput>({
-		resolver: valibotResolver(signInSchema),
+	const signInForm = form.useForm({
+		mode: "controlled",
+		initialValues: {
+			email: "",
+			password: "",
+		},
+		validate: {
+			email: (value) => {
+				const email = value.trim();
+				if (!email) return "Informe seu e-mail.";
+				if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+					return "Informe um endereço de e-mail válido (ex: nome@dominio.com).";
+				return null;
+			},
+			password: (value) =>
+				value.trim() ? null : "Informe sua senha.",
+		},
 	});
 
-	async function onSubmit({ email, password }: SignInOutput) {
+	async function onSubmit(values: typeof signInForm.values) {
+		setRootError(null);
+
 		try {
-			await signInWithPassword(email, password);
+			await signInWithPassword(
+				values.email.trim(),
+				values.password.trim(),
+			);
 			navigate("/escolas", { replace: true });
 		} catch {
-			setError("root", {
-				message: "Não foi possível entrar. Verifique seu e-mail e senha.",
-			});
+			setRootError(
+				"Não foi possível entrar. Verifique seu e-mail e senha.",
+			);
 		}
 	}
 
 	return (
-		<section className="ui-card">
+		<UI.Paper>
 			<title>CodiGO! | Login</title>
-			<header className="mb-8 text-center">
-				<h1 className="mt-4 text-(2xl heading) font-black tracking-tight">
+			<UI.Stack gap="lg">
+				<UI.Title order={1} ta="center">
 					Bom te ver!
-				</h1>
-			</header>
-
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="flex-(~ col) gap-5"
-			>
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>E-mail</span>
-
-					<input
-						type="email"
-						{...register("email")}
-						autoComplete="email"
-						placeholder="Digite seu e-mail"
-						aria-invalid={Boolean(errors.email)}
-						className="ui-field"
-					/>
-
-					{errors.email && (
-						<p role="alert" className="text-(sm danger) font-medium">
-							{errors.email.message}
-						</p>
-					)}
-				</label>
-
-				<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-					<span>Senha</span>
-
-					<input
-						type="password"
-						{...register("password")}
-						autoComplete="current-password"
-						placeholder="Digite sua senha"
-						aria-invalid={Boolean(errors.password)}
-						className="ui-field"
-					/>
-
-					{errors.password && (
-						<p role="alert" className="text-(sm danger) font-medium">
-							{errors.password.message}
-						</p>
-					)}
-				</label>
-
-				{errors.root && (
-					<p role="alert" className="ui-alert-danger">
-						{errors.root.message}
-					</p>
-				)}
-
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="ui-button-(~ primary) mt-1"
-				>
-					{isSubmitting ? "Entrando..." : "Entrar"}
-				</button>
-			</form>
-
-			<p className="mt-7 text-(center sm muted)">
-				Ainda não tem uma conta?{" "}
-				<Link to="/criar-conta" className="ui-link">
-					Criar conta
-				</Link>
-			</p>
-		</section>
+				</UI.Title>
+				<form onSubmit={signInForm.onSubmit(onSubmit)} noValidate>
+					<UI.Stack gap="md">
+						<UI.TextInput
+							label="E-mail"
+							type="email"
+							placeholder="Digite seu e-mail"
+							autoComplete="email"
+							{...signInForm.getInputProps("email")}
+						/>
+						<UI.PasswordInput
+							label="Senha"
+							placeholder="Digite sua senha"
+							autoComplete="current-password"
+							{...signInForm.getInputProps("password")}
+						/>
+						{rootError && <UI.Alert>{rootError}</UI.Alert>}
+						<UI.Button
+							type="submit"
+							loading={signInForm.submitting}
+							mt="xs"
+						>
+							{signInForm.submitting ? "Entrando..." : "Entrar"}
+						</UI.Button>
+					</UI.Stack>
+				</form>
+				<UI.Text size="sm" c="dimmed" ta="center">
+					Ainda não tem uma conta?{" "}
+					<UI.Anchor component={Link} to="/criar-conta" fw={700}>
+						Criar conta
+					</UI.Anchor>
+				</UI.Text>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

@@ -1,4 +1,4 @@
-import codiIcon from "@codi-go/ui/images/codi.png";
+import { UI } from "@codi-go/ui";
 import type { Toast } from "react-hot-toast";
 
 type CodiToastProps = {
@@ -8,34 +8,39 @@ type CodiToastProps = {
 
 export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 	return (
-		<div
-			className={`
-				pointer-events-auto w-[min(90vw,28rem)]
-				transition-all duration-300
-				${t.visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}
-			`}
+		<UI.Box
+			style={{
+				pointerEvents: "auto",
+				width: "min(90vw, 28rem)",
+				transform: t.visible ? "translateY(0)" : "translateY(0.5rem)",
+				opacity: t.visible ? 1 : 0,
+				transition: "transform 300ms, opacity 300ms",
+			}}
 		>
-			<div className="ui-card flex items-center gap-4 border-(2 danger/20) bg-bg p-4 shadow-lg">
-				<img
-					src={codiIcon}
-					alt=""
-					className="h-16 w-16 shrink-0 object-contain"
-				/>
+			<UI.Paper
+				bg="red.0"
+				style={{
+					border: "2px solid var(--mantine-color-red-2)",
+				}}
+			>
+				<UI.Group gap="md" wrap="nowrap">
+					<UI.Image src="/codi.png" alt="" h={64} w={64} fit="contain" />
 
-				<div className="flex-1">
-					<p className="text-(xl heading) font-bold">
-						{is_class_playing
-							? "Ops! Não deu certo."
-							: "Ops! A sala está fechada."}
-					</p>
+					<UI.Box style={{ flex: 1 }}>
+						<UI.Text size="xl" fw={700}>
+							{is_class_playing
+								? "Ops! Não deu certo."
+								: "Ops! A sala está fechada."}
+						</UI.Text>
 
-					<p className="mt-1 text-(base fg)">
-						{is_class_playing
-							? "Tente escolher outra imagem."
-							: "Tente de novo depois"}
-					</p>
-				</div>
-			</div>
-		</div>
+						<UI.Text mt={4}>
+							{is_class_playing
+								? "Tente escolher outra imagem."
+								: "Tente de novo depois"}
+						</UI.Text>
+					</UI.Box>
+				</UI.Group>
+			</UI.Paper>
+		</UI.Box>
 	);
 }

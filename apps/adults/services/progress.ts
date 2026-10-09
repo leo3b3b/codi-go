@@ -22,9 +22,6 @@ export async function getStudentProgress(studentId: string) {
 		.eq("student_id", studentId)
 		.order("register_time", { ascending: true });
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }

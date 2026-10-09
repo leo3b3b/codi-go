@@ -1,35 +1,42 @@
+import { UI } from "@codi-go/ui";
 import { Link } from "react-router";
-import { HorizontalSeparator } from "@/components";
 
 export default function CheckEmailPage() {
 	return (
-		<section className="ui-card">
+		<UI.Paper>
 			<title>CodiGO! | Confirme seu e-mail</title>
-			<header className="mb-8 text-center">
-				<h1 className="mb-4 text-(2xl heading) font-black tracking-tight">
-					Confirme seu e-mail
-				</h1>
 
-				<p className="text-muted">
-					Enviamos uma mensagem para confirmar sua conta.
-				</p>
-			</header>
-			<HorizontalSeparator />
-			<div className="flex-(~ col) gap-4 text-fg">
-				<p className="text-muted">
-					Se não encontrar a mensagem, verifique também a pasta de spam ou lixo
-					eletrônico.
-				</p>
+			<UI.Stack gap="lg">
+				<UI.Stack gap="xs" align="center">
+					<UI.Title order={1} ta="center">
+						Confirme seu e-mail
+					</UI.Title>
 
-				<p>Depois de confirmar seu e-mail, você poderá entrar na sua conta.</p>
-			</div>
+					<UI.Text c="dimmed" ta="center">
+						Enviamos uma mensagem para confirmar sua conta.
+					</UI.Text>
+				</UI.Stack>
 
-			<p className="mt-7 text-(center sm muted)">
-				Já confirmou seu e-mail?{" "}
-				<Link to="/login" className="ui-link">
-					Entrar
-				</Link>
-			</p>
-		</section>
+				<UI.Divider />
+
+				<UI.Stack gap="md">
+					<UI.Text c="dimmed">
+						Se não encontrar a mensagem, verifique também a pasta de spam ou
+						lixo eletrônico.
+					</UI.Text>
+
+					<UI.Text>
+						Depois de confirmar seu e-mail, você poderá entrar na sua conta.
+					</UI.Text>
+				</UI.Stack>
+
+				<UI.Text size="sm" c="dimmed" ta="center" mt="sm">
+					Já confirmou seu e-mail?{" "}
+					<UI.Anchor component={Link} to="/login" fw={700}>
+						Entrar
+					</UI.Anchor>
+				</UI.Text>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

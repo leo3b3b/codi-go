@@ -23,9 +23,7 @@ export async function isClassPlaying(class_id: string) {
 		.eq("is_playing", true)
 		.maybeSingle();
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 
 	if (!data) {
 		throw new Response("A turma não está em atividade.", { status: 403 });

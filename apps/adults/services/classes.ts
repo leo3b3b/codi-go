@@ -24,10 +24,7 @@ export async function getClassesForCurrentUser(school_id: string) {
 		.eq("teacher_id", user.id)
 		.order("name");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -38,10 +35,7 @@ export async function getClassesBySchool(school_id: string) {
 		.eq("school_id", school_id)
 		.order("name");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -60,9 +54,7 @@ export async function getClassById(classId: string) {
 		.eq("id", classId)
 		.single();
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 
 	const { teacher, ...classData } = data;
 	return { ...classData, teacher_username: teacher?.username ?? null };
@@ -80,9 +72,7 @@ export async function setClassPlaying({
 		.update({ is_playing })
 		.eq("id", class_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function updateClass({
@@ -106,9 +96,7 @@ export async function updateClass({
 	if (teacher_id !== null) dataToUpdate.teacher_id = teacher_id;
 	if (access_code !== null) dataToUpdate.access_code = access_code;
 
-	if (Object.keys(dataToUpdate).length === 0) {
-		return;
-	}
+	if (Object.keys(dataToUpdate).length === 0) return;
 
 	const { data: currentClass, error: currentClassError } = await supabase
 		.from("classes")
@@ -116,24 +104,19 @@ export async function updateClass({
 		.eq("id", class_id)
 		.single();
 
-	if (currentClassError) {
-		throw currentClassError;
-	}
+	if (currentClassError) throw currentClassError;
 
-	if (currentClass.is_playing) {
+	if (currentClass.is_playing)
 		throw new Error(
 			"Não é possível editar uma turma enquanto ela está em atividade.",
 		);
-	}
 
 	const { error } = await supabase
 		.from("classes")
 		.update(dataToUpdate)
 		.eq("id", class_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function createClass({
@@ -149,15 +132,11 @@ export async function createClass({
 		access_code: generateClassAccessCode(),
 	});
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function deleteClass(class_id: string) {
 	const { error } = await supabase.from("classes").delete().eq("id", class_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }

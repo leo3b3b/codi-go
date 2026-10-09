@@ -7,9 +7,6 @@ export async function getSchoolById(id: string) {
 		.eq("id", id)
 		.single();
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }

@@ -9,10 +9,7 @@ export async function listGames(): Promise<GameSummary[]> {
 		.select("key, name")
 		.order("name");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -23,9 +20,6 @@ export async function listLevels(): Promise<LevelSummary[]> {
 		.order("game_key")
 		.order("id");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }

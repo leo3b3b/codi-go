@@ -1,8 +1,6 @@
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, Icon, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon } from "@/components";
-import { type CreateClassOutput, createClassSchema } from "@/schemas";
 import { createClass } from "@/services";
 
 export function CreateClassForm({
@@ -16,88 +14,73 @@ export function CreateClassForm({
 	};
 }) {
 	const { revalidate } = useRevalidator();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		reset,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<CreateClassOutput>({
-		resolver: valibotResolver(createClassSchema),
+	const classForm = form.useForm({
+		mode: "uncontrolled",
+		initialValues: {
+			name: "",
+		},
+		validate: {
+			name: (value) =>
+				value.trim().length === 0 ? "O nome da turma é obrigatório." : null,
+		},
 	});
 
-	async function onSubmit({ name }: CreateClassOutput) {
+	async function onSubmit({ name }: typeof classForm.values) {
+		setIsSubmitting(true);
+		setRootError(null);
+
 		try {
 			await createClass({
-				name,
+				name: name.trim(),
 				school_id: school.id,
 			});
 
-			reset();
+			classForm.reset();
 			await revalidate();
 		} catch {
-			setError("root", {
-				message: "Não foi possível criar a turma.",
-			});
+			setRootError("Não foi possível criar a turma.");
+		} finally {
+			setIsSubmitting(false);
 		}
 	}
 
 	return (
-		<section className="ui-card">
-			<header>
-				<h1 className="text-(2xl heading) font-bold">
+		<UI.Paper>
+			<UI.Stack gap="lg">
+				<UI.Title order={1}>
 					Criar Turma em {school.trade_name || school.legal_name}
-				</h1>
-				<HorizontalSeparator />
-			</header>
+				</UI.Title>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className="
-					flex-(~ col) sm:flex-row items-center
-					gap-x-4 gap-y-2 py-3
-				"
-			>
-				<div className="flex-(~ row) relative items-center font-bold w-full">
-					<Icon
-						icon="i-lucide-school"
-						color="muted"
-						size={6}
-						className="absolute left-3 pointer-events-none"
-					/>
+				<UI.Divider />
 
-					<input
-						type="text"
-						{...register("name")}
-						placeholder="Digite o nome da turma"
-						aria-invalid={Boolean(errors.name)}
-						className="ui-field w-full h-14 pl-10"
-					/>
-				</div>
+				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
+					<UI.Group align="flex-start" gap="md" wrap="nowrap">
+						<UI.TextInput
+							key={classForm.key("name")}
+							flex={1}
+							size="lg"
+							leftSection={<Icon.School size={18} />}
+							placeholder="Digite o nome da turma"
+							{...classForm.getInputProps("name")}
+						/>
 
-				<button
-					type="submit"
-					disabled={isSubmitting || !watch("name")}
-					className="ui-button-(~ primary) h-14 mt-4 sm:(mt-0 w-40)"
-				>
-					{isSubmitting ? "Criando..." : "Criar Turma"}
-				</button>
-			</form>
+						<UI.Button
+							type="submit"
+							size="lg"
+							w={160}
+							loading={isSubmitting}
+							disabled={!classForm.getValues().name}
+						>
+							{isSubmitting ? "Criando..." : "Criar Turma"}
+						</UI.Button>
+					</UI.Group>
 
-			{errors.name && (
-				<p role="alert" className="text-(sm danger) font-medium">
-					{errors.name.message}
-				</p>
-			)}
-
-			{errors.root && (
-				<p role="alert" className="ui-alert-danger">
-					{errors.root.message}
-				</p>
-			)}
-		</section>
+					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
+				</form>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

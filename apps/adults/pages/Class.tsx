@@ -1,7 +1,7 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
+import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { Icon } from "@/components";
 import {
 	getClassById,
 	getStudentsByClassId,
@@ -44,55 +44,54 @@ function StudentRow({
 	const navigate = useNavigate();
 
 	return (
-		<div
-			className="
-				grid grid-cols-[1fr_auto]
-				gap-x-4 gap-y-2 py-3
-				border-b-(~ border)
-				lg:grid-cols-[1fr_0.5fr_2fr]
-				lg:items-center
-			"
-		>
-			<div className="font-semibold text-heading">{student.name ?? "—"}</div>
+		<UI.Grid align="center" py="md">
+			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
+				<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
+			</UI.Grid.Col>
 
-			<div className="h-14 flex items-center">
-				{showCredential ? (
-					<img
-						src={imageCodes[student.access_code as ImageCode].src}
-						aria-label={imageCodes[student.access_code as ImageCode].label}
-						className="h-14"
-					/>
-				) : (
-					<span className="text-sm text-muted font-mono tracking-widest">
-						••••••••
-					</span>
-				)}
-			</div>
+			<UI.Grid.Col span={{ base: 12, lg: 2 }}>
+				<UI.Group h={56}>
+					{showCredential ? (
+						<UI.Image
+							src={imageCodes[student.access_code as ImageCode].src}
+							alt={imageCodes[student.access_code as ImageCode].label}
+							h={56}
+							w="auto"
+							fit="contain"
+						/>
+					) : (
+						<UI.Text size="sm" ff="monospace" lts="0.25em">
+							••••••••
+						</UI.Text>
+					)}
+				</UI.Group>
+			</UI.Grid.Col>
 
-			<div className="flex gap-2 col-span-2 mt-2 lg:(col-span-1 mt-0)">
-				<button
-					type="button"
-					className="ui-button-(~ secondary) w-1/2"
-					onClick={() => setShowCredential(!showCredential)}
-				>
-					<Icon
-						icon={showCredential ? "i-lucide-eye-off" : "i-lucide-eye"}
-						color="fg"
-						size={5}
-					/>
-					{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
-				</button>
+			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+				<UI.Group grow>
+					<UI.Button
+						variant="light"
+						onClick={() => setShowCredential(!showCredential)}
+						leftSection={
+							showCredential ? (
+								<Icon.EyeOff size={18} />
+							) : (
+								<Icon.Eye size={18} />
+							)
+						}
+					>
+						{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
+					</UI.Button>
 
-				<button
-					type="button"
-					className="ui-button-(~ primary) w-1/2"
-					onClick={() => navigate(`/escola/${schoolId}/aluno/${student.id}`)}
-				>
-					<Icon icon="i-lucide-file-text" color="on-primary" size={5} />
-					Ver Registros
-				</button>
-			</div>
-		</div>
+					<UI.Button
+						onClick={() => navigate(`/escola/${schoolId}/aluno/${student.id}`)}
+						leftSection={<Icon.FileText size={18} />}
+					>
+						Ver Registros
+					</UI.Button>
+				</UI.Group>
+			</UI.Grid.Col>
+		</UI.Grid>
 	);
 }
 
@@ -122,91 +121,101 @@ export default function ClassPage() {
 	}
 
 	return (
-		<div className="w-full mx-auto flex-(~ col) gap-4">
+		<UI.Stack w="100%" mx="auto" gap="md">
 			<title>CodiGO! | Turma</title>
 
-			<header className="flex items-center justify-between gap-4">
+			<UI.Group justify="space-between" align="center" gap="md">
 				<div>
-					<h1 className="text-(2xl heading) font-bold">
+					<UI.Title order={1} size="h2">
 						{classData.name} | Código de Acesso: {classData.access_code}
-					</h1>
+					</UI.Title>
 
-					<p className="text-(sm muted)">
+					<UI.Text size="sm" c="dimmed">
 						{students.length} {students.length === 1 ? "aluno" : "alunos"}
-					</p>
+					</UI.Text>
 				</div>
 
-				<div className="flex items-center gap-2">
-					<button
-						type="button"
-						className={`w-auto ui-button ${
-							classData.is_playing ? "ui-button-primary" : "ui-button-secondary"
-						}`}
+				<UI.Group gap="sm">
+					<UI.Button
+						variant={classData.is_playing ? "filled" : "light"}
 						disabled={isUpdatingPlaying}
 						onClick={handleTogglePlaying}
+						leftSection={
+							classData.is_playing ? (
+								<Icon.CirclePause size={18} />
+							) : (
+								<Icon.CirclePlay size={18} />
+							)
+						}
 					>
-						<Icon
-							icon={
-								classData.is_playing
-									? "i-lucide-circle-pause"
-									: "i-lucide-circle-play"
-							}
-							color={classData.is_playing ? "on-primary" : "fg"}
-							size={5}
-						/>
 						{isUpdatingPlaying
 							? "Atualizando…"
 							: classData.is_playing
 								? "Em atividade"
 								: "Iniciar atividade"}
-					</button>
+					</UI.Button>
 
-					<button
-						type="button"
-						className="ui-button-(~ secondary) w-auto"
+					<UI.Button
+						variant="light"
 						onClick={() => navigate(`/escola/${classData.school_id}`)}
+						leftSection={<Icon.ArrowLeft size={18} />}
 					>
-						<Icon icon="i-lucide-arrow-left" size={5} color="fg" />
 						Voltar
-					</button>
-				</div>
-			</header>
+					</UI.Button>
+				</UI.Group>
+			</UI.Group>
 
-			<section className="ui-card">
-				<header>
-					<h2 className="text-(2xl heading) font-bold mb-4">Alunos</h2>
-				</header>
+			<UI.Paper p="lg">
+				<UI.Title order={2} size="h3" mb="md">
+					Alunos
+				</UI.Title>
 
-				<div
-					className="
-						hidden lg:grid
-						grid-cols-[1fr_0.5fr_2fr]
-						gap-x-4 gap-y-2 py-3
-						border-b-(~ border)
-						text-(sm muted) font-bold
-					"
+				<UI.Grid
+					visibleFrom="lg"
+					align="center"
+					py="md"
+					style={{
+						borderBottom: "1px solid var(--mantine-color-default-border)",
+					}}
 				>
-					<div>Nome</div>
-					<div>Credencial</div>
-					<div>Ações</div>
-				</div>
+					<UI.Grid.Col span={4}>
+						<UI.Text size="sm" c="dimmed" fw={700}>
+							Nome
+						</UI.Text>
+					</UI.Grid.Col>
 
-				<div className="flex-(~ col) gap-4 lg:gap-0">
+					<UI.Grid.Col span={2}>
+						<UI.Text size="sm" c="dimmed" fw={700}>
+							Credencial
+						</UI.Text>
+					</UI.Grid.Col>
+
+					<UI.Grid.Col span={6}>
+						<UI.Text size="sm" c="dimmed" fw={700}>
+							Ações
+						</UI.Text>
+					</UI.Grid.Col>
+				</UI.Grid>
+
+				<UI.Stack gap={0}>
 					{students.map((student) => (
-						<StudentRow
-							key={student.id}
-							student={student}
-							schoolId={classData.school_id}
-						/>
+						<>
+							<StudentRow
+								key={student.id}
+								student={student}
+								schoolId={classData.school_id}
+							/>
+							<UI.Divider />
+						</>
 					))}
-				</div>
+				</UI.Stack>
 
 				{students.length === 0 && (
-					<p className="text-(lg center) py-6">
+					<UI.Text size="lg" ta="center" py="xl">
 						Esta turma ainda não possui alunos.
-					</p>
+					</UI.Text>
 				)}
-			</section>
-		</div>
+			</UI.Paper>
+		</UI.Stack>
 	);
 }

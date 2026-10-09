@@ -9,10 +9,7 @@ export async function getStudentsByClassId(class_id: string) {
 		.eq("class_id", class_id)
 		.order("name");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -23,10 +20,7 @@ export async function getStudentById(student_id: string) {
 		.eq("id", student_id)
 		.single();
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -46,9 +40,7 @@ export async function createStudent({
 		access_code: generateImageCode(),
 	});
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function updateStudent({
@@ -65,9 +57,7 @@ export async function updateStudent({
 		.update({ name, access_code })
 		.eq("id", student_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function transferStudent({
@@ -83,9 +73,7 @@ export async function transferStudent({
 		.eq("id", student_id)
 		.single();
 
-	if (studentError) {
-		throw studentError;
-	}
+	if (studentError) throw studentError;
 
 	const { data: targetClass, error: classError } = await supabase
 		.from("classes")
@@ -93,22 +81,17 @@ export async function transferStudent({
 		.eq("id", class_id)
 		.single();
 
-	if (classError) {
-		throw classError;
-	}
+	if (classError) throw classError;
 
-	if (student.school_id !== targetClass.school_id) {
+	if (student.school_id !== targetClass.school_id)
 		throw new Error("Não é possível transferir o aluno para outra escola.");
-	}
 
 	const { error } = await supabase
 		.from("students")
 		.update({ class_id })
 		.eq("id", student_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function deleteStudent(student_id: string) {
@@ -117,7 +100,5 @@ export async function deleteStudent(student_id: string) {
 		.delete()
 		.eq("id", student_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }

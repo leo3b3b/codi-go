@@ -1,22 +1,22 @@
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, Icon, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { HorizontalSeparator, Icon, InviteCard } from "@/components";
-import { type ProfileOutput, profileSchema } from "@/schemas";
+import { InviteCard } from "@/components";
 import {
+	deleteUserAccount,
 	getInvitesForCurrentUser,
 	getProfileForCurrentUser,
 	getSchoolsForCurrentUser,
 	signOut,
 	updateProfileForCurrentUser,
 } from "@/services";
-import { deleteUserAccount } from "@/services/auth";
+
+const nameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
 
 export async function clientLoader() {
 	const profile = await getProfileForCurrentUser();
 	const schools = await getSchoolsForCurrentUser();
 	const invites = await getInvitesForCurrentUser();
-
 	return { profile, schools, invites };
 }
 
@@ -24,36 +24,47 @@ export default function ProfilePage() {
 	const { profile, schools, invites } = useLoaderData<typeof clientLoader>();
 	const navigate = useNavigate();
 	const { revalidate } = useRevalidator();
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		reset,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<ProfileOutput>({
-		resolver: valibotResolver(profileSchema),
+	const profileForm = form.useForm({
+		mode: "controlled",
+		initialValues: { name: "", username: "" },
+		validate: {
+			name: (value) =>
+				!value
+					? null
+					: !nameRegex.test(value.trim())
+						? "O nome deve conter apenas letras e espaços."
+						: null,
+			username: (value) => {
+				if (!value) return null;
+				const username = value.trim();
+
+				if (username.length < 3)
+					return "O nome de usuário deve ter pelo menos 3 caracteres.";
+				if (username.length > 30)
+					return "O nome de usuário pode ter no máximo 30 caracteres.";
+				if (!/^[a-z0-9._-]+$/.test(username))
+					return "Use apenas letras minúsculas, números, pontos, traços ou sublinhados.";
+
+				return null;
+			},
+		},
 	});
 
-	const currentName = watch("name");
-	const currentUsername = watch("username");
-	const isFormEmpty = !currentName && !currentUsername;
-
-	async function onSubmit({ name, username }: ProfileOutput) {
+	async function onSubmit(values: typeof profileForm.values) {
+		setRootError(null);
 		try {
 			await updateProfileForCurrentUser({
-				name: name || null,
-				username: username || null,
+				name: values.name.trim() || null,
+				username: values.username.trim() || null,
 			});
-
-			revalidate();
-			reset();
+			profileForm.reset();
+			await revalidate();
 		} catch {
-			setError("root", {
-				message:
-					"Não foi possível salvar seu perfil. Tente novamente mais tarde.",
-			});
+			setRootError(
+				"Não foi possível salvar seu perfil. Tente novamente mais tarde.",
+			);
 		}
 	}
 
@@ -63,160 +74,143 @@ export default function ProfilePage() {
 	}
 
 	async function handleDeleteAccount() {
-		const confirmed = window.confirm(
-			"Tem certeza de que quer deletar sua conta? Essa ação é irreversível!",
-		);
-		if (!confirmed) return;
+		if (
+			!window.confirm(
+				"Tem certeza de que quer deletar sua conta? Essa ação é irreversível!",
+			)
+		)
+			return;
 		await deleteUserAccount();
 		navigate("/login");
 	}
 
 	return (
-		<div className="w-full max-w-2xl h-full mx-auto flex-(~ col) items-center gap-4">
+		<UI.Container size="sm">
 			<title>CodiGO! | Meu Perfil</title>
-
-			<section className="ui-card w-full flex-(~ row) gap-6 items-center">
-				<div className="rounded-full bg-primary flex items-center justify-center size-16">
-					<Icon icon="i-lucide-user" color="on-primary" size={8} />
-				</div>
-				<div>
-					<h1 className="text-(2xl heading) sm:text-3xl font-bold break-words">
-						{profile.name}
-					</h1>
-					<p className="text-(lg muted) italic">@{profile.username}</p>
-				</div>
-			</section>
-
-			<section className="ui-card w-full">
-				<h2 className="text-(xl heading) font-bold">Minhas Escolas</h2>
-				<HorizontalSeparator />
-				<div className="size-full flex-(~ col) gap-2">
-					{schools.map(({ school_id, legal_name, trade_name, role }) => (
-						<InviteCard
-							key={school_id}
-							school_id={school_id}
-							profile_id={profile.id}
-							legal_name={legal_name}
-							trade_name={trade_name}
-							user_role={role}
-							invite_status="active"
-						/>
-					))}
-				</div>
-				{schools.length === 0 && (
-					<p className="text-(sm muted center)">
-						Você não participa de nenhuma escola!
-					</p>
-				)}
-				<h2 className="text-(xl heading) font-bold mt-6">Convites</h2>
-				<HorizontalSeparator />
-				<div className="size-full flex-(~ col) gap-2">
-					{invites.map(({ school_id, legal_name, trade_name, role }) => (
-						<InviteCard
-							key={school_id}
-							school_id={school_id}
-							profile_id={profile.id}
-							legal_name={legal_name}
-							trade_name={trade_name}
-							user_role={role}
-							invite_status="pending"
-						/>
-					))}
-				</div>
-				{invites.length === 0 && (
-					<p className="text-(sm muted center)">Você não tem convites!</p>
-				)}
-			</section>
-
-			<section className="ui-card w-full">
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className="flex-(~ col) gap-5"
-				>
-					<header className="flex-(~ col) gap-1 mb-2">
-						<h2 className="text-(xl heading) font-bold">Editar Perfil</h2>
-						<p className="text-(sm muted)">
-							Deixe em branco os campos que não deseja alterar.
-						</p>
-					</header>
-
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Novo nome</span>
-						<input
-							type="text"
-							{...register("name")}
-							autoComplete="name"
-							placeholder={profile.name || undefined}
-							aria-invalid={Boolean(errors.name)}
-							className="ui-field"
-						/>
-						{errors.name && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.name.message}
-							</p>
-						)}
-					</label>
-
-					<label className="flex-(~ col) gap-2 text-(sm fg) font-bold">
-						<span>Novo nome de usuário</span>
-						<div className="relative flex items-center">
-							<Icon
-								icon="i-lucide-at-sign"
-								color="muted"
-								size={6}
-								className="absolute left-3 pointer-events-none"
-							/>
-							<input
-								type="text"
-								{...register("username")}
-								autoComplete="username"
-								placeholder={profile.username || undefined}
-								aria-invalid={Boolean(errors.username)}
-								className="ui-field w-full pl-10"
-							/>
+			<UI.Stack gap="md">
+				<UI.Paper>
+					<UI.Group gap="lg" wrap="nowrap">
+						<UI.ThemeIcon size={64} radius="xl">
+							<Icon.User size={32} />
+						</UI.ThemeIcon>
+						<div>
+							<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
+								{profile.name}
+							</UI.Title>
+							<UI.Text size="lg" c="dimmed" fs="italic">
+								@{profile.username}
+							</UI.Text>
 						</div>
-						{errors.username && (
-							<p role="alert" className="text-(sm danger) font-medium">
-								{errors.username.message}
-							</p>
-						)}
-					</label>
+					</UI.Group>
+				</UI.Paper>
 
-					{errors.root && (
-						<p role="alert" className="ui-alert-danger">
-							{errors.root.message}
-						</p>
+				<UI.Paper>
+					<UI.Title order={2}>Minhas Escolas</UI.Title>
+					<UI.Divider />
+					<UI.Stack gap="sm">
+						{schools.map(({ school_id, legal_name, trade_name, role }) => (
+							<InviteCard
+								key={school_id}
+								school_id={school_id}
+								profile_id={profile.id}
+								legal_name={legal_name}
+								trade_name={trade_name}
+								user_role={role}
+								invite_status="active"
+							/>
+						))}
+					</UI.Stack>
+					{!schools.length && (
+						<UI.Text size="sm" c="dimmed" ta="center">
+							Você não participa de nenhuma escola!
+						</UI.Text>
 					)}
 
-					<button
-						type="submit"
-						disabled={isSubmitting || isFormEmpty}
-						className="ui-button-(~ primary) mt-2"
-					>
-						<Icon icon="i-lucide-save" color="on-primary" size={5} />
-						{isSubmitting ? "Salvando..." : "Salvar Alterações"}
-					</button>
-				</form>
-			</section>
-			<section className="ui-card w-full flex-(~ row) gap-4">
-				<button
-					type="button"
-					className="ui-button-(~ danger)"
-					onClick={handleSignOut}
-				>
-					<Icon icon="i-lucide-log-out" color="on-danger" size={5} />
-					Sair da Conta
-				</button>
-				<button
-					type="button"
-					className="ui-button-(~ danger)"
-					onClick={handleDeleteAccount}
-				>
-					<Icon icon="i-lucide-trash-2" color="on-danger" size={5} />
-					Deletar Conta
-				</button>
-			</section>
-		</div>
+					<UI.Title order={2} mt="xl">
+						Convites
+					</UI.Title>
+					<UI.Divider />
+					<UI.Stack gap="sm">
+						{invites.map(({ school_id, legal_name, trade_name, role }) => (
+							<InviteCard
+								key={school_id}
+								school_id={school_id}
+								profile_id={profile.id}
+								legal_name={legal_name}
+								trade_name={trade_name}
+								user_role={role}
+								invite_status="pending"
+							/>
+						))}
+					</UI.Stack>
+					{!invites.length && (
+						<UI.Text size="sm" c="dimmed" ta="center">
+							Você não tem convites!
+						</UI.Text>
+					)}
+				</UI.Paper>
+
+				<UI.Paper>
+					<form onSubmit={profileForm.onSubmit(onSubmit)} noValidate>
+						<UI.Stack gap="md">
+							<div>
+								<UI.Title order={2} size="h3">
+									Editar Perfil
+								</UI.Title>
+								<UI.Text size="sm" c="dimmed">
+									Deixe em branco os campos que não deseja alterar.
+								</UI.Text>
+							</div>
+
+							<UI.TextInput
+								label="Novo nome"
+								autoComplete="name"
+								placeholder={profile.name || undefined}
+								{...profileForm.getInputProps("name")}
+							/>
+							<UI.TextInput
+								label="Novo nome de usuário"
+								autoComplete="username"
+								placeholder={profile.username || undefined}
+								leftSection={<Icon.AtSign size={18} />}
+								{...profileForm.getInputProps("username")}
+							/>
+
+							{rootError && <UI.Alert>{rootError}</UI.Alert>}
+
+							<UI.Button
+								type="submit"
+								disabled={!profileForm.isDirty() || profileForm.submitting}
+								mt="xs"
+								leftSection={<Icon.Save size={18} />}
+							>
+								{profileForm.submitting ? "Salvando..." : "Salvar Alterações"}
+							</UI.Button>
+						</UI.Stack>
+					</form>
+				</UI.Paper>
+
+				<UI.Paper>
+					<UI.Group grow>
+						<UI.Button
+							type="button"
+							color="red"
+							onClick={handleSignOut}
+							leftSection={<Icon.LogOut size={18} />}
+						>
+							Sair da Conta
+						</UI.Button>
+						<UI.Button
+							type="button"
+							color="red"
+							onClick={handleDeleteAccount}
+							leftSection={<Icon.Trash2 size={18} />}
+						>
+							Deletar Conta
+						</UI.Button>
+					</UI.Group>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
 	);
 }

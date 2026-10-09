@@ -1,5 +1,5 @@
+import { Icon, UI } from "@codi-go/ui";
 import { useRevalidator } from "react-router";
-import { Icon } from "@/components";
 import { deleteMembership } from "@/services";
 import { acceptInvite } from "@/services/memberships";
 
@@ -23,52 +23,59 @@ export function InviteCard({
 	const { revalidate } = useRevalidator();
 
 	return (
-		<article className="bg-surface-subtle px-3 py-2 rounded-lg md:(px-5 py-4)">
-			<header className="mb-2 flex-(~ row) items-center justify-between">
-				<h3 className="text-(lg heading) font-bold">{trade_name}</h3>
-				<span className="text-primary">
+		<UI.Paper component="article" p={{ base: "sm", md: "md" }} bg="gray.1">
+			<UI.Group justify="space-between" align="center" mb="xs">
+				<UI.Title order={3} size="h4">
+					{trade_name}
+				</UI.Title>
+
+				<UI.Badge variant="light" color="violet">
 					{user_role === "admin" ? "Administrador" : "Professor"}
-				</span>
-			</header>
-			<p className="text-(sm muted) mb-4">{legal_name}</p>
+				</UI.Badge>
+			</UI.Group>
+
+			<UI.Text size="sm" c="dimmed" mb="md">
+				{legal_name}
+			</UI.Text>
+
 			{invite_status === "active" ? (
-				<button
+				<UI.Button
 					type="button"
-					className="ui-button-(~ danger)"
+					color="red"
 					onClick={() => {
 						deleteMembership({ profile_id, school_id });
 						revalidate();
 					}}
+					leftSection={<Icon.LogOut size={18} />}
 				>
-					<Icon icon="i-lucide-log-out" color="on-danger" size={5} />
 					Sair da escola
-				</button>
+				</UI.Button>
 			) : (
-				<div className="flex-(~ row) gap-2">
-					<button
+				<UI.Group>
+					<UI.Button
 						type="button"
-						className="ui-button-(~ primary)"
 						onClick={() => {
 							acceptInvite({ profile_id, school_id });
 							revalidate();
 						}}
+						leftSection={<Icon.Check size={18} />}
 					>
-						<Icon icon="i-lucide-check" color="on-primary" size={5} />
 						Aceitar
-					</button>
-					<button
+					</UI.Button>
+
+					<UI.Button
 						type="button"
-						className="ui-button-(~ danger)"
+						color="red"
 						onClick={() => {
 							deleteMembership({ profile_id, school_id });
 							revalidate();
 						}}
+						leftSection={<Icon.X size={18} />}
 					>
-						<Icon icon="i-lucide-x" color="on-danger" size={5} />
 						Recusar
-					</button>
-				</div>
+					</UI.Button>
+				</UI.Group>
 			)}
-		</article>
+		</UI.Paper>
 	);
 }

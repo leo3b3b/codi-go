@@ -1,4 +1,10 @@
-export { getUser, signInWithPassword, signOut, signUp } from "./auth";
+export {
+	deleteUserAccount,
+	getUser,
+	signInWithPassword,
+	signOut,
+	signUp,
+} from "./auth";
 export {
 	createClass,
 	deleteClass,

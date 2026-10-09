@@ -37,7 +37,11 @@ export function Codi({
 			src={`/codi/${direction}-${frame + 1}.png`}
 			alt="Codi"
 			draggable={false}
-			className="size-full object-contain"
+			style={{
+				width: "100%",
+				height: "100%",
+				objectFit: "contain",
+			}}
 		/>
 	);
 }

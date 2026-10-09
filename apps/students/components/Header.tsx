@@ -1,6 +1,5 @@
-import logo from "@codi-go/ui/images/logo.png";
+import { Icon, UI } from "@codi-go/ui";
 import { useNavigate, useParams } from "react-router";
-import { Icon } from "@/components";
 import { getStudentSession, signOutStudent } from "@/services";
 
 export function Header() {
@@ -14,21 +13,35 @@ export function Header() {
 	}
 
 	return (
-		<header className="sticky top-0 z-40 border-b-(~ border) bg-surface">
-			<div className="mx-auto flex h-16 max-w-7xl items-center px-4 py-3 sm:(px-6 py-4) gap-4">
-				<img src={logo} alt="Logo do CodiGO!" className="h-14" />
-				<span className="text-(xl heading) font-semibold truncate">
-					{student?.name ?? "Aluno"}
-				</span>
-				<button
-					type="button"
-					className="ui-button-(~ danger) p-2 size-10 rounded-full sm:(rounded-xl w-auto) ml-auto"
-					onClick={handleLogOut}
-				>
-					<Icon icon="i-lucide-log-out" color="on-danger" size={5} />
-					<span className="hidden sm:block">Sair</span>
-				</button>
-			</div>
-		</header>
+		<UI.Paper
+			component="header"
+			pos="sticky"
+			top={0}
+			withBorder
+			radius="none"
+			style={{ zIndex: 40 }}
+		>
+			<UI.Container size="xl">
+				<UI.Group h={40} py="sm" gap="md" wrap="nowrap">
+					<UI.Image src="/logo.png" alt="Logo do CodiGO!" h={56} w="auto" />
+
+					<UI.Text size="xl" fw={600} truncate>
+						{student?.name ?? "Aluno"}
+					</UI.Text>
+
+					<UI.Button
+						type="button"
+						color="red"
+						size="lg"
+						w={{ base: 40, sm: "auto" }}
+						ml="auto"
+						onClick={handleLogOut}
+						leftSection={<Icon.LogOut size={20} />}
+					>
+						<UI.Text visibleFrom="sm">Sair</UI.Text>
+					</UI.Button>
+				</UI.Group>
+			</UI.Container>
+		</UI.Paper>
 	);
 }

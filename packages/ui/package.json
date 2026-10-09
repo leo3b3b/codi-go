@@ -4,18 +4,19 @@
 	"version": "1.0.0",
 	"type": "module",
 	"exports": {
-		"./preset": "./preset.ts",
-		"./css": {
-			"types": "./css.d.ts",
-			"default": "./styles.css"
-		},
-		"./components": "./components/index.ts",
-		"./images/*": "./images/*"
+		".": "./index.ts",
+		"./styles.css": "./styles.css",
+		"./postcss.config.cjs": "./postcss.config.cjs"
+	},
+	"dependencies": {
+		"@mantine/core": "^9.7.1",
+		"@mantine/form": "^9.7.1",
+		"@mantine/hooks": "^9.7.1",
+		"lucide-react": "^1.52.0"
 	},
 	"devDependencies": {
-		"@iconify-json/lucide": "^1.2.133"
-	},
-	"peerDependencies": {
-		"unocss": "^66.10.2"
+		"postcss": "^8.5.29",
+		"postcss-preset-mantine": "^1.18.0",
+		"postcss-simple-vars": "^7.0.1"
 	}
 }

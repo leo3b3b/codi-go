@@ -1,3 +1,4 @@
+import { UI } from "@codi-go/ui";
 import { NavLink } from "react-router";
 
 type SchoolCardProps = {
@@ -15,16 +16,21 @@ export function SchoolCard({
 }: SchoolCardProps) {
 	return (
 		<NavLink to={`/escola/${schoolId}`}>
-			<article className="ui-card size-full">
-				<header className="w-full flex items-center justify-between mb-4">
-					<h2 className="text-(xl heading) font-semibold">{tradeName}</h2>
-					<span className="bg-primary-soft text-(xs on-primary) uppercase font-semibold px-2 py-2 rounded-lg tracking-wider">
+			<UI.Paper component="article" h="100%">
+				<UI.Group justify="space-between" mb="md">
+					<UI.Title order={2} size="h3">
+						{tradeName}
+					</UI.Title>
+
+					<UI.Badge variant="light" color="violet">
 						{userRole === "admin" ? "Administrador" : "Professor"}
-					</span>
-				</header>
-				<div className="w-full h-px bg-border my-4" />
-				<p className="text-muted">{legalName}</p>
-			</article>
+					</UI.Badge>
+				</UI.Group>
+
+				<UI.Divider />
+
+				<UI.Text c="dimmed">{legalName}</UI.Text>
+			</UI.Paper>
 		</NavLink>
 	);
 }
