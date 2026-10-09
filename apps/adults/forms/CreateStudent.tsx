@@ -1,26 +1,10 @@
-import { Icon, UI } from "@codi-go/ui";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, Icon, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { useRevalidator } from "react-router";
-import * as v from "valibot";
 import { createStudent } from "@/services";
 
 const studentNameRegex =
 	/^\p{L}+(?: +\p{L}+)*(?:\s*,\s*\p{L}+(?: +\p{L}+)*)*$/u;
-
-const createStudentSchema = v.object({
-	names: v.pipe(
-		v.string("Os nomes dos alunos devem ser um texto."),
-		v.trim(),
-		v.nonEmpty("O nome do aluno é obrigatório."),
-		v.regex(
-			studentNameRegex,
-			"Os nomes devem conter apenas letras e espaços, separados por vírgulas.",
-		),
-	),
-});
-
-type CreateStudentOutput = v.InferOutput<typeof createStudentSchema>;
 
 export function CreateStudentForm({
 	classData,
@@ -32,19 +16,28 @@ export function CreateStudentForm({
 	};
 }) {
 	const { revalidate } = useRevalidator();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		reset,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm<CreateStudentOutput>({
-		resolver: valibotResolver(createStudentSchema),
+	const studentForm = form.useForm({
+		mode: "uncontrolled",
+		initialValues: {
+			names: "",
+		},
+		validate: {
+			names: (value) => {
+				if (!value.trim()) return "O nome do aluno é obrigatório.";
+				if (!studentNameRegex.test(value.trim()))
+					return "Os nomes devem conter apenas letras e espaços, separados por vírgulas.";
+				return null;
+			},
+		},
 	});
 
-	async function onSubmit({ names }: CreateStudentOutput) {
+	async function onSubmit({ names }: typeof studentForm.values) {
+		setIsSubmitting(true);
+		setRootError(null);
+
 		try {
 			const studentNames = names.split(",").map((name) => name.trim());
 
@@ -56,17 +49,16 @@ export function CreateStudentForm({
 				});
 			}
 
-			reset();
+			studentForm.reset();
 			await revalidate();
 		} catch {
-			setError("root", {
-				message: "Não foi possível criar o aluno.",
-			});
+			setRootError("Não foi possível criar o aluno.");
+		} finally {
+			setIsSubmitting(false);
 		}
 	}
 
-	const namesValue = watch("names") ?? "";
-
+	const namesValue = studentForm.getValues().names;
 	const studentCount = namesValue
 		.split(",")
 		.map((name) => name.trim())
@@ -76,18 +68,17 @@ export function CreateStudentForm({
 		<UI.Paper>
 			<UI.Stack gap="lg">
 				<UI.Title order={2}>Criar Alunos em {classData.name}</UI.Title>
-
 				<UI.Divider />
 
-				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
 					<UI.Group align="flex-start" gap="md" wrap="nowrap">
 						<UI.TextInput
+							key={studentForm.key("names")}
 							flex={1}
 							size="lg"
 							leftSection={<Icon.Baby size={18} />}
 							placeholder="Digite um ou mais nomes, separados por vírgula"
-							{...register("names")}
-							error={errors.names?.message}
+							{...studentForm.getInputProps("names")}
 						/>
 
 						<UI.Button
@@ -98,13 +89,11 @@ export function CreateStudentForm({
 							loading={isSubmitting}
 							disabled={!namesValue}
 						>
-							{isSubmitting
-								? "Criando..."
-								: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
+							{isSubmitting ? "Criando..." : `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
 						</UI.Button>
 					</UI.Group>
 
-					{errors.root && <UI.Alert mt="md">{errors.root.message}</UI.Alert>}
+					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
 				</form>
 			</UI.Stack>
 		</UI.Paper>
