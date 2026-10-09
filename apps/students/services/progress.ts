@@ -33,7 +33,5 @@ export async function registerMazeProgress({
 		},
 	});
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }

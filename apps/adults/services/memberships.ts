@@ -21,10 +21,7 @@ async function getMembershipsForCurrentUser(status: "active" | "pending") {
 		.order("schools(legal_name)")
 		.order("schools(trade_name)");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -63,9 +60,7 @@ export async function acceptInvite({
 		.eq("profile_id", profile_id)
 		.eq("school_id", school_id);
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function inviteUserToSchool({
@@ -85,9 +80,7 @@ export async function inviteUserToSchool({
 		role,
 	});
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 }
 
 export async function adminGetMembershipsBySchool(schoolId: string) {
@@ -107,9 +100,7 @@ export async function adminGetMembershipsBySchool(schoolId: string) {
 		.order("profiles(name)")
 		.order("profiles(username)");
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 
 	return data.map(({ profiles, ...membership }) => ({
 		...profiles,

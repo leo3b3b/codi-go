@@ -1,10 +1,10 @@
 {
-    "recommendations": [
-        "redwan-hossain.auto-rename-tag-clone",
-        "biomejs.biome",
-        "vunguyentuan.vscode-css-variables",
-        "fill-labs.dependi",
-        "kisstkondoros.vscode-gutter-preview",
-        "vunguyentuan.vscode-postcss"
-    ]
+	"recommendations": [
+		"redwan-hossain.auto-rename-tag-clone",
+		"biomejs.biome",
+		"vunguyentuan.vscode-css-variables",
+		"fill-labs.dependi",
+		"kisstkondoros.vscode-gutter-preview",
+		"vunguyentuan.vscode-postcss"
+	]
 }

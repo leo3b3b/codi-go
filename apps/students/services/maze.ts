@@ -66,10 +66,7 @@ export async function listMazeLevels(): Promise<MazeLevelSummary[]> {
 		.eq("game_key", "maze")
 		.order("id");
 
-	if (error) {
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -81,9 +78,7 @@ export async function getMazeLevel(levelId: number): Promise<MazeLevel> {
 		.eq("game_key", "maze")
 		.single();
 
-	if (error) {
-		throw error;
-	}
+	if (error) throw error;
 
 	return parseMazeLevel(data);
 }
