@@ -12,16 +12,13 @@
 	"dependencies": {
 		"@codi-go/supabase": "*",
 		"@codi-go/ui": "*",
-		"@hookform/resolvers": "^5.9.1",
 		"@react-router/node": "^8.4.0",
 		"isbot": "^5",
 		"react": "^19.3.0",
 		"react-dom": "^19.3.0",
-		"react-hook-form": "^7.88.0",
 		"react-hot-toast": "^2.6.0",
 		"react-router": "^8.3.1",
-		"recharts": "^3.7.0",
-		"valibot": "^1.5.0"
+		"recharts": "^3.7.0"
 	},
 	"devDependencies": {
 		"@react-router/dev": "^8.4.0",

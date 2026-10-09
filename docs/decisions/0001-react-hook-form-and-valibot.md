@@ -1,6 +1,6 @@
 # 0001: React Hook Form e Valibot
 
-**Status:** Aceito
+**Status:** Revertido
 
 ## Contexto
 
