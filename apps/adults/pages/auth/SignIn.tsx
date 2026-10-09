@@ -1,85 +1,79 @@
-import { UI } from "@codi-go/ui";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { useForm } from "react-hook-form";
+import { form, UI } from "@codi-go/ui";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import * as v from "valibot";
 import { signInWithPassword } from "@/services";
-
-const signInSchema = v.object({
-	email: v.pipe(
-		v.string("O e-mail deve ser um texto."),
-		v.trim(),
-		v.nonEmpty("Informe seu e-mail."),
-		v.email("Informe um endereço de e-mail válido (ex: nome@dominio.com)."),
-	),
-	password: v.pipe(
-		v.string("A senha deve ser um texto."),
-		v.trim(),
-		v.nonEmpty("Informe sua senha."),
-	),
-});
-
-type SignInOutput = v.InferOutput<typeof signInSchema>;
 
 export default function SignInPage() {
 	const navigate = useNavigate();
+	const [rootError, setRootError] = useState<string | null>(null);
 
-	const {
-		register,
-		handleSubmit,
-		setError,
-		formState: { errors, isSubmitting },
-	} = useForm<SignInOutput>({
-		resolver: valibotResolver(signInSchema),
+	const signInForm = form.useForm({
+		mode: "controlled",
+		initialValues: {
+			email: "",
+			password: "",
+		},
+		validate: {
+			email: (value) => {
+				const email = value.trim();
+				if (!email) return "Informe seu e-mail.";
+				if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+					return "Informe um endereço de e-mail válido (ex: nome@dominio.com).";
+				return null;
+			},
+			password: (value) =>
+				value.trim() ? null : "Informe sua senha.",
+		},
 	});
 
-	async function onSubmit({ email, password }: SignInOutput) {
+	async function onSubmit(values: typeof signInForm.values) {
+		setRootError(null);
+
 		try {
-			await signInWithPassword(email, password);
+			await signInWithPassword(
+				values.email.trim(),
+				values.password.trim(),
+			);
 			navigate("/escolas", { replace: true });
 		} catch {
-			setError("root", {
-				message: "Não foi possível entrar. Verifique seu e-mail e senha.",
-			});
+			setRootError(
+				"Não foi possível entrar. Verifique seu e-mail e senha.",
+			);
 		}
 	}
 
 	return (
 		<UI.Paper>
 			<title>CodiGO! | Login</title>
-
 			<UI.Stack gap="lg">
 				<UI.Title order={1} ta="center">
 					Bom te ver!
 				</UI.Title>
-
-				<form onSubmit={handleSubmit(onSubmit)} noValidate>
+				<form onSubmit={signInForm.onSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="md">
 						<UI.TextInput
 							label="E-mail"
 							type="email"
 							placeholder="Digite seu e-mail"
 							autoComplete="email"
-							{...register("email")}
-							error={errors.email?.message}
+							{...signInForm.getInputProps("email")}
 						/>
-
 						<UI.PasswordInput
 							label="Senha"
 							placeholder="Digite sua senha"
 							autoComplete="current-password"
-							{...register("password")}
-							error={errors.password?.message}
+							{...signInForm.getInputProps("password")}
 						/>
-
-						{errors.root && <UI.Alert>{errors.root.message}</UI.Alert>}
-
-						<UI.Button type="submit" loading={isSubmitting} mt="xs">
-							{isSubmitting ? "Entrando..." : "Entrar"}
+						{rootError && <UI.Alert>{rootError}</UI.Alert>}
+						<UI.Button
+							type="submit"
+							loading={signInForm.submitting}
+							mt="xs"
+						>
+							{signInForm.submitting ? "Entrando..." : "Entrar"}
 						</UI.Button>
 					</UI.Stack>
 				</form>
-
 				<UI.Text size="sm" c="dimmed" ta="center">
 					Ainda não tem uma conta?{" "}
 					<UI.Anchor component={Link} to="/criar-conta" fw={700}>
