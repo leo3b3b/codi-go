@@ -9,9 +9,6 @@ import {
 	setClassPlaying,
 } from "@/services";
 
-type LoaderData = Awaited<ReturnType<typeof clientLoader>>;
-export type Student = LoaderData["students"][number];
-
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.schoolId || !params.classId)
 		throw new Response("Turma não encontrada", { status: 404 });

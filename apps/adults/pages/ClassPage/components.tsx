@@ -1,8 +1,10 @@
 import { Icon, UI } from "@codi-go/ui";
-import type { Student } from "../Class";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { getImageCode } from "./utils";
+import type { getStudentsByClassId } from "@/services";
+
+type Student = Awaited<ReturnType<typeof getStudentsByClassId>>[number];
 
 type CopyDropdownProps = {
 	onCopyCode: () => Promise<boolean>;
