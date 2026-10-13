@@ -1,4 +1,3 @@
 export { InviteCard } from "./InviteCard";
-export { SchoolCard } from "./SchoolCard";
 export { SchoolHeader } from "./SchoolHeader";
 export { Select } from "./Select";
