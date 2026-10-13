@@ -9,6 +9,10 @@ type CopyDropdownProps = {
 export function CopyDropdown({ onCopyCode, onCopyLink }: CopyDropdownProps) {
 	const [copied, setCopied] = useState(false);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const actions = {
+		code: onCopyCode,
+		link: onCopyLink
+	};
 
 	useEffect(() => {
 		return () => {
@@ -23,13 +27,8 @@ export function CopyDropdown({ onCopyCode, onCopyLink }: CopyDropdownProps) {
 	const handleOptionSubmit = async (value: string) => {
 		combobox.closeDropdown();
 
-		const success =
-			value === "code"
-				? await onCopyCode()
-				: value === "link"
-					? await onCopyLink()
-					: false;
-
+		const action = actions[value];
+		const success = action ? await action() : false;
 		if (!success) return;
 
 		setCopied(true);
