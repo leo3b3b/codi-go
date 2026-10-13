@@ -19,6 +19,7 @@ export {
 	adminGetMembershipsBySchool,
 	deleteMembership,
 	getInvitesForCurrentUser,
+	getSchoolById,
 	getSchoolsForCurrentUser,
 	inviteUserToSchool,
 	updateMembershipRole,
@@ -29,7 +30,6 @@ export {
 	updateProfileForCurrentUser,
 } from "./profile";
 export { getStudentProgress } from "./progress";
-export { getSchoolById } from "./schools";
 export {
 	createStudent,
 	deleteStudent,
