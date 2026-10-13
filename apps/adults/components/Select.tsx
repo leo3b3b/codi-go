@@ -1,5 +1,4 @@
 import { Icon, UI } from "@codi-go/ui";
-import type { ButtonProps } from "@mantine/core";
 
 interface Option {
 	value: string;
@@ -7,7 +6,7 @@ interface Option {
 }
 
 type SelectProps = Omit<
-	ButtonProps,
+	UI.ButtonProps,
 	"children" | "type" | "rightSection" | "value" | "onChange" | "aria-label"
 > & {
 	"aria-label": string;
