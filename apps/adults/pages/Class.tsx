@@ -107,7 +107,9 @@ function StudentRow({
 						</UI.Button>
 
 						<UI.Button
-							onClick={() => navigate(`/escola/${schoolId}/aluno/${student.id}`)}
+							onClick={() =>
+								navigate(`/escola/${schoolId}/aluno/${student.id}`)
+							}
 							leftSection={<Icon.FileText size={18} />}
 						>
 							Ver Registros
@@ -170,7 +172,9 @@ export default function ClassPage() {
 
 					<CopyDropdown
 						onCopyCode={() => copyToClipboard(classData.access_code)}
-						onCopyLink={() => copyToClipboard(`${studentUrl}/${classData.access_code}`)}
+						onCopyLink={() =>
+							copyToClipboard(`${studentUrl}/${classData.access_code}`)
+						}
 					/>
 					<UI.Button
 						variant={classData.is_playing ? "filled" : "light"}

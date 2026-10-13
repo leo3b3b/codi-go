@@ -79,11 +79,7 @@ export default function SignUpPage() {
 							{...signUpForm.getInputProps("confirmation")}
 						/>
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
-						<UI.Button
-							type="submit"
-							loading={signUpForm.submitting}
-							mt="xs"
-						>
+						<UI.Button type="submit" loading={signUpForm.submitting} mt="xs">
 							{signUpForm.submitting ? "Criando..." : "Criar conta"}
 						</UI.Button>
 					</UI.Stack>

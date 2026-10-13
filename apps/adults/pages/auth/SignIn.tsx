@@ -21,8 +21,7 @@ export default function SignInPage() {
 					return "Informe um endereço de e-mail válido (ex: nome@dominio.com).";
 				return null;
 			},
-			password: (value) =>
-				value.trim() ? null : "Informe sua senha.",
+			password: (value) => (value.trim() ? null : "Informe sua senha."),
 		},
 	});
 
@@ -30,15 +29,10 @@ export default function SignInPage() {
 		setRootError(null);
 
 		try {
-			await signInWithPassword(
-				values.email.trim(),
-				values.password.trim(),
-			);
+			await signInWithPassword(values.email.trim(), values.password.trim());
 			navigate("/escolas", { replace: true });
 		} catch {
-			setRootError(
-				"Não foi possível entrar. Verifique seu e-mail e senha.",
-			);
+			setRootError("Não foi possível entrar. Verifique seu e-mail e senha.");
 		}
 	}
 
@@ -65,11 +59,7 @@ export default function SignInPage() {
 							{...signInForm.getInputProps("password")}
 						/>
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
-						<UI.Button
-							type="submit"
-							loading={signInForm.submitting}
-							mt="xs"
-						>
+						<UI.Button type="submit" loading={signInForm.submitting} mt="xs">
 							{signInForm.submitting ? "Entrando..." : "Entrar"}
 						</UI.Button>
 					</UI.Stack>
