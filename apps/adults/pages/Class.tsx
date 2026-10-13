@@ -1,13 +1,13 @@
+import type { Route } from "+pages/Class";
 import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate, useRevalidator } from "react-router";
-import type { Route } from "+pages/Class";
-import * as Self from "./ClassPage";
 import {
 	getClassById,
 	getStudentsByClassId,
 	setClassPlaying,
 } from "@/services";
+import * as Self from "./ClassPage";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.schoolId || !params.classId)

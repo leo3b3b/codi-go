@@ -1,7 +1,7 @@
-import { NavLink } from "react-router";
-import { UI } from "@codi-go/ui";
-import { getSchoolsForCurrentUser } from "@/services";
 import type { Route } from "+pages/Schools";
+import { UI } from "@codi-go/ui";
+import { NavLink } from "react-router";
+import { getSchoolsForCurrentUser } from "@/services";
 
 export async function clientLoader() {
 	return await getSchoolsForCurrentUser();

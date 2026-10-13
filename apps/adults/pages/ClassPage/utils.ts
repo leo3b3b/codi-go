@@ -2,7 +2,7 @@ import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { notifications } from "@codi-go/ui";
 
 export function getImageCode(value: string) {
-	if (!Object.prototype.hasOwnProperty.call(imageCodes, value)) return null;
+	if (!Object.hasOwn(imageCodes, value)) return null;
 	return imageCodes[value as ImageCode];
 }
 
