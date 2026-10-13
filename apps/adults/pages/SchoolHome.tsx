@@ -15,8 +15,7 @@ export async function clientLoader({
 	const schools = await getSchoolsForCurrentUser();
 	const school = schools.find((school) => school.school_id === schoolId);
 
-	if (!school)
-		throw new Response("Escola não encontrada", { status: 404 });
+	if (!school) throw new Response("Escola não encontrada", { status: 404 });
 
 	const classes = await getClassesForCurrentUser(schoolId);
 
