@@ -12,6 +12,7 @@
 		"@mantine/core": "^9.7.1",
 		"@mantine/form": "^9.7.1",
 		"@mantine/hooks": "^9.7.1",
+		"@mantine/notifications": "^9.7.2",
 		"lucide-react": "^1.52.0"
 	},
 	"devDependencies": {

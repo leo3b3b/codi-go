@@ -1,3 +1,4 @@
+export { CopyDropdown } from "./CopyDropdown";
 export { InviteCard } from "./InviteCard";
 export { SchoolCard } from "./SchoolCard";
 export { SchoolHeader } from "./SchoolHeader";

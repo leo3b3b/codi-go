@@ -2,9 +2,10 @@ import {
 	ColorSchemeScript,
 	MantineProvider,
 	mantineHtmlProps,
+	Notifications,
 	theme,
 } from "@codi-go/ui";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Links, Meta, Outlet, Scripts } from "react-router";
 
 import "@codi-go/ui/styles.css";
 
@@ -21,8 +22,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
-				<MantineProvider theme={theme}>{children}</MantineProvider>
-				<ScrollRestoration />
+				<MantineProvider theme={theme}>
+					<Notifications />
+					{children}
+				</MantineProvider>
 				<Scripts />
 			</body>
 		</html>

@@ -6,5 +6,6 @@ export {
 } from "@mantine/core";
 export * as form from "@mantine/form";
 export * as Hooks from "@mantine/hooks";
+export { Notifications, notifications } from "@mantine/notifications";
 export * as Icon from "lucide-react";
 export { theme } from "./theme.ts";

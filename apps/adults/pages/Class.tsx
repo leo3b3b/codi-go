@@ -1,31 +1,53 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
-import { Icon, UI } from "@codi-go/ui";
+import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
+import { CopyDropdown } from "@/components";
 import {
 	getClassById,
 	getStudentsByClassId,
 	setClassPlaying,
 } from "@/services";
 
+async function copyToClipboard(text: string): Promise<boolean> {
+	try {
+		await navigator.clipboard.writeText(text);
+
+		notifications.show({
+			message: "Copiado para a área de transferência",
+			color: "teal",
+			autoClose: 2000,
+			withCloseButton: false,
+		});
+
+		return true;
+	} catch {
+		notifications.show({
+			message: "Não foi possível copiar",
+			color: "red",
+			autoClose: 2000,
+			withCloseButton: false,
+		});
+
+		return false;
+	}
+}
+
 export async function clientLoader({
 	params,
 }: {
 	params: { schoolId?: string; classId?: string };
 }) {
-	if (!params.schoolId || !params.classId) {
+	if (!params.schoolId || !params.classId)
 		throw new Response("Turma não encontrada", { status: 404 });
-	}
 
 	const [classData, students] = await Promise.all([
 		getClassById(params.classId),
 		getStudentsByClassId(params.classId),
 	]);
 
-	if (classData.school_id !== params.schoolId) {
+	if (classData.school_id !== params.schoolId)
 		throw new Response("Turma não encontrada", { status: 404 });
-	}
-
 	return { classData, students };
 }
 
@@ -44,68 +66,69 @@ function StudentRow({
 	const navigate = useNavigate();
 
 	return (
-		<UI.Grid align="center" py="md">
-			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
-				<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
-			</UI.Grid.Col>
+		<>
+			<UI.Grid align="center" py="md">
+				<UI.Grid.Col span={{ base: 12, lg: 4 }}>
+					<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
+				</UI.Grid.Col>
 
-			<UI.Grid.Col span={{ base: 12, lg: 2 }}>
-				<UI.Group h={56}>
-					{showCredential ? (
-						<UI.Image
-							src={imageCodes[student.access_code as ImageCode].src}
-							alt={imageCodes[student.access_code as ImageCode].label}
-							h={56}
-							w="auto"
-							fit="contain"
-						/>
-					) : (
-						<UI.Text size="sm" ff="monospace" lts="0.25em">
-							••••••••
-						</UI.Text>
-					)}
-				</UI.Group>
-			</UI.Grid.Col>
+				<UI.Grid.Col span={{ base: 12, lg: 2 }}>
+					<UI.Group h={56}>
+						{showCredential ? (
+							<UI.Image
+								src={imageCodes[student.access_code as ImageCode].src}
+								alt={imageCodes[student.access_code as ImageCode].label}
+								h={56}
+								w="auto"
+								fit="contain"
+							/>
+						) : (
+							<UI.Text size="sm" ff="monospace" lts="0.25em">
+								••••••••
+							</UI.Text>
+						)}
+					</UI.Group>
+				</UI.Grid.Col>
 
-			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
-				<UI.Group grow>
-					<UI.Button
-						variant="light"
-						onClick={() => setShowCredential(!showCredential)}
-						leftSection={
-							showCredential ? (
-								<Icon.EyeOff size={18} />
-							) : (
-								<Icon.Eye size={18} />
-							)
-						}
-					>
-						{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
-					</UI.Button>
+				<UI.Grid.Col span={{ base: 12, lg: 6 }}>
+					<UI.Group grow>
+						<UI.Button
+							variant="light"
+							onClick={() => setShowCredential(!showCredential)}
+							leftSection={
+								showCredential ? (
+									<Icon.EyeOff size={18} />
+								) : (
+									<Icon.Eye size={18} />
+								)
+							}
+						>
+							{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
+						</UI.Button>
 
-					<UI.Button
-						onClick={() => navigate(`/escola/${schoolId}/aluno/${student.id}`)}
-						leftSection={<Icon.FileText size={18} />}
-					>
-						Ver Registros
-					</UI.Button>
-				</UI.Group>
-			</UI.Grid.Col>
-		</UI.Grid>
+						<UI.Button
+							onClick={() => navigate(`/escola/${schoolId}/aluno/${student.id}`)}
+							leftSection={<Icon.FileText size={18} />}
+						>
+							Ver Registros
+						</UI.Button>
+					</UI.Group>
+				</UI.Grid.Col>
+			</UI.Grid>
+			<UI.Divider />
+		</>
 	);
 }
 
 export default function ClassPage() {
+	const studentUrl = import.meta.env.STUDENT_URL;
 	const { classData, students } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
 	const [isUpdatingPlaying, setIsUpdatingPlaying] = useState(false);
 
 	async function handleTogglePlaying() {
-		if (isUpdatingPlaying) {
-			return;
-		}
-
+		if (isUpdatingPlaying) return;
 		setIsUpdatingPlaying(true);
 
 		try {
@@ -127,7 +150,7 @@ export default function ClassPage() {
 			<UI.Group justify="space-between" align="center" gap="md">
 				<div>
 					<UI.Title order={1} size="h2">
-						{classData.name} | Código de Acesso: {classData.access_code}
+						{classData.name}
 					</UI.Title>
 
 					<UI.Text size="sm" c="dimmed">
@@ -136,6 +159,19 @@ export default function ClassPage() {
 				</div>
 
 				<UI.Group gap="sm">
+					<UI.Button
+						variant="light"
+						color="gray"
+						onClick={() => navigate(`/escola/${classData.school_id}`)}
+						leftSection={<Icon.ArrowLeft size={18} />}
+					>
+						Voltar
+					</UI.Button>
+
+					<CopyDropdown
+						onCopyCode={() => copyToClipboard(classData.access_code)}
+						onCopyLink={() => copyToClipboard(`${studentUrl}/${classData.access_code}`)}
+					/>
 					<UI.Button
 						variant={classData.is_playing ? "filled" : "light"}
 						disabled={isUpdatingPlaying}
@@ -153,14 +189,6 @@ export default function ClassPage() {
 							: classData.is_playing
 								? "Em atividade"
 								: "Iniciar atividade"}
-					</UI.Button>
-
-					<UI.Button
-						variant="light"
-						onClick={() => navigate(`/escola/${classData.school_id}`)}
-						leftSection={<Icon.ArrowLeft size={18} />}
-					>
-						Voltar
 					</UI.Button>
 				</UI.Group>
 			</UI.Group>
@@ -199,14 +227,11 @@ export default function ClassPage() {
 
 				<UI.Stack gap={0}>
 					{students.map((student) => (
-						<>
-							<StudentRow
-								key={student.id}
-								student={student}
-								schoolId={classData.school_id}
-							/>
-							<UI.Divider />
-						</>
+						<StudentRow
+							key={student.id}
+							student={student}
+							schoolId={classData.school_id}
+						/>
 					))}
 				</UI.Stack>
 
