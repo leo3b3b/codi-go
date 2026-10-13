@@ -121,7 +121,7 @@ function StudentRow({
 }
 
 export default function ClassPage() {
-	const studentUrl = import.meta.env.STUDENT_URL;
+	const studentUrl = import.meta.env.VITE_STUDENT_URL;
 	const { classData, students } = useLoaderData<typeof clientLoader>();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
