@@ -122,11 +122,10 @@ export async function deleteMembership({
 		.eq("school_id", school_id);
 
 	if (error) {
-		if (error.code === "PT409" && error.message === "LAST_ADMIN") {
+		if (error.code === "PT409" && error.message === "LAST_ADMIN")
 			throw new Error(
 				"Não é possível remover o único administrador ativo de uma escola!",
 			);
-		}
 
 		throw error;
 	}
@@ -148,11 +147,10 @@ export async function updateMembershipRole({
 		.eq("school_id", school_id);
 
 	if (error) {
-		if (error.code === "PT409" && error.message === "LAST_ADMIN") {
+		if (error.code === "PT409" && error.message === "LAST_ADMIN")
 			throw new Error(
 				"Não é possível rebaixar o único administrador ativo de uma escola!",
 			);
-		}
 
 		throw error;
 	}
