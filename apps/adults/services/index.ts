@@ -16,6 +16,7 @@ export {
 	updateClass,
 } from "./classes";
 export {
+	acceptInvite,
 	adminGetMembershipsBySchool,
 	deleteMembership,
 	getInvitesForCurrentUser,

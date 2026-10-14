@@ -1,25 +1,23 @@
 import { Icon, UI } from "@codi-go/ui";
 import { useRevalidator } from "react-router";
-import { deleteMembership } from "@/services";
-import { acceptInvite } from "@/services/memberships";
+import {
+	acceptInvite,
+	deleteMembership,
+	type getSchoolsForCurrentUser,
+} from "@/services";
 
-type InviteCardProps = {
-	profile_id: string;
-	school_id: string;
-	legal_name: string;
-	trade_name: string;
-	user_role: "admin" | "teacher";
-	invite_status: "active" | "pending";
-};
+type School = Awaited<ReturnType<typeof getSchoolsForCurrentUser>>[number];
 
 export function InviteCard({
+	school,
 	profile_id,
-	school_id,
-	legal_name,
-	trade_name,
-	user_role,
-	invite_status,
-}: InviteCardProps) {
+	status,
+}: {
+	school: School;
+	profile_id: string;
+	status: "active" | "pending";
+}) {
+	const { school_id, trade_name, legal_name, role } = school;
 	const { revalidate } = useRevalidator();
 
 	return (
@@ -30,7 +28,7 @@ export function InviteCard({
 				</UI.Title>
 
 				<UI.Badge variant="light" color="violet">
-					{user_role === "admin" ? "Administrador" : "Professor"}
+					{role === "admin" ? "Administrador" : "Professor"}
 				</UI.Badge>
 			</UI.Group>
 
@@ -38,7 +36,7 @@ export function InviteCard({
 				{legal_name}
 			</UI.Text>
 
-			{invite_status === "active" ? (
+			{status === "active" ? (
 				<UI.Button
 					type="button"
 					color="red"

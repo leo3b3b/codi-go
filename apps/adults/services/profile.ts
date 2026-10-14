@@ -12,10 +12,7 @@ export async function updateProfileForCurrentUser({
 
 	if (name !== null) dataToUpdate.name = name;
 	if (username !== null) dataToUpdate.username = username;
-
-	if (Object.keys(dataToUpdate).length === 0) {
-		return;
-	}
+	if (Object.keys(dataToUpdate).length === 0) return;
 
 	const user = await getUser();
 

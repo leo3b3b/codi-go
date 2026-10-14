@@ -2,11 +2,11 @@ import { supabase } from "@codi-go/supabase";
 import { getUser, getUserIdByUsername } from "@/services";
 
 export async function getSchoolById(id: string) {
-    const user = await getUser();
+	const user = await getUser();
 
-    const { data, error } = await supabase
-        .from("school_memberships")
-        .select(`
+	const { data, error } = await supabase
+		.from("school_memberships")
+		.select(`
             role,
             schools!inner (
                 id,
@@ -15,18 +15,18 @@ export async function getSchoolById(id: string) {
                 cnpj
             )
         `)
-        .eq("profile_id", user.id)
-        .eq("school_id", id)
-        .eq("status", "active")
-        .eq("schools.is_active", true)
-        .single();
+		.eq("profile_id", user.id)
+		.eq("school_id", id)
+		.eq("status", "active")
+		.eq("schools.is_active", true)
+		.single();
 
-    if (error) throw error;
+	if (error) throw error;
 
-    return {
-        ...data.schools,
-        role: data.role,
-    };
+	return {
+		...data.schools,
+		role: data.role,
+	};
 }
 
 async function getMembershipsForCurrentUser(status: "active" | "pending") {

@@ -7,7 +7,9 @@ export async function clientLoader() {
 	return await getSchoolsForCurrentUser();
 }
 
-export default function SchoolsPage({ loaderData: schools }: Route.ComponentProps) {
+export default function SchoolsPage({
+	loaderData: schools,
+}: Route.ComponentProps) {
 	return (
 		<UI.Container size="lg">
 			<title>Minhas Escolas | CodiGO!</title>
@@ -20,9 +22,8 @@ export default function SchoolsPage({ loaderData: schools }: Route.ComponentProp
 							</UI.Title>
 							<UI.Divider />
 							<UI.Text size="lg" ta="center">
-								Aguarde um convite de um administrador ou entre em
-								contato com a equipe para ativar o CodiGO! para a
-								sua escola.
+								Aguarde um convite de um administrador ou entre em contato com a
+								equipe para ativar o CodiGO! para a sua escola.
 							</UI.Text>
 						</UI.Stack>
 					</UI.Paper>
