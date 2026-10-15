@@ -45,7 +45,7 @@ export default function ProfilePage({
 				<UI.Paper>
 					<UI.Group gap="lg" wrap="nowrap">
 						<UI.Avatar
-							name={profile.name}
+							name={profile.name || undefined}
 							color="violet"
 							variant="filled"
 							radius="xl"
