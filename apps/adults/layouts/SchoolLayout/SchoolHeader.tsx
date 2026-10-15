@@ -1,7 +1,7 @@
+import type { Route } from "+layouts/School";
 import { Icon, UI } from "@codi-go/ui";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router";
-import { Select } from "@/components";
-import type { SchoolLayoutLoaderData } from "@/layouts/School";
+import { Select } from "./Select";
 
 const adminOptions = [
 	{
@@ -12,26 +12,33 @@ const adminOptions = [
 		value: "membros",
 		label: "Membros",
 	},
-];
+] as const;
 
-type SchoolHeaderProps = Pick<SchoolLayoutLoaderData, "schools" | "classes">;
+type AdminScreen = (typeof adminOptions)[number]["value"];
+
+type SchoolHeaderProps = Pick<
+	Route.ComponentProps["loaderData"],
+	"schools" | "classes"
+>;
 
 export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
-	const { schoolId, classId } = useParams();
+	const { schoolId, classId } = useParams<"schoolId" | "classId">();
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const isSchoolRoute = schoolId !== undefined;
 	const isAdminRoute = location.pathname.includes("/admin/");
-	const isClassRoute =
-		schoolId !== undefined && classId !== undefined && !isAdminRoute;
 
-	const matchedOption = adminOptions.find((option) =>
-		location.pathname.includes(`/admin/${option.value}`),
-	);
+	const currentAdminScreen: AdminScreen =
+		adminOptions.find((option) =>
+			location.pathname.includes(`/admin/${option.value}`),
+		)?.value ?? "turmas";
 
-	const currentAdminScreen = matchedOption ? matchedOption.value : "turmas";
 	const currentClass = classes.find((item) => item.id === classId);
+
+	const { setColorScheme } = UI.useMantineColorScheme();
+	const colorScheme = UI.useComputedColorScheme("light", {
+		getInitialValueInEffect: true,
+	});
 
 	return (
 		<UI.Paper
@@ -49,7 +56,7 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 							<UI.Image src="/logo.png" alt="Logo do CodiGO!" h={48} w="auto" />
 						</NavLink>
 
-						{isSchoolRoute && (
+						{schoolId !== undefined && (
 							<UI.Group gap="sm" wrap="nowrap" flex={1}>
 								<Select
 									aria-label="Escola"
@@ -63,7 +70,7 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 									}))}
 								/>
 
-								{isClassRoute && currentClass && (
+								{classId !== undefined && !isAdminRoute && currentClass && (
 									<Select
 										aria-label="Turma"
 										value={classId}
@@ -91,11 +98,37 @@ export function SchoolHeader({ schools, classes }: SchoolHeaderProps) {
 						)}
 					</UI.Group>
 
-					<NavLink to="/meu-perfil">
-						<UI.ThemeIcon size={40} radius="xl" variant="light" color="violet">
+					<UI.Group gap="xs" wrap="nowrap">
+						<UI.ActionIcon
+							size={40}
+							radius="xl"
+							variant="default"
+							aria-label={
+								colorScheme === "dark"
+									? "Ativar tema claro"
+									: "Ativar tema escuro"
+							}
+							onClick={() =>
+								setColorScheme(colorScheme === "dark" ? "light" : "dark")
+							}
+						>
+							{colorScheme === "dark" ? (
+								<Icon.Sun size={20} />
+							) : (
+								<Icon.Moon size={20} />
+							)}
+						</UI.ActionIcon>
+
+						<UI.ActionIcon
+							size={40}
+							radius="xl"
+							variant="filled"
+							color="violet"
+							onClick={() => navigate("/meu-perfil")}
+						>
 							<Icon.User size={20} />
-						</UI.ThemeIcon>
-					</NavLink>
+						</UI.ActionIcon>
+					</UI.Group>
 				</UI.Group>
 			</UI.Container>
 		</UI.Paper>

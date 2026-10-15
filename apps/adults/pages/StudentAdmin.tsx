@@ -75,7 +75,7 @@ export default function StudentAdminPage({
 							return (
 								<UI.Paper
 									key={classData.id}
-									bg={isCurrentClass ? "violet.0" : "gray.1"}
+									bg="var(--app-surface)"
 									style={{
 										borderColor: isCurrentClass
 											? "var(--mantine-color-violet-6)"

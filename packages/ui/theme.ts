@@ -28,21 +28,13 @@ export const theme = createTheme({
 			defaultProps: {
 				radius: "lg",
 				withBorder: true,
-				bg: "gray.2",
+				bg: "var(--app-page-bg)",
 				p: "lg",
-			},
-		},
-
-		Divider: {
-			defaultProps: {
-				color: "gray.0",
-				my: "md",
 			},
 		},
 
 		TextInput: {
 			defaultProps: {
-				variant: "filled",
 				size: "md",
 				radius: "lg",
 			},
@@ -50,7 +42,6 @@ export const theme = createTheme({
 
 		PasswordInput: {
 			defaultProps: {
-				variant: "filled",
 				size: "md",
 				radius: "lg",
 			},

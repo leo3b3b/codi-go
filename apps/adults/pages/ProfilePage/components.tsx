@@ -21,7 +21,11 @@ export function InviteCard({
 	const { revalidate } = useRevalidator();
 
 	return (
-		<UI.Paper component="article" p={{ base: "sm", md: "md" }} bg="gray.1">
+		<UI.Paper
+			component="article"
+			p={{ base: "sm", md: "md" }}
+			bg="var(--app-surface)"
+		>
 			<UI.Group justify="space-between" align="center" mb="xs">
 				<UI.Title order={3} size="h4">
 					{trade_name}

@@ -128,7 +128,7 @@ export default function StudentPage({
 						px="md"
 						py="sm"
 						style={{
-							borderBottom: "1px solid var(--mantine-color-gray-3)",
+							borderBottom: "1px solid var(--app-border)",
 						}}
 					>
 						<UI.Grid.Col span={3}>
@@ -164,7 +164,7 @@ export default function StudentPage({
 								px="md"
 								py="sm"
 								style={{
-									borderBottom: "1px solid var(--mantine-color-gray-3)",
+									borderBottom: "1px solid var(--app-border)",
 								}}
 							>
 								<UI.Grid.Col span={{ base: 12, md: 3 }}>
@@ -259,7 +259,11 @@ export function MazeProgressChart({ records }: MazeProgressChartProps) {
 		);
 	}
 
-	const chartData: MazeChartPoint[] = records.map((record, index) => ({
+	const validRecords = records.filter(
+		(record): record is NonNullable<typeof record> => record !== null,
+	);
+
+	const chartData: MazeChartPoint[] = validRecords.map((record, index) => ({
 		attempt: index + 1,
 		levelName: record.levelName,
 		result: record.result,
@@ -270,7 +274,7 @@ export function MazeProgressChart({ records }: MazeProgressChartProps) {
 
 	const chartLimit = Math.max(
 		1,
-		...records.map((record) => Math.abs(record.commandDifference ?? 0)),
+		...validRecords.map((record) => Math.abs(record.commandDifference ?? 0)),
 	);
 
 	return (
@@ -296,7 +300,7 @@ export function MazeProgressChart({ records }: MazeProgressChartProps) {
 			dotProps={{ r: 5, strokeWidth: 2 }}
 			activeDotProps={{ r: 7 }}
 			yAxisProps={{ domain: [-chartLimit, chartLimit] }}
-			referenceLines={[{ y: 0, color: "gray.6" }]}
+			referenceLines={[{ y: 0, color: "var(--app-surface)" }]}
 			valueFormatter={(value) => `${value} comandos`}
 			tooltipProps={{
 				content: ({ payload }) => <MazeProgressTooltip payload={payload} />,

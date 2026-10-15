@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 
 export default function AuthLayout() {
 	return (
-		<UI.Grid mih="100vh" bg="gray.1">
+		<UI.Grid mih="100vh" bg="var(--app-page-bg)">
 			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
 				<UI.Center mih="100vh" px={{ base: "md", sm: "xl", lg: "2xl" }}>
 					<UI.Stack w="100%" maw={448}>

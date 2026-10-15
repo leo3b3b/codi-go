@@ -48,7 +48,7 @@ export default function MemberAdminPage({
 						px="md"
 						py="sm"
 						style={{
-							borderBottom: "1px solid var(--mantine-color-gray-3)",
+							borderBottom: "1px solid var(--app-border)",
 						}}
 					>
 						<UI.Grid.Col span={2}>
@@ -91,7 +91,7 @@ export default function MemberAdminPage({
 								px="md"
 								py="sm"
 								style={{
-									borderBottom: "1px solid var(--mantine-color-gray-3)",
+									borderBottom: "1px solid var(--app-border)",
 								}}
 							>
 								<UI.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>

@@ -118,7 +118,7 @@ export default function ClassPage({
 					align="center"
 					py="md"
 					style={{
-						borderBottom: "1px solid var(--mantine-color-default-border)",
+						borderBottom: "1px solid var(--app-border)",
 					}}
 				>
 					<UI.Grid.Col span={4}>

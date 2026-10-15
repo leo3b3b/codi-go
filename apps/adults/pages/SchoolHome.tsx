@@ -30,8 +30,6 @@ export default function SchoolHomePage({
 	return (
 		<UI.Stack w="100%">
 			<UI.Title order={1}>{school.trade_name}</UI.Title>
-			<UI.Divider />
-
 			<UI.SimpleGrid
 				cols={{ base: 1, md: isAdmin ? 2 : 1 }}
 				spacing="lg"
@@ -67,7 +65,7 @@ function ClassesSection({ classes }: ClassesSectionProps) {
 					<UI.Stack gap="sm">
 						{classes.map(({ id, name }) => (
 							<NavLink to={`turma/${id}`} key={id}>
-								<UI.Paper bg="gray.1" p="md">
+								<UI.Paper bg="var(--app-surface)" p="md">
 									<UI.Text c="violet" fw={600}>
 										{name}
 									</UI.Text>
@@ -93,7 +91,7 @@ function AdminSection() {
 				<UI.Stack gap="sm">
 					{adminActions.map(({ title, description, icon: ActionIcon, to }) => (
 						<NavLink to={to} key={title}>
-							<UI.Paper bg="gray.1" p="md">
+							<UI.Paper bg="var(--app-surface)" p="md">
 								<UI.Group gap="md" wrap="nowrap">
 									<ActionIcon size={28} />
 

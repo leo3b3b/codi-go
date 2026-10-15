@@ -259,9 +259,9 @@ export default function MazeGame() {
 									justify="center"
 									gap="sm"
 									p="sm"
-									bg="gray.1"
+									bg="var(--app-surface)"
 									style={{
-										border: "1px solid var(--mantine-color-gray-3)",
+										border: "1px solid var(--app-border)",
 										borderRadius: "var(--mantine-radius-md)",
 									}}
 								>
@@ -299,7 +299,7 @@ export default function MazeGame() {
 									wrap="wrap"
 									mih={80}
 									style={{
-										border: "1px solid var(--mantine-color-violet-6)",
+										border: "1px solid var(--app-border)",
 										borderRadius: "var(--mantine-radius-md)",
 									}}
 								>
@@ -316,9 +316,9 @@ export default function MazeGame() {
 													key={`${index}-${command}`}
 													w={48}
 													h={48}
-													bg="gray.1"
+													bg="var(--app-surface)"
 													style={{
-														border: "1px solid var(--mantine-color-violet-6)",
+														border: "1px solid var(--app-border)",
 														borderRadius: "var(--mantine-radius-sm)",
 													}}
 												>

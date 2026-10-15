@@ -17,12 +17,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>CodiGO!</title>
 				<link rel="icon" href="/favicon.svg" />
-				<ColorSchemeScript />
+				<ColorSchemeScript defaultColorScheme="auto" />
 				<Meta />
 				<Links />
 			</head>
 			<body>
-				<MantineProvider theme={theme}>
+				<MantineProvider theme={theme} defaultColorScheme="auto">
 					<Notifications />
 					{children}
 				</MantineProvider>

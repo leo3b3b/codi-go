@@ -1,7 +1,7 @@
 import { form, Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useRevalidator } from "react-router";
-import { Select } from "@/components";
+import { Select } from "@/layouts/SchoolLayout";
 import { type getSchoolById, inviteUserToSchool } from "@/services";
 
 export function InviteUserForm({

@@ -1,27 +1,27 @@
 import { Icon, UI } from "@codi-go/ui";
 
-interface Option {
-	value: string;
+interface SelectOption<TValue extends string> {
+	value: TValue;
 	label: string;
 }
 
-type SelectProps = Omit<
+type SelectProps<TValue extends string> = Omit<
 	UI.ButtonProps,
 	"children" | "type" | "rightSection" | "value" | "onChange" | "aria-label"
 > & {
 	"aria-label": string;
-	value: string;
-	onChange: (value: string) => void;
-	options: Option[];
+	value: TValue;
+	onChange: (value: TValue) => void;
+	options: readonly SelectOption<TValue>[];
 };
 
-export function Select({
+export function Select<TValue extends string>({
 	"aria-label": ariaLabel,
 	value,
 	onChange,
 	options,
 	...buttonProps
-}: SelectProps) {
+}: SelectProps<TValue>) {
 	const selectedOption = options.find((option) => option.value === value);
 
 	return (

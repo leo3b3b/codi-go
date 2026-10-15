@@ -5,7 +5,8 @@
 		"rootDirs": [".", "./.react-router/types"],
 		"paths": {
 			"@/*": ["./*"],
-			"+pages/*": ["./.react-router/types/pages/+types/*"]
+			"+pages/*": ["./.react-router/types/pages/+types/*"],
+			"+layouts/*": ["./.react-router/types/layouts/+types/*"]
 		}
 	}
 }

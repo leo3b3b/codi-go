@@ -128,7 +128,7 @@ function ClassList({
 					to={`/escola/${school.id}/admin/turma/${id}`}
 					underline="never"
 				>
-					<UI.Paper component="article" bg="gray.1" p="md">
+					<UI.Paper component="article" bg="var(--app-surface)" p="md">
 						<UI.Title order={2} c="violet">
 							{name}
 						</UI.Title>

@@ -64,7 +64,7 @@ export default function ClassAdminPage({
 						px="md"
 						py="sm"
 						style={{
-							borderBottom: "1px solid var(--mantine-color-gray-3)",
+							borderBottom: "1px solid var(--app-border)",
 						}}
 					>
 						<UI.Grid.Col span={4}>
@@ -117,7 +117,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 			px="md"
 			py="sm"
 			style={{
-				borderBottom: "1px solid var(--mantine-color-gray-3)",
+				borderBottom: "1px solid var(--app-border)",
 			}}
 		>
 			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
