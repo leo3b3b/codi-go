@@ -8,7 +8,7 @@ export default function SignInPage() {
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const signInForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: {
 			email: "",
 			password: "",

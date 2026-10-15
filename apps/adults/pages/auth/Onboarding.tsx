@@ -11,7 +11,7 @@ export default function OnboardingPage() {
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const onboardingForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: {
 			name: "",
 			username: "",

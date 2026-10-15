@@ -6,7 +6,7 @@ export default function AccessCodePage() {
 	const navigate = useNavigate();
 
 	const accessCodeForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: { accessCode: "" },
 		validate: {
 			accessCode: (value) =>

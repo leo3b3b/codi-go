@@ -13,7 +13,7 @@ export function EditProfileForm({ profile }: { profile: Profile }) {
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const profileForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: { name: "", username: "" },
 		validate: {
 			name: (value) => {

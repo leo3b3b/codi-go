@@ -18,7 +18,7 @@ export function InviteUserForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const inviteForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: { username: "", role: "teacher" as "teacher" | "admin" },
 		validate: {
 			username: (value) => {
