@@ -38,7 +38,7 @@ export default function SignInPage() {
 
 	return (
 		<UI.Paper>
-			<title>CodiGO! | Login</title>
+			<title>Login | CodiGO!</title>
 			<UI.Stack gap="lg">
 				<UI.Title order={1} ta="center">
 					Bom te ver!

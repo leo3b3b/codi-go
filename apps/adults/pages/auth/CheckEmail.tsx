@@ -4,7 +4,7 @@ import { Link } from "react-router";
 export default function CheckEmailPage() {
 	return (
 		<UI.Paper>
-			<title>CodiGO! | Confirme seu e-mail</title>
+			<title>Confirme seu e-mail | CodiGO!</title>
 
 			<UI.Stack gap="lg">
 				<UI.Stack gap="xs" align="center">

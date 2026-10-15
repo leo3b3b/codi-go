@@ -52,7 +52,7 @@ export default function SignUpPage() {
 
 	return (
 		<UI.Paper>
-			<title>CodiGO! | Crie sua conta</title>
+			<title>Crie sua conta | CodiGO!</title>
 			<UI.Stack gap="lg">
 				<UI.Title order={1} ta="center">
 					Crie sua conta
