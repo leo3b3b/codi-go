@@ -7,13 +7,11 @@ const studentNameRegex =
 	/^\p{L}+(?: +\p{L}+)*(?:\s*,\s*\p{L}+(?: +\p{L}+)*)*$/u;
 
 export function CreateStudentForm({
-	classData,
+	class_id,
+	school_id,
 }: {
-	classData: {
-		name: string;
-		id: string;
-		school_id: string;
-	};
+	class_id: string;
+	school_id: string;
 }) {
 	const { revalidate } = useRevalidator();
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,28 +35,29 @@ export function CreateStudentForm({
 	async function onSubmit({ names }: typeof studentForm.values) {
 		setIsSubmitting(true);
 		setRootError(null);
+		const studentNames = names.split(",").map((name) => name.trim());
 
 		try {
-			const studentNames = names.split(",").map((name) => name.trim());
-
-			for (const name of studentNames) {
-				await createStudent({
-					name,
-					class_id: classData.id,
-					school_id: classData.school_id,
-				});
-			}
+			await Promise.all(
+				studentNames.map((name) =>
+					createStudent({ name, class_id, school_id }),
+				),
+			);
 
 			studentForm.reset();
 			await revalidate();
 		} catch {
-			setRootError("Não foi possível criar o aluno.");
+			const message =
+				studentNames.length > 1
+					? "Não foi possível criar os alunos."
+					: "Não foi possível criar o aluno.";
+			setRootError(message);
 		} finally {
 			setIsSubmitting(false);
 		}
 	}
 
-	const namesValue = studentForm.getValues().names;
+	const namesValue = studentForm.useWatchValue("names");
 	const studentCount = namesValue
 		.split(",")
 		.map((name) => name.trim())
@@ -67,8 +66,7 @@ export function CreateStudentForm({
 	return (
 		<UI.Paper>
 			<UI.Stack gap="lg">
-				<UI.Title order={2}>Criar Alunos em {classData.name}</UI.Title>
-				<UI.Divider />
+				<UI.Title order={2}>Criar Alunos</UI.Title>
 
 				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
 					<UI.Group align="flex-start" gap="md" wrap="nowrap">

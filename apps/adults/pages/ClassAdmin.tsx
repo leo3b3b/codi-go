@@ -1,18 +1,14 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
-import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { CreateStudentForm, EditClassForm } from "@/forms";
+import { useNavigate, useRevalidator } from "react-router";
 import { deleteStudent, getClassById, getStudentsByClassId } from "@/services";
+import type { Route } from "./+types/ClassAdmin";
+import * as Self from "./ClassAdminPage";
 
-export async function clientLoader({
-	params,
-}: {
-	params: { classId?: string };
-}) {
-	if (!params.classId) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+	if (!params.classId)
 		throw new Response("Turma não encontrada", { status: 404 });
-	}
 
 	const classData = await getClassById(params.classId);
 	const students = await getStudentsByClassId(params.classId);
@@ -20,18 +16,15 @@ export async function clientLoader({
 	return { classData, students };
 }
 
-type Student = ReturnType<
-	typeof useLoaderData<typeof clientLoader>
->["students"][number];
-
-interface StudentRowProps {
-	student: Student;
-	onDelete: (params: { student_id: string; student_name: string }) => void;
-	onUpdate: (student_id: string) => void | Promise<void>;
+export function meta({ loaderData }: Route.MetaArgs) {
+	return [
+		{ title: `Gerenciar ${loaderData?.classData.name ?? "Turma"} | CodiGO!` },
+	];
 }
 
-export default function ClassAdminPage() {
-	const { classData, students } = useLoaderData<typeof clientLoader>();
+export default function ClassAdminPage({
+	loaderData: { classData, students },
+}: Route.ComponentProps) {
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
 
@@ -46,10 +39,8 @@ export default function ClassAdminPage() {
 		student_id: string;
 		student_name: string;
 	}) {
-		const confirmed = window.confirm(
-			`Tem certeza de que quer excluir ${student_name} e todos os seus registros? Essa ação é irreversível!`,
-		);
-		if (!confirmed) return;
+		const message = `Tem certeza de que quer excluir ${student_name} e todos os seus registros? Essa ação é irreversível!`;
+		if (!window.confirm(message)) return;
 
 		await deleteStudent(student_id);
 		revalidate();
@@ -57,16 +48,11 @@ export default function ClassAdminPage() {
 
 	return (
 		<UI.Stack w="100%" gap="md">
-			<title>CodiGO! | Gerenciar Turma</title>
+			<Self.EditClassForm classData={classData} />
 
-			<EditClassForm classData={classData} />
-
-			<CreateStudentForm
-				classData={{
-					name: classData.name,
-					id: classData.id,
-					school_id: classData.school_id,
-				}}
+			<Self.CreateStudentForm
+				class_id={classData.id}
+				school_id={classData.school_id}
 			/>
 
 			<UI.Paper>
@@ -114,6 +100,12 @@ export default function ClassAdminPage() {
 			</UI.Paper>
 		</UI.Stack>
 	);
+}
+
+interface StudentRowProps {
+	student: Awaited<ReturnType<typeof getStudentsByClassId>>[number];
+	onDelete: (params: { student_id: string; student_name: string }) => void;
+	onUpdate: (student_id: string) => void | Promise<void>;
 }
 
 function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
