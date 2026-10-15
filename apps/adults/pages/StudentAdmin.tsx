@@ -83,17 +83,13 @@ export default function StudentAdminPage({
 									}}
 								>
 									<UI.Group justify="space-between" gap="md" wrap="nowrap">
-										<div>
-											<UI.Text fw={600}>{classData.name}</UI.Text>
+										<UI.Text fw={600}>{classData.name}</UI.Text>
 
-											{isCurrentClass && (
-												<UI.Text size="sm" c="violet" fw={600}>
-													Turma atual
-												</UI.Text>
-											)}
-										</div>
-
-										{!isCurrentClass && (
+										{isCurrentClass ? (
+											<UI.Text size="sm" c="violet" fw={600}>
+												Turma atual
+											</UI.Text>
+										) : (
 											<UI.Button
 												type="button"
 												variant="default"
