@@ -1,10 +1,9 @@
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
-import { CodiToast } from "@/components";
+import { showCodiToast } from "@/components";
 import {
 	getClassByAccessCode,
 	getStudentsByClassId,
@@ -51,9 +50,7 @@ export default function ClassHome() {
 
 			navigate(`/${classData.access_code}/fases`);
 		} catch {
-			toast.custom((t) => (
-				<CodiToast t={t} is_class_playing={classData.is_playing} />
-			));
+			showCodiToast(classData.is_playing);
 		}
 	}
 

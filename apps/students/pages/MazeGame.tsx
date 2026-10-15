@@ -1,6 +1,5 @@
-import { Icon, UI } from "@codi-go/ui";
+import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useReward } from "react-rewards";
 import {
 	type LoaderFunctionArgs,
@@ -146,7 +145,15 @@ export default function MazeGame() {
 					commandsToExecute.length,
 				);
 
-				toast.error("Ops! Tente outra sequência.");
+				notifications.show({
+					message: "Ops! Tente outra sequência.",
+					color: "red",
+					position: "top-center",
+					autoClose: 3000,
+					withCloseButton: false,
+					icon: <Icon.X />,
+				});
+
 				return;
 			}
 
@@ -171,7 +178,14 @@ export default function MazeGame() {
 					commandsToExecute.length,
 				);
 
-				toast.success("Muito bem! O Codi chegou ao objetivo.");
+				notifications.show({
+					message: "Muito bem! O Codi chegou ao objetivo.",
+					color: "green",
+					position: "top-center",
+					autoClose: 3000,
+					withCloseButton: false,
+					icon: <Icon.Check />,
+				});
 				reward();
 
 				return;
@@ -184,6 +198,14 @@ export default function MazeGame() {
 		}));
 
 		await registerResult("failure", currentLevel.id, commandsToExecute.length);
+		notifications.show({
+			message: "Ops! Tente outra sequência.",
+			color: "red",
+			position: "top-center",
+			autoClose: 3000,
+			withCloseButton: false,
+			icon: <Icon.X />,
+		});
 	}
 
 	return (
