@@ -1,3 +1,4 @@
+export * as Charts from "@mantine/charts";
 export * as UI from "@mantine/core";
 export {
 	ColorSchemeScript,
