@@ -1,9 +1,9 @@
+import type { Route } from "+pages/ClassAdmin";
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate, useRevalidator } from "react-router";
 import { deleteStudent, getClassById, getStudentsByClassId } from "@/services";
-import type { Route } from "./+types/ClassAdmin";
 import * as Self from "./ClassAdminPage";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
