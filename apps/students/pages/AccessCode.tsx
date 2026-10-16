@@ -29,7 +29,7 @@ export default function AccessCodePage() {
 
 	return (
 		<UI.Center w="100%" mih="100vh" px="md">
-			<title>CodiGO! | Entrar</title>
+			<title>Entrar | CodiGO!</title>
 			<UI.Stack w="100%" maw={448} gap="lg">
 				<UI.Image
 					src="/logo.png"

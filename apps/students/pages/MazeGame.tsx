@@ -1,12 +1,8 @@
+import type { Route } from "+pages/MazeGame";
 import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
-import {
-	type LoaderFunctionArgs,
-	useLoaderData,
-	useNavigate,
-} from "react-router";
-import { MazeRenderer } from "@/components";
+import { useNavigate } from "react-router";
 import { executeCommand, isGoalReached } from "@/engine";
 import {
 	getMazeLevel,
@@ -14,44 +10,29 @@ import {
 	isClassPlaying,
 	registerMazeProgress,
 } from "@/services";
-import type { Command, MazeLevel, MazeState } from "@/types";
+import type { Command, MazeState } from "@/types";
+import * as Self from "./MazeGamePage";
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const levelId = Number(params.levelId);
-
 	const session = getStudentSession();
 
-	if (!session) {
+	if (!session)
 		throw new Response("Sessão de aluno não encontrada.", { status: 401 });
-	}
 
 	const status = await isClassPlaying(session.class_id);
 
-	if (status !== true) {
+	if (status !== true)
 		throw new Response("A turma não está em atividade.", { status: 403 });
-	}
 
 	return getMazeLevel(levelId);
 }
 
-const commandIcons: Record<
-	Command,
-	React.ComponentType<{ size?: number; color?: string }>
-> = {
-	up: Icon.ArrowUp,
-	down: Icon.ArrowDown,
-	left: Icon.ArrowLeft,
-	right: Icon.ArrowRight,
-};
-
-const commands: Command[] = ["up", "left", "down", "right"];
-
-function wait(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+export function meta({ loaderData: level }: Route.MetaArgs) {
+	return [{ title: `${level.name} | COdiGO!` }];
 }
 
-export default function MazeGame() {
-	const level = useLoaderData() as MazeLevel;
+export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 	const navigate = useNavigate();
 	const { reward } = useReward("confettiDiv", "confetti", {
 		position: "fixed",
@@ -83,9 +64,7 @@ export default function MazeGame() {
 	}
 
 	function addCommand(command: Command) {
-		if (isRunning) {
-			return;
-		}
+		if (isRunning) return;
 
 		setState((current) => ({
 			...current,
@@ -95,9 +74,7 @@ export default function MazeGame() {
 	}
 
 	function clearCommands() {
-		if (isRunning) {
-			return;
-		}
+		if (isRunning) return;
 
 		setState((current) => ({
 			...current,
@@ -108,9 +85,7 @@ export default function MazeGame() {
 	}
 
 	async function play() {
-		if (isRunning || state.commands.length === 0) {
-			return;
-		}
+		if (isRunning || state.commands.length === 0) return;
 
 		const commandsToExecute = [...state.commands];
 		const currentLevel = state.level;
@@ -129,7 +104,7 @@ export default function MazeGame() {
 				direction: command,
 			}));
 
-			await wait(400);
+			await Self.wait(400);
 
 			const nextPosition = executeCommand(currentLevel, position, command);
 
@@ -164,7 +139,7 @@ export default function MazeGame() {
 				playerPosition: position,
 			}));
 
-			await wait(300);
+			await Self.wait(300);
 
 			if (isGoalReached(currentLevel, position)) {
 				setState((current) => ({
@@ -210,8 +185,6 @@ export default function MazeGame() {
 
 	return (
 		<UI.Stack w="100%" gap="md">
-			<title>CodiGO! | Labirinto</title>
-
 			<UI.Paper>
 				<UI.Group gap="md" wrap="nowrap">
 					<UI.Button
@@ -231,7 +204,7 @@ export default function MazeGame() {
 			<UI.Grid align="stretch">
 				<UI.Grid.Col span={{ base: 12, lg: 6 }}>
 					<UI.Center h="100%" mih={400}>
-						<MazeRenderer
+						<Self.MazeRenderer
 							level={state.level}
 							playerPosition={state.playerPosition}
 							direction={state.direction}
@@ -265,8 +238,8 @@ export default function MazeGame() {
 										borderRadius: "var(--mantine-radius-md)",
 									}}
 								>
-									{commands.map((command) => {
-										const CommandIcon = commandIcons[command];
+									{Self.commands.map((command) => {
+										const CommandIcon = Self.commandIcons[command];
 
 										return (
 											<UI.ActionIcon
@@ -309,7 +282,7 @@ export default function MazeGame() {
 										</UI.Text>
 									) : (
 										state.commands.map((command, index) => {
-											const CommandIcon = commandIcons[command];
+											const CommandIcon = Self.commandIcons[command];
 
 											return (
 												<UI.Center
