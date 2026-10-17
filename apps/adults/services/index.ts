@@ -1,9 +1,11 @@
 export {
 	deleteUserAccount,
 	getUser,
+	resetPasswordForEmail,
 	signInWithPassword,
 	signOut,
 	signUp,
+	updatePassword,
 } from "./auth";
 export {
 	createClass,

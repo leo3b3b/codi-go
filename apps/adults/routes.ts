@@ -8,6 +8,8 @@ export default [
 		route("criar-conta", "pages/auth/SignUp.tsx"),
 		route("confirmar-email", "pages/auth/CheckEmail.tsx"),
 		route("onboarding", "pages/auth/Onboarding.tsx"),
+		route("recuperar-senha", "pages/auth/RecoverPassword.tsx"),
+		route("redefinir-senha", "pages/auth/ResetPassword.tsx"),
 	]),
 	layout("layouts/School.tsx", [
 		route("meu-perfil", "pages/Profile.tsx"),

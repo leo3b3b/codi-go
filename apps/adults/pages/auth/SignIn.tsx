@@ -70,6 +70,11 @@ export default function SignInPage() {
 						Criar conta
 					</UI.Anchor>
 				</UI.Text>
+				<UI.Text size="sm" ta="right">
+					<UI.Anchor component={Link} to="/recuperar-senha" fw={700}>
+						Esqueceu sua senha?
+					</UI.Anchor>
+				</UI.Text>
 			</UI.Stack>
 		</UI.Paper>
 	);
