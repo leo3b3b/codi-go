@@ -1,7 +1,7 @@
 import { UI } from "@codi-go/ui";
-import { Codi } from "@/components";
 import type { Command, MazeLevel, Position, TileType } from "@/types";
 import { tileImages } from "@/types";
+import { Codi } from "./Codi";
 
 type MazeRendererProps = {
 	level: MazeLevel;

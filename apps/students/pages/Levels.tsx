@@ -1,6 +1,6 @@
+import type { Route } from "+pages/Levels";
 import { Icon, UI } from "@codi-go/ui";
-import type { LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import {
 	getStudentSession,
 	isClassPlaying,
@@ -8,22 +8,18 @@ import {
 	listLevels,
 } from "@/services";
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-	if (!params.accessCode) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+	if (!params.accessCode)
 		throw new Response("Turma não encontrada", { status: 404 });
-	}
 
 	const session = getStudentSession();
-
-	if (!session || session.class_id === "") {
+	if (!session || session.class_id === "")
 		throw new Response("Sessão de aluno não encontrada.", { status: 401 });
-	}
 
 	const status = await isClassPlaying(session.class_id);
 
-	if (status !== true) {
+	if (status !== true)
 		throw new Response("A turma não está em atividade.", { status: 403 });
-	}
 
 	const [games, levels] = await Promise.all([listGames(), listLevels()]);
 
@@ -33,13 +29,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 	}));
 }
 
-export default function LevelsPage() {
-	const games = useLoaderData<typeof clientLoader>();
+export default function LevelsPage({
+	loaderData: games,
+}: Route.ComponentProps) {
 	const navigate = useNavigate();
 
 	return (
 		<UI.Stack w="100%" gap="xl">
-			<title>CodiGO! | Fases</title>
+			<title>Fases | CodiGO!</title>
 
 			<div>
 				<UI.Title order={1}>Fases</UI.Title>

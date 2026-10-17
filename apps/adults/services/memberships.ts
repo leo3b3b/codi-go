@@ -1,6 +1,34 @@
 import { supabase } from "@codi-go/supabase";
 import { getUser, getUserIdByUsername } from "@/services";
 
+export async function getSchoolById(id: string) {
+	const user = await getUser();
+
+	const { data, error } = await supabase
+		.from("school_memberships")
+		.select(`
+            role,
+            schools!inner (
+                id,
+                legal_name,
+                trade_name,
+                cnpj
+            )
+        `)
+		.eq("profile_id", user.id)
+		.eq("school_id", id)
+		.eq("status", "active")
+		.eq("schools.is_active", true)
+		.single();
+
+	if (error) throw error;
+
+	return {
+		...data.schools,
+		role: data.role,
+	};
+}
+
 async function getMembershipsForCurrentUser(status: "active" | "pending") {
 	const user = await getUser();
 
@@ -122,11 +150,10 @@ export async function deleteMembership({
 		.eq("school_id", school_id);
 
 	if (error) {
-		if (error.code === "PT409" && error.message === "LAST_ADMIN") {
+		if (error.code === "PT409" && error.message === "LAST_ADMIN")
 			throw new Error(
 				"Não é possível remover o único administrador ativo de uma escola!",
 			);
-		}
 
 		throw error;
 	}
@@ -148,11 +175,10 @@ export async function updateMembershipRole({
 		.eq("school_id", school_id);
 
 	if (error) {
-		if (error.code === "PT409" && error.message === "LAST_ADMIN") {
+		if (error.code === "PT409" && error.message === "LAST_ADMIN")
 			throw new Error(
 				"Não é possível rebaixar o único administrador ativo de uma escola!",
 			);
-		}
 
 		throw error;
 	}

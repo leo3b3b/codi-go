@@ -39,10 +39,26 @@ export async function deleteUserAccount() {
 export async function getUser() {
 	const {
 		data: { user },
-		error: userError,
+		error,
 	} = await supabase.auth.getUser();
 
-	if (userError) throw userError;
+	if (error) throw error;
 	if (!user) throw new Error("usuário não autenticado");
 	return user;
+}
+
+export async function resetPasswordForEmail(email: string) {
+	const redirectUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
+
+	const { error } = await supabase.auth.resetPasswordForEmail(email, {
+		redirectTo: `${redirectUrl}/redefinir-senha`,
+	});
+
+	if (error) throw error;
+}
+
+export async function updatePassword(password: string) {
+	const { error } = await supabase.auth.updateUser({ password });
+
+	if (error) throw error;
 }

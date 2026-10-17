@@ -9,6 +9,12 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL(".", import.meta.url)),
+			"+pages": fileURLToPath(
+				new URL("./.react-router/types/pages/+types", import.meta.url),
+			),
+			"+layouts": fileURLToPath(
+				new URL("./.react-router/types/layouts/+types", import.meta.url),
+			),
 		},
 	},
 

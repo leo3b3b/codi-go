@@ -1,100 +1,46 @@
+import type { Route } from "+pages/MemberAdmin";
 import { Icon, UI } from "@codi-go/ui";
-import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { InviteUserForm } from "@/forms";
 import {
 	adminGetMembershipsBySchool,
-	deleteMembership,
 	getSchoolById,
 	getUser,
-	updateMembershipRole,
 } from "@/services";
+import * as Self from "./MemberAdminPage";
 
-export async function clientLoader({
-	params,
-}: {
-	params: { schoolId?: string };
-}) {
-	if (!params.schoolId) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+	if (!params.schoolId)
 		throw new Response("Escola não encontrada", { status: 404 });
-	}
 
-	const user = await getUser();
-	const school = await getSchoolById(params.schoolId);
-	const memberships = await adminGetMembershipsBySchool(params.schoolId);
+	const [user, school, memberships] = await Promise.all([
+		getUser(),
+		getSchoolById(params.schoolId),
+		adminGetMembershipsBySchool(params.schoolId),
+	]);
 
 	return { user, school, memberships };
 }
 
-type HandleUpdateRoleProps = {
-	profile_id: string;
-	school_id: string;
-	username: string | null;
-	current_role: "admin" | "teacher";
-};
+export function meta({ loaderData: { school } }: Route.MetaArgs) {
+	return [{ title: `Gerenciar membros em ${school.trade_name} | CodiGO!` }];
+}
 
-type HandleDeleteMembershipProps = {
-	profile_id: string;
-	school_id: string;
-	username: string | null;
-	action: "remove" | "cancel";
-};
-
-export default function MemberAdminPage() {
-	const { user, school, memberships } = useLoaderData<typeof clientLoader>();
-	const { revalidate } = useRevalidator();
-	const navigate = useNavigate();
-
-	async function handleUpdateRole({
-		profile_id,
-		school_id,
-		username,
-		current_role,
-	}: HandleUpdateRoleProps) {
-		const confirmed = window.confirm(
-			current_role === "teacher"
-				? `Tem certeza de que quer promover ${username ?? "este usuário"} a administrador?`
-				: `Tem certeza de que quer rebaixar ${username ?? "este usuário"} a professor?`,
-		);
-		if (!confirmed) return;
-
-		const role = current_role === "teacher" ? "admin" : "teacher";
-		const isSelfDemotion = current_role === "admin" && profile_id === user.id;
-
-		await updateMembershipRole({ profile_id, school_id, role });
-
-		if (isSelfDemotion) {
-			navigate("/");
-			return;
-		}
-
-		revalidate();
-	}
-
-	async function handleDeleteMembership({
-		profile_id,
-		school_id,
-		username,
-		action,
-	}: HandleDeleteMembershipProps) {
-		const confirmed = window.confirm(
-			action === "remove"
-				? `Tem certeza de que quer remover ${username ?? "este usuário"} de ${school.trade_name}?`
-				: `Tem certeza de que quer cancelar o convite ${username ? `de ${username}` : "deste usuário"} para ${school.trade_name}?`,
-		);
-		if (!confirmed) return;
-		await deleteMembership({ profile_id, school_id });
-		revalidate();
-	}
+export default function MemberAdminPage({
+	loaderData: { user, school, memberships },
+}: Route.ComponentProps) {
+	const { handleDeleteMembership, handleUpdateRole } =
+		Self.useMembershipActions({
+			userId: user.id,
+			school,
+		});
 
 	return (
 		<UI.Stack w="100%" gap="md">
-			<title>CodiGO! | Gerenciar Membros</title>
-
-			<InviteUserForm school={school} />
+			<UI.Title order={1}>Gerenciar membros em {school.trade_name}</UI.Title>
+			<Self.InviteUserForm school={school} />
 
 			<UI.Paper>
 				<UI.Stack gap="md">
-					<UI.Title order={1}>Gerenciar Membros</UI.Title>
+					<UI.Title order={2}>Gerenciar Membros</UI.Title>
 
 					<UI.Grid
 						visibleFrom="lg"
@@ -102,7 +48,7 @@ export default function MemberAdminPage() {
 						px="md"
 						py="sm"
 						style={{
-							borderBottom: "1px solid var(--mantine-color-gray-3)",
+							borderBottom: "1px solid var(--app-border)",
 						}}
 					>
 						<UI.Grid.Col span={2}>
@@ -145,7 +91,7 @@ export default function MemberAdminPage() {
 								px="md"
 								py="sm"
 								style={{
-									borderBottom: "1px solid var(--mantine-color-gray-3)",
+									borderBottom: "1px solid var(--app-border)",
 								}}
 							>
 								<UI.Grid.Col span={{ base: 6, md: 3, lg: 2 }}>
@@ -196,17 +142,11 @@ export default function MemberAdminPage() {
 													)
 												}
 												onClick={() => {
-													const {
-														profile_id,
-														school_id,
-														username,
-														name,
-														role,
-													} = membership;
+													const { profile_id, username, name, role } =
+														membership;
 
 													handleUpdateRole({
 														profile_id,
-														school_id,
 														username: username ? `@${username}` : name,
 														current_role: role,
 													});
@@ -229,17 +169,11 @@ export default function MemberAdminPage() {
 												)
 											}
 											onClick={() => {
-												const {
-													profile_id,
-													school_id,
-													username,
-													name,
-													status,
-												} = membership;
+												const { profile_id, username, name, status } =
+													membership;
 
 												handleDeleteMembership({
 													profile_id,
-													school_id,
 													username: username ? `@${username}` : name,
 													action: status === "active" ? "remove" : "cancel",
 												});

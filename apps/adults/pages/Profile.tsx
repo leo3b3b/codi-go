@@ -1,72 +1,28 @@
-import { form, Icon, UI } from "@codi-go/ui";
-import { useState } from "react";
-import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import { InviteCard } from "@/components";
+import type { Route } from "+pages/Profile";
+import { Icon, UI } from "@codi-go/ui";
+import { useNavigate } from "react-router";
 import {
 	deleteUserAccount,
 	getInvitesForCurrentUser,
 	getProfileForCurrentUser,
 	getSchoolsForCurrentUser,
 	signOut,
-	updateProfileForCurrentUser,
 } from "@/services";
-
-const nameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
+import * as Self from "./ProfilePage";
 
 export async function clientLoader() {
-	const profile = await getProfileForCurrentUser();
-	const schools = await getSchoolsForCurrentUser();
-	const invites = await getInvitesForCurrentUser();
+	const [profile, schools, invites] = await Promise.all([
+		getProfileForCurrentUser(),
+		getSchoolsForCurrentUser(),
+		getInvitesForCurrentUser(),
+	]);
 	return { profile, schools, invites };
 }
 
-export default function ProfilePage() {
-	const { profile, schools, invites } = useLoaderData<typeof clientLoader>();
+export default function ProfilePage({
+	loaderData: { profile, schools, invites },
+}: Route.ComponentProps) {
 	const navigate = useNavigate();
-	const { revalidate } = useRevalidator();
-	const [rootError, setRootError] = useState<string | null>(null);
-
-	const profileForm = form.useForm({
-		mode: "controlled",
-		initialValues: { name: "", username: "" },
-		validate: {
-			name: (value) =>
-				!value
-					? null
-					: !nameRegex.test(value.trim())
-						? "O nome deve conter apenas letras e espaços."
-						: null,
-			username: (value) => {
-				if (!value) return null;
-				const username = value.trim();
-
-				if (username.length < 3)
-					return "O nome de usuário deve ter pelo menos 3 caracteres.";
-				if (username.length > 30)
-					return "O nome de usuário pode ter no máximo 30 caracteres.";
-				if (!/^[a-z0-9._-]+$/.test(username))
-					return "Use apenas letras minúsculas, números, pontos, traços ou sublinhados.";
-
-				return null;
-			},
-		},
-	});
-
-	async function onSubmit(values: typeof profileForm.values) {
-		setRootError(null);
-		try {
-			await updateProfileForCurrentUser({
-				name: values.name.trim() || null,
-				username: values.username.trim() || null,
-			});
-			profileForm.reset();
-			await revalidate();
-		} catch {
-			setRootError(
-				"Não foi possível salvar seu perfil. Tente novamente mais tarde.",
-			);
-		}
-	}
 
 	async function handleSignOut() {
 		await signOut();
@@ -74,25 +30,27 @@ export default function ProfilePage() {
 	}
 
 	async function handleDeleteAccount() {
-		if (
-			!window.confirm(
-				"Tem certeza de que quer deletar sua conta? Essa ação é irreversível!",
-			)
-		)
-			return;
+		const message =
+			"Tem certeza de que quer deletar sua conta? Essa ação é irreversível!";
+		if (!window.confirm(message)) return;
+
 		await deleteUserAccount();
 		navigate("/login");
 	}
 
 	return (
 		<UI.Container size="sm">
-			<title>CodiGO! | Meu Perfil</title>
+			<title>Meu Perfil | CodiGO!</title>
 			<UI.Stack gap="md">
 				<UI.Paper>
 					<UI.Group gap="lg" wrap="nowrap">
-						<UI.ThemeIcon size={64} radius="xl">
-							<Icon.User size={32} />
-						</UI.ThemeIcon>
+						<UI.Avatar
+							name={profile.name || undefined}
+							color="violet"
+							variant="filled"
+							radius="xl"
+							size={64}
+						/>
 						<div>
 							<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
 								{profile.name}
@@ -108,15 +66,12 @@ export default function ProfilePage() {
 					<UI.Title order={2}>Minhas Escolas</UI.Title>
 					<UI.Divider />
 					<UI.Stack gap="sm">
-						{schools.map(({ school_id, legal_name, trade_name, role }) => (
-							<InviteCard
-								key={school_id}
-								school_id={school_id}
+						{schools.map((school) => (
+							<Self.InviteCard
+								key={school.school_id}
+								school={school}
 								profile_id={profile.id}
-								legal_name={legal_name}
-								trade_name={trade_name}
-								user_role={role}
-								invite_status="active"
+								status="active"
 							/>
 						))}
 					</UI.Stack>
@@ -127,19 +82,16 @@ export default function ProfilePage() {
 					)}
 
 					<UI.Title order={2} mt="xl">
-						Convites
+						Meus Convites
 					</UI.Title>
 					<UI.Divider />
 					<UI.Stack gap="sm">
-						{invites.map(({ school_id, legal_name, trade_name, role }) => (
-							<InviteCard
-								key={school_id}
-								school_id={school_id}
+						{invites.map((school) => (
+							<Self.InviteCard
+								key={school.school_id}
+								school={school}
 								profile_id={profile.id}
-								legal_name={legal_name}
-								trade_name={trade_name}
-								user_role={role}
-								invite_status="pending"
+								status="pending"
 							/>
 						))}
 					</UI.Stack>
@@ -150,45 +102,7 @@ export default function ProfilePage() {
 					)}
 				</UI.Paper>
 
-				<UI.Paper>
-					<form onSubmit={profileForm.onSubmit(onSubmit)} noValidate>
-						<UI.Stack gap="md">
-							<div>
-								<UI.Title order={2} size="h3">
-									Editar Perfil
-								</UI.Title>
-								<UI.Text size="sm" c="dimmed">
-									Deixe em branco os campos que não deseja alterar.
-								</UI.Text>
-							</div>
-
-							<UI.TextInput
-								label="Novo nome"
-								autoComplete="name"
-								placeholder={profile.name || undefined}
-								{...profileForm.getInputProps("name")}
-							/>
-							<UI.TextInput
-								label="Novo nome de usuário"
-								autoComplete="username"
-								placeholder={profile.username || undefined}
-								leftSection={<Icon.AtSign size={18} />}
-								{...profileForm.getInputProps("username")}
-							/>
-
-							{rootError && <UI.Alert>{rootError}</UI.Alert>}
-
-							<UI.Button
-								type="submit"
-								disabled={!profileForm.isDirty() || profileForm.submitting}
-								mt="xs"
-								leftSection={<Icon.Save size={18} />}
-							>
-								{profileForm.submitting ? "Salvando..." : "Salvar Alterações"}
-							</UI.Button>
-						</UI.Stack>
-					</form>
-				</UI.Paper>
+				<Self.EditProfileForm profile={profile} />
 
 				<UI.Paper>
 					<UI.Group grow>

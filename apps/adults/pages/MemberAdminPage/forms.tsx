@@ -1,24 +1,19 @@
 import { form, Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useRevalidator } from "react-router";
-import { Select } from "@/components";
-import { inviteUserToSchool } from "@/services";
+import { Select } from "@/layouts/SchoolLayout";
+import { type getSchoolById, inviteUserToSchool } from "@/services";
 
 export function InviteUserForm({
 	school,
 }: {
-	school: {
-		id: string;
-		legal_name: string;
-		trade_name: string;
-		cnpj: string;
-	};
+	school: Awaited<ReturnType<typeof getSchoolById>>;
 }) {
 	const { revalidate } = useRevalidator();
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const inviteForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: { username: "", role: "teacher" as "teacher" | "admin" },
 		validate: {
 			username: (value) => {
@@ -58,10 +53,7 @@ export function InviteUserForm({
 	return (
 		<UI.Paper>
 			<UI.Stack gap="lg">
-				<UI.Title order={1}>
-					Convidar Usuário para {school.trade_name || school.legal_name}
-				</UI.Title>
-				<UI.Divider />
+				<UI.Title order={2}>Convidar Usuário</UI.Title>
 
 				<form onSubmit={inviteForm.onSubmit(onSubmit)} noValidate>
 					<UI.Grid align="flex-start">

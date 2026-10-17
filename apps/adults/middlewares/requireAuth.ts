@@ -6,18 +6,13 @@ export const requireAuth: MiddlewareFunction = async ({ request }, next) => {
 	const { data: claimsData, error: claimsError } =
 		await supabase.auth.getClaims();
 
-	if (claimsError || !claimsData?.claims) {
-		throw redirect("/login");
-	}
+	if (claimsError || !claimsData?.claims) throw redirect("/login");
 
 	const data = await getProfileForCurrentUser();
 
 	if (!data.name || !data.username) {
 		const pathname = new URL(request.url).pathname;
-
-		if (pathname !== "/onboarding") {
-			throw redirect("/onboarding");
-		}
+		if (pathname !== "/onboarding") throw redirect("/onboarding");
 	}
 
 	await next();

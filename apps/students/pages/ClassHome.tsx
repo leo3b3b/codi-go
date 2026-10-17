@@ -1,34 +1,30 @@
+import type { Route } from "+pages/ClassHome";
 import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
-import type { LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
-import { CodiToast } from "@/components";
+import { useNavigate } from "react-router";
 import {
 	getClassByAccessCode,
 	getStudentsByClassId,
 	signInStudent,
 } from "@/services";
+import { showCodiToast } from "./ClassHomePage/CodiToast";
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-	if (!params.accessCode) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+	if (!params.accessCode)
 		throw new Response("Turma não encontrada", { status: 404 });
-	}
 
 	const classData = await getClassByAccessCode(params.accessCode);
-
-	if (!classData) {
-		throw new Response("Turma não encontrada", { status: 404 });
-	}
+	if (!classData) throw new Response("Turma não encontrada", { status: 404 });
 
 	const students = await getStudentsByClassId(classData.id);
 
 	return { classData, students };
 }
 
-export default function ClassHome() {
-	const { classData, students } = useLoaderData<typeof clientLoader>();
+export default function ClassHome({
+	loaderData: { classData, students },
+}: Route.ComponentProps) {
 	const navigate = useNavigate();
 
 	const [selectedStudent, setSelectedStudent] = useState<{
@@ -38,9 +34,7 @@ export default function ClassHome() {
 	const [selectedCode, setSelectedCode] = useState<ImageCode | null>(null);
 
 	async function handleStart() {
-		if (!selectedStudent || !selectedCode) {
-			return;
-		}
+		if (!selectedStudent || !selectedCode) return;
 
 		try {
 			await signInStudent({
@@ -51,15 +45,13 @@ export default function ClassHome() {
 
 			navigate(`/${classData.access_code}/fases`);
 		} catch {
-			toast.custom((t) => (
-				<CodiToast t={t} is_class_playing={classData.is_playing} />
-			));
+			showCodiToast(classData.is_playing);
 		}
 	}
 
 	return (
 		<UI.Stack w="100%" gap="xl">
-			<title>CodiGO! | Quem é você?</title>
+			<title>Quem é você? | CodiGO!</title>
 
 			<UI.Paper>
 				<UI.Grid align="center">

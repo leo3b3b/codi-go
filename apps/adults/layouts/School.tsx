@@ -1,23 +1,23 @@
+import type { Route } from "+layouts/School";
 import { UI } from "@codi-go/ui";
-import { Outlet, useLoaderData, useLocation } from "react-router";
-import { SchoolHeader } from "@/components";
+import { Outlet, useLocation } from "react-router";
 import { requireAuth } from "@/middlewares";
 import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
+import { SchoolHeader } from "./SchoolLayout";
 
 export const clientMiddleware = [requireAuth];
 
-export async function clientLoader({ request }: { request: Request }) {
-	const url = new URL(request.url);
-	const match = url.pathname.match(/^\/escola\/([^/]+)/);
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+	const schoolId = new URL(request.url).pathname.match(
+		/^\/escola\/([^/]+)/,
+	)?.[1];
 
-	if (!match) {
+	if (!schoolId) {
 		return {
 			schools: [],
 			classes: [],
 		};
 	}
-
-	const schoolId = match[1];
 
 	const [schools, classes] = await Promise.all([
 		getSchoolsForCurrentUser(),
@@ -32,14 +32,13 @@ export async function clientLoader({ request }: { request: Request }) {
 
 export const shouldRevalidate = () => true;
 
-export type SchoolLayoutLoaderData = Awaited<ReturnType<typeof clientLoader>>;
-
-export default function SchoolLayout() {
-	const data = useLoaderData<typeof clientLoader>();
+export default function SchoolLayout({
+	loaderData: data,
+}: Route.ComponentProps) {
 	const location = useLocation();
 
 	return (
-		<UI.Box c="gray.9" className="ui-root">
+		<UI.Box className="ui-root">
 			<SchoolHeader schools={data.schools} classes={data.classes} />
 
 			<UI.Container

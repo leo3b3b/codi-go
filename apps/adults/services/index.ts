@@ -1,9 +1,11 @@
 export {
 	deleteUserAccount,
 	getUser,
+	resetPasswordForEmail,
 	signInWithPassword,
 	signOut,
 	signUp,
+	updatePassword,
 } from "./auth";
 export {
 	createClass,
@@ -16,9 +18,11 @@ export {
 	updateClass,
 } from "./classes";
 export {
+	acceptInvite,
 	adminGetMembershipsBySchool,
 	deleteMembership,
 	getInvitesForCurrentUser,
+	getSchoolById,
 	getSchoolsForCurrentUser,
 	inviteUserToSchool,
 	updateMembershipRole,
@@ -29,7 +33,6 @@ export {
 	updateProfileForCurrentUser,
 } from "./profile";
 export { getStudentProgress } from "./progress";
-export { getSchoolById } from "./schools";
 export {
 	createStudent,
 	deleteStudent,

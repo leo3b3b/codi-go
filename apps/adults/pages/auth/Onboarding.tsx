@@ -11,7 +11,7 @@ export default function OnboardingPage() {
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const onboardingForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: {
 			name: "",
 			username: "",
@@ -56,7 +56,7 @@ export default function OnboardingPage() {
 
 	return (
 		<UI.Paper>
-			<title>CodiGO! | Complete seu perfil</title>
+			<title>Complete seu perfil | CodiGO!</title>
 			<UI.Stack gap="lg">
 				<UI.Title order={1} ta="center">
 					Complete seu perfil

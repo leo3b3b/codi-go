@@ -1,20 +1,22 @@
-import { UI } from "@codi-go/ui";
-import type { Toast } from "react-hot-toast";
+import { notifications, UI } from "@codi-go/ui";
 
-type CodiToastProps = {
-	t: Toast;
-	is_class_playing: boolean;
-};
+export function showCodiToast(is_class_playing: boolean) {
+	notifications.clean();
+	notifications.show({
+		message: "",
+		autoClose: 3000,
+		position: "top-center",
 
-export function CodiToast({ t, is_class_playing }: CodiToastProps) {
+		renderNotification: () => <CodiToast is_class_playing={is_class_playing} />,
+	});
+}
+
+function CodiToast({ is_class_playing }: { is_class_playing: boolean }) {
 	return (
 		<UI.Box
 			style={{
 				pointerEvents: "auto",
 				width: "min(90vw, 28rem)",
-				transform: t.visible ? "translateY(0)" : "translateY(0.5rem)",
-				opacity: t.visible ? 1 : 0,
-				transition: "transform 300ms, opacity 300ms",
 			}}
 		>
 			<UI.Paper
@@ -36,7 +38,7 @@ export function CodiToast({ t, is_class_playing }: CodiToastProps) {
 						<UI.Text mt={4}>
 							{is_class_playing
 								? "Tente escolher outra imagem."
-								: "Tente de novo depois"}
+								: "Tente de novo depois."}
 						</UI.Text>
 					</UI.Box>
 				</UI.Group>

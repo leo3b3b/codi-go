@@ -27,7 +27,7 @@ export function EditClassForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const classForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: {
 			name: classData.name,
 			teacher_username: classData.teacher_username ?? "",

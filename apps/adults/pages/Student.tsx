@@ -1,37 +1,22 @@
-import { Icon, UI } from "@codi-go/ui";
-import { useLoaderData, useNavigate } from "react-router";
-import {
-	Bar,
-	BarChart,
-	CartesianGrid,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from "recharts";
+import type { Route } from "+pages/Student";
+import { Charts, Icon, UI } from "@codi-go/ui";
+import { useNavigate } from "react-router";
 import { parseMazeProgress } from "@/games/maze/progress";
 import { getStudentById, getStudentProgress } from "@/services";
 
-export async function clientLoader({
-	params,
-}: {
-	params: {
-		schoolId?: string;
-		studentId?: string;
-	};
-}) {
-	if (!params.schoolId || !params.studentId) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+	const { schoolId, studentId } = params;
+
+	if (!schoolId || !studentId)
 		throw new Response("Aluno não encontrado", { status: 404 });
-	}
 
 	const [student, progress] = await Promise.all([
-		getStudentById(params.studentId),
-		getStudentProgress(params.studentId),
+		getStudentById(studentId),
+		getStudentProgress(studentId),
 	]);
 
-	if (student.school_id !== params.schoolId) {
+	if (student.school_id !== schoolId)
 		throw new Response("Aluno não encontrado", { status: 404 });
-	}
 
 	return {
 		student,
@@ -42,10 +27,13 @@ export async function clientLoader({
 	};
 }
 
-export default function StudentPage() {
-	const { student, progress, mazeProgress } =
-		useLoaderData<typeof clientLoader>();
+export function meta({ loaderData: { student } }: Route.MetaArgs) {
+	return [{ title: `${student.name} | CodiGO!` }];
+}
 
+export default function StudentPage({
+	loaderData: { student, progress, mazeProgress },
+}: Route.ComponentProps) {
 	const navigate = useNavigate();
 
 	const successCount = progress.filter(
@@ -66,15 +54,8 @@ export default function StudentPage() {
 	const lastActivity =
 		progress.length > 0 ? progress[progress.length - 1].register_time : null;
 
-	const mazeChartData = mazeProgress.map((record) => ({
-		name: record.levelName,
-		difference: record.commandDifference,
-	}));
-
 	return (
 		<UI.Stack w="100%" gap="xl">
-			<title>CodiGO! | Aluno</title>
-
 			<UI.Paper>
 				<UI.Group justify="space-between" gap="md" wrap="nowrap">
 					<div>
@@ -128,20 +109,8 @@ export default function StudentPage() {
 						</UI.Text>
 					</div>
 
-					{mazeChartData.length > 0 ? (
-						<UI.Box h={320}>
-							<ResponsiveContainer width="100%" height="100%">
-								<BarChart data={mazeChartData}>
-									<CartesianGrid strokeDasharray="3 3" />
-									<XAxis dataKey="name" />
-									<YAxis />
-									<Tooltip
-										formatter={(value) => [`${value} comandos`, "Diferença"]}
-									/>
-									<Bar dataKey="difference" />
-								</BarChart>
-							</ResponsiveContainer>
-						</UI.Box>
+					{mazeProgress.length > 0 ? (
+						<MazeProgressChart records={mazeProgress} />
 					) : (
 						<UI.Text size="sm" c="dimmed">
 							Ainda não há dados suficientes para o labirinto.
@@ -159,7 +128,7 @@ export default function StudentPage() {
 						px="md"
 						py="sm"
 						style={{
-							borderBottom: "1px solid var(--mantine-color-gray-3)",
+							borderBottom: "1px solid var(--app-border)",
 						}}
 					>
 						<UI.Grid.Col span={3}>
@@ -195,7 +164,7 @@ export default function StudentPage() {
 								px="md"
 								py="sm"
 								style={{
-									borderBottom: "1px solid var(--mantine-color-gray-3)",
+									borderBottom: "1px solid var(--app-border)",
 								}}
 							>
 								<UI.Grid.Col span={{ base: 12, md: 3 }}>
@@ -237,5 +206,105 @@ function MetricCard({ label, value }: { label: string; value: string }) {
 				{value}
 			</UI.Text>
 		</UI.Paper>
+	);
+}
+
+interface MazeProgressChartProps {
+	records: Awaited<ReturnType<typeof parseMazeProgress>>[];
+}
+
+interface MazeChartPoint {
+	attempt: number;
+	levelName: string;
+	result: "success" | "failure";
+	difference: number | null;
+	success: number | null;
+	failure: number | null;
+}
+
+function MazeProgressTooltip({
+	payload,
+}: {
+	// biome-ignore lint/suspicious/noExplicitAny: its better this way
+	payload: readonly Record<string, any>[] | undefined;
+}) {
+	if (!payload) return null;
+
+	// Remove entradas vazias geradas para compor as séries do gráfico.
+	const filteredPayload = Charts.getFilteredChartTooltipPayload(payload);
+	const point = filteredPayload[0]?.payload as MazeChartPoint | undefined;
+
+	if (!point) return null;
+
+	return (
+		<UI.Paper p="sm" withBorder shadow="md">
+			<UI.Text fw={600}>
+				Tentativa {point.attempt} — {point.levelName}
+			</UI.Text>
+
+			<UI.Text c={point.result === "success" ? "green.6" : "red.6"}>
+				{point.result === "success" ? "Sucesso" : "Falha"}:{" "}
+				{point.difference === null
+					? "diferença indisponível"
+					: `${point.difference} comandos`}
+			</UI.Text>
+		</UI.Paper>
+	);
+}
+
+export function MazeProgressChart({ records }: MazeProgressChartProps) {
+	if (records.length === 0) {
+		return (
+			<UI.Text c="dimmed">Nenhum registro de progresso disponível.</UI.Text>
+		);
+	}
+
+	const validRecords = records.filter(
+		(record): record is NonNullable<typeof record> => record !== null,
+	);
+
+	const chartData: MazeChartPoint[] = validRecords.map((record, index) => ({
+		attempt: index + 1,
+		levelName: record.levelName,
+		result: record.result,
+		difference: record.commandDifference,
+		success: record.result === "success" ? record.commandDifference : null,
+		failure: record.result === "failure" ? record.commandDifference : null,
+	}));
+
+	const chartLimit = Math.max(
+		1,
+		...validRecords.map((record) => Math.abs(record.commandDifference ?? 0)),
+	);
+
+	return (
+		<Charts.LineChart
+			h={320}
+			data={chartData}
+			dataKey="attempt"
+			series={[
+				{
+					name: "success",
+					label: "Sucesso",
+					color: "green.6",
+				},
+				{
+					name: "failure",
+					label: "Falha",
+					color: "red.6",
+				},
+			]}
+			withLegend
+			curveType="linear"
+			connectNulls={false}
+			dotProps={{ r: 5, strokeWidth: 2 }}
+			activeDotProps={{ r: 7 }}
+			yAxisProps={{ domain: [-chartLimit, chartLimit] }}
+			referenceLines={[{ y: 0, color: "var(--app-surface)" }]}
+			valueFormatter={(value) => `${value} comandos`}
+			tooltipProps={{
+				content: ({ payload }) => <MazeProgressTooltip payload={payload} />,
+			}}
+		/>
 	);
 }

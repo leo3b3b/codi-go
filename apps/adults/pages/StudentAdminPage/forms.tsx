@@ -2,7 +2,12 @@ import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { form, Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate, useRevalidator } from "react-router";
-import { deleteStudent, generateImageCode, updateStudent } from "@/services";
+import {
+	deleteStudent,
+	generateImageCode,
+	type getStudentById,
+	updateStudent,
+} from "@/services";
 
 const imageCodeValues = Object.keys(imageCodes) as [ImageCode, ...ImageCode[]];
 const studentNameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
@@ -10,11 +15,7 @@ const studentNameRegex = /^\p{L}+(?: +\p{L}+)*$/u;
 export function EditStudentForm({
 	student,
 }: {
-	student: {
-		id: string;
-		name: string;
-		access_code: string;
-	};
+	student: Awaited<ReturnType<typeof getStudentById>>;
 }) {
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
@@ -22,7 +23,7 @@ export function EditStudentForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const studentForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: {
 			name: student.name,
 			access_code: student.access_code as ImageCode,
@@ -41,19 +42,17 @@ export function EditStudentForm({
 		},
 	});
 
-	const imageCode = imageCodes[studentForm.values.access_code];
+	const imageCode = imageCodes[studentForm.useWatchValue("access_code")];
 
 	function handleBack() {
 		navigate(-1);
 	}
 
 	async function handleDeleteStudent() {
-		const confirmed = window.confirm(
-			`Tem certeza de que quer excluir ${student.name} e todos os seus registros? Essa ação é irreversível!`,
-		);
-		if (!confirmed) return;
-
+		const message = `Tem certeza de que quer excluir ${student.name} e todos os seus registros? Essa ação é irreversível!`;
+		if (!window.confirm(message)) return;
 		setIsDeleting(true);
+
 		try {
 			await deleteStudent(student.id);
 			handleBack();
@@ -70,7 +69,7 @@ export function EditStudentForm({
 				name: values.name.trim(),
 				access_code: values.access_code,
 			});
-			studentForm.setInitialValues(studentForm.getValues());
+
 			studentForm.resetDirty();
 			await revalidate();
 		} catch {
@@ -93,8 +92,6 @@ export function EditStudentForm({
 					<UI.Title order={1}>Editar Aluno</UI.Title>
 				</UI.Group>
 
-				<UI.Divider />
-
 				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="lg">
 						<UI.TextInput
@@ -108,35 +105,32 @@ export function EditStudentForm({
 								Credencial
 							</UI.Text>
 							<UI.Group align="center" gap="md" wrap="nowrap">
-								{imageCode && (
-									<UI.Image
-										src={imageCode.src}
-										alt={imageCode.label}
-										h={80}
-										w={80}
-										fit="contain"
-									/>
-								)}
+								<UI.Image
+									src={imageCode.src}
+									alt={imageCode.label}
+									h={80}
+									w={80}
+									fit="contain"
+								/>
 								<UI.TextInput
 									flex={1}
 									value={imageCode?.label ?? ""}
 									readOnly
 									error={studentForm.errors.access_code}
-									rightSection={
-										<UI.ActionIcon
-											variant="default"
-											aria-label="Gerar nova credencial"
-											onClick={() =>
-												studentForm.setFieldValue(
-													"access_code",
-													generateImageCode(),
-												)
-											}
-										>
-											<Icon.Shuffle size={18} />
-										</UI.ActionIcon>
-									}
 								/>
+								<UI.ActionIcon
+									size={40}
+									radius="lg"
+									aria-label="Gerar nova credencial"
+									onClick={() =>
+										studentForm.setFieldValue(
+											"access_code",
+											generateImageCode(),
+										)
+									}
+								>
+									<Icon.Shuffle size={20} />
+								</UI.ActionIcon>
 							</UI.Group>
 						</UI.Stack>
 
@@ -150,17 +144,18 @@ export function EditStudentForm({
 								disabled={!studentForm.isDirty() || isDeleting}
 								leftSection={<Icon.Save size={18} />}
 							>
-								{studentForm.submitting ? "Salvando..." : "Salvar Alterações"}
+								Salvar Alterações
 							</UI.Button>
 							<UI.Button
 								type="button"
+								color="red"
 								flex={1}
 								loading={isDeleting}
 								disabled={studentForm.submitting}
 								leftSection={<Icon.Trash2 size={18} />}
 								onClick={handleDeleteStudent}
 							>
-								{isDeleting ? "Excluindo..." : "Excluir Aluno"}
+								Excluir Aluno
 							</UI.Button>
 						</UI.Group>
 					</UI.Stack>

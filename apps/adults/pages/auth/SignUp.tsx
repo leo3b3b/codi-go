@@ -8,7 +8,7 @@ export default function SignUpPage() {
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const signUpForm = form.useForm({
-		mode: "controlled",
+		mode: "uncontrolled",
 		initialValues: {
 			email: "",
 			password: "",
@@ -52,7 +52,7 @@ export default function SignUpPage() {
 
 	return (
 		<UI.Paper>
-			<title>CodiGO! | Crie sua conta</title>
+			<title>Crie sua conta | CodiGO!</title>
 			<UI.Stack gap="lg">
 				<UI.Title order={1} ta="center">
 					Crie sua conta
@@ -79,11 +79,7 @@ export default function SignUpPage() {
 							{...signUpForm.getInputProps("confirmation")}
 						/>
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
-						<UI.Button
-							type="submit"
-							loading={signUpForm.submitting}
-							mt="xs"
-						>
+						<UI.Button type="submit" loading={signUpForm.submitting} mt="xs">
 							{signUpForm.submitting ? "Criando..." : "Criar conta"}
 						</UI.Button>
 					</UI.Stack>
