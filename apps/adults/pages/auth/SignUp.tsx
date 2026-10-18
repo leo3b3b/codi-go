@@ -5,7 +5,9 @@ import { signUp } from "@/services";
 
 export default function SignUpPage() {
 	const navigate = useNavigate();
+
 	const [rootError, setRootError] = useState<string | null>(null);
+	const [passwordVisible, setPasswordVisible] = useState(false);
 
 	const signUpForm = form.useForm({
 		mode: "uncontrolled",
@@ -22,6 +24,7 @@ export default function SignUpPage() {
 					return "Informe um endereço de e-mail válido (ex: nome@dominio.com).";
 				return null;
 			},
+
 			password: (value) => {
 				const password = value.trim();
 				if (!password) return "Crie uma senha.";
@@ -29,6 +32,7 @@ export default function SignUpPage() {
 					return "A senha deve ter no mínimo 6 caracteres.";
 				return null;
 			},
+
 			confirmation: (value, values) => {
 				const confirmation = value.trim();
 				if (!confirmation) return "Confirme sua senha.";
@@ -53,10 +57,12 @@ export default function SignUpPage() {
 	return (
 		<UI.Paper>
 			<title>Crie sua conta | CodiGO!</title>
+
 			<UI.Stack gap="lg">
 				<UI.Title order={1} ta="center">
 					Crie sua conta
 				</UI.Title>
+
 				<form onSubmit={signUpForm.onSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="md">
 						<UI.TextInput
@@ -66,24 +72,33 @@ export default function SignUpPage() {
 							autoComplete="email"
 							{...signUpForm.getInputProps("email")}
 						/>
+
 						<UI.PasswordInput
 							label="Senha"
 							placeholder="Crie uma senha"
 							autoComplete="new-password"
+							visible={passwordVisible}
+							onVisibilityChange={setPasswordVisible}
 							{...signUpForm.getInputProps("password")}
 						/>
+
 						<UI.PasswordInput
 							label="Confirmar senha"
 							placeholder="Confirme sua senha"
 							autoComplete="new-password"
+							visible={passwordVisible}
+							onVisibilityChange={setPasswordVisible}
 							{...signUpForm.getInputProps("confirmation")}
 						/>
+
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
+
 						<UI.Button type="submit" loading={signUpForm.submitting} mt="xs">
 							{signUpForm.submitting ? "Criando..." : "Criar conta"}
 						</UI.Button>
 					</UI.Stack>
 				</form>
+
 				<UI.Text size="sm" c="dimmed" ta="center">
 					Já possui uma conta?{" "}
 					<UI.Anchor component={Link} to="/login" fw={700}>

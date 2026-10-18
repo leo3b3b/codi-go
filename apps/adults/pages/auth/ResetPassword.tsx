@@ -5,6 +5,8 @@ import { updatePassword } from "@/services";
 
 export default function ResetPasswordPage() {
 	const navigate = useNavigate();
+
+	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [rootError, setRootError] = useState<string | null>(null);
 	const [success, setSuccess] = useState(false);
 
@@ -64,6 +66,8 @@ export default function ResetPasswordPage() {
 									label="Nova senha"
 									placeholder="Digite sua nova senha"
 									autoComplete="new-password"
+									visible={passwordVisible}
+									onVisibilityChange={setPasswordVisible}
 									{...resetForm.getInputProps("password")}
 								/>
 
@@ -71,6 +75,8 @@ export default function ResetPasswordPage() {
 									label="Confirmar nova senha"
 									placeholder="Digite novamente sua senha"
 									autoComplete="new-password"
+									visible={passwordVisible}
+									onVisibilityChange={setPasswordVisible}
 									{...resetForm.getInputProps("confirmPassword")}
 								/>
 
