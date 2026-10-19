@@ -24,6 +24,18 @@ export const theme = createTheme({
 	},
 
 	components: {
+		Container: {
+			defaultProps: {
+				size: "lg",
+			},
+		},
+
+		Stack: {
+			defaultProps: {
+				gap: "md",
+			},
+		},
+
 		Paper: {
 			defaultProps: {
 				radius: "lg",

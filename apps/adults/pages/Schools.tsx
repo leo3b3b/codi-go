@@ -11,12 +11,12 @@ export default function SchoolsPage({
 	loaderData: schools,
 }: Route.ComponentProps) {
 	return (
-		<UI.Container size="lg">
+		<UI.Container>
 			<title>Minhas Escolas | CodiGO!</title>
 			{schools.length === 0 ? (
 				<UI.Center>
 					<UI.Paper p="xl" maw={672}>
-						<UI.Stack gap="md">
+						<UI.Stack>
 							<UI.Title order={2} ta="center">
 								Você não participa de nenhuma escola!
 							</UI.Title>

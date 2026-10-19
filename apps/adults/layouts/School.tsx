@@ -45,7 +45,7 @@ export default function SchoolLayout({
 				key={location.pathname}
 				component="main"
 				size="xl"
-				px="md"
+				px="0px"
 				py="lg"
 			>
 				<Outlet />

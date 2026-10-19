@@ -136,7 +136,7 @@ export function EditClassForm({
 				)}
 
 				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.SimpleGrid cols={{ base: 1, md: 2 }}>
 							<UI.TextInput
 								label="Nome da Turma"

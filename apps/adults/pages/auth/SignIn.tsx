@@ -44,7 +44,7 @@ export default function SignInPage() {
 					Bom te ver!
 				</UI.Title>
 				<form onSubmit={signInForm.onSubmit(onSubmit)} noValidate>
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.TextInput
 							label="E-mail"
 							type="email"

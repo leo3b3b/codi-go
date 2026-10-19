@@ -130,7 +130,7 @@ function Hero() {
 
 			<UI.Grid.Col span={{ base: 12, md: 5 }}>
 				<UI.Paper p={{ base: "md", md: "xl" }}>
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.Group justify="space-between" align="center">
 							<UI.Stack gap={2}>
 								<UI.Text size="sm" c="dimmed">
@@ -230,7 +230,7 @@ function FeaturesSection() {
 						return (
 							<UI.Grid.Col key={feature.title} span={{ base: 12, md: 4 }}>
 								<UI.Paper h="100%" bg="var(--app-surface)">
-									<UI.Stack gap="md">
+									<UI.Stack>
 										<UI.ThemeIcon
 											size={48}
 											variant="light"
@@ -261,7 +261,7 @@ function SchoolValueSection() {
 		<UI.Paper p={{ base: "xl", md: 40 }}>
 			<UI.Grid align="center">
 				<UI.Grid.Col span={{ base: 12, md: 8 }}>
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.Text size="sm" fw={700} c="violet.7" tt="uppercase">
 							Para escolas
 						</UI.Text>

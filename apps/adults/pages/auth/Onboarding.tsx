@@ -62,7 +62,7 @@ export default function OnboardingPage() {
 					Complete seu perfil
 				</UI.Title>
 				<form onSubmit={onboardingForm.onSubmit(onSubmit)} noValidate>
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.TextInput
 							label="Nome"
 							placeholder="Digite seu nome"

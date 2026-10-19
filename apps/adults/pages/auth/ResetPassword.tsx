@@ -61,7 +61,7 @@ export default function ResetPasswordPage() {
 						</UI.Text>
 
 						<form onSubmit={resetForm.onSubmit(onSubmit)} noValidate>
-							<UI.Stack gap="md">
+							<UI.Stack>
 								<UI.PasswordInput
 									label="Nova senha"
 									placeholder="Digite sua nova senha"
@@ -89,7 +89,7 @@ export default function ResetPasswordPage() {
 						</form>
 					</>
 				) : (
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.Alert color="violet">
 							Sua senha foi redefinida com sucesso. Você já pode entrar com sua
 							nova senha.

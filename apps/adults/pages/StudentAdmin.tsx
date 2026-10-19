@@ -51,65 +51,66 @@ export default function StudentAdminPage({
 	}
 
 	return (
-		<UI.Stack w="100%" gap="md">
+		<UI.Container>
 			<title>Editar Aluno | CodiGO!</title>
+			<UI.Stack>
+				<Self.EditStudentForm student={student} />
 
-			<Self.EditStudentForm student={student} />
+				<UI.Paper>
+					<UI.Stack gap="lg">
+						<div>
+							<UI.Title order={2}>Turma do Aluno</UI.Title>
 
-			<UI.Paper>
-				<UI.Stack gap="lg">
-					<div>
-						<UI.Title order={2}>Turma do Aluno</UI.Title>
+							<UI.Text size="sm" c="dimmed">
+								Selecione outra turma para transferir o aluno.
+							</UI.Text>
+						</div>
 
-						<UI.Text size="sm" c="dimmed">
-							Selecione outra turma para transferir o aluno.
-						</UI.Text>
-					</div>
+						{transferError && <UI.Alert>{transferError}</UI.Alert>}
 
-					{transferError && <UI.Alert>{transferError}</UI.Alert>}
+						<UI.Stack gap="sm">
+							{classes.map((classData) => {
+								const isCurrentClass = classData.id === student.class_id;
 
-					<UI.Stack gap="sm">
-						{classes.map((classData) => {
-							const isCurrentClass = classData.id === student.class_id;
+								return (
+									<UI.Paper
+										key={classData.id}
+										bg="var(--app-surface)"
+										style={{
+											borderColor: isCurrentClass
+												? "var(--mantine-color-violet-6)"
+												: undefined,
+										}}
+									>
+										<UI.Group justify="space-between" gap="md" wrap="nowrap">
+											<UI.Text fw={600}>{classData.name}</UI.Text>
 
-							return (
-								<UI.Paper
-									key={classData.id}
-									bg="var(--app-surface)"
-									style={{
-										borderColor: isCurrentClass
-											? "var(--mantine-color-violet-6)"
-											: undefined,
-									}}
-								>
-									<UI.Group justify="space-between" gap="md" wrap="nowrap">
-										<UI.Text fw={600}>{classData.name}</UI.Text>
-
-										{isCurrentClass ? (
-											<UI.Text size="sm" c="violet" fw={600}>
-												Turma atual
-											</UI.Text>
-										) : (
-											<UI.Button
-												type="button"
-												variant="default"
-												w="auto"
-												disabled={isTransferring}
-												leftSection={<Icon.Move size={18} />}
-												onClick={() =>
-													handleTransfer(classData.id, classData.name)
-												}
-											>
-												Transferir
-											</UI.Button>
-										)}
-									</UI.Group>
-								</UI.Paper>
-							);
-						})}
+											{isCurrentClass ? (
+												<UI.Text size="sm" c="violet" fw={600}>
+													Turma atual
+												</UI.Text>
+											) : (
+												<UI.Button
+													type="button"
+													variant="default"
+													w="auto"
+													disabled={isTransferring}
+													leftSection={<Icon.Move size={18} />}
+													onClick={() =>
+														handleTransfer(classData.id, classData.name)
+													}
+												>
+													Transferir
+												</UI.Button>
+											)}
+										</UI.Group>
+									</UI.Paper>
+								);
+							})}
+						</UI.Stack>
 					</UI.Stack>
-				</UI.Stack>
-			</UI.Paper>
-		</UI.Stack>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
 	);
 }

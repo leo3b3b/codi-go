@@ -41,7 +41,7 @@ export default function ProfilePage({
 	return (
 		<UI.Container size="sm">
 			<title>Meu Perfil | CodiGO!</title>
-			<UI.Stack gap="md">
+			<UI.Stack>
 				<UI.Paper>
 					<UI.Group gap="lg" wrap="nowrap">
 						<UI.Avatar

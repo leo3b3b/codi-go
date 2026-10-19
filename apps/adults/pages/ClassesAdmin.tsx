@@ -22,27 +22,29 @@ export default function ClassesAdminPage({
 	loaderData: { school, classes },
 }: Route.ComponentProps) {
 	return (
-		<UI.Stack w="100%" gap="md">
-			<UI.Title order={1}>Gerenciar turmas em {school.trade_name}</UI.Title>
+		<UI.Container>
+			<UI.Stack>
+				<UI.Title order={1}>Gerenciar turmas em {school.trade_name}</UI.Title>
 
-			<CreateClassForm school_id={school.id} />
+				<CreateClassForm school_id={school.id} />
 
-			<UI.Paper>
-				<UI.Stack gap="md">
-					<UI.Title order={2}>Gerenciar Turmas</UI.Title>
+				<UI.Paper>
+					<UI.Stack>
+						<UI.Title order={2}>Gerenciar Turmas</UI.Title>
 
-					{classes.length === 0 ? (
-						<UI.Center py="xl">
-							<UI.Text size="lg" ta="center">
-								Esta escola ainda não possui turmas.
-							</UI.Text>
-						</UI.Center>
-					) : (
-						<ClassList school={school} classes={classes} />
-					)}
-				</UI.Stack>
-			</UI.Paper>
-		</UI.Stack>
+						{classes.length === 0 ? (
+							<UI.Center py="xl">
+								<UI.Text size="lg" ta="center">
+									Esta escola ainda não possui turmas.
+								</UI.Text>
+							</UI.Center>
+						) : (
+							<ClassList school={school} classes={classes} />
+						)}
+					</UI.Stack>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
 	);
 }
 

@@ -57,7 +57,7 @@ export function EditProfileForm({ profile }: { profile: Profile }) {
 	return (
 		<UI.Paper>
 			<form onSubmit={profileForm.onSubmit(onSubmit)} noValidate>
-				<UI.Stack gap="md">
+				<UI.Stack>
 					<div>
 						<UI.Title order={2}>Editar Perfil</UI.Title>
 						<UI.Text size="sm" c="dimmed">

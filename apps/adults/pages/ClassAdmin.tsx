@@ -47,58 +47,60 @@ export default function ClassAdminPage({
 	}
 
 	return (
-		<UI.Stack w="100%" gap="md">
-			<Self.EditClassForm classData={classData} />
+		<UI.Container>
+			<UI.Stack>
+				<Self.EditClassForm classData={classData} />
 
-			<Self.CreateStudentForm
-				class_id={classData.id}
-				school_id={classData.school_id}
-			/>
+				<Self.CreateStudentForm
+					class_id={classData.id}
+					school_id={classData.school_id}
+				/>
 
-			<UI.Paper>
-				<UI.Stack gap="md">
-					<UI.Title order={2}>Gerenciar Alunos</UI.Title>
+				<UI.Paper>
+					<UI.Stack>
+						<UI.Title order={2}>Gerenciar Alunos</UI.Title>
 
-					<UI.Grid
-						visibleFrom="lg"
-						px="md"
-						py="sm"
-						style={{
-							borderBottom: "1px solid var(--app-border)",
-						}}
-					>
-						<UI.Grid.Col span={4}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Nome
-							</UI.Text>
-						</UI.Grid.Col>
+						<UI.Grid
+							visibleFrom="lg"
+							px="md"
+							py="sm"
+							style={{
+								borderBottom: "1px solid var(--app-border)",
+							}}
+						>
+							<UI.Grid.Col span={4}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Nome
+								</UI.Text>
+							</UI.Grid.Col>
 
-						<UI.Grid.Col span={2}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Credencial
-							</UI.Text>
-						</UI.Grid.Col>
+							<UI.Grid.Col span={2}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Credencial
+								</UI.Text>
+							</UI.Grid.Col>
 
-						<UI.Grid.Col span={6}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Ações
-							</UI.Text>
-						</UI.Grid.Col>
-					</UI.Grid>
+							<UI.Grid.Col span={6}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Ações
+								</UI.Text>
+							</UI.Grid.Col>
+						</UI.Grid>
 
-					<UI.Stack gap="md">
-						{students.map((student) => (
-							<StudentRow
-								key={student.id}
-								student={student}
-								onUpdate={handleUpdate}
-								onDelete={handleDeleteStudent}
-							/>
-						))}
+						<UI.Stack>
+							{students.map((student) => (
+								<StudentRow
+									key={student.id}
+									student={student}
+									onUpdate={handleUpdate}
+									onDelete={handleDeleteStudent}
+								/>
+							))}
+						</UI.Stack>
 					</UI.Stack>
-				</UI.Stack>
-			</UI.Paper>
-		</UI.Stack>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
 	);
 }
 

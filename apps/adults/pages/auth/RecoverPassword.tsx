@@ -55,7 +55,7 @@ export default function RecoverPasswordPage() {
 
 				{!submitted ? (
 					<form onSubmit={recoverForm.onSubmit(onSubmit)} noValidate>
-						<UI.Stack gap="md">
+						<UI.Stack>
 							<UI.TextInput
 								label="E-mail"
 								type="email"

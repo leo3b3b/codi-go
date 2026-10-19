@@ -28,19 +28,21 @@ export default function SchoolHomePage({
 	const isAdmin = school.role === "admin";
 
 	return (
-		<UI.Stack w="100%">
-			<UI.Title order={1}>{school.trade_name}</UI.Title>
-			<UI.SimpleGrid
-				cols={{ base: 1, md: isAdmin ? 2 : 1 }}
-				spacing="lg"
-				maw={isAdmin ? undefined : 672}
-				mx={isAdmin ? undefined : "auto"}
-				w="100%"
-			>
-				<ClassesSection classes={classes} />
-				{isAdmin && <AdminSection />}
-			</UI.SimpleGrid>
-		</UI.Stack>
+		<UI.Container>
+			<UI.Stack>
+				<UI.Title order={1}>{school.trade_name}</UI.Title>
+				<UI.SimpleGrid
+					cols={{ base: 1, md: isAdmin ? 2 : 1 }}
+					spacing="lg"
+					maw={isAdmin ? undefined : 672}
+					mx={isAdmin ? undefined : "auto"}
+					w="100%"
+				>
+					<ClassesSection classes={classes} />
+					{isAdmin && <AdminSection />}
+				</UI.SimpleGrid>
+			</UI.Stack>
+		</UI.Container>
 	);
 }
 

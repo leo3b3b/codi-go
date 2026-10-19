@@ -64,7 +64,7 @@ export default function SignUpPage() {
 				</UI.Title>
 
 				<form onSubmit={signUpForm.onSubmit(onSubmit)} noValidate>
-					<UI.Stack gap="md">
+					<UI.Stack>
 						<UI.TextInput
 							label="E-mail"
 							type="email"

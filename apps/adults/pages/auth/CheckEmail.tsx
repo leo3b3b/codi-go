@@ -19,7 +19,7 @@ export default function CheckEmailPage() {
 
 				<UI.Divider />
 
-				<UI.Stack gap="md">
+				<UI.Stack>
 					<UI.Text c="dimmed">
 						Se não encontrar a mensagem, verifique também a pasta de spam ou
 						lixo eletrônico.

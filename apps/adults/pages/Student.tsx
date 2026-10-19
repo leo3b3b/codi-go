@@ -55,143 +55,150 @@ export default function StudentPage({
 		progress.length > 0 ? progress[progress.length - 1].register_time : null;
 
 	return (
-		<UI.Stack w="100%" gap="xl">
-			<UI.Paper>
-				<UI.Group justify="space-between" gap="md" wrap="nowrap">
-					<div>
-						<UI.Title order={1}>{student.name}</UI.Title>
-						<UI.Text size="sm" c="dimmed">
-							Acompanhamento do aluno
-						</UI.Text>
-					</div>
+		<UI.Container>
+			<UI.Stack>
+				<UI.Paper>
+					<UI.Group justify="space-between" gap="md" wrap="nowrap">
+						<div>
+							<UI.Title order={1}>{student.name}</UI.Title>
+							<UI.Text size="sm" c="dimmed">
+								Acompanhamento do aluno
+							</UI.Text>
+						</div>
 
-					<UI.Button
-						type="button"
-						variant="default"
-						w="auto"
-						leftSection={<Icon.ArrowLeft size={18} />}
-						onClick={() =>
-							navigate(`/escola/${student.school_id}/turma/${student.class_id}`)
+						<UI.Button
+							type="button"
+							variant="default"
+							w="auto"
+							leftSection={<Icon.ArrowLeft size={18} />}
+							onClick={() =>
+								navigate(
+									`/escola/${student.school_id}/turma/${student.class_id}`,
+								)
+							}
+						>
+							Voltar
+						</UI.Button>
+					</UI.Group>
+				</UI.Paper>
+
+				<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
+					<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
+
+					<MetricCard
+						label="Níveis concluídos"
+						value={String(completedLevels)}
+					/>
+
+					<MetricCard label="Registros" value={String(progress.length)} />
+
+					<MetricCard
+						label="Última atividade"
+						value={
+							lastActivity
+								? new Date(lastActivity).toLocaleDateString("pt-BR")
+								: "—"
 						}
-					>
-						Voltar
-					</UI.Button>
-				</UI.Group>
-			</UI.Paper>
+					/>
+				</UI.SimpleGrid>
 
-			<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
-				<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
+				<UI.Paper>
+					<UI.Stack>
+						<div>
+							<UI.Title order={2}>Jogo do Labirinto</UI.Title>
 
-				<MetricCard label="Níveis concluídos" value={String(completedLevels)} />
+							<UI.Divider />
 
-				<MetricCard label="Registros" value={String(progress.length)} />
-
-				<MetricCard
-					label="Última atividade"
-					value={
-						lastActivity
-							? new Date(lastActivity).toLocaleDateString("pt-BR")
-							: "—"
-					}
-				/>
-			</UI.SimpleGrid>
-
-			<UI.Paper>
-				<UI.Stack gap="md">
-					<div>
-						<UI.Title order={2}>Jogo do Labirinto</UI.Title>
-
-						<UI.Divider />
-
-						<UI.Text size="sm" c="dimmed" mt="md">
-							Diferença entre os comandos utilizados e a meta do nível{" "}
-							<b>(quanto menor, melhor)</b>.
-						</UI.Text>
-					</div>
-
-					{mazeProgress.length > 0 ? (
-						<MazeProgressChart records={mazeProgress} />
-					) : (
-						<UI.Text size="sm" c="dimmed">
-							Ainda não há dados suficientes para o labirinto.
-						</UI.Text>
-					)}
-				</UI.Stack>
-			</UI.Paper>
-
-			<UI.Paper>
-				<UI.Stack gap="md">
-					<UI.Title order={2}>Registros</UI.Title>
-
-					<UI.Grid
-						visibleFrom="md"
-						px="md"
-						py="sm"
-						style={{
-							borderBottom: "1px solid var(--app-border)",
-						}}
-					>
-						<UI.Grid.Col span={3}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Nível
+							<UI.Text size="sm" c="dimmed" mt="md">
+								Diferença entre os comandos utilizados e a meta do nível{" "}
+								<b>(quanto menor, melhor)</b>.
 							</UI.Text>
-						</UI.Grid.Col>
+						</div>
 
-						<UI.Grid.Col span={3}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Jogo
+						{mazeProgress.length > 0 ? (
+							<MazeProgressChart records={mazeProgress} />
+						) : (
+							<UI.Text size="sm" c="dimmed">
+								Ainda não há dados suficientes para o labirinto.
 							</UI.Text>
-						</UI.Grid.Col>
-
-						<UI.Grid.Col span={3}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Resultado
-							</UI.Text>
-						</UI.Grid.Col>
-
-						<UI.Grid.Col span={3}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Data
-							</UI.Text>
-						</UI.Grid.Col>
-					</UI.Grid>
-
-					<UI.Stack gap={0}>
-						{[...progress].reverse().map((record) => (
-							<UI.Grid
-								key={record.id}
-								align="center"
-								px="md"
-								py="sm"
-								style={{
-									borderBottom: "1px solid var(--app-border)",
-								}}
-							>
-								<UI.Grid.Col span={{ base: 12, md: 3 }}>
-									<UI.Text fw={600}>{record.level.name}</UI.Text>
-								</UI.Grid.Col>
-
-								<UI.Grid.Col span={{ base: 12, md: 3 }}>
-									<UI.Text c="dimmed">{record.level.game.name}</UI.Text>
-								</UI.Grid.Col>
-
-								<UI.Grid.Col span={{ base: 6, md: 3 }}>
-									<UI.Text>
-										{record.result === "success" ? "Sucesso" : "Falha"}
-									</UI.Text>
-								</UI.Grid.Col>
-
-								<UI.Grid.Col span={{ base: 6, md: 3 }}>
-									<UI.Text c="dimmed">
-										{new Date(record.register_time).toLocaleString("pt-BR")}
-									</UI.Text>
-								</UI.Grid.Col>
-							</UI.Grid>
-						))}
+						)}
 					</UI.Stack>
-				</UI.Stack>
-			</UI.Paper>
-		</UI.Stack>
+				</UI.Paper>
+
+				<UI.Paper>
+					<UI.Stack>
+						<UI.Title order={2}>Registros</UI.Title>
+
+						<UI.Grid
+							visibleFrom="md"
+							px="md"
+							py="sm"
+							style={{
+								borderBottom: "1px solid var(--app-border)",
+							}}
+						>
+							<UI.Grid.Col span={3}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Nível
+								</UI.Text>
+							</UI.Grid.Col>
+
+							<UI.Grid.Col span={3}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Jogo
+								</UI.Text>
+							</UI.Grid.Col>
+
+							<UI.Grid.Col span={3}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Resultado
+								</UI.Text>
+							</UI.Grid.Col>
+
+							<UI.Grid.Col span={3}>
+								<UI.Text size="sm" c="dimmed" fw={700}>
+									Data
+								</UI.Text>
+							</UI.Grid.Col>
+						</UI.Grid>
+
+						<UI.Stack gap={0}>
+							{[...progress].reverse().map((record) => (
+								<UI.Grid
+									key={record.id}
+									align="center"
+									px="md"
+									py="sm"
+									style={{
+										borderBottom: "1px solid var(--app-border)",
+									}}
+								>
+									<UI.Grid.Col span={{ base: 12, md: 3 }}>
+										<UI.Text fw={600}>{record.level.name}</UI.Text>
+									</UI.Grid.Col>
+
+									<UI.Grid.Col span={{ base: 12, md: 3 }}>
+										<UI.Text c="dimmed">{record.level.game.name}</UI.Text>
+									</UI.Grid.Col>
+
+									<UI.Grid.Col span={{ base: 6, md: 3 }}>
+										<UI.Text>
+											{record.result === "success" ? "Sucesso" : "Falha"}
+										</UI.Text>
+									</UI.Grid.Col>
+
+									<UI.Grid.Col span={{ base: 6, md: 3 }}>
+										<UI.Text c="dimmed">
+											{new Date(record.register_time).toLocaleString("pt-BR")}
+										</UI.Text>
+									</UI.Grid.Col>
+								</UI.Grid>
+							))}
+						</UI.Stack>
+					</UI.Stack>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
 	);
 }
 
