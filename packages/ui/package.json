@@ -9,11 +9,11 @@
 		"./postcss.config.cjs": "./postcss.config.cjs"
 	},
 	"dependencies": {
-		"@mantine/charts": "^9.7.2",
-		"@mantine/core": "^9.7.1",
-		"@mantine/form": "^9.7.1",
-		"@mantine/hooks": "^9.7.1",
-		"@mantine/notifications": "^9.7.2",
+		"@mantine/charts": "^9.7.3",
+		"@mantine/core": "^9.7.3",
+		"@mantine/form": "^9.7.3",
+		"@mantine/hooks": "^9.7.3",
+		"@mantine/notifications": "^9.7.3",
 		"lucide-react": "^1.52.0",
 		"recharts": "^3.10.1"
 	},
