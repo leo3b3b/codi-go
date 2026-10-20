@@ -51,18 +51,17 @@ export function SchoolCard({ school }: { school: School }) {
 
 	return (
 		<NavLink to={`/escola/${school_id}`}>
-			<UI.Paper component="article" h="100%">
-				<UI.Group justify="space-between" mb="md">
+			<UI.Paper component="article" h="100%" p="md">
+				<UI.Stack gap="0" h="100%">
 					<UI.Title order={2}>{trade_name}</UI.Title>
+					<UI.Text c="dimmed" mt="4px" mb="md">
+						{legal_name}
+					</UI.Text>
 
-					<UI.Badge variant="light" color="violet">
+					<UI.Badge variant="light" color="violet" mt="auto">
 						{role === "admin" ? "Administrador" : "Professor"}
 					</UI.Badge>
-				</UI.Group>
-
-				<UI.Divider />
-
-				<UI.Text c="dimmed">{legal_name}</UI.Text>
+				</UI.Stack>
 			</UI.Paper>
 		</NavLink>
 	);
