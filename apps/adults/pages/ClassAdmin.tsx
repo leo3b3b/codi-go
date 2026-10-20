@@ -3,8 +3,11 @@ import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate, useRevalidator } from "react-router";
+import { requireAdmin } from "@/middlewares";
 import { deleteStudent, getClassById, getStudentsByClassId } from "@/services";
 import * as Self from "./ClassAdminPage";
+
+export const clientMiddleware = [requireAdmin];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.classId)

@@ -1,11 +1,14 @@
 import type { Route } from "+pages/MemberAdmin";
 import { Icon, UI } from "@codi-go/ui";
+import { requireAdmin } from "@/middlewares";
 import {
 	adminGetMembershipsBySchool,
 	getSchoolById,
 	getUser,
 } from "@/services";
 import * as Self from "./MemberAdminPage";
+
+export const clientMiddleware = [requireAdmin];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.schoolId)

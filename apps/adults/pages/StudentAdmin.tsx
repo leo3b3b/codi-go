@@ -2,12 +2,15 @@ import type { Route } from "+pages/StudentAdmin";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useRevalidator } from "react-router";
+import { requireAdmin } from "@/middlewares";
 import {
 	getClassesBySchool,
 	getStudentById,
 	transferStudent,
 } from "@/services";
 import * as Self from "./StudentAdminPage";
+
+export const clientMiddleware = [requireAdmin];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.schoolId || !params.studentId)
