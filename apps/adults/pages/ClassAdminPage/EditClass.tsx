@@ -136,7 +136,7 @@ export function EditClassForm({
 				)}
 
 				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
-					<UI.Stack>
+					<UI.Stack gap="md">
 						<UI.SimpleGrid cols={{ base: 1, md: 2 }}>
 							<UI.TextInput
 								label="Nome da Turma"
@@ -144,6 +144,7 @@ export function EditClassForm({
 								disabled={classData.is_playing}
 								{...classForm.getInputProps("name")}
 							/>
+
 							<UI.TextInput
 								label="Professor Responsável"
 								placeholder="Nome de usuário do professor"
@@ -152,6 +153,7 @@ export function EditClassForm({
 								disabled={classData.is_playing}
 								{...classForm.getInputProps("teacher_username")}
 							/>
+
 							<UI.TextInput
 								label="Código de Acesso"
 								readOnly
@@ -180,31 +182,37 @@ export function EditClassForm({
 								}}
 								{...classForm.getInputProps("access_code")}
 							/>
-							<UI.Group gap="sm" align="stretch" mt={{ base: 0, md: "lg" }}>
-								<UI.Button
-									type="submit"
-									flex={1}
-									loading={classForm.submitting}
-									disabled={
-										!classForm.isDirty() || isDeleting || classData.is_playing
-									}
-									leftSection={<Icon.Save size={18} />}
-								>
-									{classForm.submitting ? "Salvando..." : "Salvar Alterações"}
-								</UI.Button>
-								<UI.Button
-									type="button"
-									flex={1}
-									color="red"
-									loading={isDeleting}
-									disabled={classForm.submitting || classData.is_playing}
-									leftSection={<Icon.Trash2 size={18} />}
-									onClick={handleDeleteClass}
-								>
-									{isDeleting ? "Excluindo..." : "Excluir Turma"}
-								</UI.Button>
-							</UI.Group>
 						</UI.SimpleGrid>
+
+						<UI.Flex
+							direction={{ base: "column", md: "row" }}
+							gap="sm"
+							align="stretch"
+						>
+							<UI.Button
+								type="submit"
+								flex={1}
+								loading={classForm.submitting}
+								disabled={
+									!classForm.isDirty() || isDeleting || classData.is_playing
+								}
+								leftSection={<Icon.Save size={18} />}
+							>
+								{classForm.submitting ? "Salvando..." : "Salvar Alterações"}
+							</UI.Button>
+
+							<UI.Button
+								type="button"
+								flex={1}
+								color="red"
+								loading={isDeleting}
+								disabled={classForm.submitting || classData.is_playing}
+								leftSection={<Icon.Trash2 size={18} />}
+								onClick={handleDeleteClass}
+							>
+								{isDeleting ? "Excluindo..." : "Excluir Turma"}
+							</UI.Button>
+						</UI.Flex>
 
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
 					</UI.Stack>
