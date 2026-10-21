@@ -126,7 +126,7 @@ export function EditStudentForm({
 
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
 
-						<UI.Group gap="sm" mt="xs">
+						<UI.Flex gap="sm" mt="xs" direction={{ base: "column", sm: "row" }}>
 							<UI.Button
 								type="submit"
 								flex={1}
@@ -147,7 +147,7 @@ export function EditStudentForm({
 							>
 								Excluir Aluno
 							</UI.Button>
-						</UI.Group>
+						</UI.Flex>
 					</UI.Stack>
 				</form>
 			</UI.Stack>
