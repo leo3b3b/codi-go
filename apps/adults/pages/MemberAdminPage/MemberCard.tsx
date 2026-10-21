@@ -66,7 +66,7 @@ export function MemberCard({
 		<UI.Paper>
 			<UI.Flex gap="sm" direction={{ base: "column", md: "row" }}>
 				<UI.Box w={{ base: "100%", md: "30%" }}>
-					<UI.Text fw={800} size="lg">
+					<UI.Text fw={700} size="lg">
 						{member.name}
 					</UI.Text>
 					<UI.Text c="dimmed" mt={4}>

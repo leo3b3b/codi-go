@@ -23,7 +23,7 @@ export function EditStudentForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const studentForm = form.useForm({
-		mode: "uncontrolled",
+		mode: "controlled",
 		initialValues: {
 			name: student.name,
 			access_code: student.access_code as ImageCode,
@@ -94,7 +94,7 @@ export function EditStudentForm({
 							<UI.Text fw={700} size="sm">
 								Credencial
 							</UI.Text>
-							<UI.Group align="center" gap="md" wrap="nowrap">
+							<UI.Group align="center" gap="sm" wrap="nowrap">
 								<UI.Image
 									src={imageCode.src}
 									alt={imageCode.label}

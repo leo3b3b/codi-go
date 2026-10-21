@@ -27,7 +27,7 @@ export function EditClassForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const classForm = form.useForm({
-		mode: "uncontrolled",
+		mode: "controlled",
 		initialValues: {
 			name: classData.name,
 			teacher_username: classData.teacher_username ?? "",
@@ -142,34 +142,36 @@ export function EditClassForm({
 								{...classForm.getInputProps("teacher_username")}
 							/>
 
-							<UI.TextInput
-								label="Código de Acesso"
-								readOnly
-								disabled={classData.is_playing}
-								rightSection={
-									<UI.ActionIcon
-										variant="default"
-										aria-label="Gerar novo código de acesso"
-										disabled={classData.is_playing}
-										onClick={() =>
-											classForm.setFieldValue(
-												"access_code",
-												generateClassAccessCode(),
-											)
-										}
-									>
-										<Icon.Shuffle size={18} />
-									</UI.ActionIcon>
-								}
-								styles={{
-									input: {
-										fontFamily: "monospace",
-										letterSpacing: "0.15em",
-										textTransform: "uppercase",
-									},
-								}}
-								{...classForm.getInputProps("access_code")}
-							/>
+							<UI.Group align="flex-end" gap="sm" wrap="nowrap" w="100%">
+								<UI.TextInput
+									w="100%"
+									label="Código de Acesso"
+									readOnly
+									disabled={classData.is_playing}
+									styles={{
+										input: {
+											fontFamily: "monospace",
+											letterSpacing: "0.15em",
+											textTransform: "uppercase",
+										},
+									}}
+									{...classForm.getInputProps("access_code")}
+								/>
+								<UI.ActionIcon
+									size={40}
+									radius="lg"
+									disabled={classData.is_playing}
+									aria-label="Gerar nova credencial"
+									onClick={() =>
+										classForm.setFieldValue(
+											"access_code",
+											generateClassAccessCode(),
+										)
+									}
+								>
+									<Icon.Shuffle size={20} />
+								</UI.ActionIcon>
+							</UI.Group>
 						</UI.SimpleGrid>
 
 						<UI.Flex
