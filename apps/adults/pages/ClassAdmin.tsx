@@ -110,7 +110,7 @@ function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 	const credential = imageCodes[student.access_code as ImageCode];
 
 	return (
-		<UI.Paper component="article" bg="var(--app-surface)" p="md">
+		<UI.Paper>
 			<UI.Stack gap="md">
 				<UI.Text size="lg" fw={700} style={{ overflowWrap: "anywhere" }}>
 					{student.name ?? "—"}

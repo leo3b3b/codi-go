@@ -114,20 +114,10 @@ export function EditClassForm({
 		<UI.Paper>
 			<UI.Stack gap="lg">
 				<UI.Group gap="sm" wrap="nowrap">
-					<UI.ActionIcon
-						variant="default"
-						size="lg"
-						aria-label="Voltar para turmas"
-						onClick={handleBack}
-					>
-						<Icon.ArrowLeft size={20} />
-					</UI.ActionIcon>
 					<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
 						{classData.name}
 					</UI.Title>
 				</UI.Group>
-
-				<UI.Divider />
 
 				{classData.is_playing && (
 					<UI.Alert>

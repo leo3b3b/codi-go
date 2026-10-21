@@ -80,17 +80,7 @@ export function EditStudentForm({
 	return (
 		<UI.Paper>
 			<UI.Stack gap="lg">
-				<UI.Group gap="sm" wrap="nowrap">
-					<UI.ActionIcon
-						variant="default"
-						size="lg"
-						aria-label="Voltar para turmas"
-						onClick={handleBack}
-					>
-						<Icon.ArrowLeft size={20} />
-					</UI.ActionIcon>
-					<UI.Title order={1}>Editar Aluno</UI.Title>
-				</UI.Group>
+				<UI.Title order={1}>Editar Aluno</UI.Title>
 
 				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="lg">

@@ -82,6 +82,7 @@ export function SchoolHeader({
 					<UI.Group gap="xs" wrap="nowrap">
 						{navigationProps && <MobileSchoolNavigation {...navigationProps} />}
 
+						<GoBack />
 						<ThemeToggle />
 
 						<ProfileAction
@@ -241,6 +242,21 @@ function MobileSchoolNavigation(props: SchoolNavigationProps) {
 				</UI.Menu.Dropdown>
 			</UI.Menu>
 		</UI.Box>
+	);
+}
+
+function GoBack() {
+	const navigate = useNavigate();
+	return (
+		<UI.ActionIcon
+			size={40}
+			radius="xl"
+			variant="default"
+			aria-label="Voltar"
+			onClick={() => navigate(-1)}
+		>
+			<Icon.ArrowLeft size={18} />
+		</UI.ActionIcon>
 	);
 }
 

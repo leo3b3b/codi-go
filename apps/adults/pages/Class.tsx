@@ -1,7 +1,7 @@
 import type { Route } from "+pages/Class";
 import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
-import { useNavigate, useRevalidator } from "react-router";
+import { useRevalidator } from "react-router";
 import {
 	getClassById,
 	getStudentsByClassId,
@@ -33,7 +33,6 @@ export default function ClassPage({
 }: Route.ComponentProps) {
 	const studentUrl = import.meta.env.VITE_STUDENT_URL;
 	const { revalidate } = useRevalidator();
-	const navigate = useNavigate();
 
 	const [isUpdatingPlaying, setIsUpdatingPlaying] = useState(false);
 
@@ -74,15 +73,6 @@ export default function ClassPage({
 					</div>
 
 					<UI.Group gap="sm">
-						<UI.Button
-							variant="light"
-							color="gray"
-							onClick={() => navigate(`/escola/${classData.school_id}`)}
-							leftSection={<Icon.ArrowLeft size={18} />}
-						>
-							Voltar
-						</UI.Button>
-
 						<Self.CopyDropdown
 							onCopyCode={() => Self.copyToClipboard(classData.access_code)}
 							onCopyLink={() =>
