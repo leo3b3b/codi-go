@@ -17,9 +17,9 @@ export default function SchoolsPage({
 				<UI.Center>
 					<UI.Paper p="xl" maw={672}>
 						<UI.Stack>
-							<UI.Title order={2} ta="center">
+							<UI.Text size="xl" ta="center">
 								Você não participa de nenhuma escola!
-							</UI.Title>
+							</UI.Text>
 							<UI.Divider />
 							<UI.Text size="lg" ta="center">
 								Aguarde um convite de um administrador ou entre em contato com a
@@ -29,16 +29,19 @@ export default function SchoolsPage({
 					</UI.Paper>
 				</UI.Center>
 			) : (
-				<UI.Grid>
-					{schools.map((school) => (
-						<UI.Grid.Col
-							key={school.school_id}
-							span={{ base: 12, md: 6, lg: 4 }}
-						>
-							<SchoolCard school={school} />
-						</UI.Grid.Col>
-					))}
-				</UI.Grid>
+				<UI.Stack>
+					<UI.Title order={1}>Suas Escolas</UI.Title>
+					<UI.Grid>
+						{schools.map((school) => (
+							<UI.Grid.Col
+								key={school.school_id}
+								span={{ base: 12, md: 6, lg: 4 }}
+							>
+								<SchoolCard school={school} />
+							</UI.Grid.Col>
+						))}
+					</UI.Grid>
+				</UI.Stack>
 			)}
 		</UI.Container>
 	);
