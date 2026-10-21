@@ -47,7 +47,7 @@ export function useMembershipActions({
 		await updateMembershipRole({ profile_id, school_id: school.id, role });
 
 		if (isSelfDemotion) {
-			navigate("/");
+			navigate("/escolas");
 			return;
 		}
 
