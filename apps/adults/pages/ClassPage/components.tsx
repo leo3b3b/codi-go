@@ -100,66 +100,104 @@ export function StudentRow({ student, schoolId }: StudentRowProps) {
 	const credential = getImageCode(student.access_code);
 
 	return (
-		<>
-			<UI.Grid align="center" py="md">
-				<UI.Grid.Col span={{ base: 12, lg: 4 }}>
-					<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
-				</UI.Grid.Col>
+		<UI.Paper>
+			<UI.Stack gap="md">
+				<UI.Text size="lg" fw={700} style={{ overflowWrap: "anywhere" }}>
+					{student.name ?? "—"}
+				</UI.Text>
 
-				<UI.Grid.Col span={{ base: 12, lg: 2 }}>
-					<UI.Group h={56}>
-						{credential ? (
-							showCredential ? (
-								<UI.Image
-									src={credential.src}
-									alt={credential.label}
-									h={56}
-									w="auto"
-									fit="contain"
-								/>
-							) : (
-								<UI.Text size="sm" ff="monospace" lts="0.25em">
-									••••••••
-								</UI.Text>
-							)
-						) : (
-							<UI.Text size="sm" c="dimmed">
-								Indisponível
-							</UI.Text>
-						)}
-					</UI.Group>
-				</UI.Grid.Col>
+				<UI.Divider />
 
-				<UI.Grid.Col span={{ base: 12, lg: 6 }}>
-					<UI.Group grow>
-						<UI.Button
-							variant="light"
-							disabled={!credential}
-							onClick={() => setShowCredential((visible) => !visible)}
-							leftSection={
-								showCredential ? (
-									<Icon.EyeOff size={18} />
-								) : (
-									<Icon.Eye size={18} />
-								)
-							}
+				<UI.Flex
+					direction={{ base: "column", md: "row" }}
+					align={{ base: "stretch", md: "center" }}
+					justify="space-between"
+					gap="md"
+				>
+					<UI.Stack gap="xs" flex={1}>
+						<UI.Flex
+							direction={{ base: "column", sm: "row" }}
+							align={{ base: "stretch", sm: "center" }}
+							gap="sm"
 						>
-							{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
-						</UI.Button>
+							<UI.Group gap="sm" align="center" wrap="nowrap" flex={1}>
+								<UI.Center w={56} h={56} style={{ flex: "0 0 56px" }}>
+									{credential && showCredential ? (
+										<UI.Image
+											src={credential.src}
+											alt={credential.label}
+											w={48}
+											h={48}
+											fit="contain"
+										/>
+									) : credential ? (
+										<Icon.EyeOff
+											size={22}
+											color="var(--mantine-color-dimmed)"
+										/>
+									) : (
+										<Icon.ImageOff
+											size={22}
+											color="var(--mantine-color-dimmed)"
+										/>
+									)}
+								</UI.Center>
 
+								<UI.Text
+									size="sm"
+									c={credential && showCredential ? undefined : "dimmed"}
+									lineClamp={2}
+									style={{
+										minWidth: 0,
+										overflowWrap: "anywhere",
+									}}
+								>
+									{!credential
+										? "Credencial indisponível"
+										: showCredential
+											? credential.label
+											: "Credencial oculta"}
+								</UI.Text>
+							</UI.Group>
+
+							<UI.Button
+								type="button"
+								size="sm"
+								w={{ base: "100%", sm: "auto" }}
+								variant="default"
+								disabled={!credential}
+								leftSection={
+									showCredential ? (
+										<Icon.EyeOff size={18} />
+									) : (
+										<Icon.Eye size={18} />
+									)
+								}
+								onClick={() => setShowCredential((visible) => !visible)}
+							>
+								{showCredential ? "Ocultar credencial" : "Mostrar credencial"}
+							</UI.Button>
+						</UI.Flex>
+					</UI.Stack>
+
+					<UI.Flex
+						direction={{ base: "column", sm: "row" }}
+						gap="sm"
+						w={{ base: "100%", md: 260 }}
+					>
 						<UI.Button
+							type="button"
+							flex={1}
+							leftSection={<Icon.FileText size={18} />}
 							onClick={() =>
 								navigate(`/escola/${schoolId}/aluno/${student.id}`)
 							}
-							leftSection={<Icon.FileText size={18} />}
 						>
-							Ver Registros
+							Ver registros
 						</UI.Button>
-					</UI.Group>
-				</UI.Grid.Col>
-			</UI.Grid>
-
-			<UI.Divider />
-		</>
+					</UI.Flex>
+				</UI.Flex>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

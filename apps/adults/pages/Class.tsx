@@ -82,6 +82,7 @@ export default function ClassPage({
 
 						<UI.Button
 							variant={classData.is_playing ? "filled" : "light"}
+							loading={isUpdatingPlaying}
 							disabled={isUpdatingPlaying}
 							onClick={handleTogglePlaying}
 							leftSection={
@@ -92,46 +93,14 @@ export default function ClassPage({
 								)
 							}
 						>
-							{isUpdatingPlaying
-								? "Atualizando…"
-								: classData.is_playing
-									? "Em atividade"
-									: "Iniciar atividade"}
+							{classData.is_playing ? "Em atividade" : "Iniciar atividade"}
 						</UI.Button>
 					</UI.Group>
 				</UI.Group>
 
 				<UI.Paper p="lg">
-					<UI.Title order={2}>Alunos</UI.Title>
-
-					<UI.Grid
-						visibleFrom="lg"
-						align="center"
-						py="md"
-						style={{
-							borderBottom: "1px solid var(--app-border)",
-						}}
-					>
-						<UI.Grid.Col span={4}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Nome
-							</UI.Text>
-						</UI.Grid.Col>
-
-						<UI.Grid.Col span={2}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Credencial
-							</UI.Text>
-						</UI.Grid.Col>
-
-						<UI.Grid.Col span={6}>
-							<UI.Text size="sm" c="dimmed" fw={700}>
-								Ações
-							</UI.Text>
-						</UI.Grid.Col>
-					</UI.Grid>
-
-					<UI.Stack gap={0}>
+					<UI.Stack>
+						<UI.Title order={2}>Alunos</UI.Title>
 						{students.map((student) => (
 							<Self.StudentRow
 								key={student.id}
