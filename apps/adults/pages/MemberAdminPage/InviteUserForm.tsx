@@ -56,50 +56,56 @@ export function InviteUserForm({
 				<UI.Title order={2}>Convidar Usuário</UI.Title>
 
 				<form onSubmit={inviteForm.onSubmit(onSubmit)} noValidate>
-					<UI.Grid align="flex-start">
-						<UI.Grid.Col span={{ base: 12, md: 6 }}>
+					<UI.Stack gap="md">
+						<UI.Flex
+							direction={{ base: "column", md: "row" }}
+							align="stretch"
+							gap="md"
+						>
 							<UI.TextInput
+								flex={2}
 								autoComplete="username"
 								placeholder="Digite o nome de usuário"
 								leftSection={<Icon.AtSign size={18} />}
 								{...inviteForm.getInputProps("username")}
 							/>
-						</UI.Grid.Col>
 
-						<UI.Grid.Col span={{ base: 12, md: 3 }}>
-							<Select
-								aria-label="Cargo"
-								value={inviteForm.values.role}
-								onChange={(value) =>
-									inviteForm.setFieldValue(
-										"role",
-										value === "admin" ? "admin" : "teacher",
-									)
-								}
-								options={[
-									{ value: "teacher", label: "Professor" },
-									{ value: "admin", label: "Administrador" },
-								]}
-								w="100%"
-							/>
-							{inviteForm.errors.role && (
-								<UI.Text size="sm" c="red" mt={4}>
-									{inviteForm.errors.role}
-								</UI.Text>
-							)}
-						</UI.Grid.Col>
+							<UI.Stack gap={4} flex={1}>
+								<Select
+									aria-label="Cargo"
+									value={inviteForm.values.role}
+									onChange={(value) =>
+										inviteForm.setFieldValue(
+											"role",
+											value === "admin" ? "admin" : "teacher",
+										)
+									}
+									options={[
+										{ value: "teacher", label: "Professor" },
+										{ value: "admin", label: "Administrador" },
+									]}
+									w="100%"
+								/>
 
-						<UI.Grid.Col span={{ base: 12, md: 3 }}>
+								{inviteForm.errors.role && (
+									<UI.Text size="sm" c="red">
+										{inviteForm.errors.role}
+									</UI.Text>
+								)}
+							</UI.Stack>
+
 							<UI.Button
 								type="submit"
-								fullWidth
+								w={{ base: "100%", md: 160 }}
 								loading={inviteForm.submitting}
 								disabled={!inviteForm.values.username.trim()}
 							>
 								{inviteForm.submitting ? "Convidando..." : "Convidar"}
 							</UI.Button>
-						</UI.Grid.Col>
-					</UI.Grid>
+						</UI.Flex>
+
+						{rootError && <UI.Alert>{rootError}</UI.Alert>}
+					</UI.Stack>
 
 					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
 				</form>

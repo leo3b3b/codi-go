@@ -27,7 +27,7 @@ export function EditClassForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const classForm = form.useForm({
-		mode: "uncontrolled",
+		mode: "controlled",
 		initialValues: {
 			name: classData.name,
 			teacher_username: classData.teacher_username ?? "",
@@ -114,20 +114,8 @@ export function EditClassForm({
 		<UI.Paper>
 			<UI.Stack gap="lg">
 				<UI.Group gap="sm" wrap="nowrap">
-					<UI.ActionIcon
-						variant="default"
-						size="lg"
-						aria-label="Voltar para turmas"
-						onClick={handleBack}
-					>
-						<Icon.ArrowLeft size={20} />
-					</UI.ActionIcon>
-					<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
-						{classData.name}
-					</UI.Title>
+					<UI.Title order={2}>Editar Turma</UI.Title>
 				</UI.Group>
-
-				<UI.Divider />
 
 				{classData.is_playing && (
 					<UI.Alert>
@@ -136,7 +124,7 @@ export function EditClassForm({
 				)}
 
 				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
-					<UI.Stack>
+					<UI.Stack gap="md">
 						<UI.SimpleGrid cols={{ base: 1, md: 2 }}>
 							<UI.TextInput
 								label="Nome da Turma"
@@ -144,6 +132,7 @@ export function EditClassForm({
 								disabled={classData.is_playing}
 								{...classForm.getInputProps("name")}
 							/>
+
 							<UI.TextInput
 								label="Professor Responsável"
 								placeholder="Nome de usuário do professor"
@@ -152,59 +141,68 @@ export function EditClassForm({
 								disabled={classData.is_playing}
 								{...classForm.getInputProps("teacher_username")}
 							/>
-							<UI.TextInput
-								label="Código de Acesso"
-								readOnly
-								disabled={classData.is_playing}
-								rightSection={
-									<UI.ActionIcon
-										variant="default"
-										aria-label="Gerar novo código de acesso"
-										disabled={classData.is_playing}
-										onClick={() =>
-											classForm.setFieldValue(
-												"access_code",
-												generateClassAccessCode(),
-											)
-										}
-									>
-										<Icon.Shuffle size={18} />
-									</UI.ActionIcon>
-								}
-								styles={{
-									input: {
-										fontFamily: "monospace",
-										letterSpacing: "0.15em",
-										textTransform: "uppercase",
-									},
-								}}
-								{...classForm.getInputProps("access_code")}
-							/>
-							<UI.Group gap="sm" align="stretch" mt={{ base: 0, md: "lg" }}>
-								<UI.Button
-									type="submit"
-									flex={1}
-									loading={classForm.submitting}
-									disabled={
-										!classForm.isDirty() || isDeleting || classData.is_playing
+
+							<UI.Group align="flex-end" gap="sm" wrap="nowrap" w="100%">
+								<UI.TextInput
+									w="100%"
+									label="Código de Acesso"
+									readOnly
+									disabled={classData.is_playing}
+									styles={{
+										input: {
+											fontFamily: "monospace",
+											letterSpacing: "0.15em",
+											textTransform: "uppercase",
+										},
+									}}
+									{...classForm.getInputProps("access_code")}
+								/>
+								<UI.ActionIcon
+									size={40}
+									radius="lg"
+									disabled={classData.is_playing}
+									aria-label="Gerar nova credencial"
+									onClick={() =>
+										classForm.setFieldValue(
+											"access_code",
+											generateClassAccessCode(),
+										)
 									}
-									leftSection={<Icon.Save size={18} />}
 								>
-									{classForm.submitting ? "Salvando..." : "Salvar Alterações"}
-								</UI.Button>
-								<UI.Button
-									type="button"
-									flex={1}
-									color="red"
-									loading={isDeleting}
-									disabled={classForm.submitting || classData.is_playing}
-									leftSection={<Icon.Trash2 size={18} />}
-									onClick={handleDeleteClass}
-								>
-									{isDeleting ? "Excluindo..." : "Excluir Turma"}
-								</UI.Button>
+									<Icon.Shuffle size={20} />
+								</UI.ActionIcon>
 							</UI.Group>
 						</UI.SimpleGrid>
+
+						<UI.Flex
+							direction={{ base: "column", md: "row" }}
+							gap="sm"
+							align="stretch"
+						>
+							<UI.Button
+								type="submit"
+								flex={1}
+								loading={classForm.submitting}
+								disabled={
+									!classForm.isDirty() || isDeleting || classData.is_playing
+								}
+								leftSection={<Icon.Save size={18} />}
+							>
+								{classForm.submitting ? "Salvando..." : "Salvar Alterações"}
+							</UI.Button>
+
+							<UI.Button
+								type="button"
+								flex={1}
+								color="red"
+								loading={isDeleting}
+								disabled={classForm.submitting || classData.is_playing}
+								leftSection={<Icon.Trash2 size={18} />}
+								onClick={handleDeleteClass}
+							>
+								{isDeleting ? "Excluindo..." : "Excluir Turma"}
+							</UI.Button>
+						</UI.Flex>
 
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
 					</UI.Stack>

@@ -1,8 +1,11 @@
 import type { Route } from "+pages/ClassesAdmin";
 import { form, Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
-import { Link, useRevalidator } from "react-router";
+import { useRevalidator } from "react-router";
+import { requireAdmin } from "@/middlewares";
 import { createClass, getClassesBySchool, getSchoolById } from "@/services";
+
+export const clientMiddleware = [requireAdmin];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.schoolId)
@@ -86,7 +89,11 @@ export function CreateClassForm({ school_id }: { school_id: string }) {
 				<UI.Title order={2}>Criar Turma</UI.Title>
 
 				<form onSubmit={classForm.onSubmit(onSubmit)} noValidate>
-					<UI.Group align="flex-start" gap="md" wrap="nowrap">
+					<UI.Flex
+						direction={{ base: "column", sm: "row" }}
+						align="stretch"
+						gap="sm"
+					>
 						<UI.TextInput
 							key={classForm.key("name")}
 							flex={1}
@@ -99,13 +106,13 @@ export function CreateClassForm({ school_id }: { school_id: string }) {
 						<UI.Button
 							type="submit"
 							size="lg"
-							w={160}
+							w={{ base: "100%", sm: 160 }}
 							loading={isSubmitting}
 							disabled={!classForm.getValues().name}
 						>
 							{isSubmitting ? "Criando..." : "Criar Turma"}
 						</UI.Button>
-					</UI.Group>
+					</UI.Flex>
 
 					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
 				</form>
@@ -121,22 +128,42 @@ function ClassList({
 	school: Route.ComponentProps["loaderData"]["school"];
 	classes: Route.ComponentProps["loaderData"]["classes"];
 }) {
+	const [hoveredId, setHoveredId] = useState<string | null>(null);
+
 	return (
 		<UI.Stack gap="sm">
-			{classes.map(({ id, name }) => (
-				<UI.Anchor
-					key={id}
-					component={Link}
-					to={`/escola/${school.id}/admin/turma/${id}`}
-					underline="never"
-				>
-					<UI.Paper component="article" bg="var(--app-surface)" p="md">
-						<UI.Title order={2} c="violet">
-							{name}
-						</UI.Title>
-					</UI.Paper>
-				</UI.Anchor>
-			))}
+			{classes.map(({ id, name }) => {
+				const isHovered = hoveredId === id;
+
+				return (
+					<UI.Anchor
+						key={id}
+						href={`/escola/${school.id}/admin/turma/${id}`}
+						underline="never"
+						onMouseEnter={() => setHoveredId(id)}
+						onMouseLeave={() => setHoveredId(null)}
+						onFocus={() => setHoveredId(id)}
+						onBlur={() => setHoveredId(null)}
+						style={{ outline: "none" }}
+					>
+						<UI.Paper
+							component="article"
+							bg="var(--app-surface)"
+							p="md"
+							withBorder
+							style={{
+								borderColor: isHovered
+									? "var(--mantine-color-violet-5)"
+									: "transparent",
+							}}
+						>
+							<UI.Title order={2} c="violet">
+								{name}
+							</UI.Title>
+						</UI.Paper>
+					</UI.Anchor>
+				);
+			})}
 		</UI.Stack>
 	);
 }

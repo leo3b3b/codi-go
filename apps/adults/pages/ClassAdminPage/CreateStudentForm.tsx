@@ -69,29 +69,31 @@ export function CreateStudentForm({
 				<UI.Title order={2}>Criar Alunos</UI.Title>
 
 				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
-					<UI.Group align="flex-start" gap="md" wrap="nowrap">
+					<UI.Flex
+						direction={{ base: "column", sm: "row" }}
+						align="flex-end"
+						gap="md"
+					>
 						<UI.TextInput
 							key={studentForm.key("names")}
 							flex={1}
 							size="lg"
 							leftSection={<Icon.Baby size={18} />}
-							placeholder="Digite um ou mais nomes, separados por vírgula"
+							placeholder="Digite os nomes"
+							description="Digite um ou mais nomes, separados por vírgula."
 							{...studentForm.getInputProps("names")}
 						/>
 
 						<UI.Button
 							type="submit"
 							size="lg"
-							w={160}
-							mt={0}
+							w={{ base: "100%", sm: 160 }}
 							loading={isSubmitting}
-							disabled={!namesValue}
+							disabled={!studentForm.isTouched()}
 						>
-							{isSubmitting
-								? "Criando..."
-								: `Criar ${studentCount > 1 ? "Alunos" : "Aluno"}`}
+							Criar {studentCount > 1 ? "Alunos" : "Aluno"}
 						</UI.Button>
-					</UI.Group>
+					</UI.Flex>
 
 					{rootError && <UI.Alert mt="md">{rootError}</UI.Alert>}
 				</form>

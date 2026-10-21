@@ -2,7 +2,12 @@ import type { Route } from "+layouts/School";
 import { UI } from "@codi-go/ui";
 import { Outlet, useLocation } from "react-router";
 import { requireAuth } from "@/middlewares";
-import { getClassesForCurrentUser, getSchoolsForCurrentUser } from "@/services";
+import {
+	getClassesForCurrentUser,
+	getInvitesForCurrentUser,
+	getProfileForCurrentUser,
+	getSchoolsForCurrentUser,
+} from "@/services";
 import { SchoolHeader } from "./SchoolLayout";
 
 export const clientMiddleware = [requireAuth];
@@ -12,10 +17,17 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 		/^\/escola\/([^/]+)/,
 	)?.[1];
 
+	const [profile, invites] = await Promise.all([
+		getProfileForCurrentUser(),
+		getInvitesForCurrentUser(),
+	]);
+
 	if (!schoolId) {
 		return {
 			schools: [],
 			classes: [],
+			profile,
+			invites,
 		};
 	}
 
@@ -27,6 +39,8 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 	return {
 		schools,
 		classes,
+		profile,
+		invites,
 	};
 }
 
@@ -39,7 +53,12 @@ export default function SchoolLayout({
 
 	return (
 		<UI.Box className="ui-root">
-			<SchoolHeader schools={data.schools} classes={data.classes} />
+			<SchoolHeader
+				schools={data.schools}
+				classes={data.classes}
+				profile={data.profile}
+				invites={data.invites}
+			/>
 
 			<UI.Container
 				key={location.pathname}

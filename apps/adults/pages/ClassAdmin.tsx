@@ -3,8 +3,11 @@ import { type ImageCode, imageCodes } from "@codi-go/supabase";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useNavigate, useRevalidator } from "react-router";
+import { requireAdmin } from "@/middlewares";
 import { deleteStudent, getClassById, getStudentsByClassId } from "@/services";
 import * as Self from "./ClassAdminPage";
+
+export const clientMiddleware = [requireAdmin];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (!params.classId)
@@ -49,6 +52,9 @@ export default function ClassAdminPage({
 	return (
 		<UI.Container>
 			<UI.Stack>
+				<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
+					{classData.name}
+				</UI.Title>
 				<Self.EditClassForm classData={classData} />
 
 				<Self.CreateStudentForm
@@ -58,45 +64,37 @@ export default function ClassAdminPage({
 
 				<UI.Paper>
 					<UI.Stack>
-						<UI.Title order={2}>Gerenciar Alunos</UI.Title>
-
-						<UI.Grid
-							visibleFrom="lg"
-							px="md"
-							py="sm"
-							style={{
-								borderBottom: "1px solid var(--app-border)",
-							}}
+						<UI.Group
+							justify="space-between"
+							align="center"
+							gap="sm"
+							wrap="wrap"
 						>
-							<UI.Grid.Col span={4}>
-								<UI.Text size="sm" c="dimmed" fw={700}>
-									Nome
-								</UI.Text>
-							</UI.Grid.Col>
+							<UI.Title order={2}>Gerenciar Alunos</UI.Title>
 
-							<UI.Grid.Col span={2}>
-								<UI.Text size="sm" c="dimmed" fw={700}>
-									Credencial
-								</UI.Text>
-							</UI.Grid.Col>
+							<UI.Text size="sm" c="dimmed">
+								{students.length} {students.length === 1 ? "aluno" : "alunos"}
+							</UI.Text>
+						</UI.Group>
 
-							<UI.Grid.Col span={6}>
-								<UI.Text size="sm" c="dimmed" fw={700}>
-									Ações
+						{students.length === 0 ? (
+							<UI.Center py="xl">
+								<UI.Text size="lg" ta="center" c="dimmed">
+									Esta turma ainda não possui alunos.
 								</UI.Text>
-							</UI.Grid.Col>
-						</UI.Grid>
-
-						<UI.Stack>
-							{students.map((student) => (
-								<StudentRow
-									key={student.id}
-									student={student}
-									onUpdate={handleUpdate}
-									onDelete={handleDeleteStudent}
-								/>
-							))}
-						</UI.Stack>
+							</UI.Center>
+						) : (
+							<UI.Stack gap="sm">
+								{students.map((student) => (
+									<StudentRow
+										key={student.id}
+										student={student}
+										onUpdate={handleUpdate}
+										onDelete={handleDeleteStudent}
+									/>
+								))}
+							</UI.Stack>
+						)}
 					</UI.Stack>
 				</UI.Paper>
 			</UI.Stack>
@@ -112,78 +110,107 @@ interface StudentRowProps {
 
 function StudentRow({ student, onDelete, onUpdate }: StudentRowProps) {
 	const [showCredential, setShowCredential] = useState(false);
+	const credential = imageCodes[student.access_code as ImageCode];
 
 	return (
-		<UI.Grid
-			align="center"
-			px="md"
-			py="sm"
-			style={{
-				borderBottom: "1px solid var(--app-border)",
-			}}
-		>
-			<UI.Grid.Col span={{ base: 12, lg: 4 }}>
-				<UI.Text fw={600}>{student.name ?? "—"}</UI.Text>
-			</UI.Grid.Col>
+		<UI.Paper>
+			<UI.Stack gap="md">
+				<UI.Text size="lg" fw={700} style={{ overflowWrap: "anywhere" }}>
+					{student.name ?? "—"}
+				</UI.Text>
 
-			<UI.Grid.Col span={{ base: 12, lg: 2 }}>
-				<UI.Center h={56}>
-					{showCredential ? (
-						<UI.Image
-							src={imageCodes[student.access_code as ImageCode].src}
-							alt={imageCodes[student.access_code as ImageCode].label}
-							h={56}
-							w="auto"
-							fit="contain"
-						/>
-					) : (
-						<UI.Text size="sm" ff="monospace" c="dimmed">
-							••••••••
-						</UI.Text>
-					)}
-				</UI.Center>
-			</UI.Grid.Col>
+				<UI.Divider />
 
-			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
-				<UI.Group gap="sm" grow>
-					<UI.Button
-						type="button"
-						variant="default"
-						leftSection={
-							showCredential ? (
-								<Icon.EyeOff size={18} />
-							) : (
-								<Icon.Eye size={18} />
-							)
-						}
-						onClick={() => setShowCredential(!showCredential)}
+				<UI.Flex
+					direction={{ base: "column", md: "row" }}
+					align={{ base: "stretch", md: "center" }}
+					justify="space-between"
+					gap="md"
+				>
+					<UI.Stack gap="xs" flex={1}>
+						<UI.Flex
+							direction={{ base: "column", sm: "row" }}
+							align={{ base: "stretch", sm: "center" }}
+							gap="sm"
+						>
+							<UI.Group gap="sm" align="center" wrap="nowrap" flex={1}>
+								<UI.Center w={56} h={56} style={{ flex: "0 0 56px" }}>
+									{showCredential ? (
+										<UI.Image
+											src={credential.src}
+											alt={credential.label}
+											w={48}
+											h={48}
+											fit="contain"
+										/>
+									) : (
+										<Icon.EyeOff
+											size={22}
+											color="var(--mantine-color-dimmed)"
+										/>
+									)}
+								</UI.Center>
+
+								<UI.Text
+									size="sm"
+									c={showCredential ? undefined : "dimmed"}
+									lineClamp={2}
+									style={{ minWidth: 0, overflowWrap: "anywhere" }}
+								>
+									{showCredential ? credential.label : "Credencial oculta"}
+								</UI.Text>
+							</UI.Group>
+
+							<UI.Button
+								type="button"
+								size="sm"
+								w={{ base: "100%", sm: "auto" }}
+								variant="default"
+								leftSection={
+									showCredential ? (
+										<Icon.EyeOff size={18} />
+									) : (
+										<Icon.Eye size={18} />
+									)
+								}
+								onClick={() => setShowCredential((current) => !current)}
+							>
+								{showCredential ? "Ocultar credencial" : "Mostrar credencial"}
+							</UI.Button>
+						</UI.Flex>
+					</UI.Stack>
+					<UI.Flex
+						direction={{ base: "column", sm: "row" }}
+						gap="sm"
+						w={{ base: "100%", md: 260 }}
 					>
-						{showCredential ? "Esconder Credencial" : "Mostrar Credencial"}
-					</UI.Button>
+						<UI.Button
+							type="button"
+							flex={1}
+							leftSection={<Icon.Pencil size={18} />}
+							onClick={() => onUpdate(student.id)}
+						>
+							Editar
+						</UI.Button>
 
-					<UI.Button
-						type="button"
-						leftSection={<Icon.Pencil size={18} />}
-						onClick={() => onUpdate(student.id)}
-					>
-						Editar
-					</UI.Button>
-
-					<UI.Button
-						type="button"
-						color="red"
-						leftSection={<Icon.UserX size={18} />}
-						onClick={() =>
-							onDelete({
-								student_id: student.id,
-								student_name: student.name,
-							})
-						}
-					>
-						Excluir
-					</UI.Button>
-				</UI.Group>
-			</UI.Grid.Col>
-		</UI.Grid>
+						<UI.Button
+							type="button"
+							flex={1}
+							color="red"
+							variant="light"
+							leftSection={<Icon.UserX size={18} />}
+							onClick={() =>
+								onDelete({
+									student_id: student.id,
+									student_name: student.name,
+								})
+							}
+						>
+							Excluir
+						</UI.Button>
+					</UI.Flex>
+				</UI.Flex>
+			</UI.Stack>
+		</UI.Paper>
 	);
 }

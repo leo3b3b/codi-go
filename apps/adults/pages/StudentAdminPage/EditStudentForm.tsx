@@ -23,7 +23,7 @@ export function EditStudentForm({
 	const [rootError, setRootError] = useState<string | null>(null);
 
 	const studentForm = form.useForm({
-		mode: "uncontrolled",
+		mode: "controlled",
 		initialValues: {
 			name: student.name,
 			access_code: student.access_code as ImageCode,
@@ -80,17 +80,7 @@ export function EditStudentForm({
 	return (
 		<UI.Paper>
 			<UI.Stack gap="lg">
-				<UI.Group gap="sm" wrap="nowrap">
-					<UI.ActionIcon
-						variant="default"
-						size="lg"
-						aria-label="Voltar para turmas"
-						onClick={handleBack}
-					>
-						<Icon.ArrowLeft size={20} />
-					</UI.ActionIcon>
-					<UI.Title order={1}>Editar Aluno</UI.Title>
-				</UI.Group>
+				<UI.Title order={1}>Editar Aluno</UI.Title>
 
 				<form onSubmit={studentForm.onSubmit(onSubmit)} noValidate>
 					<UI.Stack gap="lg">
@@ -104,7 +94,7 @@ export function EditStudentForm({
 							<UI.Text fw={700} size="sm">
 								Credencial
 							</UI.Text>
-							<UI.Group align="center" gap="md" wrap="nowrap">
+							<UI.Group align="center" gap="sm" wrap="nowrap">
 								<UI.Image
 									src={imageCode.src}
 									alt={imageCode.label}
@@ -136,7 +126,7 @@ export function EditStudentForm({
 
 						{rootError && <UI.Alert>{rootError}</UI.Alert>}
 
-						<UI.Group gap="sm" mt="xs">
+						<UI.Flex gap="sm" mt="xs" direction={{ base: "column", sm: "row" }}>
 							<UI.Button
 								type="submit"
 								flex={1}
@@ -157,7 +147,7 @@ export function EditStudentForm({
 							>
 								Excluir Aluno
 							</UI.Button>
-						</UI.Group>
+						</UI.Flex>
 					</UI.Stack>
 				</form>
 			</UI.Stack>

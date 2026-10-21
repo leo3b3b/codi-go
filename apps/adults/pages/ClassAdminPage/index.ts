@@ -1,2 +1,2 @@
-export * from "./CreateStudent";
-export * from "./EditClass";
+export * from "./CreateStudentForm";
+export * from "./EditClassForm";

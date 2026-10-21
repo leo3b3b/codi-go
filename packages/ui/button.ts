@@ -24,6 +24,7 @@ const button = Button.extend({
 		variant: "filled",
 		size: "md",
 		radius: "lg",
+		mih: 40,
 	},
 
 	classNames: {

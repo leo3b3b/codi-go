@@ -3,9 +3,13 @@ import { Outlet } from "react-router";
 
 export default function AuthLayout() {
 	return (
-		<UI.Grid mih="100vh" bg="var(--app-page-bg)">
+		<UI.Grid mih="100dvh" bg="var(--app-page-bg)">
 			<UI.Grid.Col span={{ base: 12, lg: 6 }}>
-				<UI.Center mih="100vh" px={{ base: "md", sm: "xl", lg: "2xl" }}>
+				<UI.Center
+					mih="100dvh"
+					px={{ base: "md", sm: "xl", lg: "2xl" }}
+					py="xl"
+				>
 					<UI.Stack w="100%" maw={448}>
 						<UI.Image
 							src="/logo.png"
@@ -29,13 +33,13 @@ export default function AuthLayout() {
 					position: "relative",
 					overflow: "hidden",
 					backgroundImage: `
-						linear-gradient(
-							180deg,
-							color-mix(in srgb, var(--mantine-color-violet-4) 60%, transparent),
-							color-mix(in srgb, var(--mantine-color-violet-8) 20%, transparent)
-						),
-						url("/backgroundIceberg.png")
-					`,
+                        linear-gradient(
+                            180deg,
+                            color-mix(in srgb, var(--mantine-color-violet-4) 60%, transparent),
+                            color-mix(in srgb, var(--mantine-color-violet-8) 20%, transparent)
+                        ),
+                        url("/backgroundIceberg.png")
+                    `,
 					backgroundPosition: "center",
 					backgroundSize: "cover",
 				}}

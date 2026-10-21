@@ -4,10 +4,22 @@ import {
 	mantineHtmlProps,
 	Notifications,
 	theme,
+	UI,
 } from "@codi-go/ui";
-import { Links, Meta, Outlet, Scripts } from "react-router";
+import {
+	isRouteErrorResponse,
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	useRouteError,
+} from "react-router";
 
 import "@codi-go/ui/styles.css";
+
+export default function Root() {
+	return <Outlet />;
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
@@ -32,6 +44,63 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
-export default function Root() {
-	return <Outlet />;
+export function ErrorBoundary() {
+	const error = useRouteError();
+
+	const status = isRouteErrorResponse(error) ? error.status : 500;
+
+	const message = getErrorMessage(error);
+
+	return (
+		<main className="ui-root">
+			<UI.Container size="sm" py="xl">
+				<UI.Stack align="center" gap="lg">
+					<UI.Paper w="100%" p="xl">
+						<UI.Stack align="center" gap="md">
+							<UI.Text c="dimmed" size="sm" fw={600}>
+								Erro {status}
+							</UI.Text>
+
+							<UI.Title order={1} ta="center">
+								Não foi possível abrir esta página
+							</UI.Title>
+
+							<UI.Text c="dimmed" ta="center">
+								{message}
+							</UI.Text>
+							<UI.Text ta="center" size="sm">
+								<UI.Anchor href="/escolas">
+									Clique aqui para voltar à página inicial
+								</UI.Anchor>
+							</UI.Text>
+						</UI.Stack>
+					</UI.Paper>
+				</UI.Stack>
+			</UI.Container>
+		</main>
+	);
+}
+
+const ERROR_MESSAGES: Record<number, string> = {
+	400: "A solicitação é inválida.",
+	401: "Você precisa entrar na sua conta para continuar.",
+	403: "Você não tem permissão para acessar esta página.",
+	404: "A página solicitada não foi encontrada.",
+	408: "A solicitação demorou demais. Tente novamente.",
+	409: "Não foi possível concluir a operação devido a um conflito.",
+	422: "Não foi possível processar os dados enviados.",
+	429: "Muitas solicitações foram feitas. Aguarde um pouco e tente novamente.",
+	500: "Ocorreu um erro interno. Tente novamente mais tarde.",
+	502: "O serviço está temporariamente indisponível.",
+	503: "O serviço está temporariamente indisponível.",
+	504: "O serviço demorou demais para responder.",
+};
+
+function getErrorMessage(error: unknown): string {
+	if (isRouteErrorResponse(error)) {
+		if (error.status === 404) return ERROR_MESSAGES[404];
+		if (typeof error.data === "string" && error.data.trim()) return error.data;
+		return ERROR_MESSAGES[error.status] ?? "Ocorreu um erro inesperado.";
+	}
+	return "Ocorreu um erro inesperado.";
 }
