@@ -55,7 +55,7 @@ function ClassesSection({ classes }: ClassesSectionProps) {
 		<UI.Paper>
 			<UI.Stack>
 				<UI.Title order={2}>Suas Turmas</UI.Title>
-				{classes.length !== 0 ? (
+				{classes.length === 0 ? (
 					<UI.Text size="lg" ta="center" c="dimmed">
 						Você não tem turmas!
 					</UI.Text>

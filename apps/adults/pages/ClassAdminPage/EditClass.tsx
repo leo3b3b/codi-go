@@ -114,9 +114,7 @@ export function EditClassForm({
 		<UI.Paper>
 			<UI.Stack gap="lg">
 				<UI.Group gap="sm" wrap="nowrap">
-					<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
-						{classData.name}
-					</UI.Title>
+					<UI.Title order={2}>Editar Turma</UI.Title>
 				</UI.Group>
 
 				{classData.is_playing && (

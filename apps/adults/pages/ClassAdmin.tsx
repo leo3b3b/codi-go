@@ -52,6 +52,9 @@ export default function ClassAdminPage({
 	return (
 		<UI.Container>
 			<UI.Stack>
+				<UI.Title order={1} style={{ overflowWrap: "anywhere" }}>
+					{classData.name}
+				</UI.Title>
 				<Self.EditClassForm classData={classData} />
 
 				<Self.CreateStudentForm
