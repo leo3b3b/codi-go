@@ -33,7 +33,7 @@ export default function SchoolHomePage({
 				<UI.Title order={1}>{school.trade_name}</UI.Title>
 				<UI.SimpleGrid
 					cols={{ base: 1, md: isAdmin ? 2 : 1 }}
-					spacing="lg"
+					spacing="md"
 					maw={isAdmin ? undefined : 672}
 					mx={isAdmin ? undefined : "auto"}
 					w="100%"
@@ -54,13 +54,9 @@ function ClassesSection({ classes }: ClassesSectionProps) {
 	return (
 		<UI.Paper>
 			<UI.Stack>
-				<UI.Title order={2} ta="center">
-					Suas Turmas
-				</UI.Title>
-				<UI.Divider />
-
-				{classes.length === 0 ? (
-					<UI.Text size="lg" ta="center">
+				<UI.Title order={2}>Suas Turmas</UI.Title>
+				{classes.length !== 0 ? (
+					<UI.Text size="lg" ta="center" c="dimmed">
 						Você não tem turmas!
 					</UI.Text>
 				) : (
@@ -85,11 +81,7 @@ function AdminSection() {
 	return (
 		<UI.Paper>
 			<UI.Stack>
-				<UI.Title order={2} ta="center">
-					Administração
-				</UI.Title>
-				<UI.Divider />
-
+				<UI.Title order={2}>Administração</UI.Title>
 				<UI.Stack gap="sm">
 					{adminActions.map(({ title, description, icon: ActionIcon, to }) => (
 						<NavLink to={to} key={title}>

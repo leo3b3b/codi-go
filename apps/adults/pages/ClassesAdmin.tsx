@@ -144,6 +144,7 @@ function ClassList({
 						onMouseLeave={() => setHoveredId(null)}
 						onFocus={() => setHoveredId(id)}
 						onBlur={() => setHoveredId(null)}
+						style={{ outline: "none" }}
 					>
 						<UI.Paper
 							component="article"
