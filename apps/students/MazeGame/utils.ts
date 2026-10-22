@@ -1,5 +1,5 @@
 import { Icon } from "@codi-go/ui";
-import type { Command } from "@/types";
+import type { Command } from "./types";
 
 export const commandIcons: Record<
 	Command,
@@ -13,6 +13,5 @@ export const commandIcons: Record<
 
 export const commands: Command[] = ["up", "left", "down", "right"];
 
-export function wait(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
+export const wait = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms));

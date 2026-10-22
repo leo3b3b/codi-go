@@ -1,33 +1,26 @@
 import { supabase, type Tables } from "@codi-go/supabase";
-import type { MazeLevel, MazeLevelSummary, Position, TileType } from "@/types";
-import { tileImages } from "@/types";
+import { T } from "@/MazeGame";
 
 type LevelRow = Omit<Tables<"levels">, "game_key">;
 
-function isPosition(value: unknown): value is Position {
-	return (
-		typeof value === "object" &&
-		value !== null &&
-		"x" in value &&
-		"y" in value &&
-		typeof value.x === "number" &&
-		typeof value.y === "number"
-	);
-}
+const isPosition = (value: unknown): value is T.Position =>
+	typeof value === "object" &&
+	value !== null &&
+	"x" in value &&
+	"y" in value &&
+	typeof value.x === "number" &&
+	typeof value.y === "number";
 
-function isTileType(value: unknown): value is TileType {
-	return typeof value === "string" && value in tileImages;
-}
+const isTileType = (value: unknown): value is T.TileType =>
+	typeof value === "string" && value in T.tileImages;
 
-function isTileRow(value: unknown): value is TileType[] {
-	return Array.isArray(value) && value.every(isTileType);
-}
+const isTileRow = (value: unknown): value is T.TileType[] =>
+	Array.isArray(value) && value.every(isTileType);
 
-function isTiles(value: unknown): value is TileType[][] {
-	return Array.isArray(value) && value.length > 0 && value.every(isTileRow);
-}
+const isTiles = (value: unknown): value is T.TileType[][] =>
+	Array.isArray(value) && value.length > 0 && value.every(isTileRow);
 
-function parseMazeLevel(row: LevelRow): MazeLevel {
+function parseMazeLevel(row: LevelRow): T.MazeLevel {
 	const config = row.config;
 
 	if (
@@ -39,16 +32,16 @@ function parseMazeLevel(row: LevelRow): MazeLevel {
 		!isPosition(config.start) ||
 		!isPosition(config.goal) ||
 		!isTiles(config.tiles)
-	) {
-		throw new Error(`Invalid maze level configuration: ${row.id}`);
-	}
+	)
+		throw new Error(`Configuração de labirinto inválida: ${row.id}`);
 
 	const tiles = config.tiles;
 	const firstRowLength = tiles[0].length;
 
-	if (!tiles.every((row) => row.length === firstRowLength)) {
-		throw new Error(`Maze level has inconsistent row sizes: ${row.id}`);
-	}
+	if (!tiles.every((row) => row.length === firstRowLength))
+		throw new Error(
+			`O labirinto tem linhas de tamanho inconsistente: ${row.id}`,
+		);
 
 	return {
 		id: row.id,
@@ -59,7 +52,7 @@ function parseMazeLevel(row: LevelRow): MazeLevel {
 	};
 }
 
-export async function listMazeLevels(): Promise<MazeLevelSummary[]> {
+export async function listMazeLevels(): Promise<T.MazeLevelSummary[]> {
 	const { data, error } = await supabase
 		.from("levels")
 		.select("id, name")
@@ -70,7 +63,7 @@ export async function listMazeLevels(): Promise<MazeLevelSummary[]> {
 	return data;
 }
 
-export async function getMazeLevel(levelId: number): Promise<MazeLevel> {
+export async function getMazeLevel(levelId: number): Promise<T.MazeLevel> {
 	const { data, error } = await supabase
 		.from("levels")
 		.select("id, name, config")

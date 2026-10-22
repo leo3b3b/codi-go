@@ -1,4 +1,4 @@
-import type { Command, MazeLevel, Position } from "@/types";
+import type { Command, MazeLevel, Position } from "./types";
 
 export function getNextPosition(
 	position: Position,
@@ -28,9 +28,8 @@ export function canMove(
 		next.y >= level.tiles.length ||
 		next.x < 0 ||
 		next.x >= level.tiles[next.y].length
-	) {
+	)
 		return false;
-	}
 
 	return level.tiles[next.y][next.x] === "floor";
 }
@@ -40,13 +39,9 @@ export function executeCommand(
 	position: Position,
 	command: Command,
 ): Position | null {
-	if (!canMove(level, position, command)) {
-		return null;
-	}
-
+	if (!canMove(level, position, command)) return null;
 	return getNextPosition(position, command);
 }
 
-export function isGoalReached(level: MazeLevel, position: Position): boolean {
-	return position.x === level.goal.x && position.y === level.goal.y;
-}
+export const isGoalReached = (level: MazeLevel, position: Position): boolean =>
+	position.x === level.goal.x && position.y === level.goal.y;

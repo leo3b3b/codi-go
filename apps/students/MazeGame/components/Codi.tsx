@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Command } from "@/types";
+import type { Command } from "../types";
 
 export function Codi({
 	direction,

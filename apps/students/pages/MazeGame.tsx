@@ -3,15 +3,13 @@ import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
 import { useNavigate } from "react-router";
-import { executeCommand, isGoalReached } from "@/engine";
+import { C, commandIcons, commands, engine, type T, wait } from "@/MazeGame";
 import {
 	getMazeLevel,
 	getStudentSession,
 	isClassPlaying,
 	registerMazeProgress,
 } from "@/services";
-import type { Command, MazeState } from "@/types";
-import * as Self from "./MazeGamePage";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const levelId = Number(params.levelId);
@@ -25,11 +23,14 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	if (status !== true)
 		throw new Response("A turma não está em atividade.", { status: 403 });
 
-	return getMazeLevel(levelId);
+	const level = await getMazeLevel(levelId);
+	if (!level) throw new Response("Fase não encontrada.", { status: 404 });
+
+	return level;
 }
 
 export function meta({ loaderData: level }: Route.MetaArgs) {
-	return [{ title: `${level.name} | COdiGO!` }];
+	return [{ title: `${level.name} | CodiGO!` }];
 }
 
 export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
@@ -41,7 +42,7 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 		spread: 120,
 	});
 
-	const [state, setState] = useState<MazeState>({
+	const [state, setState] = useState<T.MazeState>({
 		level,
 		playerPosition: level.start,
 		commands: [],
@@ -63,7 +64,7 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 		});
 	}
 
-	function addCommand(command: Command) {
+	function addCommand(command: T.Command) {
 		if (isRunning) return;
 
 		setState((current) => ({
@@ -104,9 +105,13 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 				direction: command,
 			}));
 
-			await Self.wait(400);
+			await wait(400);
 
-			const nextPosition = executeCommand(currentLevel, position, command);
+			const nextPosition = engine.executeCommand(
+				currentLevel,
+				position,
+				command,
+			);
 
 			if (!nextPosition) {
 				setState((current) => ({
@@ -139,9 +144,9 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 				playerPosition: position,
 			}));
 
-			await Self.wait(300);
+			await wait(300);
 
-			if (isGoalReached(currentLevel, position)) {
+			if (engine.isGoalReached(currentLevel, position)) {
 				setState((current) => ({
 					...current,
 					status: "success",
@@ -204,7 +209,7 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 			<UI.Grid align="stretch">
 				<UI.Grid.Col span={{ base: 12, lg: 6 }}>
 					<UI.Center h="100%" mih={400}>
-						<Self.MazeRenderer
+						<C.MazeRenderer
 							level={state.level}
 							playerPosition={state.playerPosition}
 							direction={state.direction}
@@ -238,8 +243,8 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 										borderRadius: "var(--mantine-radius-md)",
 									}}
 								>
-									{Self.commands.map((command) => {
-										const CommandIcon = Self.commandIcons[command];
+									{commands.map((command) => {
+										const CommandIcon = commandIcons[command];
 
 										return (
 											<UI.ActionIcon
@@ -282,7 +287,7 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 										</UI.Text>
 									) : (
 										state.commands.map((command, index) => {
-											const CommandIcon = Self.commandIcons[command];
+											const CommandIcon = commandIcons[command];
 
 											return (
 												<UI.Center
