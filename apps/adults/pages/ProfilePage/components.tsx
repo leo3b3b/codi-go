@@ -26,6 +26,12 @@ export function InviteCard({
 	}
 
 	async function handleDelete() {
+		const message =
+			status === "active"
+				? "Tem certeza de que deseja sair desta escola?"
+				: "Tem certeza de que deseja recusar este convite?";
+		if (!window.confirm(message)) return;
+
 		await deleteMembership({ profile_id, school_id });
 		await revalidate();
 	}
