@@ -28,14 +28,14 @@ export default function AccessCodePage() {
 	}
 
 	return (
-		<UI.Center w="100%" mih="100vh" px="md">
+		<UI.Container size="xs">
 			<title>Entrar | CodiGO!</title>
-			<UI.Stack w="100%" maw={448} gap="lg">
+			<UI.Stack w="100%" gap="lg">
 				<UI.Image
 					src="/logo.png"
 					alt="Logo do CodiGO!"
 					w="auto"
-					h={72}
+					h={120}
 					fit="contain"
 					mx="auto"
 				/>
@@ -67,6 +67,6 @@ export default function AccessCodePage() {
 					</form>
 				</UI.Paper>
 			</UI.Stack>
-		</UI.Center>
+		</UI.Container>
 	);
 }
