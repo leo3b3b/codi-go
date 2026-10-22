@@ -62,9 +62,50 @@ export default function ProfilePage({
 					</UI.Group>
 				</UI.Paper>
 
+				<SchoolsList profile={profile} schools={schools} invites={invites} />
+				<Self.EditProfileForm profile={profile} />
+
 				<UI.Paper>
-					<UI.Title order={2}>Minhas Escolas</UI.Title>
-					<UI.Divider />
+					<UI.Flex direction={{ base: "column", md: "row" }} gap="sm">
+						<UI.Button
+							type="button"
+							w="100%"
+							color="red"
+							onClick={handleSignOut}
+							leftSection={<Icon.LogOut size={18} />}
+						>
+							Sair da Conta
+						</UI.Button>
+						<UI.Button
+							type="button"
+							w="100%"
+							color="red"
+							onClick={handleDeleteAccount}
+							leftSection={<Icon.Trash2 size={18} />}
+						>
+							Deletar Conta
+						</UI.Button>
+					</UI.Flex>
+				</UI.Paper>
+			</UI.Stack>
+		</UI.Container>
+	);
+}
+
+function SchoolsList({
+	profile,
+	schools,
+	invites,
+}: Route.ComponentProps["loaderData"]) {
+	return (
+		<UI.Paper>
+			<UI.Stack>
+				<UI.Title order={2}>Minhas Escolas</UI.Title>
+				{schools.length === 0 ? (
+					<UI.Text c="dimmed" ta="center">
+						Você não tem convites!
+					</UI.Text>
+				) : (
 					<UI.Stack gap="sm">
 						{schools.map((school) => (
 							<Self.InviteCard
@@ -75,16 +116,16 @@ export default function ProfilePage({
 							/>
 						))}
 					</UI.Stack>
-					{!schools.length && (
-						<UI.Text size="sm" c="dimmed" ta="center">
-							Você não participa de nenhuma escola!
-						</UI.Text>
-					)}
+				)}
 
-					<UI.Title order={2} mt="xl">
-						Meus Convites
-					</UI.Title>
-					<UI.Divider />
+				<UI.Title order={2} mt="md">
+					Meus Convites
+				</UI.Title>
+				{invites.length === 0 ? (
+					<UI.Text c="dimmed" ta="center">
+						Você não tem convites!
+					</UI.Text>
+				) : (
 					<UI.Stack gap="sm">
 						{invites.map((school) => (
 							<Self.InviteCard
@@ -95,36 +136,8 @@ export default function ProfilePage({
 							/>
 						))}
 					</UI.Stack>
-					{!invites.length && (
-						<UI.Text size="sm" c="dimmed" ta="center">
-							Você não tem convites!
-						</UI.Text>
-					)}
-				</UI.Paper>
-
-				<Self.EditProfileForm profile={profile} />
-
-				<UI.Paper>
-					<UI.Group grow>
-						<UI.Button
-							type="button"
-							color="red"
-							onClick={handleSignOut}
-							leftSection={<Icon.LogOut size={18} />}
-						>
-							Sair da Conta
-						</UI.Button>
-						<UI.Button
-							type="button"
-							color="red"
-							onClick={handleDeleteAccount}
-							leftSection={<Icon.Trash2 size={18} />}
-						>
-							Deletar Conta
-						</UI.Button>
-					</UI.Group>
-				</UI.Paper>
+				)}
 			</UI.Stack>
-		</UI.Container>
+		</UI.Paper>
 	);
 }

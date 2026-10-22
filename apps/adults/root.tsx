@@ -43,6 +43,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 		</html>
 	);
 }
+export function HydrateFallback() {
+	return (
+		<UI.Box className="ui-root">
+			<UI.Stack h="100%" align="center" justify="center">
+				<UI.Loader />
+				<UI.Image w={200} h={200} src="/codiPisca.png" aria-hidden />
+			</UI.Stack>
+		</UI.Box>
+	);
+}
 
 export function ErrorBoundary() {
 	const error = useRouteError();

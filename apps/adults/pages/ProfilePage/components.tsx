@@ -20,16 +20,20 @@ export function InviteCard({
 	const { school_id, trade_name, legal_name, role } = school;
 	const { revalidate } = useRevalidator();
 
+	async function handleAccept() {
+		await acceptInvite({ profile_id, school_id });
+		await revalidate();
+	}
+
+	async function handleDelete() {
+		await deleteMembership({ profile_id, school_id });
+		await revalidate();
+	}
+
 	return (
-		<UI.Paper
-			component="article"
-			p={{ base: "sm", md: "md" }}
-			bg="var(--app-surface)"
-		>
-			<UI.Group justify="space-between" align="center" mb="xs">
-				<UI.Title order={3} size="h4">
-					{trade_name}
-				</UI.Title>
+		<UI.Paper>
+			<UI.Group justify="space-between" align="center">
+				<UI.Title order={3}>{trade_name}</UI.Title>
 
 				<UI.Badge variant="light" color="violet">
 					{role === "admin" ? "Administrador" : "Professor"}
@@ -43,23 +47,19 @@ export function InviteCard({
 			{status === "active" ? (
 				<UI.Button
 					type="button"
+					w={{ base: "100%", md: "50%" }}
 					color="red"
-					onClick={() => {
-						deleteMembership({ profile_id, school_id });
-						revalidate();
-					}}
+					onClick={handleDelete}
 					leftSection={<Icon.LogOut size={18} />}
 				>
 					Sair da escola
 				</UI.Button>
 			) : (
-				<UI.Group>
+				<UI.Flex direction={{ base: "column", md: "row" }}>
 					<UI.Button
 						type="button"
-						onClick={() => {
-							acceptInvite({ profile_id, school_id });
-							revalidate();
-						}}
+						w="100%"
+						onClick={handleAccept}
 						leftSection={<Icon.Check size={18} />}
 					>
 						Aceitar
@@ -67,16 +67,14 @@ export function InviteCard({
 
 					<UI.Button
 						type="button"
+						w="100%"
 						color="red"
-						onClick={() => {
-							deleteMembership({ profile_id, school_id });
-							revalidate();
-						}}
+						onClick={handleDelete}
 						leftSection={<Icon.X size={18} />}
 					>
 						Recusar
 					</UI.Button>
-				</UI.Group>
+				</UI.Flex>
 			)}
 		</UI.Paper>
 	);
