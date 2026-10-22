@@ -33,7 +33,7 @@ function parseMazeLevel(row: LevelRow): T.MazeLevel {
 		!isPosition(config.goal) ||
 		!isTiles(config.tiles)
 	)
-		throw new Error(`Configuração de labirinto inválida: ${row.id}`);
+		throw new Error(`Configuração de labirinto inválida: ${row.name}`);
 
 	const tiles = config.tiles;
 	const firstRowLength = tiles[0].length;

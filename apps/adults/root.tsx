@@ -53,7 +53,9 @@ export const HydrateFallback = () => (
 
 export function ErrorBoundary() {
 	const error = useRouteError();
-	const status = isRouteErrorResponse(error) ? error.status : 500;
+	let status = 500;
+
+	if (isRouteErrorResponse(error)) status = error.status;
 	const message = getErrorMessage(error);
 
 	return (
@@ -71,7 +73,7 @@ export function ErrorBoundary() {
 							{message}
 						</UI.Text>
 						<UI.Text ta="center" size="sm">
-							<UI.Anchor href="/escolas">
+							<UI.Anchor href="/">
 								Clique aqui para voltar à página inicial
 							</UI.Anchor>
 						</UI.Text>
@@ -103,5 +105,11 @@ function getErrorMessage(error: unknown): string {
 		if (typeof error.data === "string" && error.data.trim()) return error.data;
 		return ERROR_MESSAGES[error.status] ?? "Ocorreu um erro inesperado.";
 	}
+
+	if (error instanceof Error)
+		return error.message || "Ocorreu um erro inesperado.";
+
+	if (typeof error === "string") return error;
+
 	return "Ocorreu um erro inesperado.";
 }

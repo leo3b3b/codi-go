@@ -86,16 +86,25 @@ function GameSection({ game }: { game: Game }) {
 			</UI.Group>
 
 			<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
-				{game.levels.map((level) => (
-					<LevelCard key={level.id} level={level} route={route} />
+				{game.levels.map((level, index) => (
+					<LevelCard key={level.id} level={level} route={route} index={index} />
 				))}
 			</UI.SimpleGrid>
 		</UI.Stack>
 	);
 }
 
-function LevelCard({ level, route }: { level: Level; route: string }) {
+function LevelCard({
+	level,
+	route,
+	index,
+}: {
+	level: Level;
+	route: string;
+	index: number;
+}) {
 	const navigate = useNavigate();
+	const levelNumber = index + 1;
 
 	return (
 		<UI.Paper
@@ -103,7 +112,7 @@ function LevelCard({ level, route }: { level: Level; route: string }) {
 			component="button"
 			type="button"
 			w="100%"
-			onClick={() => navigate(`../${route}/${level.id}`)}
+			onClick={() => navigate(`../${route}/${levelNumber}`)}
 			style={{
 				textAlign: "left",
 				cursor: "pointer",
@@ -120,13 +129,13 @@ function LevelCard({ level, route }: { level: Level; route: string }) {
 					}}
 				>
 					<UI.Text size="xl" c="violet" fw={700}>
-						{level.id}
+						{levelNumber}
 					</UI.Text>
 				</UI.Center>
 
 				<div style={{ minWidth: 0, flex: 1 }}>
 					<UI.Text size="xs" fw={600} c="dimmed" tt="uppercase">
-						Fase {level.id}
+						Fase {levelNumber}
 					</UI.Text>
 
 					<UI.Text fw={700} truncate>
