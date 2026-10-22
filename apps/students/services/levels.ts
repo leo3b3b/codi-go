@@ -23,3 +23,15 @@ export async function listLevels(): Promise<LevelSummary[]> {
 	if (error) throw error;
 	return data;
 }
+
+export async function getLevel(levelId: number): Promise<unknown> {
+	const { data, error } = await supabase
+		.from("levels")
+		.select("id, name, config")
+		.eq("id", levelId)
+		.eq("game_key", "maze")
+		.single();
+
+	if (error) throw error;
+	return data;
+}
