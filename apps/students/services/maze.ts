@@ -72,6 +72,5 @@ export async function getMazeLevel(levelId: number): Promise<T.MazeLevel> {
 		.single();
 
 	if (error) throw error;
-
 	return parseMazeLevel(data);
 }

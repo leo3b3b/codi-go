@@ -13,16 +13,10 @@ export async function registerMazeProgress({
 	number_of_commands: number;
 }) {
 	const session = getStudentSession();
-
-	if (!session) {
-		throw new Error("Sessão de aluno não encontrada!.");
-	}
+	if (!session) throw new Error("Sessão de aluno não encontrada!.");
 
 	const status = await isClassPlaying(session.class_id);
-
-	if (status !== true) {
-		throw new Error("A turma não está em atividade.");
-	}
+	if (status !== true) throw new Error("A turma não está em atividade.");
 
 	const { error } = await supabase.from("progress").insert({
 		student_id: session.student_id,

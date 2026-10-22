@@ -7,11 +7,7 @@ export async function getClassByAccessCode(access_code: string) {
 		.eq("access_code", access_code)
 		.single();
 
-	if (error) {
-		error.message = `getClassByAccessCode error: ${error.message}`;
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -24,10 +20,8 @@ export async function isClassPlaying(class_id: string) {
 		.maybeSingle();
 
 	if (error) throw error;
-
-	if (!data) {
+	if (!data)
 		throw new Response("A turma não está em atividade.", { status: 403 });
-	}
 
 	return data.is_playing;
 }

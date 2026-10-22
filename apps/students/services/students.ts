@@ -7,11 +7,7 @@ export async function getStudentsByClassId(class_id: string) {
 		.eq("class_id", class_id)
 		.order("name");
 
-	if (error) {
-		error.message = `getStudentsByClassId error: ${error.message}`;
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }
 
@@ -22,10 +18,6 @@ export async function getStudentById(student_id: string) {
 		.eq("id", student_id)
 		.single();
 
-	if (error) {
-		error.message = `getStudentById error: ${error.message}`;
-		throw error;
-	}
-
+	if (error) throw error;
 	return data;
 }

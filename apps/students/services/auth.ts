@@ -26,20 +26,12 @@ export async function signInStudent({
 		.eq("access_code", access_code)
 		.maybeSingle();
 
-	if (error) {
-		error.message = `signInStudent error: ${error.message}`;
-		throw error;
-	}
-
-	if (!data) {
+	if (error) throw error;
+	if (!data)
 		throw new Error("Estudante não existe ou informações estão incorretas!");
-	}
 
 	const status = await isClassPlaying(data.class_id);
-
-	if (status === false) {
-		throw new Error("A turma não está em atividade.");
-	}
+	if (!status) throw new Error("A turma não está em atividade.");
 
 	const json = {
 		student_id: data.id,
@@ -48,16 +40,12 @@ export async function signInStudent({
 	};
 
 	sessionStorage.setItem(STUDENT_SESSION_KEY, JSON.stringify(json));
-
 	return json;
 }
 
 export function getStudentSession(): StudentSession | null {
 	const session = sessionStorage.getItem(STUDENT_SESSION_KEY);
-
-	if (!session) {
-		return null;
-	}
+	if (!session) return null;
 
 	try {
 		return JSON.parse(session) as StudentSession;
@@ -67,6 +55,5 @@ export function getStudentSession(): StudentSession | null {
 	}
 }
 
-export function signOutStudent() {
+export const signOutStudent = () =>
 	sessionStorage.removeItem(STUDENT_SESSION_KEY);
-}
