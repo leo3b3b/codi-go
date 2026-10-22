@@ -17,6 +17,10 @@ import {
 
 import "@codi-go/ui/styles.css";
 
+export default function Root() {
+	return <Outlet />;
+}
+
 export const Layout = ({ children }: { children: React.ReactNode }) => (
 	<html lang="pt-BR" {...mantineHtmlProps}>
 		<head>
@@ -37,10 +41,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => (
 		</body>
 	</html>
 );
-
-export default function Root() {
-	return <Outlet />;
-}
 
 export const HydrateFallback = () => (
 	<UI.Box className="ui-root">
