@@ -17,76 +17,66 @@ import {
 
 import "@codi-go/ui/styles.css";
 
-export function Layout({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang="pt-BR" {...mantineHtmlProps}>
-			<head>
-				<meta charSet="UTF-8" />
-				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<title>CodiGO!</title>
-				<link rel="icon" href="/favicon.svg" />
-				<ColorSchemeScript defaultColorScheme="auto" />
-				<Meta />
-				<Links />
-			</head>
-			<body>
-				<MantineProvider theme={theme} defaultColorScheme="auto">
-					<Notifications />
-					{children}
-				</MantineProvider>
-				<Scripts />
-			</body>
-		</html>
-	);
-}
+export const Layout = ({ children }: { children: React.ReactNode }) => (
+	<html lang="pt-BR" {...mantineHtmlProps}>
+		<head>
+			<meta charSet="UTF-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<title>CodiGO!</title>
+			<link rel="icon" href="/favicon.svg" />
+			<ColorSchemeScript defaultColorScheme="auto" />
+			<Meta />
+			<Links />
+		</head>
+		<body>
+			<MantineProvider theme={theme} defaultColorScheme="auto">
+				<Notifications />
+				{children}
+			</MantineProvider>
+			<Scripts />
+		</body>
+	</html>
+);
 
 export default function Root() {
 	return <Outlet />;
 }
 
-export function HydrateFallback() {
-	return (
-		<UI.Box className="ui-root">
-			<UI.Stack h="100%" align="center" justify="center">
-				<UI.Loader />
-				<UI.Image w={200} h={200} src="/codiPisca.png" aria-hidden />
-			</UI.Stack>
-		</UI.Box>
-	);
-}
+export const HydrateFallback = () => (
+	<UI.Box className="ui-root">
+		<UI.Stack h="100%" align="center" justify="center">
+			<UI.Loader />
+			<UI.Image w={200} h={200} src="/codiPisca.png" aria-hidden />
+		</UI.Stack>
+	</UI.Box>
+);
 
 export function ErrorBoundary() {
 	const error = useRouteError();
-
 	const status = isRouteErrorResponse(error) ? error.status : 500;
-
 	const message = getErrorMessage(error);
 
 	return (
 		<main className="ui-root">
 			<UI.Container size="sm" py="xl">
-				<UI.Stack align="center" gap="lg">
-					<UI.Paper w="100%" p="xl">
-						<UI.Stack align="center" gap="md">
-							<UI.Text c="dimmed" size="sm" fw={600}>
-								Erro {status}
-							</UI.Text>
-
-							<UI.Title order={1} ta="center">
-								Não foi possível abrir esta página
-							</UI.Title>
-
-							<UI.Text c="dimmed" ta="center">
-								{message}
-							</UI.Text>
-							<UI.Text ta="center" size="sm">
-								<UI.Anchor href="/escolas">
-									Clique aqui para voltar à página inicial
-								</UI.Anchor>
-							</UI.Text>
-						</UI.Stack>
-					</UI.Paper>
-				</UI.Stack>
+				<UI.Paper w="100%" p="xl">
+					<UI.Stack align="center" gap="md">
+						<UI.Text c="dimmed" size="sm" fw={600}>
+							Erro {status}
+						</UI.Text>
+						<UI.Title order={1} ta="center">
+							Não foi possível abrir esta página
+						</UI.Title>
+						<UI.Text c="dimmed" ta="center">
+							{message}
+						</UI.Text>
+						<UI.Text ta="center" size="sm">
+							<UI.Anchor href="/">
+								Clique aqui para voltar à página inicial
+							</UI.Anchor>
+						</UI.Text>
+					</UI.Stack>
+				</UI.Paper>
 			</UI.Container>
 		</main>
 	);

@@ -51,3 +51,13 @@ a {
     background: var(--custom-button-disabled-bg);
     color: var(--button-color);
 }
+
+.codi-level-card {
+	border: 1px solid transparent;
+	transition: border-color 150ms ease;
+}
+
+.codi-level-card:hover,
+.codi-level-card:focus-visible {
+	border-color: var(--mantine-color-violet-6);
+}
