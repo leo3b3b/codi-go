@@ -8,10 +8,7 @@ function getDisabledColor(
 		color,
 		theme,
 	});
-
-	if (!parsed.isThemeColor) {
-		return undefined;
-	}
+	if (!parsed.isThemeColor) return undefined;
 
 	const shade = parsed.shade ?? 6;
 	const disabledShade = Math.max(shade - 4, 0);
@@ -32,17 +29,19 @@ const button = Button.extend({
 	},
 
 	styles: (theme, props) => {
-		const color = props.color || theme.primaryColor;
-		const disabledColor = getDisabledColor(theme, color);
+		const variant = props.variant ?? "filled";
+		const color = props.color ?? theme.primaryColor;
+
+		const disabledColor =
+			variant === "filled"
+				? getDisabledColor(theme, color)
+				: "var(--mantine-color-disabled)";
 
 		return {
 			root: {
-				...(disabledColor
-					? ({
-							"--custom-button-disabled-bg": disabledColor,
-						} as React.CSSProperties)
-					: {}),
-			},
+				"--custom-button-disabled-bg":
+					disabledColor ?? "var(--mantine-color-disabled)",
+			} as React.CSSProperties,
 		};
 	},
 });
