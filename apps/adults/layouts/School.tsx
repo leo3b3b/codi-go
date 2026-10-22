@@ -22,14 +22,13 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 		getInvitesForCurrentUser(),
 	]);
 
-	if (!schoolId) {
+	if (!schoolId)
 		return {
 			schools: [],
 			classes: [],
 			profile,
 			invites,
 		};
-	}
 
 	const [schools, classes] = await Promise.all([
 		getSchoolsForCurrentUser(),
