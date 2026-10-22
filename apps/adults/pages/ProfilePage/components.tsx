@@ -55,7 +55,7 @@ export function InviteCard({
 					Sair da escola
 				</UI.Button>
 			) : (
-				<UI.Flex direction={{ base: "column", md: "row" }}>
+				<UI.Flex direction={{ base: "column", md: "row" }} gap="sm">
 					<UI.Button
 						type="button"
 						w="100%"
