@@ -1,5 +1,5 @@
 import { Icon, UI } from "@codi-go/ui";
-import { SectionHeading } from "./components/SectionHeading";
+import { SectionHeading } from "./SectionHeading";
 
 const pillars = [
 	{

@@ -1,5 +1,5 @@
 export { AccessBenefits } from "./AccessBenefits";
-export { SectionHeading } from "./components/SectionHeading";
+export { SectionHeading } from "./SectionHeading";
 export { FAQSection } from "./FAQSection";
 export { FinalCTASection } from "./FinalCTASection";
 export { Footer } from "./Footer";

@@ -1,5 +1,5 @@
 import { UI } from "@codi-go/ui";
-import { SectionHeading } from "./components/SectionHeading";
+import { SectionHeading } from "./SectionHeading";
 
 const faqs = [
 	{
