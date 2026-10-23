@@ -14,14 +14,33 @@ export async function getStudentProgress(studentId: string) {
 				name,
 				game_key,
 				config,
-                game:games(
-                    name
-                )
+				game:games(
+					name
+				)
 			)
 		`)
 		.eq("student_id", studentId)
 		.order("register_time", { ascending: true });
 
 	if (error) throw error;
-	return data;
+
+	const games = new Map<
+		string,
+		{
+			key: string;
+			name: string;
+			records: typeof data;
+		}
+	>();
+
+	for (const record of data) {
+		const key = record.level.game_key;
+		const name = record.level.game?.name ?? key;
+
+		if (!games.has(key)) games.set(key, { key, name, records: [] });
+
+		games.get(key)?.records.push(record);
+	}
+
+	return Array.from(games.values());
 }
