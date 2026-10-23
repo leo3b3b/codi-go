@@ -1,16 +1,16 @@
 export const imageCodes = {
-	bunny: { src: "/image_codes/bunny.png", label: "Coelho" },
-	capybara: { src: "/image_codes/capybara.png", label: "Capivara" },
-	cat: { src: "/image_codes/cat.png", label: "Gato" },
-	dog: { src: "/image_codes/dog.png", label: "Cachorro" },
-	jellyfish: { src: "/image_codes/jellyfish.png", label: "Água-viva" },
-	lion: { src: "/image_codes/lion.png", label: "Leão" },
-	monkey: { src: "/image_codes/monkey.png", label: "Macaco" },
-	otter: { src: "/image_codes/otter.png", label: "Lontra" },
-	raccoon: { src: "/image_codes/raccoon.png", label: "Guaxinim" },
-	squirrel: { src: "/image_codes/squirrel.png", label: "Esquilo" },
-	turtle: { src: "/image_codes/turtle.png", label: "Tartaruga" },
-	whale: { src: "/image_codes/whale.png", label: "Baleia" },
+	bunny: { src: "/animals/bunny.png", label: "Coelho" },
+	capybara: { src: "/animals/capybara.png", label: "Capivara" },
+	cat: { src: "/animals/cat.png", label: "Gato" },
+	dog: { src: "/animals/dog.png", label: "Cachorro" },
+	jellyfish: { src: "/animals/octopus.png", label: "Polvo" }, //! Legacy
+	lion: { src: "/animals/lion.png", label: "Leão" },
+	monkey: { src: "/animals/monkey.png", label: "Macaco" },
+	otter: { src: "/animals/otter.png", label: "Lontra" },
+	raccoon: { src: "/animals/sheep.png", label: "Ovelha" }, //! Legacy
+	squirrel: { src: "/animals/squirrel.png", label: "Esquilo" },
+	turtle: { src: "/animals/turtle.png", label: "Tartaruga" },
+	whale: { src: "/animals/whale.png", label: "Baleia" },
 } as const satisfies Record<
 	string,
 	{

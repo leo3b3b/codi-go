@@ -1,0 +1,15 @@
+export type GameGuidanceTexts = readonly [string, string, string];
+
+export const GAME_GUIDANCE: Record<string, GameGuidanceTexts> = {
+	maze: [
+		"Neste jogo, o aluno organiza uma sequência de comandos para levar o Codi até o destino, planejando o percurso antes de executá-lo.",
+		"Resolver o labirinto desenvolve o pensamento computacional: o aluno pratica o sequenciamento de instruções, a antecipação de resultados e a revisão de estratégias para solucionar um problema.",
+		"Quando a diferença de comandos está disponível, sucesso com diferença 0 indica que o aluno chegou ao destino usando a quantidade esperada de comandos; sucesso com diferença positiva indica que chegou, mas precisou de passos adicionais; falha indica que não concluiu o percurso. A falha, por si só, não revela a causa. Observe se, ao longo das tentativas, o aluno passa a concluir os níveis e reduz os comandos adicionais.",
+	],
+
+	box: [
+		"Neste jogo, o aluno observa os objetos de uma caixa e escolhe uma alternativa que segue a mesma regra dos objetos apresentados.",
+		"A atividade desenvolve o reconhecimento de padrões e o raciocínio lógico, pois exige comparar objetos, identificar características relevantes e aplicar uma regra a um novo exemplo.",
+		"Cada resposta confirmada representa uma tentativa: sucesso indica que a escolha segue a regra; falha indica que a alternativa escolhida não corresponde ao padrão. Observe a proporção de acertos e a evolução dos resultados em cada nível. Como o registro não guarda a alternativa escolhida, ele não revela, sozinho, qual característica o aluno interpretou incorretamente.",
+	],
+};
