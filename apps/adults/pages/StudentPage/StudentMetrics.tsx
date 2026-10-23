@@ -12,7 +12,9 @@ export function StudentMetrics({ records }: StudentMetricsProps) {
 	).length;
 
 	const successRate =
-		records.length > 0 ? Math.round((successCount / records.length) * 100) : 0;
+		records.length > 0
+			? `${Math.round((successCount / records.length) * 100)}%`
+			: "—";
 
 	const completedLevels = new Set(
 		records
@@ -25,7 +27,7 @@ export function StudentMetrics({ records }: StudentMetricsProps) {
 
 	return (
 		<UI.SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
-			<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
+			<MetricCard label="Taxa de sucesso" value={String(successRate)} />
 			<MetricCard label="Níveis concluídos" value={String(completedLevels)} />
 			<MetricCard label="Registros" value={String(records.length)} />
 			<MetricCard

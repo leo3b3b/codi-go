@@ -17,8 +17,8 @@ export function GamePanel({ game, mazeProgress }: GamePanelProps) {
 
 	const successRate =
 		game.records.length > 0
-			? Math.round((successCount / game.records.length) * 100)
-			: 0;
+			? `${Math.round((successCount / game.records.length) * 100)}%`
+			: "—";
 
 	const completedLevels = new Set(
 		game.records
@@ -31,7 +31,7 @@ export function GamePanel({ game, mazeProgress }: GamePanelProps) {
 			<GameGuidanceCards gameKey={game.key} gameName={game.name} />
 
 			<UI.SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
-				<MetricCard label="Taxa de sucesso" value={`${successRate}%`} />
+				<MetricCard label="Taxa de sucesso" value={successRate} />
 				<MetricCard label="Níveis concluídos" value={String(completedLevels)} />
 				<MetricCard
 					label="Tentativas registradas"

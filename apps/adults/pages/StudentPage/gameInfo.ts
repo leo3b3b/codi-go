@@ -7,6 +7,14 @@ export const GAME_GUIDANCE: Record<string, GameGuidanceTexts> = {
 		"Quando a diferença de comandos está disponível, sucesso com diferença 0 indica que o aluno chegou ao destino usando a quantidade esperada de comandos; sucesso com diferença positiva indica que chegou, mas precisou de passos adicionais; falha indica que não concluiu o percurso. A falha, por si só, não revela a causa. Observe se, ao longo das tentativas, o aluno passa a concluir os níveis e reduz os comandos adicionais.",
 	],
 
+	kit: [
+		"Neste jogo, o aluno interpreta a instrução da fase e seleciona, entre várias opções, os itens que atendem ao critério solicitado.",
+
+		"A atividade trabalha a compreensão de instruções, a classificação de elementos, a atenção às características relevantes e a tomada de decisões com base em um conjunto de opções.",
+
+		"Sucesso indica que o aluno selecionou todos os itens corretos; resultado parcial indica que acertou parte dos itens, mas não o conjunto completo; falha indica que não selecionou nenhum item correto. Observe se as tentativas parciais evoluem para acertos completos. Os registros também permitem consultar a quantidade de itens corretos em relação ao total esperado.",
+	],
+
 	box: [
 		"Neste jogo, o aluno observa os objetos de uma caixa e escolhe uma alternativa que segue a mesma regra dos objetos apresentados.",
 		"A atividade desenvolve o reconhecimento de padrões e o raciocínio lógico, pois exige comparar objetos, identificar características relevantes e aplicar uma regra a um novo exemplo.",
