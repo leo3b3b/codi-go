@@ -158,7 +158,7 @@ export default function KitGamePage({
 					</UI.Group>
 				</UI.Paper>
 
-				<CodiMessage message={message} status={feedback} />
+				<CodiMessage message={message} status={feedback} textSize="xl" />
 
 				<UI.Paper h="100%">
 					<UI.Stack gap="lg">

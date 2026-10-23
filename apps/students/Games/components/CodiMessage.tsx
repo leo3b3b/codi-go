@@ -4,6 +4,7 @@ import type { Feedback } from "../types";
 type CodiMessageProps = {
 	message: string;
 	status: Feedback;
+	textSize?: "xl" | "lg" | "md" | "sm" | "xs";
 };
 
 const statusStyles = {
@@ -25,7 +26,7 @@ const statusStyles = {
 	},
 } as const;
 
-export function CodiMessage({ message, status }: CodiMessageProps) {
+export function CodiMessage({ message, status, textSize }: CodiMessageProps) {
 	const style = statusStyles[status];
 
 	return (
@@ -43,7 +44,7 @@ export function CodiMessage({ message, status }: CodiMessageProps) {
 					alignItems: "center",
 				}}
 			>
-				<UI.Text size="lg">{message}</UI.Text>
+				<UI.Text size={textSize || "lg"}>{message}</UI.Text>
 			</UI.Paper>
 		</UI.Group>
 	);
