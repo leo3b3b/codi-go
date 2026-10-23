@@ -112,7 +112,7 @@ function LevelCard({
 			component="button"
 			type="button"
 			w="100%"
-			onClick={() => navigate(`../${route}/${levelNumber}`)}
+			onClick={() => navigate(`../${route}/${level.id}`)}
 			style={{
 				textAlign: "left",
 				cursor: "pointer",
