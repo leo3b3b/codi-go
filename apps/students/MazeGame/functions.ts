@@ -1,3 +1,4 @@
+import type { LevelData } from "@/services";
 import type { MazeLevel, Position, TileType } from "./types";
 import { tileImages } from "./types";
 
@@ -18,20 +19,7 @@ const isTileRow = (value: unknown): value is TileType[] =>
 const isTiles = (value: unknown): value is TileType[][] =>
 	Array.isArray(value) && value.length > 0 && value.every(isTileRow);
 
-export function parseMazeLevel(value: unknown): MazeLevel {
-	if (
-		typeof value !== "object" ||
-		value === null ||
-		!("id" in value) ||
-		!("name" in value) ||
-		!("config" in value) ||
-		typeof value.id !== "number" ||
-		typeof value.name !== "string"
-	)
-		throw new Error("Dados da fase inválidos.");
-
-	const { id, name, config } = value;
-
+export function parseMazeLevel({ id, name, config }: LevelData): MazeLevel {
 	if (
 		typeof config !== "object" ||
 		config === null ||

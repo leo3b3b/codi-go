@@ -1,5 +1,6 @@
 import { supabase, type Tables } from "@codi-go/supabase";
 
+export type LevelData = Pick<Tables<"levels">, "id" | "name" | "config">;
 export type LevelSummary = Pick<Tables<"levels">, "id" | "name" | "game_key">;
 export type GameSummary = Tables<"games">;
 
@@ -24,12 +25,11 @@ export async function listLevels(): Promise<LevelSummary[]> {
 	return data;
 }
 
-export async function getLevel(levelId: number): Promise<unknown> {
+export async function getLevel(levelId: number): Promise<LevelData> {
 	const { data, error } = await supabase
 		.from("levels")
 		.select("id, name, config")
 		.eq("id", levelId)
-		.eq("game_key", "maze")
 		.single();
 
 	if (error) throw error;
