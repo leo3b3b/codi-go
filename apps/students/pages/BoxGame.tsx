@@ -2,10 +2,9 @@ import type { Route } from "+pages/BoxGame";
 import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
-import { useNavigate } from "react-router";
 import { BoxContents, parseBoxLevel } from "@/BoxGame";
 import type { Feedback, ObjectType } from "@/Games";
-import { CodiMessage, ObjectOption, objectImages } from "@/Games";
+import { CodiMessage, GameHeader, ObjectOption, objectImages } from "@/Games";
 import {
 	getLevel,
 	getStudentSession,
@@ -47,7 +46,6 @@ function shuffleObjects(objects: ObjectType[]): ObjectType[] {
 export default function BoxGamePage({
 	loaderData: level,
 }: Route.ComponentProps) {
-	const navigate = useNavigate();
 	const { reward } = useReward("confettiDiv", "confetti", {
 		position: "fixed",
 		elementCount: 240,
@@ -112,33 +110,18 @@ export default function BoxGamePage({
 	return (
 		<UI.Container>
 			<UI.Stack gap="md">
+				<GameHeader name={level.name} />
+
+				<CodiMessage message={message} status={feedback} />
+
 				<UI.Paper>
-					<UI.Group gap="md" wrap="nowrap">
-						<UI.Button
-							type="button"
-							variant="default"
-							w="auto"
-							leftSection={<Icon.ArrowLeft size={18} />}
-							onClick={() => navigate("../fases")}
-						>
-							Voltar para fases
-						</UI.Button>
-
-						<UI.Title order={1}>{level.name}</UI.Title>
-					</UI.Group>
-				</UI.Paper>
-
-				<UI.Grid align="stretch">
-					<UI.Grid.Col span={{ base: 12, lg: 6 }}>
-						<UI.Paper h="100%">
+					<UI.Grid align="stretch">
+						<UI.Grid.Col span={{ base: 12, md: 5 }}>
 							<BoxContents objects={level.boxObjects} />
-						</UI.Paper>
-					</UI.Grid.Col>
+						</UI.Grid.Col>
 
-					<UI.Grid.Col span={{ base: 12, lg: 6 }}>
-						<UI.Paper h="100%">
+						<UI.Grid.Col span={{ base: 12, md: 7 }}>
 							<ControlColumn
-								message={message}
 								feedback={feedback}
 								options={options}
 								selectedObject={selectedObject}
@@ -147,16 +130,15 @@ export default function BoxGamePage({
 								selectObject={selectObject}
 								confirmAnswer={confirmAnswer}
 							/>
-						</UI.Paper>
-					</UI.Grid.Col>
-				</UI.Grid>
+						</UI.Grid.Col>
+					</UI.Grid>
+				</UI.Paper>
 			</UI.Stack>
 		</UI.Container>
 	);
 }
 
 type ControlColumnProps = {
-	message: string;
 	feedback: Feedback;
 	options: ObjectType[];
 	selectedObject: ObjectType | null;
@@ -167,7 +149,6 @@ type ControlColumnProps = {
 };
 
 const ControlColumn = ({
-	message,
 	feedback,
 	options,
 	selectedObject,
@@ -177,11 +158,15 @@ const ControlColumn = ({
 	confirmAnswer,
 }: ControlColumnProps) => (
 	<UI.Stack gap="lg">
-		<CodiMessage message={message} status={feedback} />
+		<UI.Group justify="space-between" align="center" wrap="wrap">
+			<UI.Title order={2}>Qual objeto segue a mesma regra?</UI.Title>
 
-		<UI.Title order={2}>Qual objeto segue a mesma regra?</UI.Title>
+			<UI.Text size="sm" c="dimmed">
+				{options.length} opções
+			</UI.Text>
+		</UI.Group>
 
-		<UI.SimpleGrid cols={2} spacing="sm">
+		<UI.SimpleGrid cols={{ base: 2, sm: 4 }} spacing="sm">
 			{options.map((object) => (
 				<ObjectOption
 					key={object}
@@ -193,14 +178,6 @@ const ControlColumn = ({
 			))}
 		</UI.SimpleGrid>
 
-		<UI.Box h={24}>
-			{feedback === "correct" && (
-				<UI.Text c="green" fw={600}>
-					<Icon.Check size={18} /> Resposta correta!
-				</UI.Text>
-			)}
-		</UI.Box>
-
 		<UI.Button
 			type="button"
 			fullWidth
@@ -210,5 +187,13 @@ const ControlColumn = ({
 		>
 			{isCorrect ? "Resposta confirmada" : "Confirmar resposta"}
 		</UI.Button>
+
+		<UI.Box mih={24}>
+			{feedback === "correct" && (
+				<UI.Text c="green" fw={600}>
+					<Icon.Check size={18} /> Resposta correta!
+				</UI.Text>
+			)}
+		</UI.Box>
 	</UI.Stack>
 );

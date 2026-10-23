@@ -2,10 +2,10 @@ import type { Route } from "+pages/KitGame";
 import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
-import { useNavigate } from "react-router";
 import {
 	CodiMessage,
 	type Feedback,
+	GameHeader,
 	ObjectOption,
 	type ObjectType,
 } from "@/Games";
@@ -41,7 +41,6 @@ export function meta({ loaderData: level }: Route.MetaArgs) {
 export default function KitGamePage({
 	loaderData: level,
 }: Route.ComponentProps) {
-	const navigate = useNavigate();
 	const { reward } = useReward("confettiDiv", "confetti", {
 		position: "fixed",
 		elementCount: 240,
@@ -142,21 +141,7 @@ export default function KitGamePage({
 	return (
 		<UI.Container>
 			<UI.Stack gap="md">
-				<UI.Paper>
-					<UI.Group gap="md" wrap="nowrap">
-						<UI.Button
-							type="button"
-							variant="default"
-							w="auto"
-							leftSection={<Icon.ArrowLeft size={18} />}
-							onClick={() => navigate("../fases")}
-						>
-							Voltar para fases
-						</UI.Button>
-
-						<UI.Title order={1}>{level.name}</UI.Title>
-					</UI.Group>
-				</UI.Paper>
+				<GameHeader name={level.name} />
 
 				<CodiMessage message={message} status={feedback} textSize="xl" />
 
