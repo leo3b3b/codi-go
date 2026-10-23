@@ -8,29 +8,32 @@ type GameTabsProps = {
 };
 
 export function GameTabs({ games, mazeProgress }: GameTabsProps) {
-	const firstGame = games[0];
+	const orderedGames = [...games].sort((a, b) =>
+		a.name.localeCompare(b.name, "pt-BR", { sensitivity: "base" }),
+	);
 
-	if (!firstGame) {
+	const firstGame = orderedGames[0];
+
+	if (!firstGame)
 		return (
 			<UI.Paper p="lg">
 				<UI.Text c="dimmed" ta="center">
-					Este aluno ainda não possui tentativas registradas.
+					Nenhum jogo está cadastrado no sistema.
 				</UI.Text>
 			</UI.Paper>
 		);
-	}
 
 	return (
 		<UI.Tabs defaultValue={firstGame.key}>
 			<UI.Tabs.List>
-				{games.map((game) => (
+				{orderedGames.map((game) => (
 					<UI.Tabs.Tab key={game.key} value={game.key}>
 						{game.name}
 					</UI.Tabs.Tab>
 				))}
 			</UI.Tabs.List>
 
-			{games.map((game) => (
+			{orderedGames.map((game) => (
 				<UI.Tabs.Panel key={game.key} value={game.key} pt="md">
 					<GamePanel
 						game={game}

@@ -9,28 +9,28 @@ import {
 export function ImportClassesStudentsCsv({ school_id }: { school_id: string }) {
 	const { revalidate } = useRevalidator();
 
-async function handleImport(rows: CsvRow[]) {
-	const result = await importClassesAndStudentsFromCsv({
-		school_id,
-		rows: rows.map((row) => ({
-			className: row.className ?? "",
-			studentName: row.studentName ?? "",
-		})),
-	});
+	async function handleImport(rows: CsvRow[]) {
+		const result = await importClassesAndStudentsFromCsv({
+			school_id,
+			rows: rows.map((row) => ({
+				className: row.className ?? "",
+				studentName: row.studentName ?? "",
+			})),
+		});
 
-	await revalidate();
+		await revalidate();
 
-	notifications.show({
-		title: "Importação concluída",
-		message: [
-			`${result.createdClasses} turmas criadas.`,
-			`${result.createdStudents} alunos cadastrados.`,
-			`${result.skippedStudents} alunos ignorados por já existirem ou se repetirem.`,
-			`${result.ignoredRows} linhas com aluno sem turma ignoradas.`,
-		].join(" "),
-		color: "green",
-	});
-}
+		notifications.show({
+			title: "Importação concluída",
+			message: [
+				`${result.createdClasses} turmas criadas.`,
+				`${result.createdStudents} alunos cadastrados.`,
+				`${result.skippedStudents} alunos ignorados por já existirem ou se repetirem.`,
+				`${result.ignoredRows} linhas com aluno sem turma ignoradas.`,
+			].join(" "),
+			color: "green",
+		});
+	}
 
 	return (
 		<CsvImportWizard

@@ -8,7 +8,7 @@ type MazeProgressChartProps = {
 interface MazeChartPoint {
 	attempt: number;
 	levelName: string;
-	result: "success" | "failure";
+	result: "success" | "partial" | "failure";
 	difference: number | null;
 	success: number | null;
 	failure: number | null;

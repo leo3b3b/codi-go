@@ -4,9 +4,31 @@ import type { StudentProgressRecord } from "./types";
 
 const PAGE_SIZE = 10;
 
+const resultStyles = {
+	success: { label: "Sucesso", color: "green.7" },
+	partial: { label: "Parcial", color: "yellow.7" },
+	failure: { label: "Falha", color: "red.7" },
+} as const;
+
 type ProgressRecordsProps = {
 	records: StudentProgressRecord[];
 };
+
+function getPartialSummary(metadata: StudentProgressRecord["metadata"]) {
+	if (
+		typeof metadata !== "object" ||
+		metadata === null ||
+		Array.isArray(metadata)
+	)
+		return null;
+
+	const correctCount = metadata.correct_count;
+	const itemCount = metadata.item_count;
+
+	return typeof correctCount === "number" && typeof itemCount === "number"
+		? `${correctCount} de ${itemCount} itens corretos`
+		: null;
+}
 
 export function ProgressRecords({ records }: ProgressRecordsProps) {
 	const [page, setPage] = useState(1);
@@ -35,32 +57,44 @@ export function ProgressRecords({ records }: ProgressRecordsProps) {
 				) : (
 					<>
 						<UI.Stack gap={0}>
-							{pageRecords.map((record) => (
-								<UI.Group
-									key={record.id}
-									justify="space-between"
-									gap="md"
-									wrap="wrap"
-									p="md"
-									style={{
-										borderBottom: "1px solid var(--app-border)",
-									}}
-								>
-									<div>
-										<UI.Text fw={600}>{record.level.name}</UI.Text>
+							{pageRecords.map((record) => {
+								const resultStyle = resultStyles[record.result];
+								const partialSummary =
+									record.result === "partial"
+										? getPartialSummary(record.metadata)
+										: null;
 
-										<UI.Text size="sm" c="dimmed">
-											{new Date(record.register_time).toLocaleString("pt-BR")}
-										</UI.Text>
-									</div>
-
-									<UI.Text
-										c={record.result === "success" ? "green.7" : "red.7"}
+								return (
+									<UI.Group
+										key={record.id}
+										justify="space-between"
+										gap="md"
+										wrap="wrap"
+										p="md"
+										style={{
+											borderBottom: "1px solid var(--app-border)",
+										}}
 									>
-										{record.result === "success" ? "Sucesso" : "Falha"}
-									</UI.Text>
-								</UI.Group>
-							))}
+										<div>
+											<UI.Text fw={600}>{record.level.name}</UI.Text>
+
+											<UI.Text size="sm" c="dimmed">
+												{new Date(record.register_time).toLocaleString("pt-BR")}
+											</UI.Text>
+
+											{partialSummary && (
+												<UI.Text size="sm" c="dimmed">
+													{partialSummary}
+												</UI.Text>
+											)}
+										</div>
+
+										<UI.Text c={resultStyle.color} fw={500}>
+											{resultStyle.label}
+										</UI.Text>
+									</UI.Group>
+								);
+							})}
 						</UI.Stack>
 
 						{totalPages > 1 && (

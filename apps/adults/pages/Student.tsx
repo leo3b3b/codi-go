@@ -36,7 +36,13 @@ export default function StudentPage({
 	loaderData: { student, games, mazeProgress },
 }: Route.ComponentProps) {
 	const navigate = useNavigate();
-	const progress = games.flatMap((game) => game.records);
+	const progress = games
+		.flatMap((game) => game.records)
+		.sort(
+			(a, b) =>
+				new Date(a.register_time).getTime() -
+				new Date(b.register_time).getTime(),
+		);
 
 	return (
 		<UI.Container>

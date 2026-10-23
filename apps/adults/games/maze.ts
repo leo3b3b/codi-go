@@ -13,7 +13,7 @@ export interface MazeProgressRecord {
 	levelId: number;
 	levelName: string;
 	gameName: string;
-	result: "success" | "failure";
+	result: "success" | "partial" | "failure";
 	registerTime: string;
 	numberOfCommands: number | null;
 	minCommands: number | null;
@@ -31,7 +31,7 @@ function getNumber(value: Json | undefined): number | null {
 export function parseMazeProgress(record: {
 	id: number;
 	level_id: number;
-	result: "success" | "failure";
+	result: "success" | "partial" | "failure";
 	metadata: Json;
 	register_time: string;
 	level: {

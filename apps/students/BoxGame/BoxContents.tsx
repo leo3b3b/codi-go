@@ -1,5 +1,5 @@
 import { UI } from "@codi-go/ui";
-import { type ObjectType, objectImages } from "../types";
+import { type ObjectType, objectImages } from "../Games/types";
 
 type BoxContentsProps = {
 	objects: ObjectType[];
@@ -18,7 +18,7 @@ export const BoxContents = ({ objects }: BoxContentsProps) => (
 				border: "6px solid #a66b36",
 				borderRadius: "var(--mantine-radius-lg)",
 				background: "#fff8eb",
-				minHeight: 320,
+				minHeight: 200,
 			}}
 		>
 			<UI.SimpleGrid cols={{ base: 2, sm: 3 }} spacing="lg">

@@ -62,7 +62,7 @@ function Entity({
 	);
 }
 
-export const MazeRenderer = ({
+const MazeRenderer = ({
 	level,
 	playerPosition,
 	direction,
@@ -95,4 +95,27 @@ export const MazeRenderer = ({
 			</Entity>
 		</UI.Box>
 	</UI.Box>
+);
+
+type MazeBoardProps = {
+	level: MazeLevel;
+	playerPosition: Position;
+	direction: Command;
+	moving: boolean;
+};
+
+export const MazeBoard = ({
+	level,
+	playerPosition,
+	direction,
+	moving,
+}: MazeBoardProps) => (
+	<UI.Center w="100%" h={{ base: "auto", lg: "100%" }} style={{ minHeight: 0 }}>
+		<MazeRenderer
+			level={level}
+			playerPosition={playerPosition}
+			direction={direction}
+			moving={moving}
+		/>
+	</UI.Center>
 );
