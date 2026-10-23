@@ -3,21 +3,22 @@ import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
 import { useNavigate } from "react-router";
-import {
-	C,
-	commandIcons,
-	commands,
-	engine,
-	parseMazeLevel,
-	type T,
-	wait,
-} from "@/MazeGame";
+import { C, engine, parseMazeLevel, type T, wait } from "@/MazeGame";
 import {
 	getLevel,
 	getStudentSession,
 	isClassPlaying,
 	registerMazeProgress,
 } from "@/services";
+
+export const commandIcons: Record<T.Command, Icon.LucideIcon> = {
+	up: Icon.ArrowUp,
+	down: Icon.ArrowDown,
+	left: Icon.ArrowLeft,
+	right: Icon.ArrowRight,
+};
+
+export const commands: T.Command[] = ["up", "left", "down", "right"];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const levelId = Number(params.levelId);

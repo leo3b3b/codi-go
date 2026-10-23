@@ -1,7 +1,7 @@
-import { Icon } from "@codi-go/ui";
-import * as T from "./types";
+import type { MazeLevel, Position, TileType } from "./types";
+import { tileImages } from "./types";
 
-const isPosition = (value: unknown): value is T.Position =>
+const isPosition = (value: unknown): value is Position =>
 	typeof value === "object" &&
 	value !== null &&
 	"x" in value &&
@@ -9,16 +9,16 @@ const isPosition = (value: unknown): value is T.Position =>
 	typeof value.x === "number" &&
 	typeof value.y === "number";
 
-const isTileType = (value: unknown): value is T.TileType =>
-	typeof value === "string" && value in T.tileImages;
+const isTileType = (value: unknown): value is TileType =>
+	typeof value === "string" && value in tileImages;
 
-const isTileRow = (value: unknown): value is T.TileType[] =>
+const isTileRow = (value: unknown): value is TileType[] =>
 	Array.isArray(value) && value.every(isTileType);
 
-const isTiles = (value: unknown): value is T.TileType[][] =>
+const isTiles = (value: unknown): value is TileType[][] =>
 	Array.isArray(value) && value.length > 0 && value.every(isTileRow);
 
-export function parseMazeLevel(value: unknown): T.MazeLevel {
+export function parseMazeLevel(value: unknown): MazeLevel {
 	if (
 		typeof value !== "object" ||
 		value === null ||
@@ -52,18 +52,6 @@ export function parseMazeLevel(value: unknown): T.MazeLevel {
 
 	return { id, name, tiles, start, goal };
 }
-
-export const commandIcons: Record<
-	T.Command,
-	React.ComponentType<{ size?: number; color?: string }>
-> = {
-	up: Icon.ArrowUp,
-	down: Icon.ArrowDown,
-	left: Icon.ArrowLeft,
-	right: Icon.ArrowRight,
-};
-
-export const commands: T.Command[] = ["up", "left", "down", "right"];
 
 export const wait = (ms: number) =>
 	new Promise((resolve) => setTimeout(resolve, ms));
