@@ -1,6 +1,6 @@
 import { generateImageCode, supabase } from "@codi-go/supabase";
 import { generateClassAccessCode } from "@/services";
-import {type CsvRow, cleanImportName, normalizeImportName} from "./utils";
+import { type CsvRow, cleanImportName, normalizeImportName } from "./utils";
 
 export async function importStudentsFromCsv({
 	class_id,
