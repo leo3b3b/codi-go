@@ -1,5 +1,13 @@
-import type { BoxLevel, ObjectType } from "./types";
-import { objectImages } from "./types";
+import { type ObjectType, objectImages } from "@/Games";
+
+export type BoxLevel = {
+	id: number;
+	name: string;
+	boxObjects: ObjectType[];
+	correctObject: ObjectType;
+	alternatives: ObjectType[];
+	explanation: string;
+};
 
 const isObjectType = (value: unknown): value is ObjectType =>
 	typeof value === "string" && Object.hasOwn(objectImages, value);

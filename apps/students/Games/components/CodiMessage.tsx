@@ -15,6 +15,10 @@ const statusStyles = {
 		background: "green.0",
 		color: "green.9",
 	},
+	partial: {
+		background: "yellow.0",
+		color: "yellow.9",
+	},
 	incorrect: {
 		background: "red.0",
 		color: "red.9",

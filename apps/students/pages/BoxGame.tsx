@@ -3,8 +3,9 @@ import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
 import { useNavigate } from "react-router";
-import type { Feedback, ObjectType } from "@/BoxGame";
-import { C, objectImages, parseBoxLevel } from "@/BoxGame";
+import { BoxContents, parseBoxLevel } from "@/BoxGame";
+import type { Feedback, ObjectType } from "@/Games";
+import { CodiMessage, ObjectOption, objectImages } from "@/Games";
 import {
 	getLevel,
 	getStudentSession,
@@ -130,7 +131,7 @@ export default function BoxGamePage({
 				<UI.Grid align="stretch">
 					<UI.Grid.Col span={{ base: 12, lg: 6 }}>
 						<UI.Paper h="100%">
-							<C.BoxContents objects={level.boxObjects} />
+							<BoxContents objects={level.boxObjects} />
 						</UI.Paper>
 					</UI.Grid.Col>
 
@@ -176,13 +177,13 @@ const ControlColumn = ({
 	confirmAnswer,
 }: ControlColumnProps) => (
 	<UI.Stack gap="lg">
-		<C.CodiMessage message={message} status={feedback} />
+		<CodiMessage message={message} status={feedback} />
 
 		<UI.Title order={2}>Qual objeto segue a mesma regra?</UI.Title>
 
 		<UI.SimpleGrid cols={2} spacing="sm">
 			{options.map((object) => (
-				<C.ObjectOption
+				<ObjectOption
 					key={object}
 					object={object}
 					selected={selectedObject === object}

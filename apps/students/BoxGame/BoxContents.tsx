@@ -1,5 +1,5 @@
 import { UI } from "@codi-go/ui";
-import { type ObjectType, objectImages } from "../types";
+import { type ObjectType, objectImages } from "../Games/types";
 
 type BoxContentsProps = {
 	objects: ObjectType[];

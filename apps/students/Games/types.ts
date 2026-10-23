@@ -1,14 +1,5 @@
 export type Feedback = "idle" | "correct" | "incorrect";
 
-export type BoxLevel = {
-	id: number;
-	name: string;
-	boxObjects: ObjectType[];
-	correctObject: ObjectType;
-	alternatives: ObjectType[];
-	explanation: string;
-};
-
 export const objectImages = {
 	// Animals
 	cat: { src: "/animals/cat.png", label: "Gato" },
