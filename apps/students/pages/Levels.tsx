@@ -59,6 +59,7 @@ const LevelsHeader = () => (
 function GameSection({ game }: { game: Game }) {
 	const gameRoutes: Record<string, string> = {
 		maze: "labirinto",
+		box: "caixa",
 	};
 	const route = gameRoutes[game.key];
 
