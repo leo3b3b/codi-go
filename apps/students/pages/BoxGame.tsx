@@ -1,9 +1,12 @@
 import type { Route } from "+pages/BoxGame";
 import { Icon, UI } from "@codi-go/ui";
 import { useState } from "react";
+import { useReward } from "react-rewards";
 import { useNavigate } from "react-router";
 import { C, type ObjectType, objectImages, parseBoxLevel } from "@/BoxGame";
 import { getLevel, getStudentSession, isClassPlaying } from "@/services";
+
+type Feedback = "idle" | "correct" | "incorrect";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const levelId = Number(params.levelId);
@@ -40,14 +43,18 @@ export default function BoxGamePage({
 	loaderData: level,
 }: Route.ComponentProps) {
 	const navigate = useNavigate();
+	const { reward } = useReward("confettiDiv", "confetti", {
+		position: "fixed",
+		elementCount: 240,
+		angle: 90,
+		spread: 120,
+	});
 
 	const [options] = useState(() =>
 		shuffleObjects([level.correctObject, ...level.alternatives]),
 	);
 	const [selectedObject, setSelectedObject] = useState<ObjectType | null>(null);
-	const [feedback, setFeedback] = useState<"idle" | "correct" | "incorrect">(
-		"idle",
-	);
+	const [feedback, setFeedback] = useState<Feedback>("idle");
 
 	const isCorrect = feedback === "correct";
 
@@ -68,10 +75,9 @@ export default function BoxGamePage({
 
 	function confirmAnswer() {
 		if (selectedObject === null || isCorrect) return;
-
-		setFeedback(
-			selectedObject === level.correctObject ? "correct" : "incorrect",
-		);
+		const isAnswerCorrect = selectedObject === level.correctObject;
+		setFeedback(isAnswerCorrect ? "correct" : "incorrect");
+		if (isAnswerCorrect) reward();
 	}
 
 	return (
@@ -102,38 +108,15 @@ export default function BoxGamePage({
 
 					<UI.Grid.Col span={{ base: 12, lg: 6 }}>
 						<UI.Paper h="100%">
-							<UI.Stack gap="lg">
-								<C.CodiMessage message={message} status={feedback} />
-
-								<UI.Title order={2}>Qual objeto segue a mesma regra?</UI.Title>
-
-								<UI.SimpleGrid cols={2} spacing="sm">
-									{options.map((object) => (
-										<C.ObjectOption
-											key={object}
-											object={object}
-											selected={selectedObject === object}
-											disabled={isCorrect}
-											onSelect={selectObject}
-										/>
-									))}
-								</UI.SimpleGrid>
-
-								{feedback === "correct" && (
-									<UI.Text c="green" fw={600}>
-										<Icon.Check size={18} /> Resposta correta!
-									</UI.Text>
-								)}
-
-								<UI.Button
-									type="button"
-									fullWidth
-									disabled={selectedObject === null || isCorrect}
-									onClick={confirmAnswer}
-								>
-									{isCorrect ? "Resposta confirmada" : "Confirmar resposta"}
-								</UI.Button>
-							</UI.Stack>
+							<ControlColumn
+								message={message}
+								feedback={feedback}
+								options={options}
+								selectedObject={selectedObject}
+								isCorrect={isCorrect}
+								selectObject={selectObject}
+								confirmAnswer={confirmAnswer}
+							/>
 						</UI.Paper>
 					</UI.Grid.Col>
 				</UI.Grid>
@@ -141,3 +124,58 @@ export default function BoxGamePage({
 		</UI.Container>
 	);
 }
+
+type ControlColumnProps = {
+	message: string;
+	feedback: Feedback;
+	options: ObjectType[];
+	selectedObject: ObjectType | null;
+	isCorrect: boolean;
+	selectObject: (object: ObjectType) => void;
+	confirmAnswer: () => void;
+};
+
+const ControlColumn = ({
+	message,
+	feedback,
+	options,
+	selectedObject,
+	isCorrect,
+	selectObject,
+	confirmAnswer,
+}: ControlColumnProps) => (
+	<UI.Stack gap="lg">
+		<C.CodiMessage message={message} status={feedback} />
+
+		<UI.Title order={2}>Qual objeto segue a mesma regra?</UI.Title>
+
+		<UI.SimpleGrid cols={2} spacing="sm">
+			{options.map((object) => (
+				<C.ObjectOption
+					key={object}
+					object={object}
+					selected={selectedObject === object}
+					disabled={isCorrect}
+					onSelect={selectObject}
+				/>
+			))}
+		</UI.SimpleGrid>
+
+		<UI.Box h={24}>
+			{feedback === "correct" && (
+				<UI.Text c="green" fw={600}>
+					<Icon.Check size={18} /> Resposta correta!
+				</UI.Text>
+			)}
+		</UI.Box>
+
+		<UI.Button
+			type="button"
+			fullWidth
+			disabled={selectedObject === null || isCorrect}
+			onClick={confirmAnswer}
+		>
+			{isCorrect ? "Resposta confirmada" : "Confirmar resposta"}
+		</UI.Button>
+	</UI.Stack>
+);

@@ -24,14 +24,19 @@ export function CodiMessage({ message, status }: CodiMessageProps) {
 	const style = statusStyles[status];
 
 	return (
-		<UI.Group align="center" gap="md" wrap="nowrap">
-			<UI.Image src="/codi.png" alt="Codi" w={100} fit="contain" />
+		<UI.Group h={120} align="center" gap="md" wrap="nowrap">
+			<UI.Image src="/codi.png" alt="Codi" w={100} h={140} fit="contain" />
 			<UI.Paper
+				h="100%"
 				p="md"
 				radius="lg"
 				bg={style.background}
 				c={style.color}
-				style={{ flex: 1 }}
+				style={{
+					flex: 1,
+					display: "flex",
+					alignItems: "center",
+				}}
 			>
 				<UI.Text>{message}</UI.Text>
 			</UI.Paper>
