@@ -39,7 +39,7 @@ export function CodiMessage({ message, status }: CodiMessageProps) {
 					alignItems: "center",
 				}}
 			>
-				<UI.Text>{message}</UI.Text>
+				<UI.Text size="lg">{message}</UI.Text>
 			</UI.Paper>
 		</UI.Group>
 	);
