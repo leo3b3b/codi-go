@@ -30,10 +30,10 @@ export function CodiMessage({ message, status, textSize }: CodiMessageProps) {
 	const style = statusStyles[status];
 
 	return (
-		<UI.Group mih={120} align="center" gap="md" wrap="nowrap">
+		<UI.Group align="center" gap="md">
 			<UI.Image src="/codi.png" alt="Codi" w={100} h={140} fit="contain" />
 			<UI.Paper
-				h="100%"
+				mih={100}
 				p="md"
 				radius="lg"
 				bg={style.background}
