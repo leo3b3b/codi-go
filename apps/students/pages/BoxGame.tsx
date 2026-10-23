@@ -1,12 +1,16 @@
 import type { Route } from "+pages/BoxGame";
-import { Icon, UI } from "@codi-go/ui";
+import { Icon, notifications, UI } from "@codi-go/ui";
 import { useState } from "react";
 import { useReward } from "react-rewards";
 import { useNavigate } from "react-router";
-import { C, type ObjectType, objectImages, parseBoxLevel } from "@/BoxGame";
-import { getLevel, getStudentSession, isClassPlaying } from "@/services";
-
-type Feedback = "idle" | "correct" | "incorrect";
+import type { Feedback, ObjectType } from "@/BoxGame";
+import { C, objectImages, parseBoxLevel } from "@/BoxGame";
+import {
+	getLevel,
+	getStudentSession,
+	isClassPlaying,
+	registerProgress,
+} from "@/services";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 	const levelId = Number(params.levelId);
@@ -55,6 +59,7 @@ export default function BoxGamePage({
 	);
 	const [selectedObject, setSelectedObject] = useState<ObjectType | null>(null);
 	const [feedback, setFeedback] = useState<Feedback>("idle");
+	const [isRegistering, setIsRegistering] = useState(false);
 
 	const isCorrect = feedback === "correct";
 
@@ -67,17 +72,40 @@ export default function BoxGamePage({
 				: "Observe os objetos dentro da caixa. O que eles têm em comum? Encontre outro objeto que siga a mesma regra!";
 
 	function selectObject(object: ObjectType) {
-		if (isCorrect) return;
+		if (isCorrect || isRegistering) return;
 
 		setSelectedObject(object);
 		setFeedback("idle");
 	}
 
-	function confirmAnswer() {
-		if (selectedObject === null || isCorrect) return;
+	async function confirmAnswer() {
+		if (selectedObject === null || isCorrect || isRegistering) return;
+
 		const isAnswerCorrect = selectedObject === level.correctObject;
-		setFeedback(isAnswerCorrect ? "correct" : "incorrect");
-		if (isAnswerCorrect) reward();
+
+		setIsRegistering(true);
+
+		try {
+			await registerProgress({
+				level_id: level.id,
+				result: isAnswerCorrect ? "success" : "failure",
+			});
+
+			setFeedback(isAnswerCorrect ? "correct" : "incorrect");
+
+			if (isAnswerCorrect) reward();
+		} catch {
+			notifications.show({
+				message: "Não foi possível registrar seu progresso. Tente novamente.",
+				color: "red",
+				position: "top-center",
+				autoClose: 3000,
+				withCloseButton: false,
+				icon: <Icon.X />,
+			});
+		} finally {
+			setIsRegistering(false);
+		}
 	}
 
 	return (
@@ -114,6 +142,7 @@ export default function BoxGamePage({
 								options={options}
 								selectedObject={selectedObject}
 								isCorrect={isCorrect}
+								isRegistering={isRegistering}
 								selectObject={selectObject}
 								confirmAnswer={confirmAnswer}
 							/>
@@ -127,12 +156,13 @@ export default function BoxGamePage({
 
 type ControlColumnProps = {
 	message: string;
-	feedback: Feedback;
+	feedback: "idle" | "correct" | "incorrect";
 	options: ObjectType[];
 	selectedObject: ObjectType | null;
 	isCorrect: boolean;
+	isRegistering: boolean;
 	selectObject: (object: ObjectType) => void;
-	confirmAnswer: () => void;
+	confirmAnswer: () => Promise<void>;
 };
 
 const ControlColumn = ({
@@ -141,6 +171,7 @@ const ControlColumn = ({
 	options,
 	selectedObject,
 	isCorrect,
+	isRegistering,
 	selectObject,
 	confirmAnswer,
 }: ControlColumnProps) => (
@@ -155,7 +186,7 @@ const ControlColumn = ({
 					key={object}
 					object={object}
 					selected={selectedObject === object}
-					disabled={isCorrect}
+					disabled={isCorrect || isRegistering}
 					onSelect={selectObject}
 				/>
 			))}
@@ -172,6 +203,7 @@ const ControlColumn = ({
 		<UI.Button
 			type="button"
 			fullWidth
+			loading={isRegistering}
 			disabled={selectedObject === null || isCorrect}
 			onClick={confirmAnswer}
 		>

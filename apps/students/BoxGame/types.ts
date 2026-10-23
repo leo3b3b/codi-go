@@ -1,3 +1,5 @@
+export type Feedback = "idle" | "correct" | "incorrect";
+
 export type BoxLevel = {
 	id: number;
 	name: string;

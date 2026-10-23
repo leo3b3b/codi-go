@@ -6,5 +6,9 @@ export {
 	listGames,
 	listLevels,
 } from "./levels";
-export { type ProgressResult, registerMazeProgress } from "./progress";
+export {
+	type ProgressResult,
+	registerMazeProgress,
+	registerProgress,
+} from "./progress";
 export { getStudentById, getStudentsByClassId } from "./students";

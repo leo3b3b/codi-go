@@ -1,8 +1,9 @@
 import { UI } from "@codi-go/ui";
+import type { Feedback } from "../types";
 
 type CodiMessageProps = {
 	message: string;
-	status: "idle" | "correct" | "incorrect";
+	status: Feedback;
 };
 
 const statusStyles = {
