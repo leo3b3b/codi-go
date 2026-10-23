@@ -60,6 +60,7 @@ function GameSection({ game }: { game: Game }) {
 	const gameRoutes: Record<string, string> = {
 		maze: "labirinto",
 		box: "caixa",
+		kit: "conjunto",
 	};
 	const route = gameRoutes[game.key];
 

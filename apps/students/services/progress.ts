@@ -2,7 +2,7 @@ import { type Json, supabase } from "@codi-go/supabase";
 import { getStudentSession } from "./auth";
 import { isClassPlaying } from "./classes";
 
-export type ProgressResult = "success" | "failure";
+export type ProgressResult = "success" | "partial" | "failure";
 
 export async function registerProgress({
 	level_id,

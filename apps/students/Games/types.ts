@@ -1,4 +1,4 @@
-export type Feedback = "idle" | "correct" | "incorrect";
+export type Feedback = "idle" | "correct" | "partial" | "incorrect";
 
 export const objectImages = {
 	// Animals

@@ -17,7 +17,7 @@ export default function ProtectedLayout() {
 				component="main"
 				size="xl"
 				px={{ base: "md", sm: "xl" }}
-				py={{ base: "lg", sm: "xl" }}
+				py="lg"
 			>
 				<Outlet />
 			</UI.Container>

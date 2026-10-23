@@ -11,5 +11,6 @@ export default [
 		route("fases", "pages/Levels.tsx"),
 		route("labirinto/:levelId", "pages/MazeGame.tsx"),
 		route("caixa/:levelId", "pages/BoxGame.tsx"),
+		route("conjunto/:levelId", "pages/KitGame.tsx"),
 	]),
 ] satisfies RouteConfig;

@@ -157,7 +157,7 @@ export default function BoxGamePage({
 
 type ControlColumnProps = {
 	message: string;
-	feedback: "idle" | "correct" | "incorrect";
+	feedback: Feedback;
 	options: ObjectType[];
 	selectedObject: ObjectType | null;
 	isCorrect: boolean;
