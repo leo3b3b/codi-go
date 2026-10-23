@@ -14,12 +14,14 @@
 		"@codi-go/ui": "*",
 		"@react-router/node": "^8.4.0",
 		"isbot": "^5",
+		"papaparse": "^5.7.0",
 		"react": "^19.3.0",
 		"react-dom": "^19.3.0",
 		"react-router": "^8.4.0"
 	},
 	"devDependencies": {
 		"@react-router/dev": "^8.4.0",
+		"@types/papaparse": "^5.5.2",
 		"vite": "^8.3.0"
 	}
 }

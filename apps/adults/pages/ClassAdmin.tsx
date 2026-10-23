@@ -62,6 +62,11 @@ export default function ClassAdminPage({
 					school_id={classData.school_id}
 				/>
 
+				<Self.ImportStudentsCsv
+					class_id={classData.id}
+					school_id={classData.school_id}
+				/>
+
 				<UI.Paper>
 					<UI.Stack>
 						<UI.Group
