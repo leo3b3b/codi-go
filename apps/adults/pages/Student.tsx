@@ -1,10 +1,7 @@
 import type { Route } from "+pages/Student";
 import { UI } from "@codi-go/ui";
 import { useNavigate } from "react-router";
-import {
-	type MazeProgressRecord,
-	parseMazeProgress,
-} from "@/games/maze/progress";
+import { type MazeProgressRecord, parseMazeProgress } from "@/games/maze";
 import { getStudentById, getStudentProgress } from "@/services";
 import * as Self from "./StudentPage";
 
