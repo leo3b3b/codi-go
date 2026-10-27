@@ -10,6 +10,7 @@ export default [
 	route(":accessCode", "layouts/Protected.tsx", [
 		route("fases", "pages/Levels.tsx"),
 		route("labirinto/:levelId", "pages/MazeGame.tsx"),
+		route("caca-ao-tesouro/:levelId", "pages/TreasureHunt.tsx"),
 		route("caixa/:levelId", "pages/BoxGame.tsx"),
 		route("conjunto/:levelId", "pages/KitGame.tsx"),
 	]),

@@ -61,6 +61,7 @@ function GameSection({ game }: { game: Game }) {
 		maze: "labirinto",
 		box: "caixa",
 		kit: "conjunto",
+		hunt: "caca-ao-tesouro",
 	};
 	const route = gameRoutes[game.key];
 
