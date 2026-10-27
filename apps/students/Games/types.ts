@@ -1,5 +1,29 @@
 export type Feedback = "idle" | "correct" | "partial" | "incorrect";
 
+export type GridPosition = {
+	x: number;
+	y: number;
+};
+
+export type GridDirection = "up" | "down" | "left" | "right";
+
+export const gridTileImages = {
+	floor: "/tiles/floor.png",
+	left: "/tiles/left.png",
+	right: "/tiles/right.png",
+	top: "/tiles/wall.png",
+	bottom: "/tiles/wall.png",
+	wall: "/tiles/wall.png",
+	"top-left": "/tiles/left.png",
+	"top-right": "/tiles/right.png",
+	"bottom-left": "/tiles/bottom-left.png",
+	"bottom-right": "/tiles/bottom-right.png",
+	roof: "/tiles/roof.png",
+} as const;
+
+export type GridTileType = keyof typeof gridTileImages;
+export type GridTiles = GridTileType[][];
+
 export const objectImages = {
 	// Animals
 	cat: { src: "/animals/cat.png", label: "Gato" },

@@ -1,47 +1,19 @@
+import { canMoveOnGrid, getNextGridPosition, moveOnGrid } from "@/Games";
 import type { Command, MazeLevel, Position } from "./types";
 
-export function getNextPosition(
-	position: Position,
-	command: Command,
-): Position {
-	switch (command) {
-		case "up":
-			return { x: position.x, y: position.y - 1 };
-		case "down":
-			return { x: position.x, y: position.y + 1 };
-		case "left":
-			return { x: position.x - 1, y: position.y };
-		case "right":
-			return { x: position.x + 1, y: position.y };
-	}
-}
+export const getNextPosition = getNextGridPosition;
 
-export function canMove(
+export const canMove = (
 	level: MazeLevel,
 	position: Position,
 	command: Command,
-): boolean {
-	const next = getNextPosition(position, command);
+) => canMoveOnGrid(level.tiles, position, command);
 
-	if (
-		next.y < 0 ||
-		next.y >= level.tiles.length ||
-		next.x < 0 ||
-		next.x >= level.tiles[next.y].length
-	)
-		return false;
-
-	return level.tiles[next.y][next.x] === "floor";
-}
-
-export function executeCommand(
+export const executeCommand = (
 	level: MazeLevel,
 	position: Position,
 	command: Command,
-): Position | null {
-	if (!canMove(level, position, command)) return null;
-	return getNextPosition(position, command);
-}
+) => moveOnGrid(level.tiles, position, command);
 
 export const isGoalReached = (level: MazeLevel, position: Position): boolean =>
 	position.x === level.goal.x && position.y === level.goal.y;

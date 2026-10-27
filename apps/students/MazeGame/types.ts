@@ -1,25 +1,11 @@
-export type Position = {
-	x: number;
-	y: number;
-};
+import type { GridDirection, GridPosition, GridTileType } from "@/Games";
+import { gridTileImages } from "@/Games";
 
-export type Command = "up" | "down" | "left" | "right";
+export type Position = GridPosition;
+export type Command = GridDirection;
+export type TileType = GridTileType;
 
-export const tileImages = {
-	floor: "/tiles/floor.png",
-	left: "/tiles/left.png",
-	right: "/tiles/right.png",
-	top: "/tiles/wall.png",
-	bottom: "/tiles/wall.png",
-	wall: "/tiles/wall.png",
-	"top-left": "/tiles/left.png",
-	"top-right": "/tiles/right.png",
-	"bottom-left": "/tiles/bottom-left.png",
-	"bottom-right": "/tiles/bottom-right.png",
-	roof: "/tiles/roof.png",
-};
-
-export type TileType = keyof typeof tileImages;
+export const tileImages = gridTileImages;
 
 export type MazeLevel = {
 	id: number;

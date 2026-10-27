@@ -1,7 +1,6 @@
 import { UI } from "@codi-go/ui";
-import type { Command, MazeLevel, Position, TileType } from "../types";
-import { tileImages } from "../types";
-import { Codi } from "./Codi";
+import { Codi, GridEntity, GridMap } from "@/Games";
+import type { Command, MazeLevel, Position } from "../types";
 
 interface MazeRendererProps {
 	level: MazeLevel;
@@ -9,17 +8,6 @@ interface MazeRendererProps {
 	direction: Command;
 	moving: boolean;
 }
-
-const Tile = ({ type }: { type: TileType }) => (
-	<img
-		src={tileImages[type]}
-		alt=""
-		style={{
-			width: "var(--tile-size)",
-			height: "var(--tile-size)",
-		}}
-	/>
-);
 
 const Goal = () => (
 	<img
@@ -35,81 +23,29 @@ const Goal = () => (
 	/>
 );
 
-function Entity({
-	position,
-	animate = true,
-	children,
-}: {
-	position: Position;
-	animate: boolean;
-	children: React.ReactNode;
-}) {
-	return (
-		<UI.Box
-			pos="absolute"
-			style={{
-				aspectRatio: "1",
-				width: "var(--tile-size)",
-				left: `calc(${position.x} * var(--tile-size))`,
-				top: `calc(${position.y} * var(--tile-size))`,
-				...(animate && {
-					transition: "left 300ms ease-in-out, top 300ms ease-in-out",
-				}),
-			}}
-		>
-			{children}
-		</UI.Box>
-	);
-}
-
-const MazeRenderer = ({
+export const MazeRenderer = ({
 	level,
 	playerPosition,
 	direction,
 	moving,
 }: MazeRendererProps) => (
-	<UI.Box
-		pos="relative"
-		style={{
-			"--tile-size": "64px",
-		}}
-	>
-		<UI.Box
-			display="grid"
-			style={{
-				gridTemplateColumns: `repeat(${level.tiles[0].length}, var(--tile-size))`,
-			}}
-		>
-			{level.tiles.flatMap((row, y) =>
-				row.map((tile, x) => <Tile key={`${x}-${y}`} type={tile} />),
-			)}
-		</UI.Box>
+	<GridMap tiles={level.tiles}>
+		<GridEntity position={level.goal} animate={false}>
+			<Goal />
+		</GridEntity>
 
-		<UI.Box pos="absolute" inset={0}>
-			<Entity animate={false} position={level.goal}>
-				<Goal />
-			</Entity>
-
-			<Entity animate={moving} position={playerPosition}>
-				<Codi direction={direction} moving={moving} />
-			</Entity>
-		</UI.Box>
-	</UI.Box>
+		<GridEntity position={playerPosition} animate={moving}>
+			<Codi direction={direction} moving={moving} />
+		</GridEntity>
+	</GridMap>
 );
-
-type MazeBoardProps = {
-	level: MazeLevel;
-	playerPosition: Position;
-	direction: Command;
-	moving: boolean;
-};
 
 export const MazeBoard = ({
 	level,
 	playerPosition,
 	direction,
 	moving,
-}: MazeBoardProps) => (
+}: MazeRendererProps) => (
 	<UI.Center w="100%" h={{ base: "auto", lg: "100%" }} style={{ minHeight: 0 }}>
 		<MazeRenderer
 			level={level}
