@@ -1,6 +1,6 @@
 import { UI } from "@codi-go/ui";
-import { Codi, GridEntity, GridMap, objectImages } from "@/Games";
 import type { GridPosition } from "@/Games";
+import { Codi, GridEntity, GridMap, objectImages } from "@/Games";
 import type { TreasureHuntLevel } from "../types";
 
 type TreasureHuntBoardProps = {
@@ -31,12 +31,17 @@ export const TreasureHuntBoard = ({
 				>
 					<div
 						style={{
-							position: "relative",
 							boxSizing: "border-box",
 							width: "100%",
 							height: "100%",
 							padding: 3,
-							border: `2px solid ${index < nextPlaceIndex ? "var(--mantine-color-green-6)" : index === nextPlaceIndex ? "var(--mantine-color-violet-6)" : "transparent"}`,
+							border: `2px solid ${
+								index < nextPlaceIndex
+									? "var(--mantine-color-green-6)"
+									: index === nextPlaceIndex
+										? "var(--mantine-color-violet-6)"
+										: "transparent"
+							}`,
 							borderRadius: 8,
 							background: "rgba(255, 255, 255, 0.72)",
 						}}
@@ -52,28 +57,6 @@ export const TreasureHuntBoard = ({
 								opacity: index < nextPlaceIndex ? 0.65 : 1,
 							}}
 						/>
-						<span
-							style={{
-								position: "absolute",
-								top: 0,
-								left: 0,
-								minWidth: 16,
-								height: 16,
-								padding: "0 3px",
-								borderRadius: 5,
-								background:
-									index < nextPlaceIndex
-										? "var(--mantine-color-green-6)"
-										: "var(--mantine-color-violet-6)",
-								color: "white",
-								fontSize: 10,
-								fontWeight: 700,
-								lineHeight: "16px",
-								textAlign: "center",
-							}}
-						>
-							{index + 1}
-						</span>
 					</div>
 				</GridEntity>
 			))}

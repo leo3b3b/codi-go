@@ -1,5 +1,4 @@
-import { Icon, notifications } from "@codi-go/ui";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useReward } from "react-rewards";
 import type { GridDirection } from "@/Games";
 import { moveOnGrid, objectImages } from "@/Games";
@@ -13,8 +12,7 @@ const createInitialState = (level: TreasureHuntLevel): TreasureHuntState => ({
 	nextPlaceIndex: 0,
 	status: "playing",
 	feedback: "idle",
-	feedbackMessage:
-		"Use as setas para mover o Codi e siga a sequência dos objetos.",
+	feedbackMessage: level.instructions,
 	moves: 0,
 });
 
@@ -52,14 +50,12 @@ export function useTreasureHunt(level: TreasureHuntLevel) {
 
 			if (result === "success") reward();
 		} catch {
-			notifications.show({
-				message: "Não foi possível registrar seu progresso. Tente novamente.",
-				color: "red",
-				position: "top-center",
-				autoClose: 3000,
-				withCloseButton: false,
-				icon: Icon.X as unknown as ReactNode,
-			});
+			setState((current) => ({
+				...current,
+				feedback: "incorrect",
+				feedbackMessage:
+					"Não foi possível registrar seu progresso. Tente novamente.",
+			}));
 		} finally {
 			setIsRegistering(false);
 		}
@@ -100,6 +96,7 @@ export function useTreasureHunt(level: TreasureHuntLevel) {
 				feedback: "incorrect",
 				feedbackMessage: `Você chegou a ${objectImages[reached.object].label} antes de ${objectImages[expected.object].label}. Recomece e siga a ordem indicada.`,
 			}));
+
 			setIsMoving(true);
 			await wait(300);
 			setIsMoving(false);
