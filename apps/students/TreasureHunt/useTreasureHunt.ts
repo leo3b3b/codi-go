@@ -94,7 +94,7 @@ export function useTreasureHunt(level: TreasureHuntLevel) {
 				moves,
 				status: "failure",
 				feedback: "incorrect",
-				feedbackMessage: `Você chegou a ${objectImages[reached.object].label} antes de ${objectImages[expected.object].label}. Recomece e siga a ordem indicada.`,
+				feedbackMessage: `Você chegou a ${objectImages[reached.object].label} antes de ${objectImages[expected.object].label}. Tente novamente!`,
 			}));
 
 			setIsMoving(true);
@@ -124,7 +124,7 @@ export function useTreasureHunt(level: TreasureHuntLevel) {
 				? "Muito bem! Você encontrou todos os objetos na ordem certa!"
 				: reachedExpected
 					? `Muito bem! Agora encontre ${nextTargetLabel}.`
-					: "Continue pelo mapa até encontrar o próximo objeto da sequência.",
+					: level.instructions,
 		}));
 
 		setIsMoving(true);
