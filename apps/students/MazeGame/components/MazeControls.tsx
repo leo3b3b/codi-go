@@ -8,6 +8,7 @@ type MazeControlsProps = {
 	message: string;
 	feedback: Feedback;
 	sequence: Command[];
+	activeCommandIndex: number | null;
 	isRunning: boolean;
 	onAddCommand: (command: Command) => void;
 	onPlay: () => void;
@@ -18,6 +19,7 @@ export const MazeControls = ({
 	message,
 	feedback,
 	sequence,
+	activeCommandIndex,
 	isRunning,
 	onAddCommand,
 	onPlay,
@@ -25,19 +27,17 @@ export const MazeControls = ({
 }: MazeControlsProps) => (
 	<UI.Paper
 		w="100%"
-		h={{ base: "auto", lg: "100%" }}
 		p={{ base: "sm", lg: "xs" }}
 	>
-		<UI.Stack
-			gap="xs"
-			h={{ base: "auto", lg: "100%" }}
-			style={{ minHeight: 0 }}
-		>
+		<UI.Stack gap="xs">
 			<CodiMessage message={message} status={feedback} textSize="md" />
 
 			<CommandPicker disabled={isRunning} onSelect={onAddCommand} />
 
-			<CommandSequence sequence={sequence} />
+			<CommandSequence
+				sequence={sequence}
+				activeCommandIndex={activeCommandIndex}
+			/>
 
 			<UI.Group gap="sm">
 				<UI.Button

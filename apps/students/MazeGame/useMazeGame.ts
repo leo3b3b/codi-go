@@ -35,6 +35,7 @@ export function useMazeGame(level: MazeLevel) {
 		commands: [],
 		status: "editing",
 		direction: "down",
+		activeCommandIndex: null,
 	});
 
 	const isRunning = state.status === "running";
@@ -57,6 +58,7 @@ export function useMazeGame(level: MazeLevel) {
 			...current,
 			commands: [...current.commands, command],
 			status: "editing",
+			activeCommandIndex: null,
 		}));
 	};
 
@@ -68,6 +70,7 @@ export function useMazeGame(level: MazeLevel) {
 			playerPosition: current.level.start,
 			commands: [],
 			status: "editing",
+			activeCommandIndex: null,
 		}));
 	};
 
@@ -81,14 +84,16 @@ export function useMazeGame(level: MazeLevel) {
 			...current,
 			playerPosition: current.level.start,
 			status: "running",
+			activeCommandIndex: null,
 		}));
 
 		let position = currentLevel.start;
 
-		for (const command of commandsToExecute) {
+		for (const [index, command] of commandsToExecute.entries()) {
 			setState((current) => ({
 				...current,
 				direction: command,
+				activeCommandIndex: index,
 			}));
 
 			await wait(400);
@@ -99,6 +104,7 @@ export function useMazeGame(level: MazeLevel) {
 				setState((current) => ({
 					...current,
 					status: "failure",
+					activeCommandIndex: null,
 				}));
 
 				await registerResult(
@@ -123,6 +129,7 @@ export function useMazeGame(level: MazeLevel) {
 				setState((current) => ({
 					...current,
 					status: "success",
+					activeCommandIndex: null,
 				}));
 
 				await registerResult(
@@ -139,6 +146,7 @@ export function useMazeGame(level: MazeLevel) {
 		setState((current) => ({
 			...current,
 			status: "failure",
+			activeCommandIndex: null,
 		}));
 
 		await registerResult("failure", currentLevel.id, commandsToExecute.length);

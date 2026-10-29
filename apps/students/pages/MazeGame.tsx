@@ -42,19 +42,11 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 
 	return (
 		<UI.Container>
-			<UI.Stack
-				w="100%"
-				gap="sm"
-				h={{ base: "auto", lg: "calc(100dvh - 104px)" }}
-				style={{ minHeight: 0 }}
-			>
+			<UI.Stack w="100%" gap="sm">
 				<GameHeader name={level.name} />
 
-				<UI.Grid align="stretch" style={{ flex: "1 1 auto", minHeight: 0 }}>
-					<UI.Grid.Col
-						span={{ base: 12, lg: 5 }}
-						style={{ display: "flex", minHeight: 0 }}
-					>
+				<UI.Grid align="stretch">
+					<UI.Grid.Col span={{ base: 12, lg: 5 }} style={{ display: "flex" }}>
 						<C.MazeBoard
 							level={state.level}
 							playerPosition={state.playerPosition}
@@ -63,14 +55,12 @@ export default function MazeGame({ loaderData: level }: Route.ComponentProps) {
 						/>
 					</UI.Grid.Col>
 
-					<UI.Grid.Col
-						span={{ base: 12, lg: 7 }}
-						style={{ display: "flex", minHeight: 0 }}
-					>
+					<UI.Grid.Col span={{ base: 12, lg: 7 }} style={{ display: "flex" }}>
 						<C.MazeControls
 							message={message}
 							feedback={feedback}
 							sequence={state.commands}
+							activeCommandIndex={state.activeCommandIndex}
 							isRunning={isRunning}
 							onAddCommand={addCommand}
 							onPlay={play}
