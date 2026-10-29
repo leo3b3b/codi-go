@@ -20,4 +20,10 @@ export const GAME_GUIDANCE: Record<string, GameGuidanceTexts> = {
 		"A atividade desenvolve o reconhecimento de padrões e o raciocínio lógico, pois exige comparar objetos, identificar características relevantes e aplicar uma regra a um novo exemplo.",
 		"Cada resposta confirmada representa uma tentativa: sucesso indica que a escolha segue a regra; falha indica que a alternativa escolhida não corresponde ao padrão. Observe a proporção de acertos e a evolução dos resultados em cada nível. Como o registro não guarda a alternativa escolhida, ele não revela, sozinho, qual característica o aluno interpretou incorretamente.",
 	],
+
+	hunt: [
+		"Neste jogo, o aluno percorre um mapa em grade para encontrar objetos na ordem indicada pelas instruções da fase.",
+		"A atividade desenvolve orientação espacial, sequenciamento, planejamento de percurso e atenção à ordem dos objetivos. O aluno precisa escolher movimentos que respeitem as passagens do mapa.",
+		"Sucesso indica que todos os objetos foram encontrados na ordem correta; falha indica que o aluno alcançou um objeto fora da sequência esperada. Os registros incluem a quantidade de movimentos e quantos objetos já haviam sido encontrados corretamente, permitindo observar a evolução entre tentativas.",
+	],
 };

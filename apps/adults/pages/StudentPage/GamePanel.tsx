@@ -60,7 +60,7 @@ export function GamePanel({ game, mazeProgress }: GamePanelProps) {
 				</UI.Paper>
 			)}
 
-			<ProgressRecords records={game.records} />
+			<ProgressRecords records={game.records} gameKey={game.key} />
 		</UI.Stack>
 	);
 }

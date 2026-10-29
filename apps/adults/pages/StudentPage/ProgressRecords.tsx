@@ -12,6 +12,7 @@ const resultStyles = {
 
 type ProgressRecordsProps = {
 	records: StudentProgressRecord[];
+	gameKey: string;
 };
 
 function getPartialSummary(metadata: StudentProgressRecord["metadata"]) {
@@ -30,7 +31,29 @@ function getPartialSummary(metadata: StudentProgressRecord["metadata"]) {
 		: null;
 }
 
-export function ProgressRecords({ records }: ProgressRecordsProps) {
+function getTreasureHuntSummary(metadata: StudentProgressRecord["metadata"]) {
+	if (
+		typeof metadata !== "object" ||
+		metadata === null ||
+		Array.isArray(metadata)
+	)
+		return null;
+
+	const placesCompleted = metadata.places_completed;
+	const placesTotal = metadata.places_total;
+	const moves = metadata.moves;
+
+	if (typeof placesCompleted !== "number" || typeof placesTotal !== "number")
+		return null;
+
+	const placesSummary = `${placesCompleted} de ${placesTotal} objetos encontrados`;
+
+	return typeof moves === "number"
+		? `${placesSummary} · ${moves} movimentos`
+		: placesSummary;
+}
+
+export function ProgressRecords({ records, gameKey }: ProgressRecordsProps) {
 	const [page, setPage] = useState(1);
 	const totalPages = Math.ceil(records.length / PAGE_SIZE);
 	const currentPage = Math.max(1, Math.min(page, totalPages || 1));
@@ -52,17 +75,19 @@ export function ProgressRecords({ records }: ProgressRecordsProps) {
 
 				{records.length === 0 ? (
 					<UI.Text size="sm" c="dimmed">
-						Nenhuma tentativa registrada para este jogo.
+						Não há registros para esse jogo.
 					</UI.Text>
 				) : (
 					<>
 						<UI.Stack gap={0}>
 							{pageRecords.map((record) => {
 								const resultStyle = resultStyles[record.result];
-								const partialSummary =
-									record.result === "partial"
-										? getPartialSummary(record.metadata)
-										: null;
+								const recordSummary =
+									gameKey === "hunt"
+										? getTreasureHuntSummary(record.metadata)
+										: record.result === "partial"
+											? getPartialSummary(record.metadata)
+											: null;
 
 								return (
 									<UI.Group
@@ -82,9 +107,9 @@ export function ProgressRecords({ records }: ProgressRecordsProps) {
 												{new Date(record.register_time).toLocaleString("pt-BR")}
 											</UI.Text>
 
-											{partialSummary && (
+											{recordSummary && (
 												<UI.Text size="sm" c="dimmed">
-													{partialSummary}
+													{recordSummary}
 												</UI.Text>
 											)}
 										</div>
